@@ -1,0 +1,1551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>县镇区域经济未来决策 · 命运重跑机器（仲恺高新区 demo）</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23312e81'/%3E%3Ccircle cx='20' cy='26' r='7' fill='%23818cf8'/%3E%3Ccircle cx='44' cy='20' r='7' fill='%230e7490'/%3E%3Ccircle cx='44' cy='42' r='7' fill='%23b45309'/%3E%3Cline x1='26' y1='29' x2='38' y2='22' stroke='%23e2e8f0' stroke-width='2.5'/%3E%3Cline x1='38' y1='25' x2='40' y2='36' stroke='%23e2e8f0' stroke-width='2.5'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#f4f6f9; --ink:#1f2733; --sub:#5b6675; --line:#d9dee6;
+    --card:#ffffff; --blue:#2563eb; --good:#16a34a; --bad:#dc2626; --warn:#d97706;
+    --gold:#ca8a04; --chip:#eef2f7;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:14px;line-height:1.55}
+  header.top{background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;position:sticky;top:0;z-index:30}
+  header.top h1{font-size:17px;margin:0;display:flex;align-items:center;gap:10px}
+  header.top .ver{font-size:11px;color:#fff;background:var(--blue);border-radius:4px;padding:1px 7px}
+  .bounds{display:flex;gap:10px;flex-wrap:wrap;margin-top:9px}
+  .bounds .b{flex:1;min-width:230px;background:#fbfcfe;border:1px solid var(--line);border-left:3px solid var(--bad);border-radius:6px;padding:7px 10px;font-size:12.5px;color:var(--sub)}
+  .bounds .b b{color:var(--ink)}
+  .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(380px,.85fr);gap:14px;padding:14px 20px;align-items:start}
+  @media (max-width:1000px){.wrap{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+  .card h2{font-size:14.5px;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+  .card h2 .tag{font-size:11px;background:var(--chip);color:var(--sub);border-radius:4px;padding:1px 7px;font-weight:500}
+  .netcard{position:sticky;top:118px}
+  #netsvg{width:100%;height:560px;display:block;background:#fcfdff;border:1px solid var(--line);border-radius:8px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--sub);margin-top:8px}
+  .legend i{display:inline-block;width:22px;height:0;border-top:2px solid #8892a0;vertical-align:middle;margin-right:5px}
+  .legend i.dash{border-top:2px dashed #b7c0cd}
+  .dotq{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:middle}
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+  .kpi{background:#fbfcfe;border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center}
+  .kpi .v{font-size:17px;font-weight:700}
+  .kpi .l{font-size:11px;color:var(--sub)}
+  .bar{height:6px;border-radius:4px;background:#e7ebf1;margin-top:5px;overflow:hidden}
+  .bar>span{display:block;height:100%;border-radius:4px}
+  .tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:-4px 0 12px}
+  .tabs button{border:0;background:none;padding:8px 12px;cursor:pointer;font-size:13.5px;color:var(--sub);border-bottom:2px solid transparent}
+  .tabs button.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+  .pane{display:none}.pane.on{display:block}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+  button.btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:7px 12px;cursor:pointer;font-size:13px}
+  button.btn:hover{border-color:var(--blue);color:var(--blue)}
+  button.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+  button.btn.primary:hover{filter:brightness(1.05);color:#fff}
+  button.btn.gold{background:#fef7e3;border-color:#e8c66a;color:var(--gold)}
+  button.btn:disabled{opacity:.5;cursor:not-allowed}
+  input[type=text],input[type=number],select,textarea{border:1px solid var(--line);border-radius:7px;padding:7px 9px;font-size:13px;font-family:inherit;background:#fff;color:var(--ink)}
+  textarea{width:100%;resize:vertical}
+  input[type=range]{width:100%}
+  .chip{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;margin:2px}
+  .gate{border:1px solid var(--line);border-radius:8px;padding:10px;margin:9px 0;background:#fbfcfe}
+  .gate.locked{border-left:3px solid var(--bad)}
+  .gate.done{border-left:3px solid var(--good);background:#f7fdf8}
+  .gate h3{margin:0 0 6px;font-size:13.5px;display:flex;justify-content:space-between;align-items:center}
+  .status-pill{font-size:11px;border-radius:999px;padding:2px 9px}
+  .status-pill.no{background:#fdeaea;color:var(--bad)}
+  .status-pill.yes{background:#e9f8ef;color:var(--good)}
+  label.ck{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin:6px 0;cursor:pointer}
+  .muted{color:var(--sub);font-size:12.5px}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+  table{border-collapse:collapse;width:100%;font-size:12.5px}
+  th,td{border:1px solid var(--line);padding:5px 8px;text-align:center}
+  th{background:#f7f9fc;font-weight:600}
+  .tl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  #track{flex:1;min-width:160px}
+  .timeline-log{max-height:230px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px;background:#fcfdff}
+  .ev{font-size:12.5px;padding:3px 0;border-bottom:1px dashed #eef1f5}
+  .ev .tk{display:inline-block;min-width:42px;color:var(--sub);font-family:ui-monospace,monospace}
+  .ev.gold{color:var(--gold);font-weight:600}
+  .ivw{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fbfcfe}
+  .ivw h3{margin:0 0 8px}
+  .ivgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:8px 0}
+  .ivgrid .cell{background:#fff;border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12.5px}
+  .askbox{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:8px;font-size:13px}
+  .hist svg{width:100%;height:150px;display:block}
+  .locked-report{filter:blur(3px);pointer-events:none;user-select:none}
+  .locknote{text-align:center;color:var(--bad);font-size:13px;margin:6px 0}
+  .missrole{border:1px solid var(--line);border-radius:8px;padding:8px;margin:6px 0;font-size:12.5px;background:#fff}
+  .grade{font-size:10px;border-radius:4px;padding:1px 6px;margin-left:6px;color:#fff}
+  .grade.A{background:#16a34a}.grade.B{background:#2563eb}.grade.C{background:#d97706}.grade.D{background:#dc2626}
+  footer{padding:10px 20px;color:var(--sub);font-size:12px;border-top:1px solid var(--line);background:#fff}
+  .hintbtn{font-size:11px;color:var(--blue);cursor:pointer;background:none;border:0;padding:0}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>🏭 县镇区域经济未来决策 <span class="ver">v0.8.1</span>
+    <span class="muted" style="font-weight:400">仲恺高新区 demo · 单文件 · 零依赖 · 断网可用 · 真数据校准 · 可复现弱涌现</span></h1>
+  <div class="bounds">
+    <div class="b"><b>① 不是预测器。</b>不预测产值、不预测招商成败，只给叙事分布与结构。</div>
+    <div class="b"><b>② 不是真涌现。</b>24 主体是可复现的弱涌现，未达真实经济涌现量级。</div>
+    <div class="b" style="border-left-color:var(--good)"><b>③ 反事实不可验证，但参数可核对。</b>“当年不引进某链主会怎样”无法重演；但每个参数都能回到统计公报核对。</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- 左：网络 + 全局KPI -->
+  <div>
+    <div class="card netcard">
+      <h2>🕸 区域产业协同活网络 <span class="tag">点节点 = 主体访谈</span><span id="world-lbl" style="float:right;font-size:12px;font-weight:400;color:#64748b"></span></h2>
+      <svg id="netsvg" viewBox="0 0 760 560" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="legend">
+        <span><i style="border-color:#2563eb"></i>供给/协作层(产业链关系)</span>
+        <span><i class="dash" style="border-color:#b7c0cd"></i>同类亲和</span>
+        <span><i class="dash" style="border-color:#d8b487"></i>同园/同域接触</span>
+        <span><span class="dotq" style="background:#16a34a"></span>景气/信心</span>
+        <span><span class="dotq" style="background:#dc2626"></span>风险/恐慌</span>
+        <span><span class="dotq" style="background:#94a3b8"></span>外迁/消亡</span>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><div class="v" id="k-ab">–</div><div class="l">景气</div><div class="bar"><span id="b-ab"></span></div></div>
+        <div class="kpi"><div class="v" id="k-or">–</div><div class="l">协同</div><div class="bar"><span id="b-or"></span></div></div>
+        <div class="kpi"><div class="v" id="k-di">–</div><div class="l">风险</div><div class="bar"><span id="b-di"></span></div></div>
+        <div class="kpi"><div class="v" id="k-mo">–</div><div class="l">信心</div><div class="bar"><span id="b-mo"></span></div></div>
+        <div class="kpi"><div class="v" id="k-su">–</div><div class="l">存续</div><div class="bar"><span id="b-su"></span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右：标签面板 -->
+  <div>
+    <div class="card">
+      <div class="tabs">
+        <button data-tab="run" class="on">① 推演</button>
+        <button data-tab="gate">② 验模三门</button>
+        <button data-tab="mc">③ 蒙特卡洛</button>
+        <button data-tab="sens">④ 敏感性</button>
+        <button data-tab="iv">⑤ 访谈</button>
+        <button data-tab="ledger">⑥ 决策档案</button>
+        <button data-tab="data">⑦ 数据血统</button>
+        <button data-tab="upload">⑧ 导入世界</button>
+      </div>
+
+      <!-- 推演 -->
+      <div class="pane on" id="pane-run">
+        <div class="tl">
+          <button class="btn" id="btn-play">▶ 播放</button>
+          <button class="btn" id="btn-step">单步</button>
+          <button class="btn" id="btn-reset">重置</button>
+          <input type="range" id="track" min="0" max="20" value="0">
+          <span class="mono">t=<b id="tick-lbl">0</b>/20</span>
+        </div>
+
+        <h2 style="margin-top:14px">🎛 上帝视角（排进下一时刻，时间轴打金标）</h2>
+        <div class="row">
+          <select id="shock-sel">
+            <option value="链主外迁">链主外迁</option><option value="芯片断供">芯片断供</option>
+            <option value="订单外流">订单外流</option><option value="产能过剩">产能过剩</option>
+            <option value="政策收紧">政策收紧</option><option value="用地收紧">用地收紧</option>
+            <option value="限电">限电</option><option value="融资难">融资难</option>
+            <option value="关税摩擦">关税摩擦</option><option value="供应链中断">供应链中断</option>
+            <option value="人才流失">人才流失</option><option value="订单爆发">订单爆发</option>
+            <option value="政策利好">政策利好</option><option value="技术突破">技术突破</option>
+          </select>
+          <button class="btn gold" id="btn-shock">注入冲击</button>
+        </div>
+        <div class="row">
+          <select id="remove-sel"></select>
+          <button class="btn" id="btn-remove">移除主体</button>
+        </div>
+        <div class="row">
+          <select id="pert-metric">
+            <option value="abundance">景气</option><option value="order">协同</option>
+            <option value="disaster">风险</option><option value="mood">信心</option>
+          </select>
+          <input type="number" id="pert-delta" value="-0.2" step="0.05" width="80">
+          <button class="btn" id="btn-pert">干扰参数</button>
+        </div>
+
+        <h2 style="margin-top:12px">🗣 自然语言注入（解析 · 零API · 离线）</h2>
+        <div class="row">
+          <input type="text" id="nl-input" style="flex:1;min-width:200px" placeholder='例：TCL华星外迁｜芯片断供｜链主外迁｜增长动能 -0.2｜移除亿纬锂能'>
+          <button class="btn primary" id="btn-nl">解析并执行</button>
+        </div>
+        <div id="nl-result" class="muted"></div>
+        <div class="muted" style="margin-top:4px">
+          <button class="hintbtn" id="nl-hint">需要示例？</button>
+          &nbsp;|&nbsp; 区分：解析（规则，离线）≠ 生成（需模型，可选）
+        </div>
+
+        <h2 style="margin-top:14px">🕰 时间线（史料事件优先于随机决策）</h2>
+        <div class="timeline-log" id="tl-log"></div>
+      </div>
+
+      <!-- 验模三门 -->
+      <div class="pane" id="pane-gate">
+        <div class="muted" style="margin-bottom:8px">不验模，报告锁定。把“预测万物”收敛成“这局值不值得跑”。</div>
+
+        <div class="gate locked" id="gate1">
+          <h3>门① 输入门 · Eigen 三问 <span class="status-pill no" id="g1st">未过</span></h3>
+          <div class="muted">把预测问题改写成你真能证伪的一问，三问全勾才过。</div>
+          <label class="ck"><input type="checkbox" class="g1"><span>这局推演的问题是具体且可证伪的，而非“预测万物”。</span></label>
+          <label class="ck"><input type="checkbox" class="g1"><span>我接受它只给叙事分布、不给可信概率与确定结局。</span></label>
+          <label class="ck"><input type="checkbox" class="g1"><span>我判断这局值得跑（成本/收获相称）。</span></label>
+        </div>
+
+        <div class="gate locked" id="gate2">
+          <h3>门② 审图门 · 图谱漏了谁 <span class="status-pill no" id="g2st">未过</span></h3>
+          <div class="muted">勾选漏项会<b>真补进图谱、连 3 条边、重建世界</b>。硬门槛：至少检出一个漏项。</div>
+          <div id="missroles"></div>
+          <button class="btn primary" id="btn-apply-miss" style="margin-top:6px">补入选中角色并重建</button>
+        </div>
+
+        <div class="gate locked" id="gate3">
+          <h3>门③ 参数门 · 血统与检验日 <span class="status-pill no" id="g3st">未过</span></h3>
+          <div class="muted">C/D 级参数（外部依赖、传播率等无法直接验证项）必须填写“检验日月数”，到期对照公报，不填报告锁死。</div>
+          <table id="param-table"><thead><tr><th style="text-align:left">参数</th><th>值</th><th>血统</th><th>检验日(月)</th></tr></thead><tbody></tbody></table>
+        </div>
+
+        <div class="gate" id="anchor-gate" style="display:none">
+          <h3>🖋 落笔闸门 · 锁定你的知情判断</h3>
+          <textarea id="anchor-text" rows="2" placeholder="看懂局之后，写下你对这局结局的预判…"></textarea>
+          <button class="btn primary" id="btn-anchor" style="margin-top:6px">锁定落笔，写入决策档案</button>
+        </div>
+      </div>
+
+      <!-- 导入世界 -->
+      <div class="pane" id="pane-upload">
+        <h2>📥 导入世界 <span class="tag">把模拟器从「仲恺基准」变成你的区域</span></h2>
+        <div class="muted" style="margin-bottom:6px">
+          支持三种输入：<b>① CSV</b>（<span class="mono">[entities]</span> 主体表 + <span class="mono">[relations]</span> 关系表）·
+          <b>② JSON</b>（<span class="mono">{candidates,relations,params}</span>）· <b>③ TXT 报告</b>（内置词表抽取主体，按类型自动连边）。
+          仲恺基准永远在，导入只是换世界。
+        </div>
+        <input type="file" id="up-file" accept=".csv,.json,.txt,.tsv" style="margin-bottom:6px">
+        <textarea id="up-text" rows="6" placeholder="…或在此粘贴文件内容（CSV / JSON / TXT 报告原文）"></textarea>
+        <div class="row">
+          <button class="btn primary" id="btn-parse">解析预览</button>
+          <button class="btn" id="btn-sample">填入示例</button>
+          <span class="muted" id="up-status"></span>
+        </div>
+        <div id="up-preview"></div>
+        <div class="row" style="margin-top:8px">
+          <label class="muted">世界种子</label>
+          <input type="number" id="up-seed" value="7" style="width:70px">
+          <button class="btn primary" id="btn-build">生成世界</button>
+          <button class="btn" id="btn-restore">恢复仲恺基准</button>
+          <button class="btn" id="btn-export-seed">导出当前世界种子(JSON)</button>
+        </div>
+        <div class="muted" id="up-note" style="margin-top:6px"></div>
+      </div>
+
+      <!-- 蒙特卡洛 -->
+      <div class="pane" id="pane-mc">
+        <h2>🎲 批量重跑 <span class="tag">跑1次看故事，跑1000次看结构</span></h2>
+        <div class="row">
+          <label class="muted">局数</label>
+          <select id="mc-n"><option value="200">200</option><option value="400" selected>400</option><option value="1000">1000</option></select>
+          <label class="muted">世界种子</label>
+          <input type="number" id="mc-seed" value="7" style="width:80px">
+          <button class="btn primary" id="btn-mc">运行</button>
+        </div>
+        <div id="mc-progress" class="muted"></div>
+        <div id="mc-results"></div>
+
+        <h2 style="margin-top:14px">📐 预置基线（用本页面同源内核重算）</h2>
+        <table id="baseline-table">
+          <thead><tr><th>指标</th><th>mean</th><th>sd</th><th>P10</th><th>P50</th><th>P90</th></tr></thead>
+          <tbody>
+            <tr><td>景气</td><td>0.5367</td><td>0.2288</td><td>0.1920</td><td>0.5760</td><td>0.8647</td></tr>
+            <tr><td>协同</td><td>0.7824</td><td>0.0882</td><td>0.6305</td><td>0.8253</td><td>0.8474</td></tr>
+            <tr><td>风险</td><td>0.1087</td><td>0.1361</td><td>0.0180</td><td>0.0320</td><td>0.3562</td></tr>
+            <tr><td>信心</td><td>0.2774</td><td>0.2957</td><td>−0.2310</td><td>0.4085</td><td>0.5642</td></tr>
+            <tr><td>存续</td><td>0.8853</td><td>0.1737</td><td>0.5833</td><td>1.0000</td><td>1.0000</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 敏感性 -->
+      <div class="pane" id="pane-sens">
+        <h2>🌪 敏感性排序 <span class="tag">哪个变量一动，结论就翻</span></h2>
+        <div class="muted">对每个关键变量做 ±扰动，用同源内核重跑多局，比较“景气/存续”的变化幅度，按敏感度从大到小排序（龙卷风图）。</div>
+        <div class="row">
+          <label class="muted">每档局数</label>
+          <input type="number" id="sens-n" value="40" min="10" style="width:80px">
+          <label class="muted">扰动幅度</label>
+          <input type="number" id="sens-delta" value="0.15" step="0.05" style="width:80px">
+          <button class="btn primary" id="btn-sens">运行敏感性分析</button>
+        </div>
+        <div id="sens-progress" class="muted"></div>
+        <div id="sens-results"></div>
+      </div>
+
+      <!-- Interview -->
+      <div class="pane" id="pane-iv">
+        <div class="muted" style="margin-bottom:8px">在左侧网络点任意节点，或在此选择。</div>
+        <div class="row">
+          <select id="iv-sel"></select>
+          <button class="btn" id="btn-iv">访谈</button>
+        </div>
+        <div id="iv-box"><div class="muted">尚未选择主体。</div></div>
+      </div>
+
+      <!-- Ledger -->
+      <div class="pane" id="pane-ledger">
+        <h2>📒 Decision Ledger <span class="tag">可审计</span></h2>
+        <div class="row">
+          <button class="btn" id="btn-export-ledger">导出 JSON</button>
+          <button class="btn" id="btn-export-state">导出本局快照</button>
+        </div>
+        <div class="timeline-log" id="ledger-log" style="max-height:360px"></div>
+      </div>
+
+      <!-- 数据血统 -->
+      <div class="pane" id="pane-data">
+        <h2>🧬 数据血统与边界</h2>
+        <div id="data-lineage" class="muted"></div>
+        <h2 style="margin-top:12px">📄 本局报告</h2>
+        <div id="report-locknote" class="locknote">🔒 未过验模三门，报告锁定。</div>
+        <div id="report-box" class="locked-report"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  仲恺版是一台区域经济“风洞”：承载力模型出真分布 · 产业链时序自己演 · 三层网络让景气传播 · 验模门真查漏项 · 敏感性排序找关键变量。
+  参数可回统计公报核对，反事实不可验证。数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）。License: MIT。
+</footer>
+
+<script>
+/*KERNEL-BEGIN*/
+"use strict";
+/* ---------- 可复现 PRNG ---------- */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function clamp(x,a,b){return x<a?a:x>b?b:x;}
+function mean(a){return a.length?a.reduce((s,x)=>s+x,0)/a.length:0;}
+function quantile(a,q){const s=[...a].sort((x,y)=>x-y);const pos=(s.length-1)*q;const b=Math.floor(pos),r=pos-b;return s[b]+(s[Math.min(b+1,s.length-1)]-s[b])*r;}
+function sd(a){const m=mean(a);return Math.sqrt(mean(a.map(x=>(x-m)*(x-m))));}
+
+/* ---------- 8 类产业主体画像（living=会外迁/停产/破产；produce/consume 决定承载力） ---------- */
+const TYPE_CFG={
+  anchor:  {cn:"链主",power:.85,renown:.82,produce:.002,consume:.010,living:true, goal:"稳链扩能、守住基本盘", acts:["扩产","研发","增资","招商","订单","外迁"]},
+  oem:     {cn:"整机",power:.62,renown:.55,produce:.001,consume:.013,living:true, goal:"拿订单、出货走量", acts:["订单","扩产","降价","裁员","停产","退链"]},
+  supplier:{cn:"配套",power:.48,renown:.40,produce:.002,consume:.011,living:true, goal:"就近配套、稳定供货", acts:["就近配套","供货","涨价","断供","退链","破产"]},
+  service: {cn:"服务",power:.42,renown:.45,produce:.012,consume:.003,living:true, goal:"提供生产性服务、提效", acts:["物流","检测","金融服务","研发服务","聚集"]},
+  talent:  {cn:"人才",power:.35,renown:.30,produce:.001,consume:.012,living:true, goal:"就业、成长与安家", acts:["就业","聚集","跳槽","流失"]},
+  capital: {cn:"资本",power:.55,renown:.50,produce:.015,consume:.001,living:false,goal:"投资造血、耐心陪伴", acts:["投资","增资","撤资"]},
+  land:    {cn:"载体",power:.40,renown:.55,produce:.017,consume:.001,living:false,goal:"供地载企、连片成园", acts:["供地","建设","收地"]},
+  infra:   {cn:"设施",power:.45,renown:.45,produce:.014,consume:.001,living:false,goal:"保障要素流通与互联", acts:["基建","物流","保供","瓶颈"]}
+};
+
+/* ---------- 产业行动效果表 [Δ景气,Δ协同,Δ风险] ---------- */
+const ACT_FX={
+  扩产:[.05,.02,-.02], 研发:[.035,.015,-.015], 增资:[.04,.02,-.02], 招商:[.045,.05,-.015],
+  订单:[.055,.01,0], 降价:[-.015,-.005,.02], 裁员:[-.03,-.02,.05],
+  外迁:[-.06,-.055,.11], 停产:[-.05,-.035,.085], 退链:[-.045,-.055,.075], 破产:[-.05,-.05,.09],
+  就近配套:[.04,.055,-.02], 供货:[.03,.025,-.005], 涨价:[-.02,-.01,.03], 断供:[-.04,-.045,.08],
+  物流:[.025,.035,-.015], 检测:[.015,.025,-.01], 金融服务:[.035,.035,-.025], 研发服务:[.03,.02,-.015],
+  聚集:[.01,.02,0], 就业:[.02,.01,-.005], 跳槽:[-.005,-.005,.01], 流失:[-.015,-.015,.03],
+  投资:[.04,.03,-.015], 撤资:[-.035,-.03,.06],
+  供地:[.045,.02,-.005], 建设:[.025,.05,-.02], 收地:[-.02,-.015,.03],
+  基建:[.025,.055,-.02], 保供:[.02,.02,-.02], 瓶颈:[-.025,-.02,.05]
+};
+/* ---------- 信号表（景气沿网络传播，影响信心） ---------- */
+const ACT_SIGNAL={
+  扩产:.22,研发:.15,增资:.20,招商:.18,订单:.28,降价:-.10,裁员:-.18,
+  外迁:-.38,停产:-.32,退链:-.26,破产:-.32,
+  就近配套:.16,供货:.12,涨价:-.08,断供:-.22,
+  物流:.10,检测:.06,金融服务:.14,研发服务:.10,聚集:.08,
+  就业:.10,跳槽:-.04,流失:-.14,
+  投资:.18,撤资:-.20,供地:.10,建设:.08,收地:-.08,
+  基建:.10,保供:.08,瓶颈:-.16
+};
+
+/* ---------- 候选实体池（仲恺真实主体；t=产业链时序, w=链主权重；共 41 个） ---------- */
+let CANDIDATES=[
+  // anchor 链主（w=3，5 家；享“不随机消亡”保护，但上帝视角可令其外迁）
+  ["TCL王牌","anchor",40,3],["TCL华星","anchor",58,3],["德赛西威","anchor",62,3],
+  ["亿纬锂能","anchor",72,3],["龙旗电子","anchor",86,3],
+  // oem 整机
+  ["TCL电子","oem",42,2],["智能手机整机","oem",90,2],["机顶盒厂","oem",96,1],["车载终端厂","oem",106,1],
+  // supplier 配套
+  ["AGC玻璃基板","supplier",50,2],["显示模组厂","supplier",56,2],["聚飞光电","supplier",78,2],
+  ["德赛电池","supplier",70,2],["艾比森","supplier",76,2],["雷曼光电","supplier",80,2],
+  ["PCB板厂","supplier",88,1],["连接器厂","supplier",94,1],["锂电材料厂","supplier",100,1],
+  // service 生产性服务
+  ["物流企业","service",118,1],["检测认证","service",122,1],["工业设计","service",124,1],
+  ["软件信息","service",128,1],["人力资源服务","service",132,1],
+  // talent 人才
+  ["显示技术人才","talent",140,1],["电池工程师","talent",142,1],
+  ["智能终端工匠","talent",146,1],["研发工程师","talent",150,1],
+  // capital 资本（不含“产业基金”，那是门②漏项）
+  ["政府母基金","capital",152,2],["创投机构","capital",158,1],
+  ["银行信贷","capital",162,2],["融资租赁","capital",164,1],
+  // land 园区载体
+  ["惠南科技园","land",12,1],["东江科技园","land",15,1],["中韩产业园","land",18,2],
+  ["人工智能产业园","land",24,2],["潼湖生态智慧区","land",28,2],
+  // infra 设施（不含“物流通道”，那是门②漏项）
+  ["电力保障","infra",168,2],["高速路网","infra",174,1],["仲恺B保","infra",178,2],
+  ["深惠城际","infra",184,1],["算力数据中心","infra",190,1]
+];
+
+/* ---------- 时序因果链（t 映射到推演时刻；演仲恺产业崛起史；special: kill_object/null） ---------- */
+let CAUSAL=[
+  {s:"中韩产业园",act:"建设",o:"",t:30,type:"建设",special:null,line:"中韩（惠州）产业园起步，仲恺园区骨架铺开"},
+  {s:"潼湖生态智慧区",act:"建设",o:"",t:38,type:"建设",special:null,line:"潼湖生态智慧区建设（2026 目标产值 900 亿）"},
+  {s:"TCL王牌",act:"订单",o:"",t:48,type:"订单",special:null,line:"TCL 电视年销量稳居全球第二（2025 智能电视 2988.65 万台，+3.4%）"},
+  {s:"显示模组厂",act:"就近配套",o:"TCL华星",t:58,type:"配套",special:null,line:"模组配套群就近配套华星，本地配套率提升"},
+  {s:"AGC玻璃基板",act:"供货",o:"TCL华星",t:66,type:"供货",special:null,line:"AGC 玻璃基板就近供货华星"},
+  {s:"TCL华星",act:"扩产",o:"",t:80,type:"扩张",special:null,line:"华星高世代线放量，超高清冲到 975.7 亿（+23.6%）"},
+  {s:"德赛西威",act:"研发",o:"",t:90,type:"研发",special:null,line:"德赛西威智能座舱研发放量"},
+  {s:"龙旗电子",act:"订单",o:"",t:101,type:"订单",special:null,line:"龙旗整机放量，智能终端集群达 1212.8 亿"},
+  {s:"亿纬锂能",act:"扩产",o:"",t:110,type:"扩张",special:null,line:"亿纬锂能扩产，能源电子冲到 811.6 亿（+18.7%，唯一高增）"},
+  {s:"TCL华星",act:"扩产",o:"",t:122,type:"扩张",special:null,line:"超高清首破千亿，达 1034.5 亿（+6%，增速腰斩）"},
+  {s:"智能手机整机",act:"扩产",o:"",t:132,type:"扩张",special:null,line:"智能终端冲到 1345.8 亿（+11%，增速回落）"},
+  {s:"银行信贷",act:"撤资",o:"",t:144,type:"风险",special:null,line:"固定资产投资 −22.3%、工业投资 −23.6%（连续两年大幅下滑）"},
+  {s:"电力保障",act:"保供",o:"",t:160,type:"保供",special:null,line:"全社会用电 102.01 亿千瓦时（+14.4%），印证产能爬坡"},
+  {s:"深惠城际",act:"基建",o:"",t:185,type:"互联",special:null,line:"深惠城际等通道建设，区域互联互通提速"},
+  {s:"政府母基金",act:"投资",o:"",t:215,type:"投资",special:null,line:"“十五五”瞄准规上工业 6500 亿、GDP 破 2000 亿"}
+];
+
+/* ---------- 预设产业链关系（subject,predicate,object；共 71 条） ---------- */
+let RELATIONS=[
+  // —— 超高清 / 华星链 ——
+  ["AGC玻璃基板","供货","TCL华星"],["显示模组厂","配套","TCL华星"],["聚飞光电","供货","TCL华星"],
+  ["PCB板厂","配套","TCL华星"],["连接器厂","供货","TCL华星"],["工业设计","服务","TCL华星"],
+  ["软件信息","服务","TCL华星"],["检测认证","服务","TCL华星"],["物流企业","运输","TCL华星"],
+  ["电力保障","供电","TCL华星"],["银行信贷","授信","TCL华星"],["研发工程师","受雇","TCL华星"],
+  ["TCL华星","供货","TCL王牌"],
+  // —— 智能终端 / 王牌·龙旗链 ——
+  ["显示模组厂","配套","TCL王牌"],["德赛电池","供货","TCL王牌"],["连接器厂","供货","TCL王牌"],
+  ["TCL电子","关联","TCL王牌"],["机顶盒厂","采购","TCL王牌"],["显示模组厂","配套","龙旗电子"],
+  ["德赛电池","供货","龙旗电子"],["PCB板厂","配套","龙旗电子"],["连接器厂","供货","龙旗电子"],
+  ["检测认证","服务","龙旗电子"],["银行信贷","授信","龙旗电子"],["智能手机整机","同业","龙旗电子"],
+  // —— 能源电子 / 锂电链 ——
+  ["锂电材料厂","供货","亿纬锂能"],["德赛电池","竞争","亿纬锂能"],["检测认证","服务","亿纬锂能"],
+  ["物流企业","运输","亿纬锂能"],["电力保障","供电","亿纬锂能"],["电池工程师","受雇","亿纬锂能"],
+  ["政府母基金","投资","亿纬锂能"],["创投机构","投资","亿纬锂能"],["银行信贷","授信","亿纬锂能"],
+  ["德赛西威","采购","亿纬锂能"],
+  // —— 汽车电子 / 德赛西威链 ——
+  ["车载终端厂","配套","德赛西威"],["软件信息","服务","德赛西威"],["连接器厂","供货","德赛西威"],
+  ["检测认证","服务","德赛西威"],["融资租赁","服务","德赛西威"],["研发工程师","受雇","德赛西威"],
+  ["人力资源服务","服务","德赛西威"],
+  // —— 园区·载体·要素 ——
+  ["中韩产业园","承载","TCL王牌"],["潼湖生态智慧区","承载","TCL华星"],["潼湖生态智慧区","承载","亿纬锂能"],
+  ["人工智能产业园","承载","龙旗电子"],["人工智能产业园","承载","智能手机整机"],
+  ["东江科技园","承载","艾比森"],["东江科技园","承载","雷曼光电"],["惠南科技园","承载","机顶盒厂"],
+  ["中韩产业园","承载","车载终端厂"],["电力保障","供电","智能手机整机"],["电力保障","供电","龙旗电子"],
+  ["深惠城际","连接","潼湖生态智慧区"],["高速路网","连接","中韩产业园"],["仲恺B保","服务","物流企业"],
+  ["算力数据中心","服务","软件信息"],["政府母基金","投资","显示模组厂"],["政府母基金","投资","锂电材料厂"],
+  ["创投机构","投资","艾比森"],["创投机构","投资","雷曼光电"],["融资租赁","服务","TCL王牌"],
+  ["工业设计","服务","龙旗电子"],["智能终端工匠","受雇","智能手机整机"],["显示技术人才","受雇","艾比森"],
+  ["物流企业","运输","智能手机整机"],["物流企业","运输","德赛西威"],["人力资源服务","服务","龙旗电子"],
+  ["电池工程师","受雇","德赛电池"],["算力数据中心","服务","人工智能产业园"],
+  ["高速路网","连接","潼湖生态智慧区"]
+];
+
+/* ---------- 产业冲击词表（14；ab=景气 di=风险 or=协同 mo=信心 kill=连带退链/消亡） ---------- */
+const SHOCK_WORDS={
+  链主外迁:{ab:-.18,di:.22,or:-.08,mo:-.15,kill:.22},
+  芯片断供:{ab:-.12,di:.18,or:-.04,kill:.12},
+  订单外流:{ab:-.16,di:.12,kill:.10},
+  产能过剩:{ab:-.14,di:.14,kill:.08},
+  政策收紧:{di:.10,or:-.05},
+  用地收紧:{ab:-.08,di:.08,kill:.06},
+  限电:{ab:-.10,di:.12,kill:.07},
+  融资难:{ab:-.08,di:.12,kill:.08},
+  关税摩擦:{ab:-.12,di:.14,kill:.08},
+  供应链中断:{ab:-.12,di:.16,kill:.12},
+  人才流失:{ab:-.06,di:.08},
+  订单爆发:{ab:.20,mo:.18,or:.04},
+  政策利好:{ab:.12,mo:.12,or:.06},
+  技术突破:{ab:.14,mo:.10,di:-.05}
+};
+/* 门②漏项：产业生态最致命的 7 类缺失 */
+const MISS_ROLES=[
+  ["下游整机客户","谁下订单（外部品牌 / 海外市场）","oem"],
+  ["产业基金","谁给耐心钱（战略性产业资本）","capital"],
+  ["生产性服务业集群","研发 / 物流 / 检测体系（三产仅 +2.2% 的病灶）","service"],
+  ["物流通道","货怎么进出（多式联运 / 枢纽）","infra"],
+  ["技能人才池","谁来造（技能人才总量与结构）","talent"],
+  ["周边竞争园区","谁在抢项目（东莞 / 深圳 / 中山）","land"],
+  ["存量工业用地","项目落在哪（可连片熟地）","land"]
+];
+/* 参数血统：A=公报直接核对 B=可由公报推算 C=需持续/间接检验 D=无法验证 */
+const PARAM_LINEAGE=[
+  ["n_agents",24,"A","每局活跃主体数（结构常量）",false],
+  ["ticks",20,"A","推演步数（结构常量）",false],
+  ["abundance0",.5,"B","初始景气（由规上工业总产值 4037.12 亿、产能利用率推算）",false],
+  ["order0",.5,"C","初始协同（由本地配套率对照，需持续跟踪）",true],
+  ["disaster0",.2,"C","初始风险（由工业投资 −23.6%、外部依赖对照）",false],
+  ["spread_rate",.22,"C","景气沿链传播率（无法直接观测，需到期检验）",true],
+  ["disaster_rate",.08,"C","风险累积速率（需到期对照公报）",true],
+  ["invest",.35,"B","投资强度（由工业投资增速 −23.6% 对照）",false],
+  ["external",.62,"B","外部依赖（由外贸破 1500 亿、芯片进口对照）",false],
+  ["service",.30,"B","服务业配套（由三产增加值 +2.2% 对照）",false],
+  ["land",.45,"C","用地供给（由存量工业用地、供地节奏对照）",false]
+];
+
+/* ================= 仿真内核 ================= */
+class Sim{
+  constructor(seed,params){
+    this.seed=seed;
+    this.params=Object.assign({n_agents:24,ticks:20,pool_ratio:.55,abundance0:.5,order0:.5,
+      disaster0:.2,disaster_rate:.08,mood_gain:.6,spread_rate:.22,spread_depth:2,
+      invest:.35,external:.62,service:.30,land:.45},params||{});
+    this.rng=mulberry32(seed);
+    this.tick=0;
+    this.agents=[]; this.edges=[]; this.timeline=[]; this.snapshots=[]; this.ledger=[]; this.gold=[];
+    this.addedCount=0;
+    this.state={abundance:this.params.abundance0,order:this.params.order0,disaster:this.params.disaster0,mood:0};
+    this._sampleAgents();
+    this._computeKcap();
+    this._buildNetwork();
+    this._log("init",{seed,agents:this.agents.length});
+    this.snapshots.push(this._snap());
+  }
+  _log(type,payload){this.ledger.push({t:this.tick,type,payload});}
+  _byName(n){return this.agents.find(a=>a.name===n);}
+  _sampleAgents(){
+    const N=this.params.n_agents;
+    const chosen=[]; const used=new Set();
+    // w>=3 世界导演级核心必入（少数；唯一享有“不饿死”保护）
+    CANDIDATES.filter(c=>c[3]>=3).forEach(c=>{chosen.push(c);used.add(c[0]);});
+    // w==2 史料关键角色以中等概率入场（约半数局能演对应因果链；缺席是跨局变异）
+    CANDIDATES.filter(c=>c[3]===2).forEach(c=>{if(this.rng()<.45){chosen.push(c);used.add(c[0]);}});
+    // 其余名额从全池均匀随机抽（多数为脆弱角色，决定承载力与存续方差）
+    const rest=CANDIDATES.filter(c=>!used.has(c[0]));
+    while(chosen.length<N && rest.length){
+      const idx=Math.floor(this.rng()*rest.length);
+      chosen.push(rest[idx]); used.add(rest[idx][0]); rest.splice(idx,1);
+    }
+    chosen.forEach(c=>{
+      const cfg=TYPE_CFG[c[1]];
+      this.agents.push({name:c[0],type:c[1],t:c[2],w:c[3],
+        power:cfg.power,renown:cfg.renown,
+        energy:cfg.living?clamp(.5+.34*cfg.power+ (this.rng()-.5)*.1,.18,.97):1,
+        sentiment:0,alive:true,memory:[`${c[0]}入场（${cfg.cn}）`]});
+    });
+  }
+  _computeKcap(){
+    let p=0,c=0;
+    this.agents.forEach(a=>{p+=TYPE_CFG[a.type].produce;c+=TYPE_CFG[a.type].consume;});
+    // 用地供给、服务业配套决定园区能承载多少企业（高于现状 → 容量上移）；目标限幅避免端点
+    const landBoost=(this.params.land-.5)*.28+(this.params.service-.5)*.18;
+    this.Kcap=clamp(.62+(p-c)*7+landBoost,.15,.90);
+  }
+  _addEdge(a,b,layer,rel){
+    if(a===b)return;
+    if(this.edges.some(e=>(e.a===a&&e.b===b)||(e.a===b&&e.b===a)))return;
+    this.edges.push({a,b,layer,rel});
+  }
+  _buildNetwork(){
+    this.edges=[];
+    const alive=this.agents.map(a=>a.name);
+    const has=n=>alive.includes(n);
+    // 史料层：因果
+    CAUSAL.forEach(c=>{if(has(c.s)&&c.o&&has(c.o))this._addEdge(c.s,c.o,"hist",c.type);});
+    // 史料层：预设关系
+    RELATIONS.forEach(r=>{if(has(r[0])&&has(r[2]))this._addEdge(r[0],r[2],"hist",r[1]);});
+    // 同类亲和：同类型按 t 相邻
+    const byType={};
+    this.agents.forEach(a=>{(byType[a.type]=byType[a.type]||[]).push(a);});
+    Object.values(byType).forEach(list=>{
+      list.sort((x,y)=>x.t-y.t);
+      for(let i=0;i<list.length-1;i++)this._addEdge(list[i].name,list[i+1].name,"affinity","同类");
+    });
+    // 同域接触：时序相近
+    const contactCount={};
+    const pairs=[];
+    for(let i=0;i<this.agents.length;i++)for(let j=i+1;j<this.agents.length;j++){
+      const A=this.agents[i],B=this.agents[j];
+      if(Math.abs(A.t-B.t)<=12)pairs.push([A.name,B.name,Math.abs(A.t-B.t)]);
+    }
+    pairs.sort((x,y)=>x[2]-y[2]);
+    pairs.forEach(p=>{
+      const ca=contactCount[p[0]]||0,cb=contactCount[p[1]]||0;
+      if(ca<2&&cb<2){this._addEdge(p[0],p[1],"contact","同域");contactCount[p[0]]=ca+1;contactCount[p[1]]=cb+1;}
+    });
+  }
+  _neighbors(name){
+    const nb=[];
+    this.edges.forEach(e=>{if(e.a===name)nb.push(e.b);else if(e.b===name)nb.push(e.a);});
+    return nb;
+  }
+  _mapTick(t){return clamp(Math.round((t-26)/(240-26)*this.params.ticks),0,this.params.ticks-1);}
+  /* 统一“消亡”措辞：人才流失 / 服务业倒闭 / 制造企业停产·退链·破产·外迁 */
+  _kill(a,scene){
+    a.alive=false;a.energy=0;
+    let verb,label;
+    if(a.type==="talent"){verb="流失";label="岗位收缩，人才"}
+    else if(a.type==="service"){verb="倒闭";label="需求不足，服务机构"}
+    else if(scene==="drain"){verb="停产破产";label="订单枯竭、资金链断裂，"}
+    else if(scene==="crowd"){verb="退链出局";label="同质化内卷中被淘汰，"}
+    else {verb="断链外迁";label="产业链危机中"}
+    a.memory.push(`${a.name}${verb}`);
+    this.timeline.push({tick:this.tick,kind:"death",text:`${label}${a.name}${verb}`});
+  }
+
+  /* ---- 单步：双拍闭环 ---- */
+  step(){
+    if(this.tick>=this.params.ticks)return;
+    this.tick++;
+    let da=0,do_=0,dd=0; const signals={}, actCount={};
+    const fired=new Set();
+    const addSig=(n,v)=>{signals[n]=(signals[n]||0)+v;};
+    const applyAct=(ag,act)=>{
+      const fx=ACT_FX[act]||[0,0,0];
+      da+=fx[0];do_+=fx[1];dd+=fx[2];
+      addSig(ag.name,ACT_SIGNAL[act]||0);
+      actCount[act]=(actCount[act]||0)+1;
+      ag.memory.push(`${ag.name}${act}`);
+    };
+    // 拍一·史料因果优先
+    CAUSAL.forEach(c=>{
+      if(this._mapTick(c.t)!==this.tick-1)return;
+      const ag=this._byName(c.s);
+      if(!ag||!ag.alive)return;
+      fired.add(c.s);
+      applyAct(ag,c.act);
+      this.timeline.push({tick:this.tick,kind:"hist",text:c.line});
+      if(c.special==="kill_object"&&c.o){
+        const tg=this._byName(c.o);
+        if(tg&&tg.alive){tg.alive=false;tg.memory.push(`${c.o}被${c.s}所杀`);
+          this.timeline.push({tick:this.tick,kind:"death",text:`${c.o}亡`});}
+      }
+      if(c.special==="kill_self"){
+        ag.alive=false;
+        this.timeline.push({tick:this.tick,kind:"death",text:`${c.s}道渴而死`});
+      }
+    });
+    // 拍一·其余主体私域决策
+    this.agents.forEach(ag=>{
+      if(!ag.alive||fired.has(ag.name))return;
+      const act=this._chooseAct(ag);
+      applyAct(ag,act);
+    });
+    const aliveList=this.agents.filter(a=>a.alive);
+    const N=aliveList.length;
+    const st=this.state;
+    // —— 景气：趋向 Kcap（上限 .90）；行动/投资经 logistic 饱和（端点→0，不顶格/不归零）；风险拖累 + 中枢回归 ——
+    const satA=4*st.abundance*(1-st.abundance);
+    // 投资 / 服务低于正常(.5)为持续拖累（投资崩、三产滞后），经 logistic 饱和：越近端点影响越弱（存量韧性）
+    const investPush=(this.params.invest-.5)*.040+(this.params.service-.5)*.020;
+    st.abundance += .26*(Math.min(this.Kcap,.90)-st.abundance)
+                 + (da/N)*1.4*satA
+                 - st.disaster*.06*(.25+st.abundance)
+                 + investPush*3.0*satA
+                 + .020*(.48-st.abundance);
+    // —— 拍二·信号沿三层网传播 ——
+    const received={};
+    Object.entries(signals).forEach(([src,v])=>{
+      if(!v)return;
+      received[src]=(received[src]||0)+v*.5;
+      let frontier=[[src]]; const seen=new Set([src]);
+      for(let d=0;d<this.params.spread_depth;d++){
+        const nxt=[];
+        frontier.forEach(([node])=>{
+          this._neighbors(node).forEach(nb=>{
+            if(seen.has(nb))return;seen.add(nb);
+            const amt=v*Math.pow(this.params.spread_rate,d+1)*1.4;
+            received[nb]=(received[nb]||0)+amt; nxt.push([nb]);
+          });
+        });
+        frontier=nxt;
+      }
+    });
+    this.agents.forEach(ag=>{
+      const r=received[ag.name]||0;
+      let sit=0;
+      if(TYPE_CFG[ag.type].living){ // 处境项：景气/协同/风险/自身经营
+        sit=(st.abundance-.5)*.7+(st.order-.5)*.5-st.disaster*.7+(ag.energy-.5)*.5;
+      }
+      ag.sentiment=clamp(.5*ag.sentiment+.28*r+.3*sit,-1,1);
+    });
+    const living=this.agents.filter(a=>a.alive&&TYPE_CFG[a.type].living);
+    const meanSent=mean(living.map(a=>a.sentiment));
+    // —— 风险：趋向“风险天花板”（外部依赖高/景气低/协同低则上移，最高 .85）；行动经饱和；路径依赖 ——
+    const satD=4*st.disaster*(1-st.disaster);
+    const fracMitigate=((actCount["保供"]||0)+(actCount["金融服务"]||0)+(actCount["检测"]||0)+(actCount["物流"]||0))/N;
+    const riskCeil=clamp(.12+(this.params.external-.5)*.5+(.5-st.abundance)*.5+(.5-st.order)*.4,.05,.85);
+    st.disaster += .22*(riskCeil-st.disaster)
+                 + (dd/N)*1.2*satD
+                 + st.disaster*st.disaster*.15*(1-st.order)*satD
+                 - fracMitigate*.05;
+    // —— 信心：情绪均值（处境已内含协同/风险）——
+    st.mood=clamp(.55*st.mood+.45*meanSent,-1,1);
+    // —— 协同：趋向 .72；建设/配套行动经 logistic 饱和；信心/风险；服务业润滑 ——
+    const satO=4*st.order*(1-st.order);
+    st.order += .20*(.72-st.order)
+             + ((do_/N)*1.3+((actCount["就近配套"]||0)+(actCount["招商"]||0)+(actCount["建设"]||0))/N*.05)*satO
+             + st.mood*.04*satO - st.disaster*.07*(.3+st.order)
+             + (this.params.service-.5)*.016;
+    // —— 经营收支：高景气订单>成本（可持续/全活），低景气净亏损（配套/整机/人才先退场）；w>=3 链主享保护 ——
+    this.agents.forEach(ag=>{
+      if(!ag.alive)return;
+      const cfg=TYPE_CFG[ag.type];
+      if(!cfg.living)return;
+      const baseNeed=cfg.consume*2.6 + (st.disaster>.4?.02:0);
+      const intake=clamp(st.abundance,0,1)**2*.16;
+      ag.energy += intake-baseNeed;
+      if(ag.w>=3){ag.energy=Math.max(ag.energy,.34);}
+      if(ag.energy<=0){
+        if(ag.w<3)this._kill(ag,"drain");
+        else ag.energy=.34;
+      }
+      ag.energy=clamp(ag.energy,0,1);
+    });
+    // —— 过载竞争淘汰：资源不足以养活现有生物时，脆弱者按压力概率死亡 ——
+    const livNow=this.agents.filter(a=>a.alive&&TYPE_CFG[a.type].living);
+    let bioLoad=0;livNow.forEach(a=>bioLoad+=TYPE_CFG[a.type].consume);
+    const pressure=clamp((bioLoad-clamp(st.abundance,0,1)*.34)/Math.max(bioLoad,.001),0,1);
+    if(pressure>0)livNow.filter(a=>a.w<3).forEach(a=>{
+      if(this.rng()<pressure*.22)this._kill(a,"crowd");
+    });
+    // —— 高风险损毁：产业链危机，载体/资本/设施与各类主体（w<3）亦受冲击 ——
+    if(st.disaster>.4){
+      this.agents.filter(a=>a.alive&&a.w<3).forEach(a=>{
+        if(this.rng()<(st.disaster-.35)*.25)this._kill(a,"crisis");
+      });
+    }
+    st.abundance=clamp(st.abundance,0,1);st.order=clamp(st.order,0,1);st.disaster=clamp(st.disaster,0,1);
+    this._log("step",{tick:this.tick,state:clone(st)});
+    this.snapshots.push(this._snap());
+  }
+  _chooseAct(ag){
+    const acts=TYPE_CFG[ag.type].acts;
+    const st=this.state;
+    const w=acts.map(a=>{
+      let x=1;
+      // 景气足 / 信心高 → 扩张与协同
+      if(a==="扩产"||a==="增资")x+=st.abundance*4+(st.mood>0?2:0);
+      if(a==="研发"||a==="研发服务")x+=st.abundance*2+st.order*2;
+      if(a==="订单")x+=st.abundance*3+1;
+      if(a==="招商"||a==="投资")x+=st.order*3+(st.mood>0?2:0);
+      if(a==="就近配套"||a==="供货")x+=st.order*4+st.abundance;
+      if(a==="供地")x+=st.abundance*2+st.order;
+      if(a==="就业"||a==="聚集")x+=st.abundance*3+(st.mood>0?2:0);
+      if(a==="金融服务"||a==="保供")x+=st.order*2+(st.disaster>.3?2:0);
+      if(a==="物流"||a==="基建"||a==="建设")x+=st.order*2+(st.disaster>.3?2:0);
+      if(a==="检测")x+=1+st.order;
+      // 景气低 / 风险高 → 收缩、退链、外迁
+      if(a==="降价")x+=(st.abundance<.4?3:0);
+      if(a==="裁员")x+=(st.abundance<.35?3:0)+st.disaster*2;
+      if(a==="停产")x+=(st.abundance<.3?3:0)+st.disaster*3;
+      if(a==="退链")x+=st.disaster*3+(st.abundance<.35?2:0);
+      if(a==="破产")x+=st.disaster*3+(st.abundance<.25?2:0);
+      if(a==="断供")x+=st.disaster*3;
+      if(a==="涨价")x+=(st.disaster>.3?2:0);
+      if(a==="撤资"||a==="收地")x+=st.disaster*3+(st.abundance<.35?2:0);
+      if(a==="瓶颈")x+=st.disaster*3;
+      if(a==="跳槽"||a==="流失")x+=(st.abundance<.4?2.5:0)+st.disaster*2;
+      if(a==="外迁")x+=st.disaster*4+(st.abundance<.35?2:0);
+      return x;
+    });
+    let tot=w.reduce((s,x)=>s+x,0),r=this.rng()*tot,i=0;
+    while(r>w[i]){r-=w[i];i++;}
+    return acts[i];
+  }
+  /* ---- 上帝视角 ---- */
+  shock(type){
+    const cfg=SHOCK_WORDS[type]; if(!cfg)return {ok:false,msg:"未知冲击"};
+    const st=this.state;
+    if(cfg.ab)st.abundance=clamp(st.abundance+cfg.ab,0,1);
+    if(cfg.di)st.disaster=clamp(st.disaster+cfg.di,0,1);
+    if(cfg.or)st.order=clamp(st.order+cfg.or,0,1);
+    if(cfg.mo)st.mood=clamp(st.mood+cfg.mo,-1,1);
+    let killed=0;
+    if(cfg.kill){
+      this.agents.filter(a=>a.alive&&TYPE_CFG[a.type].living&&a.w<3).forEach(a=>{
+        if(this.rng()<cfg.kill){
+          a.alive=false;a.memory.push(`${a.name}受「${type}」波及，${a.type==="talent"?"流失":"退链"}`);killed++;
+        }
+      });
+    }
+    this.gold.push(this.tick+1);
+    this.timeline.push({tick:this.tick+1,kind:"gold",text:`[上帝] ${type}${killed?` · 连带退链/流失 ${killed} 家`:""}`});
+    this._log("shock",{type,killed});
+    return {ok:true,killed};
+  }
+  removeAgent(name){
+    const ag=this._byName(name);
+    if(!ag)return {ok:false,msg:`「${name}」不在本局候选`};
+    if(!ag.alive)return {ok:false,msg:`「${name}」已不在场`};
+    ag.alive=false; ag.memory.push(`${name}被移除`);
+    this.gold.push(this.tick+1);
+    this.timeline.push({tick:this.tick+1,kind:"gold",text:`[上帝] 移除 ${name}`});
+    this._log("remove",{name});
+    return {ok:true};
+  }
+  perturb(metric,delta){
+    this.state[metric]=clamp(this.state[metric]+delta,metric==="mood"?-1:0,1);
+    this.gold.push(this.tick+1);
+    this.timeline.push({tick:this.tick+1,kind:"gold",text:`[上帝] ${metric} ${delta>=0?"+":""}${delta.toFixed(2)}`});
+    this._log("perturb",{metric,delta});
+    return {ok:true};
+  }
+  addMissing(roleIdxs){
+    let added=0,edgesAdded=0;
+    roleIdxs.forEach(i=>{
+      const r=MISS_ROLES[i]; if(!r)return;
+      if(this._byName(r[0]))return;
+      const cfg=TYPE_CFG[r[2]];
+      this.agents.push({name:r[0],type:r[2],t:240+this.addedCount,w:1,
+        power:cfg.power,renown:cfg.renown,energy:.7,sentiment:0,alive:true,memory:[`${r[0]}补入：${r[1]}`]});
+      // 连 3 条边：连到权重最高的若干在场主体
+      const targets=[...this.agents].filter(a=>a.name!==r[0]).sort((x,y)=>y.w-x.w).slice(0,3);
+      targets.forEach(tg=>{this._addEdge(r[0],tg.name,"hist","补录");edgesAdded++;});
+      added++;this.addedCount++;
+    });
+    this._computeKcap();
+    this._log("audit_add",{added,edgesAdded});
+    return {added,edgesAdded};
+  }
+  /* ---- 自然语言解析（零API） ---- */
+  parseNL(text){
+    const s=text.trim();
+    // ① 产业冲击词（芯片断供 / 订单外流 / 关税摩擦 / 链主外迁 …）
+    for(const w in SHOCK_WORDS){if(s.includes(w))return {kind:"shock",type:w};}
+    // ② 链主泛称：链主停产 / 链主走（“链主外迁”已在①作为冲击处理）
+    if(/链主/.test(s)&&/停产|退链|破产|走/.test(s)){
+      const anchors=this.agents.filter(a=>a.alive&&a.type==="anchor");
+      if(!anchors.length)return {error:"本局没有在场链主。"};
+      const pick=anchors.find(a=>s.includes(a.name))||anchors[0];
+      return {kind:"remove",name:pick.name};
+    }
+    // ③ 显式移除 / 产业死法词 + 在场主体
+    let m=s.match(/(?:移除|外迁|停产|退链|破产|倒闭)\s*([\u4e00-\u9fa5A-Za-z]+)/);
+    const deadWords=["外迁","停产","退链","破产","倒闭","流失","撤资","退场"];
+    if(m||deadWords.some(d=>s.includes(d))){
+      const name=m?m[1]:null;
+      const hit=name?this.agents.find(a=>a.name===name):this.agents.find(a=>s.includes(a.name));
+      if(hit&&hit.alive)return {kind:"remove",name:hit.name};
+      if(hit&&!hit.alive)return {error:`「${hit.name}」已退场。`};
+      return {error:`检测到产业死法词，但没匹配到本局在场主体。可移除：${this.agents.filter(a=>a.alive).map(a=>a.name).slice(0,10).join("、")}`};
+    }
+    // ④ 干扰：指标 + 数字（“增长动能 −0.2”=景气）
+    const metricMap={增长动能:"abundance",景气:"abundance",协同:"order",风险:"disaster",信心:"mood",
+      abundance:"abundance",order:"order",disaster:"disaster",mood:"mood"};
+    for(const k in metricMap){
+      if(s.includes(k)){
+        const nm=s.match(/(-?\d+\.?\d*)/);
+        if(nm)return {kind:"perturb",metric:metricMap[k],delta:parseFloat(nm[1])};
+        if(s.includes("上升")||s.includes("增加")||s.includes("提升"))return {kind:"perturb",metric:metricMap[k],delta:.2};
+        if(s.includes("下降")||s.includes("减少"))return {kind:"perturb",metric:metricMap[k],delta:-.2};
+      }
+    }
+    return {error:"没解析出来。可试：TCL华星外迁｜链主外迁｜芯片断供｜增长动能 -0.2｜移除亿纬锂能"};
+  }
+  execNL(text){
+    const r=this.parseNL(text);
+    if(r.error)return r;
+    if(r.kind==="shock")return Object.assign({exec:this.shock(r.type)},r);
+    if(r.kind==="remove")return Object.assign({exec:this.removeAgent(r.name)},r);
+    if(r.kind==="perturb")return Object.assign({exec:this.perturb(r.metric,r.delta)},r);
+    return {error:"未知"};
+  }
+  /* ---- Interview ---- */
+  interview(name){
+    const ag=this._byName(name); if(!ag)return null;
+    const cfg=TYPE_CFG[ag.type];
+    let care;
+    if(!ag.alive)care="我已退场（外迁 / 停产），只能从记忆里复盘这局了。";
+    else if(ag.energy<.32)care=`我最在意能不能撑下去——订单 / 现金流只剩${(ag.energy*100|0)}，再不来订单就得停产。`;
+    else if(this.state.disaster>.4)care="产业链风险还在升高，我最在意这波危机何时见底、订单何时回来。";
+    else if(ag.sentiment<-.25)care="周遭信心很弱、同行都在收缩，我最在意这股预期还能不能稳住。";
+    else if(ag.type==="anchor")care="我最在意稳链扩能、守住基本盘，把本地配套和订单稳住。";
+    else if(ag.type==="oem")care="我最在意拿到订单、出货走量，别在价格战里被拖垮。";
+    else if(ag.type==="supplier")care="我最在意就近配套、稳定供货，别被链主采购调整甩出局。";
+    else if(ag.type==="capital")care="我最在意把耐心钱投给能跑出来的链与企业，别投错、别断供。";
+    else if(ag.type==="land")care="我最在意腾出连片熟地、把好项目装进来。";
+    else care=`我最在意${cfg.goal}，眼下尚可周旋。`;
+    return {name:ag.name,type:ag.type,typeCn:cfg.cn,power:ag.power,renown:ag.renown,
+      energy:ag.energy,sentiment:ag.sentiment,alive:ag.alive,goal:cfg.goal,
+      memory:ag.memory.slice(-5),care};
+  }
+  survivors(){const l=this.agents.filter(a=>a.alive).length;return l/this.agents.length;}
+  _snap(){return {tick:this.tick,state:clone(this.state),agents:clone(this.agents),
+    timeline:clone(this.timeline),gold:clone(this.gold)};}
+  seek(t){
+    if(t<0||t>=this.snapshots.length)return;
+    const snap=clone(this.snapshots[t]);
+    this.tick=snap.tick;this.state=snap.state;this.agents=snap.agents;
+    this.timeline=snap.timeline;this.gold=snap.gold;
+    this.snapshots=this.snapshots.slice(0,t+1);
+    this._log("seek",{tick:t});
+  }
+  report(){
+    const st=this.state;
+    const deaths=this.timeline.filter(e=>e.kind==="death").map(e=>e.text);
+    const hist=this.timeline.filter(e=>e.kind==="hist").map(e=>e.text);
+    return {final:clone(st),survivors:this.survivors(),
+      alive:this.agents.filter(a=>a.alive).map(a=>a.name),
+      histEvents:hist,deaths};
+  }
+}
+
+/* ---- 力导向布局（纯函数，可复现，可测0重叠） ---- */
+function layoutForce(agents,edges,W,H){
+  // Fruchterman–Reingold：斥力 k²/d、弹簧 d²/k，温度冷却限幅，保证收敛不发散
+  const N=agents.length, rng=mulberry32(42);
+  const k=Math.sqrt(W*H/N);
+  const pos={};
+  agents.forEach((a,i)=>{const ang=(i/N)*Math.PI*2;
+    pos[a.name]={x:W/2+Math.cos(ang)*Math.min(W,H)*.30+(rng()-.5)*20,
+                 y:H/2+Math.sin(ang)*Math.min(W,H)*.30+(rng()-.5)*20};});
+  const R=17; let t=W*.18;
+  for(let it=0;it<300;it++){
+    const names=agents.map(a=>a.name);
+    const disp={};names.forEach(n=>disp[n]={x:0,y:0});
+    for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
+      let dx=pos[names[i]].x-pos[names[j]].x,dy=pos[names[i]].y-pos[names[j]].y;
+      let d=Math.sqrt(dx*dx+dy*dy)||.01;
+      const f=k*k/d, ux=dx/d,uy=dy/d;
+      disp[names[i]].x+=ux*f;disp[names[i]].y+=uy*f;
+      disp[names[j]].x-=ux*f;disp[names[j]].y-=uy*f;
+    }
+    edges.forEach(e=>{const p=pos[e.a],q=pos[e.b];if(!p||!q)return;
+      let dx=p.x-q.x,dy=p.y-q.y;let d=Math.sqrt(dx*dx+dy*dy)||.01;
+      const f=d*d/k,ux=dx/d,uy=dy/d;
+      disp[e.a].x-=ux*f;disp[e.a].y-=uy*f;
+      disp[e.b].x+=ux*f;disp[e.b].y+=uy*f;});
+    names.forEach(n=>{
+      disp[n].x+=(W/2-pos[n].x)*.02;disp[n].y+=(H/2-pos[n].y)*.02;
+      const d=Math.sqrt(disp[n].x*disp[n].x+disp[n].y*disp[n].y)||.01;
+      const step=Math.min(d,t);
+      pos[n].x+=disp[n].x/d*step;pos[n].y+=disp[n].y/d*step;
+      pos[n].x=clamp(pos[n].x,R+2,W-R-2);pos[n].y=clamp(pos[n].y,R+2,H-R-2);
+    });
+    t=Math.max(t*.96,.5);
+  }
+  const out={};Object.entries(pos).forEach(([kk,p])=>out[kk]={x:p.x,y:p.y});
+  out.__minGap=minGap(agents,out,R);
+  return out;
+}
+function minGap(agents,pos,R){
+  let mg=999;
+  for(let i=0;i<agents.length;i++)for(let j=i+1;j<agents.length;j++){
+    const p=pos[agents[i].name],q=pos[agents[j].name];
+    const g=Math.sqrt((p.x-q.x)**2+(p.y-q.y)**2)-2*R;
+    if(g<mg)mg=g;
+  }
+  return mg;
+}
+
+/* ---- 蒙特卡洛批量 ---- */
+function runMonteCarlo(baseSeed,n,params,onTick){
+  const res={abundance:[],order:[],disaster:[],mood:[],survivors:[]};
+  for(let i=0;i<n;i++){
+    const sim=new Sim(baseSeed*1000+i,params);
+    for(let t=0;t<(params&&params.ticks||20);t++)sim.step();
+    res.abundance.push(sim.state.abundance);res.order.push(sim.state.order);
+    res.disaster.push(sim.state.disaster);res.mood.push(sim.state.mood);
+    res.survivors.push(sim.survivors());
+    if(onTick&&i%Math.max(1,n/50|0)===0)onTick(i,n);
+  }
+  const stats={};
+  ["abundance","order","disaster","mood","survivors"].forEach(k=>{
+    stats[k]={mean:mean(res[k]),sd:sd(res[k]),p10:quantile(res[k],.1),p50:quantile(res[k],.5),p90:quantile(res[k],.9),values:res[k]};
+  });
+  return stats;
+}
+
+/* ---- 敏感性分析（对 4 杠杆做 ±扰动，按景气/存续响应幅度排序，供龙卷风图） ---- */
+function runSensitivity(baseSeed,n,delta,params,onTick){
+  const levers=[
+    {key:"invest",cn:"投资强度"},{key:"external",cn:"外部依赖"},
+    {key:"service",cn:"服务业配套"},{key:"land",cn:"用地供给"}
+  ];
+  const defVal={invest:.35,external:.62,service:.30,land:.45};
+  const base=params||{};
+  const run=(overrides)=>{
+    const p=Object.assign({},base,overrides);
+    const ab=[],su=[];
+    for(let i=0;i<n;i++){
+      const sim=new Sim(baseSeed*700+i,p);
+      for(let t=0;t<(p.ticks||20);t++)sim.step();
+      ab.push(sim.state.abundance);su.push(sim.survivors());
+    }
+    return {ab:mean(ab),su:mean(su)};
+  };
+  const rows=[];
+  levers.forEach((L,idx)=>{
+    const center=base[L.key]!==undefined?base[L.key]:defVal[L.key];
+    const lo=run({[L.key]:clamp(center-delta,0,1)});
+    const hi=run({[L.key]:clamp(center+delta,0,1)});
+    rows.push({key:L.key,cn:L.cn,center,
+      abLo:lo.ab,abHi:hi.ab,abSwing:Math.abs(hi.ab-lo.ab),
+      suLo:lo.su,suHi:hi.su,suSwing:Math.abs(hi.su-lo.su)});
+    if(onTick)onTick(idx+1,levers.length);
+  });
+  rows.sort((a,b)=>b.abSwing-a.abSwing);
+  return rows;
+}
+
+/* ---- 世界导入（数据/报告 → 世界种子；无 DOM，可 Node 验证） ---- */
+const _ORIG_CAND_=CANDIDATES.map(c=>c.slice()),_ORIG_REL_=RELATIONS.map(r=>r.slice()),_ORIG_CAUSAL_=CAUSAL.map(c=>({...c})); // 仲恺基准副本，用于一键恢复
+let REPORT_LEXICON={}; // 词表：主体名 → [类型,权重]，随世界重建刷新
+(function(){CANDIDATES.forEach(c=>{REPORT_LEXICON[c[0]]=[c[1],c[3]];});})();
+
+function parseUploadText(text,fname){
+  const t=text.trim();
+  if(!t)return {ok:false,msg:"内容为空。"};
+  // ② CSV 优先（[entities] 标记 / 表头 / 文件扩展名；避免 "[entities]" 被当作 JSON 数组开头）
+  const isCsv=/\[entities\]/.test(t)||/^name,type/i.test(t)||/^source,target/i.test(t)||(fname&&/\.(csv|tsv)$/i.test(fname));
+  if(isCsv){
+    const ents=[],rels=[];let sec=null;
+    t.split(/\r?\n/).forEach(line=>{
+      const s=line.trim();if(!s||s.startsWith("#"))return;
+      if(s==="[entities]"){sec="e";return;}
+      if(s==="[relations]"){sec="r";return;}
+      const parts=s.split(",").map(x=>x.trim());
+      if(sec==="r"&&parts.length>=2){rels.push({a:parts[0],b:parts[1],rel:parts[2]||"协作",str:parseFloat(parts[3])||.5});return;}
+      if(parts.length>=2&&/^[a-zA-Z][a-zA-Z0-9_]*$/.test(parts[0]))return;
+      if(parts.length>=2)ents.push({name:parts[0],type:parts[1],w:parseInt(parts[2])||1,desc:parts[3]||""});
+    });
+    return {ok:ents.length>0,mode:"csv",entities:ents,relations:rels,params:{},note:`CSV：${ents.length} 主体 / ${rels.length} 关系`};
+  }
+  // ① JSON
+  if(/^[\s]*[\[{]/.test(t)){
+    try{
+      const d=JSON.parse(t);
+      const arr=Array.isArray(d)?d:(d.candidates||d.entities||[]);
+      const rels=Array.isArray(d)?[]:(d.relations||[]);
+      const ents=arr.map(x=>({name:x.name||x[0],type:x.type||x[1],w:x.w!=null?x.w:(x[3]||1),desc:x.desc||x[2]||""}));
+      return {ok:true,mode:"json",entities:ents,relations:rels.map(r=>({a:r.a||r[0],b:r.b||r[2],rel:r.rel||r[1]||"协作",str:r.str!=null?r.str:(r[3]||.5)})),params:d.params||{},note:`JSON：${ents.length} 主体 / ${rels.length} 关系`};
+    }catch(e){return {ok:false,msg:"JSON 解析失败："+e.message};}
+  }
+  // ③ TXT 报告：内置词表抽取（非智能抽取，诚实标注）
+  const hits={};
+  Object.keys(REPORT_LEXICON).forEach(name=>{
+    const n=t.split(name).length-1;
+    if(n>0&&(n>=2||t.length<600))hits[name]=n;
+  });
+  const ents=Object.keys(hits).map(name=>{
+    const tp=REPORT_LEXICON[name];return {name,type:tp[0],w:tp[1],desc:`词表命中 ${hits[name]} 次`};
+  });
+  if(!ents.length)return {ok:false,msg:"报告未命中内置词表（当前词表为仲恺 41 主体名）。词表抽取≠智能抽取：请改用 CSV/JSON，或粘贴包含这些主体名的报告片段。"};
+  return {ok:true,mode:"report",entities:ents,relations:autoConnect(ents),params:{},note:`报告词表抽取：${ents.length} 主体 · 关系按类型自动连边（${autoConnect(ents).length} 条）`};
+}
+function autoConnect(ents){
+  const rels=[],push=(a,b,rel)=>{if(a&&b&&a!==b)rels.push({a,b,rel,str:.5});};
+  const by=t=>ents.filter(x=>x.type===t);
+  const core=by("anchor").concat(by("oem"),by("supplier"));
+  by("anchor").forEach(a=>{by("supplier").concat(by("oem")).forEach(b=>push(a.name,b.name,"供货"));});
+  by("oem").concat(by("supplier")).forEach(a=>{by("anchor").forEach(b=>push(a.name,b.name,"配套"));});
+  core.forEach(x=>{
+    by("service").forEach(y=>push(y.name,x.name,"服务"));
+    by("capital").forEach(y=>push(y.name,x.name,"授信"));
+    by("land").forEach(y=>push(y.name,x.name,"承载"));
+    by("infra").forEach(y=>push(y.name,x.name,"连接"));
+    by("talent").forEach(y=>push(y.name,x.name,"受雇"));
+  });
+  const seen=new Set();
+  return rels.filter(r=>{const k=r.a+"|"+r.b;if(seen.has(k))return false;seen.add(k);return true;});
+}
+function applyWorld(ents,rels,seed,params){
+  const seen=new Set(),bad=[],cand=[];
+  ents.forEach(e=>{
+    const name=(e.name||"").trim();
+    if(!name||seen.has(name)){bad.push((name||"空名")+"(重复)");return;}
+    if(!TYPE_CFG[e.type]){bad.push(name+"(类型"+e.type+")");return;}
+    seen.add(name);
+    cand.push([name,e.type,0,Math.max(1,Math.min(3,Math.round(+e.w||1)))]);
+  });
+  if(cand.length<4)return {ok:false,msg:"有效主体少于 4 个，无法成世界："+bad.slice(0,6).join("、")};
+  const relation=[];
+  rels.forEach(r=>{const a=(r.a||"").trim(),b=(r.b||"").trim();if(seen.has(a)&&seen.has(b)&&a!==b)relation.push([a,(r.rel||"协作").trim()||"协作",b]);});
+  CANDIDATES=cand;RELATIONS=relation;
+  CAUSAL=CAUSAL.filter(c=>seen.has(c.s)&&(!c.o||seen.has(c.o)));
+  REPORT_LEXICON={};CANDIDATES.forEach(c=>{REPORT_LEXICON[c[0]]=[c[1],c[3]];});
+  const sim=new Sim(seed);
+  if(params&&typeof params==="object"){Object.keys(params).forEach(k=>{if(k in sim.params)sim.params[k]=clamp(+params[k]||0,0,1);});}
+  return {ok:true,sim,cand:cand.length,rel:relation.length,bad:bad.slice(0,6)};
+}
+/*KERNEL-END*/
+
+/* ================= UI 层（依赖DOM） ================= */
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const MET_CN={abundance:"景气",order:"协同",disaster:"风险",mood:"信心",survivors:"存续"};
+const MET_COLOR={abundance:"#16a34a",order:"#2563eb",disaster:"#dc2626",mood:"#d97706",survivors:"#0891b2"};
+/* 17 项公开指标（2025）：[名称, 数值, 映射状态, 血统] */
+const INDICATOR_TABLE=[
+  ["地区生产总值 GDP","1160.39 亿，+7.1%","景气","A"],
+  ["规上工业总产值","4037.12 亿，+12.2%","景气","A"],
+  ["规上工业增加值","750.41 亿，+14.0%","景气","A"],
+  ["三产增加值","330.70 亿，+2.2%","协同·滞后","A"],
+  ["工业投资","−23.6%","风险","A"],
+  ["固定资产投资","−22.3%","风险","A"],
+  ["工业技改投资","−22.4%","风险","A"],
+  ["基础设施投资","−41.2%","风险","A"],
+  ["社会消费品零售","173.40 亿，+5.3%","景气","A"],
+  ["税收总收入","157.74 亿，+8.0%","景气","A"],
+  ["一般公共预算收入","53.91 亿，+3.7%","景气","A"],
+  ["外贸进出口","突破 1500 亿","外部依赖","A"],
+  ["实际利用外资","7.39 亿，+167.6%","景气","A"],
+  ["全社会用电量","102.01 亿千瓦时，+14.4%","景气","A"],
+  ["高新技术企业","1053 家","协同","A"],
+  ["规上工业企业","1144 家","协同","A"],
+  ["生产性服务业增加值","约 160 亿，+7%","协同","B"]
+];
+
+let sim=new Sim(7);
+let gatesPassed={g1:false,g2:false,g3:false};
+let anchored=false;
+let playing=false, playTimer=null;
+let posCache=null;
+
+function refreshSelectors(){
+  const names=sim.agents.map(a=>`${a.name}${a.alive?"":"（已亡）"}`);
+  const raw=sim.agents.map(a=>a.name);
+  fill("#remove-sel",raw.map(n=>[n,n]));
+  fill("#iv-sel",raw.map(n=>[n,n]));
+}
+function fill(sel,opts){const el=$(sel);const cur=el.value;
+  el.innerHTML=opts.map(o=>`<option value="${o[1]}">${o[0]}</option>`).join("");if(cur)el.value=cur;}
+
+function render(){
+  const st=sim.state;
+  $("#tick-lbl").textContent=sim.tick;
+  $("#track").value=sim.tick;
+  $("#world-lbl").textContent=worldSource;
+  setKpi("ab",st.abundance);setKpi("or",st.order);setKpi("di",st.disaster);
+  const moodShow=(st.mood+1)/2;
+  setKpi("mo",st.mood,true);setKpi("su",sim.survivors());
+  renderNetwork();
+  renderTimeline();
+  renderLedger();
+  if(currentIv)renderInterview(currentIv);
+  renderReport();
+}
+function setKpi(k,v,isMood){
+  const pct=isMood?(v+1)/2:v;
+  $(`#k-${k}`).textContent=isMood?v.toFixed(2):v.toFixed(2);
+  const bar=$(`#b-${k}`);bar.style.width=(pct*100).toFixed(0)+"%";
+  bar.style.background=k==="di"?"#dc2626":k==="mo"?(v<0?"#dc2626":"#16a34a"):(k==="su"?"#0891b2":"#16a34a");
+}
+
+function renderNetwork(){
+  const svg=$("#netsvg");
+  const W=760,H=560;
+  if(!posCache||posCache.__seed!==sim.seed||posCache.__n!==sim.agents.length){
+    posCache=layoutForce(sim.agents,sim.edges,W,H);posCache.__seed=sim.seed;posCache.__n=sim.agents.length;
+  }
+  const eCol=e=>e.layer==="hist"?"#818cf8":(e.layer==="affinity"?"#cbd5e1":"#c9b8a3");
+  let html="";
+  sim.edges.forEach(e=>{
+    const p=posCache[e.a],q=posCache[e.b];if(!p||!q)return;
+    const pa=sim._byName(e.a),pb=sim._byName(e.b);
+    const op=((pa&&pa.alive?1:.25)*(pb&&pb.alive?1:.25)*.85).toFixed(2);
+    const dash=e.layer==="hist"?"":"stroke-dasharray:4 4;";
+    html+=`<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${q.x.toFixed(1)}" y2="${q.y.toFixed(1)}"
+      style="stroke:${eCol(e)};stroke-width:${e.layer==="hist"?1.8:1};${dash}opacity:${op}"><title>${e.rel}（${e.a}→${e.b}）</title></line>`;
+  });
+  sim.agents.forEach(a=>{
+    const p=posCache[a.name];if(!p)return;
+    const cfg=TYPE_CFG[a.type];
+    if(a.alive){
+      const r=(11+a.energy*11).toFixed(1);
+      const ring=a.sentiment>.12?"#16a34a":a.sentiment<-.12?"#dc2626":"#94a3b8";
+      html+=`<g class="node" data-name="${a.name}" style="cursor:pointer">
+        <circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${typeColor(a.type)}" stroke="${ring}" stroke-width="3.5"></circle>
+        <text x="${p.x}" y="${p.y+4}" text-anchor="middle" font-size="12" font-weight="600" fill="#fff" paint-order="stroke" stroke="rgba(0,0,0,.28)" stroke-width="1.5">${cfg.cn}</text>
+        <text x="${p.x}" y="${(p.y+Number(r)+14).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="#475569" paint-order="stroke" stroke="#fcfdff" stroke-width="3">${a.name}</text>
+      </g>`;
+    }else{
+      html+=`<g class="node" data-name="${a.name}" style="cursor:pointer;opacity:.55">
+        <circle cx="${p.x}" cy="${p.y}" r="9" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="2"></circle>
+        <line x1="${p.x-4}" y1="${p.y-4}" x2="${p.x+4}" y2="${p.y+4}" stroke="#94a3b8" stroke-width="1.6"></line>
+        <line x1="${p.x+4}" y1="${p.y-4}" x2="${p.x-4}" y2="${p.y+4}" stroke="#94a3b8" stroke-width="1.6"></line>
+        <text x="${p.x}" y="${p.y+18}" text-anchor="middle" font-size="9.5" fill="#94a3b8" paint-order="stroke" stroke="#fcfdff" stroke-width="3">${a.name}</text>
+      </g>`;
+    }
+  });
+  const legend=[["anchor","链主"],["oem","整机"],["supplier","配套"],["service","服务"],["talent","人才"],["capital","资本"],["land","载体"],["infra","设施"]];
+  html+=`<g opacity=".97"><rect x="556" y="4" width="200" height="130" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1"></rect>`;
+  legend.forEach((g,i)=>{
+    const x=556+14+(i<4?0:100),y=24+(i%4)*26;
+    html+=`<circle cx="${x+6}" cy="${y-5}" r="6" fill="${typeColor(g[0])}"></circle><text x="${x+20}" y="${y}" font-size="11" fill="#334155">${g[1]}</text>`;
+  });
+  html+=`</g>`;
+  svg.innerHTML=html;
+  svg.querySelectorAll(".node").forEach(n=>n.addEventListener("click",()=>{
+    currentIv=n.dataset.name; switchTab("iv"); renderInterview(currentIv);
+  }));
+}
+function typeColor(t){return {anchor:"#312e81",oem:"#4f46e5",supplier:"#0e7490",service:"#b45309",
+  talent:"#ca8a04",capital:"#065f46",land:"#4d7c0f",infra:"#64748b"}[t];}
+
+function renderTimeline(){
+  const box=$("#tl-log");
+  const evs=[...sim.timeline].sort((a,b)=>a.tick-b.tick);
+  box.innerHTML=evs.map(e=>{
+    const gold=e.kind==="gold";
+    const col=e.kind==="death"?"#dc2626":gold?"#ca8a04":e.kind==="hist"?"#2563eb":"#334155";
+    return `<div class="ev ${gold?"gold":""}" style="color:${col}"><span class="tk">t${e.tick}</span>${e.text}</div>`;
+  }).join("")||'<div class="muted">尚未推演。</div>';
+  box.scrollTop=box.scrollHeight;
+}
+
+/* ---- Interview ---- */
+let currentIv=null;
+function renderInterview(name){
+  const d=sim.interview(name);
+  $("#iv-sel").value=name;
+  if(!d){$("#iv-box").innerHTML='<div class="muted">无此主体</div>';return;}
+  const sentCol=d.sentiment>0?"#16a34a":"#dc2626";
+  $("#iv-box").innerHTML=`
+    <div class="ivw">
+      <h3>${d.name} <span class="chip">${d.typeCn}</span> ${d.alive?"":'<span class="chip" style="background:#fdeaea;color:#dc2626">已退场</span>'}</h3>
+      <div class="ivgrid">
+        <div class="cell">实力 power：<b>${d.power}</b></div>
+        <div class="cell">行业地位 renown：<b>${d.renown}</b></div>
+        <div class="cell">经营 energy：<b>${(d.energy*100|0)}</b></div>
+        <div class="cell">预期 sentiment：<b style="color:${sentCol}">${d.sentiment.toFixed(2)}</b></div>
+      </div>
+      <div class="muted">目标：${d.goal}</div>
+      <div class="askbox"><b>“你现在最在意什么？”</b><br>“${d.care}”</div>
+      <div class="askbox" style="margin-top:8px"><b>最近 5 条记忆</b><br>${d.memory.map(m=>`· ${m}`).join("<br>")}</div>
+    </div>`;
+}
+
+/* ---- Ledger ---- */
+function renderLedger(){
+  const box=$("#ledger-log");
+  box.innerHTML=sim.ledger.map(l=>{
+    let d="";
+    try{d=typeof l.payload==="object"?JSON.stringify(l.payload):l.payload;}catch(e){}
+    return `<div class="ev"><span class="tk">t${l.t}</span><b>[${l.type}]</b> <span class="mono">${escapeHtml(d)}</span></div>`;
+  }).join("");
+  box.scrollTop=box.scrollHeight;
+}
+function escapeHtml(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+
+/* ---- 验模三门 ---- */
+function buildMissRoles(){
+  $("#missroles").innerHTML=MISS_ROLES.map((r,i)=>
+    `<div class="missrole"><label class="ck"><input type="checkbox" class="miss" value="${i}">
+      <span><b>${r[0]}</b> — ${r[1]} <span class="chip">${TYPE_CFG[r[2]].cn}</span></span></label></div>`).join("");
+}
+function buildParamTable(){
+  $("#param-table tbody").innerHTML=PARAM_LINEAGE.map((p,i)=>
+    `<tr><td style="text-align:left">${p[0]}<span class="grade ${p[2]}">${p[2]}</span>
+      <div class="muted" style="font-size:10px">${p[3]}</div></td>
+      <td>${p[1]}</td><td>${p[2]}</td>
+      <td>${p[4]?`<input type="number" class="pcheck" data-i="${i}" min="1" style="width:70px" placeholder="月">`:"—"}</td></tr>`).join("");
+}
+function checkG1(){
+  const cks=$$(".g1");
+  gatesPassed.g1=cks.every(c=>c.checked);
+  markGate("gate1","g1st",gatesPassed.g1);
+  afterGates();
+}
+function markGate(id,stId,ok){
+  const el=$("#"+id);el.classList.toggle("locked",!ok);el.classList.toggle("done",ok);
+  const st=$("#"+stId);st.className="status-pill "+(ok?"yes":"no");st.textContent=ok?"已过":"未过";
+}
+function applyMiss(){
+  const idxs=$$(".miss").filter(c=>c.checked).map(c=>parseInt(c.value));
+  if(!idxs.length){alert("硬门槛：至少检出一个漏项，请勾选。");return;}
+  const r=sim.addMissing(idxs);
+  gatesPassed.g2=true;markGate("gate2","g2st",true);
+  posCache=null;refreshSelectors();render();afterGates();
+}
+function checkG3(){
+  const need=PARAM_LINEAGE.map((p,i)=>({p,i})).filter(x=>x.p[4]);
+  const vals=$$(".pcheck");
+  let ok=true;
+  vals.forEach(v=>{if(!v.value||parseFloat(v.value)<=0)ok=false;});
+  gatesPassed.g3=ok;markGate("gate3","g3st",ok);afterGates();
+}
+function afterGates(){
+  if(gatesPassed.g1&&gatesPassed.g2&&gatesPassed.g3){
+    $("#anchor-gate").style.display="block";
+  }
+}
+function doAnchor(){
+  const txt=$("#anchor-text").value.trim();
+  if(!txt){alert("请先写下你的预判再落笔。");return;}
+  anchored=true;
+  sim._log("anchor",{prediction:txt});
+  const b=$("#btn-anchor");b.textContent="已锁定 ✓";b.disabled=true;
+  $("#anchor-text").disabled=true;
+  render();
+}
+
+/* ---- 蒙特卡洛 UI ---- */
+function doMC(){
+  const n=parseInt($("#mc-n").value),seed=parseInt($("#mc-seed").value)||7;
+  const res=$("#mc-results");res.innerHTML="";
+  $("#mc-progress").textContent="运行中…";
+  setTimeout(()=>{
+    const stats=runMonteCarlo(seed,n,sim.params,(i,t)=>{$("#mc-progress").textContent=`进度 ${i}/${t}`;});
+    $("#mc-progress").textContent=`完成 ${n} 局（种子 ${seed}）`;
+    let html="";
+    ["abundance","order","disaster","mood","survivors"].forEach(k=>{
+      const s=stats[k];
+      html+=`<div style="margin:10px 0"><b>${MET_CN[k]}</b>
+        <span class="muted">mean ${s.mean.toFixed(3)} · sd ${s.sd.toFixed(3)} · P10 ${s.p10.toFixed(3)} · P50 ${s.p50.toFixed(3)} · P90 ${s.p90.toFixed(3)}</span>
+        <div class="hist">${histSVG(s.values,s.p50,s.p10,s.p90,MET_COLOR[k])}</div></div>`;
+    });
+    res.innerHTML=html;
+    sim._log("montecarlo",{n,seed});renderLedger();
+  },20);
+}
+function histSVG(values,p50,p10,p90,color){
+  const W=520,H=140,pad=18,bins=24;
+  let lo=Math.min(...values),hi=Math.max(...values);if(hi===lo){hi=lo+1;}
+  const count=Array(bins).fill(0);
+  values.forEach(v=>{let b=Math.floor((v-lo)/(hi-lo)*bins);b=Math.min(b,bins-1);count[b]++;});
+  const mx=Math.max(...count);
+  const x=v=>pad+(v-lo)/(hi-lo)*(W-2*pad);
+  const bw=(W-2*pad)/bins;
+  let rects="";
+  count.forEach((c,i)=>{const h=c/mx*(H-2*pad);
+    rects+=`<rect x="${pad+i*bw}" y="${H-pad-h}" width="${bw-1}" height="${h}" fill="${color}" opacity=".75"></rect>`;});
+  const line=v=>`<line x1="${x(v)}" y1="${pad-6}" x2="${x(v)}" y2="${H-pad}" stroke="#334155" stroke-width="1.2" stroke-dasharray="3 3"></line>`;
+  const labels=`<text x="${x(p10)}" y="${pad-9}" font-size="9" fill="#334155">P10</text>
+    <text x="${x(p50)}" y="${pad-9}" font-size="9" fill="#ca8a04">P50</text>
+    <text x="${x(p90)}" y="${pad-9}" font-size="9" fill="#334155">P90</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}">${rects}${line(p10)}${line(p50)}${line(p90)}${labels}
+    <text x="${pad}" y="${H-4}" font-size="9" fill="#64748b">${lo.toFixed(2)}</text>
+    <text x="${W-pad-20}" y="${H-4}" font-size="9" fill="#64748b">${hi.toFixed(2)}</text></svg>`;
+}
+
+/* ---- 敏感性 UI（龙卷风图） ---- */
+function doSens(){
+  const n=parseInt($("#sens-n").value)||40;
+  const delta=parseFloat($("#sens-delta").value)||.15;
+  const seed=parseInt($("#mc-seed").value)||7;
+  $("#sens-progress").textContent="运行中…";
+  setTimeout(()=>{
+    const rows=runSensitivity(seed,n,delta,sim.params,(d,t)=>{$("#sens-progress").textContent=`进度 ${d}/${t} 变量`;});
+    $("#sens-progress").textContent=`完成（每档 ${n} 局，扰动 ±${delta}）`;
+    $("#sens-results").innerHTML=tornadoSVG(rows);
+    sim._log("sensitivity",{n,delta});renderLedger();
+  },20);
+}
+function tornadoSVG(rows){
+  const W=560,rowH=34,pad=118,top=30,H=top+rows.length*rowH+42;
+  let all=[];rows.forEach(r=>{all.push(r.abLo,r.abHi,r.center);});
+  let lo=Math.min(...all),hi=Math.max(...all);if(hi===lo)hi=lo+.1;
+  const x=v=>pad+(v-lo)/(hi-lo)*(W-pad-56);
+  let bars="";
+  rows.forEach((r,i)=>{
+    const y=top+i*rowH+8,h=18;
+    const x1=x(Math.min(r.abLo,r.abHi)),x2=x(Math.max(r.abLo,r.abHi)),xc=x(r.center);
+    const col={invest:"#2563eb",external:"#dc2626",service:"#ca8a04",land:"#65a30d"}[r.key];
+    bars+=`<text x="${pad-8}" y="${y+13}" text-anchor="end" font-size="11" fill="#1f2733">${r.cn}</text>
+      <rect x="${x1}" y="${y}" width="${Math.max(x2-x1,2)}" height="${h}" fill="${col}" opacity=".78" rx="3"></rect>
+      <line x1="${xc}" y1="${y-3}" x2="${xc}" y2="${y+h+3}" stroke="#1f2733" stroke-width="1.2"></line>
+      <text x="${x2+5}" y="${y+13}" font-size="10" fill="#5b6675">Δ${r.abSwing.toFixed(3)}</text>`;
+  });
+  let axis="";
+  [lo,(lo+hi)/2,hi].forEach(v=>{axis+=`<line x1="${x(v)}" y1="${top-6}" x2="${x(v)}" y2="${H-30}" stroke="#e8edf3"></line>
+    <text x="${x(v)}" y="${H-16}" text-anchor="middle" font-size="9" fill="#94a3b8">${v.toFixed(2)}</text>`;});
+  const head=`<text x="${pad}" y="16" font-size="11" fill="#1f2733">景气（增长动能）对各变量 ±扰动的响应 · 黑线=基准 · 条长=敏感度</text>`;
+  const rank=`<div class="muted" style="margin-top:6px">敏感度排序（景气）：<b>${rows.map(r=>r.cn).join(" &gt; ")}</b>。<br>越靠前，越该优先盯紧、或作为政策抓手；外部依赖条向左伸表示依赖越高、景气越低。</div>`;
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%">${head}${axis}${bars}</svg>${rank}`;
+}
+
+/* ---- 报告 ---- */
+function renderReport(){
+  $("#data-lineage").innerHTML=`
+    · 数据来源（2025，公开）：仲恺高新区<b>统计公报</b>、管委会工作报告、计划执行草案、经济运行简析及权威媒体报道。<br>
+    · 本单文件内置 <b>${CANDIDATES.length}</b> 个真实主体（每局按种子抽 24：5 家链主 w≥3 必入，其余加权抽样）、<b>${RELATIONS.length}</b> 条产业链关系、<b>${CAUSAL.length}</b> 条时序因果链。<br>
+    · 载体 / 资本 / 设施 / 服务业为净产出，链主 / 整机 / 配套 / 人才为净消耗——区域承载力模型基础。<br>
+    · <b>17 项公开指标（2025）→ 状态映射：</b>
+    <table style="margin-top:6px"><thead><tr><th style="text-align:left">公开指标</th><th>数值</th><th>映射</th></tr></thead><tbody>
+    ${INDICATOR_TABLE.map(r=>`<tr><td style="text-align:left">${r[0]}<span class="grade ${r[3]}">${r[3]}</span></td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}
+    </tbody></table>
+    · <span style="color:#16a34a">参数可回公报核对；</span><span style="color:#dc2626">但反事实（当年不引进某链主会怎样）不可验证，只给叙事分布。</span>`;
+  const passed=gatesPassed.g1&&gatesPassed.g2&&gatesPassed.g3&&anchored;
+  const box=$("#report-box"),note=$("#report-locknote");
+  if(!passed){box.classList.add("locked-report");
+    note.textContent=`🔒 ${!anchored?"过三门后还需落笔锁定":"未过验模三门"}，报告锁定。`;
+    box.innerHTML=reportHTML();return;}
+  note.textContent="";box.classList.remove("locked-report");box.innerHTML=reportHTML();
+}
+function reportHTML(){
+  const r=sim.report();const f=r.final;
+  return `<div class="ivw">
+    <div class="ivgrid">
+      <div class="cell">景气：<b>${f.abundance.toFixed(3)}</b></div>
+      <div class="cell">协同：<b>${f.order.toFixed(3)}</b></div>
+      <div class="cell">风险：<b>${f.disaster.toFixed(3)}</b></div>
+      <div class="cell">信心：<b>${f.mood.toFixed(3)}</b></div>
+    </div>
+    <div class="cell" style="margin:6px 0">存续率：<b>${(r.survivors*100).toFixed(0)}%</b>（在场 ${r.alive.length}）</div>
+    <b>产业事件（${r.histEvents.length}）</b><div class="muted">${r.histEvents.map(e=>"· "+e).join("<br>")||"—"}</div>
+    <b style="display:block;margin-top:6px">退场（${r.deaths.length}）</b><div class="muted" style="color:#dc2626">${r.deaths.map(e=>"· "+e).join("<br>")||"—"}</div>
+    </div>`;
+}
+
+/* ================= 导入世界 UI ================= */
+let worldSource="仲恺基准（内置 41 主体 / 71 关系 / 15 因果链）";
+let pendingWorld=null;
+const SAMPLE_WORLD=`[entities]
+# 名称,类型(anchor/oem/supplier/service/talent/capital/land/infra),权重1-3,说明
+中科智城,anchor,3,智慧城市总集成商
+芯链半导体,supplier,2,芯片封测
+精密光学,supplier,2,光学模组
+园区建设集团,land,3,片区开发
+产业基金联合体,capital,2,耐心资本
+技能大学,talent,2,工程师培养
+[relations]
+# 起点,终点,关系,强度
+芯链半导体,中科智城,供货,0.8
+精密光学,中科智城,供货,0.6
+产业基金联合体,芯链半导体,授信,0.5
+技能大学,中科智城,受雇,0.4
+园区建设集团,精密光学,承载,0.7`;
+function renderUploadPreview(p){
+  if(!p||!p.ok){$("#up-preview").innerHTML=`<div class="muted" style="color:#b91c1c">${p?p.msg:"—"}</div>`;$("#up-status").textContent="";return;}
+  pendingWorld=p;
+  $("#up-status").textContent=p.note||"";
+  const typeSel=Object.keys(TYPE_CFG).map(t=>`<option value="${t}">${TYPE_CFG[t].cn}</option>`).join("");
+  let h=`<table style="table-layout:fixed"><colgroup><col style="width:34%"><col style="width:20%"><col style="width:10%"><col style="width:30%"><col style="width:6%"></colgroup>
+  <thead><tr><th>主体名</th><th>类型</th><th>权重</th><th>说明</th><th></th></tr></thead><tbody>`;
+  p.entities.forEach((e,i)=>{
+    h+=`<tr data-e="${i}"><td><input value="${e.name}" class="up-e-n" style="width:100%"></td>
+    <td><select class="up-e-t">${typeSel.replace(`value="${e.type}"`,`value="${e.type}" selected`)}</select></td>
+    <td><input type="number" min="1" max="3" value="${e.w}" class="up-e-w" style="width:100%"></td>
+    <td><input value="${(e.desc||"").replace(/"/g,"&quot;")}" class="up-e-d" style="width:100%"></td>
+    <td><button class="btn up-del" data-i="${i}">✕</button></td></tr>`;
+  });
+  h+=`</tbody></table>`;
+  if(p.relations.length){
+    h+=`<div class="muted" style="margin:6px 0">关系（${p.relations.length} 条，a → 关系 → b）</div><table style="table-layout:fixed"><colgroup><col style="width:30%"><col style="width:20%"><col style="width:30%"><col style="width:14%"><col style="width:6%"></colgroup><tbody>`;
+    p.relations.forEach((r,i)=>{
+      h+=`<tr data-r="${i}"><td><input value="${r.a}" class="up-r-a" style="width:100%"></td>
+      <td><input value="${r.rel}" class="up-r-l" style="width:100%"></td>
+      <td><input value="${r.b}" class="up-r-b" style="width:100%"></td>
+      <td><input type="number" step=".1" min="0" max="1" value="${r.str}" class="up-r-s" style="width:100%"></td>
+      <td><button class="btn up-delr" data-i="${i}">✕</button></td></tr>`;
+    });
+    h+=`</tbody></table>`;
+  }
+  $("#up-preview").innerHTML=h;
+  $("#up-preview").querySelectorAll(".up-del").forEach(b=>b.onclick=()=>{pendingWorld.entities.splice(+b.dataset.i,1);renderUploadPreview(pendingWorld);});
+  $("#up-preview").querySelectorAll(".up-delr").forEach(b=>b.onclick=()=>{pendingWorld.relations.splice(+b.dataset.i,1);renderUploadPreview(pendingWorld);});
+}
+function buildWorldFromUpload(){
+  if(!pendingWorld){alert("先「解析预览」出内容再生成世界。");return;}
+  const ents=[];
+  document.querySelectorAll("#up-preview tr[data-e]").forEach(tr=>{
+    const name=tr.querySelector(".up-e-n").value.trim();
+    if(name)ents.push({name,type:tr.querySelector(".up-e-t").value,w:+tr.querySelector(".up-e-w").value||1,desc:tr.querySelector(".up-e-d").value.trim()});
+  });
+  const rels=[];
+  document.querySelectorAll("#up-preview tr[data-r]").forEach(tr=>{
+    const a=tr.querySelector(".up-r-a").value.trim(),b=tr.querySelector(".up-r-b").value.trim();
+    if(a&&b)rels.push({a,b,rel:tr.querySelector(".up-r-l").value.trim()||"协作",str:+tr.querySelector(".up-r-s").value||.5});
+  });
+  const seed=parseInt($("#up-seed").value)||7;
+  const r=applyWorld(ents,rels,seed,pendingWorld.params);
+  if(!r.ok)return alert(r.msg);
+  worldSource=`自定义世界（${r.cand} 主体 / ${r.rel} 关系，种子 ${seed}）`;
+  sim=r.sim;posCache=null;anchored=false;gatesPassed={g1:false,g2:false,g3:false};
+  const ab=$("#btn-anchor");ab.textContent="锁定落笔，写入决策档案";ab.disabled=false;
+  const at=$("#anchor-text");at.disabled=false;at.value="";
+  refreshSelectors();switchTab("run");render();
+  $("#up-note").innerHTML=`<b>已生成</b>：${worldSource}。播放、蒙特卡洛、敏感性、访谈均已切到新世界；预置基线表仍是仲恺 400 局基准，可用于对比。`;
+}
+$("#btn-restore").onclick=()=>{
+  CAUSAL=_ORIG_CAUSAL_.map(c=>({...c}));
+  const ents=_ORIG_CAND_.map(c=>({name:c[0],type:c[1],w:c[3],desc:c[2]||""}));
+  const rels=_ORIG_REL_.map(r=>({a:r[0],rel:r[1],b:r[2],str:.5}));
+  const r=applyWorld(ents,rels,7);
+  if(!r.ok)return alert(r.msg);
+  worldSource=`仲恺基准（内置 ${r.cand} 主体 / ${r.rel} 关系 / ${CAUSAL.length} 因果链）`;
+  sim=r.sim;posCache=null;anchored=false;gatesPassed={g1:false,g2:false,g3:false};
+  refreshSelectors();switchTab("run");render();
+  $("#up-note").innerHTML=`<b>已恢复</b>：${worldSource}。`;
+};
+function exportSeed(){
+  const d={meta:{world:worldSource,seed:sim.seed},
+    params:{invest:sim.params.invest,external:sim.params.external,service:sim.params.service,land:sim.params.land},
+    candidates:CANDIDATES.map(c=>({name:c[0],type:c[1],w:c[3],desc:c[2]||""})),
+    relations:RELATIONS.map(r=>({a:r[0],rel:r[1],b:r[2]}))};
+  download("world_seed.json",JSON.stringify(d,null,2));
+}
+$("#btn-parse").onclick=()=>{const f=$("#up-file").files[0];renderUploadPreview(parseUploadText($("#up-text").value,f?f.name:""));};
+$("#up-file").onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{$("#up-text").value=rd.result;renderUploadPreview(parseUploadText(rd.result,f.name));};rd.readAsText(f,"utf-8");};
+$("#btn-sample").onclick=()=>{$("#up-text").value=SAMPLE_WORLD;renderUploadPreview(parseUploadText(SAMPLE_WORLD,"example.csv"));};
+$("#btn-build").onclick=buildWorldFromUpload;
+$("#btn-export-seed").onclick=exportSeed;
+
+/* ---- Tab 切换 ---- */
+function switchTab(t){
+  $$(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===t));
+  $$(".pane").forEach(p=>p.classList.toggle("on",p.id==="pane-"+t));
+}
+$$(".tabs button").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
+
+/* ---- 时间轴控制 ---- */
+$("#btn-step").onclick=()=>{sim.step();posCache=null;render();};
+$("#btn-reset").onclick=()=>{sim=new Sim(sim.seed);posCache=null;refreshSelectors();render();};
+$("#btn-play").onclick=function(){
+  if(playing){clearInterval(playTimer);playing=false;this.textContent="▶ 播放";return;}
+  playing=true;this.textContent="⏸ 暂停";
+  playTimer=setInterval(()=>{if(sim.tick>=sim.params.ticks||!anchored){
+      if(!anchored)alert("请先在「验模三门」过三门并落笔锁定，再播放。");
+      clearInterval(playTimer);playing=false;$("#btn-play").textContent="▶ 播放";return;}
+    sim.step();posCache=null;render();},650);
+};
+$("#track").oninput=e=>{sim.seek(parseInt(e.target.value));posCache=null;render();};
+
+/* ---- 上帝视角 ---- */
+$("#btn-shock").onclick=()=>{const r=sim.shock($("#shock-sel").value);
+  $("#nl-result").innerHTML=r.ok?`已注入「${$("#shock-sel").value}」${r.killed?`，亡 ${r.killed}：`:""}`:"";posCache=null;render();};
+$("#btn-remove").onclick=()=>{const r=sim.removeAgent($("#remove-sel").value);
+  $("#nl-result").innerHTML=r.ok?`已移除「${$("#remove-sel").value}」`:`<span style="color:#dc2626">${r.msg}</span>`;posCache=null;render();};
+$("#btn-pert").onclick=()=>{sim.perturb($("#pert-metric").value,parseFloat($("#pert-delta").value)||0);
+  posCache=null;render();};
+
+/* ---- NL 注入 ---- */
+$("#btn-nl").onclick=()=>{
+  const txt=$("#nl-input").value;if(!txt)return;
+  const r=sim.execNL(txt);
+  const out=$("#nl-result");
+  if(r.error){out.innerHTML=`<span style="color:#dc2626">✗ ${r.error}</span>`;return;}
+  let msg="";
+  if(r.kind==="shock")msg=`✓ shock:${r.type}${r.exec.killed?`（亡${r.exec.killed}）`:""}`;
+  if(r.kind==="remove")msg=r.exec.ok?`✓ remove:${r.name}`:`<span style="color:#dc2626">✗ ${r.exec.msg}</span>`;
+  if(r.kind==="perturb")msg=`✓ perturb:${r.metric} ${r.delta>=0?"+":""}${r.delta}`;
+  out.innerHTML=msg;posCache=null;render();
+};
+$("#nl-hint").onclick=()=>{$("#nl-input").value="TCL华星外迁";};
+
+/* ---- 三门事件 ---- */
+$$(".g1").forEach(c=>c.onchange=checkG1);
+$("#btn-apply-miss").onclick=applyMiss;
+buildMissRoles();buildParamTable();
+$("#param-table").addEventListener("input",checkG3);
+$("#btn-anchor").onclick=doAnchor;
+
+/* ---- 蒙特卡洛 / 敏感性 / 导出 ---- */
+$("#btn-mc").onclick=doMC;
+$("#btn-sens").onclick=doSens;
+$("#btn-export-ledger").onclick=()=>download("zhongkai_decision_ledger.json",
+  JSON.stringify({meta:{case:"仲恺高新区",year:2025,seed:sim.seed},ledger:sim.ledger},null,2));
+$("#btn-export-state").onclick=()=>download("zhongkai_snapshot.json",JSON.stringify(sim._snap(),null,2));
+function download(name,text){
+  const blob=new Blob([text],{type:"application/json"});const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);
+}
+$("#btn-iv").onclick=()=>{currentIv=$("#iv-sel").value;renderInterview(currentIv);};
+
+/* ---- 初始化 ---- */
+refreshSelectors();render();
+</script>
+</body>
+</html>
