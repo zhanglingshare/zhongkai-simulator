@@ -2112,7 +2112,7 @@ function hotStats(d){
   const kg=txt.match(/(\d+)\s*宗[^，。、]*?开工/), jg=txt.match(/(\d+)\s*宗[^，。、]*?竣工/);
   if(kg&&jg) out.push({n:kg[1]+"·"+jg[1],warm:false,cap:"今年产业项目<br>开工 · 竣工投产（宗）"});
   else if(kg) out.push({n:kg[1],warm:false,cap:"今年新开工<br>产业项目（宗）"});
-  const xw=txt.match(/新增[^，。、]*?(\d+)\s*个?\s*公办学位/)||txt.match(/(\d+)\s*个?\s*公办学位/);
+  const xw=txt.match(/公办学位\s*(\d+)\s*个/)||txt.match(/新增[^，。、]*?(\d+)\s*个?\s*公办学位/)||txt.match(/(\d+)\s*个?\s*公办学位/);
   if(xw) out.push({n:xw[1],warm:true,cap:"今年新增<br>公办学位（个）"});
   out.push({n:"9",warm:false,cap:"5 镇街 + 4 园区<br>各有各的活法"});
   out.push({n:String(d.count||(d.items||[]).length),warm:true,cap:"今天为你扒到<br>的话题（条）"});
