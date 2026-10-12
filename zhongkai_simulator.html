@@ -327,6 +327,8 @@
   .note-card .nc-quote{font-size:14.5px;font-weight:600;color:#fde68a;line-height:1.6;margin-bottom:11px}
   .note-card .nc-src{font-size:10px;color:var(--mut);border-top:1px dashed rgba(125,211,252,.25);padding-top:8px}
   .detail-head{font-size:12px;color:var(--sub);margin:14px 0 8px}
+  .ramp-btn{width:100%;margin-top:14px;padding:13px 14px;font-size:13px;line-height:1.5;text-align:left}
+  .ramp-btn b{display:block;font-size:14.5px;margin-top:2px}
   .fate-result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
   .fate-result-grid .cell{background:linear-gradient(180deg,rgba(140,170,225,.06),rgba(140,170,225,.02));border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
   .fate-result-grid .v{font-size:22px;font-weight:800;font-family:var(--font-num);color:var(--ink);text-shadow:0 0 16px rgba(125,211,252,.25)}
@@ -2851,6 +2853,7 @@ function renderFate(){
         <button class="btn" id="fate-share-link">🔗 复制可复现链接</button>
         <button class="btn" id="fate-retry">↻ 换一种选择再试</button>
       </div>
+      <button class="btn primary ramp-btn" id="fate-to-run">这只是你的直觉。想看仲恺那 839 亿缺口，你这个选择会怎样？<b>→ 进动态推演认真算一遍</b></button>
     </div>`;
     $("#fate-share-dl").onclick=()=>drawFateCard(r);
     $("#fate-share-link").onclick=async function(){
@@ -2860,6 +2863,7 @@ function renderFate(){
       this.textContent=ok?"✓ 已复制（朋友打开会自动跑同一情景）":"✗ 复制失败，请长按本页链接手动复制";
     };
     $("#fate-retry").onclick=()=>{fateState.step=2;renderFate();};
+    $("#fate-to-run").onclick=()=>{closeFate();openApp("run");};
     $("#fate-next").style.display="";$("#fate-next").textContent="完成";
     $("#fate-next").onclick=closeFate;
   }
