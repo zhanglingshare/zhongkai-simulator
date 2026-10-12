@@ -1276,6 +1276,65 @@
       </div>
     </section>
 
+    <!-- ============ 苗头变动推演 ============ -->
+    <section id="view-signal" class="view">
+      <div style="padding:16px">
+        <div style="font-size:13px;color:#94a3b8;margin-bottom:12px">从近三年趋势里挑出4个苗头。选一个方向，看可能会怎样。不下结论。</div>
+
+        <div style="background:rgba(129,140,248,.08);border-radius:10px;padding:12px;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <b style="font-size:14px;color:#e2e8f0">🔬 工业在加速，投资在退潮</b>
+          </div>
+          <div style="font-size:12px;color:#94a3b8;margin-bottom:10px">工业总产值+12.2%，固投−22.3%。这个剪刀差会持续吗？</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <button type="button" style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);border-radius:8px;padding:10px;color:#34d399;font-size:12px;cursor:pointer" onclick="showSignal(0,0)">继续加速<br><small>工业+12% → +14%</small></button>
+            <button type="button" style="background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.3);border-radius:8px;padding:10px;color:#f87171;font-size:12px;cursor:pointer" onclick="showSignal(0,1)">投资退潮传导<br><small>工业+12% → +8%</small></button>
+          </div>
+          <div id="signal-result-0" style="display:none;margin-top:10px;padding:10px;background:rgba(148,163,184,.06);border-radius:8px;font-size:12px;line-height:1.6"></div>
+        </div>
+
+        <div style="background:rgba(251,191,36,.08);border-radius:10px;padding:12px;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <b style="font-size:14px;color:#e2e8f0">🌱 三产刚从负增长转正</b>
+          </div>
+          <div style="font-size:12px;color:#94a3b8;margin-bottom:10px">2024年−2.0%，2025年+2.2%。能支撑2030年400亿目标吗？</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <button type="button" style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);border-radius:8px;padding:10px;color:#34d399;font-size:12px;cursor:pointer" onclick="showSignal(1,0)">三产加速<br><small>+2.2% → +5%</small></button>
+            <button type="button" style="background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.3);border-radius:8px;padding:10px;color:#f87171;font-size:12px;cursor:pointer" onclick="showSignal(1,1)">三产再失速<br><small>+2.2% → +0%</small></button>
+          </div>
+          <div id="signal-result-1" style="display:none;margin-top:10px;padding:10px;background:rgba(148,163,184,.06);border-radius:8px;font-size:12px;line-height:1.6"></div>
+        </div>
+
+        <div style="background:rgba(129,140,248,.08);border-radius:10px;padding:12px;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <b style="font-size:14px;color:#e2e8f0">📈 GDP V型恢复</b>
+          </div>
+          <div style="font-size:12px;color:#94a3b8;margin-bottom:10px">10.1% → 4.0% → 7.1%。这个恢复能持续吗？</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <button type="button" style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);border-radius:8px;padding:10px;color:#34d399;font-size:12px;cursor:pointer" onclick="showSignal(2,0)">恢复持续<br><small>GDP+7.1% → +8%</small></button>
+            <button type="button" style="background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.3);border-radius:8px;padding:10px;color:#f87171;font-size:12px;cursor:pointer" onclick="showSignal(2,1)">只是反弹<br><small>GDP+7.1% → +5%</small></button>
+          </div>
+          <div id="signal-result-2" style="display:none;margin-top:10px;padding:10px;background:rgba(148,163,184,.06);border-radius:8px;font-size:12px;line-height:1.6"></div>
+        </div>
+
+        <div style="background:rgba(248,113,113,.08);border-radius:10px;padding:12px;margin-bottom:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <b style="font-size:14px;color:#e2e8f0">🏠 房地产退潮</b>
+          </div>
+          <div style="font-size:12px;color:#94a3b8;margin-bottom:10px">销售面积−54.2%，销售金额−51.3%。对消费和财政的传导会怎样？</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <button type="button" style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.3);border-radius:8px;padding:10px;color:#34d399;font-size:12px;cursor:pointer" onclick="showSignal(3,0)">触底企稳<br><small>销售−54% → −20%</small></button>
+            <button type="button" style="background:rgba(248,113,113,.15);border:1px solid rgba(248,113,113,.3);border-radius:8px;padding:10px;color:#f87171;font-size:12px;cursor:pointer" onclick="showSignal(3,1)">继续下行<br><small>销售−54% → −60%</small></button>
+          </div>
+          <div id="signal-result-3" style="display:none;margin-top:10px;padding:10px;background:rgba(148,163,184,.06);border-radius:8px;font-size:12px;line-height:1.6"></div>
+        </div>
+
+        <div style="font-size:11px;color:#64748b;text-align:center;margin-top:16px">
+          以上为情景推演，非预测。实际结果取决于多重因素。
+        </div>
+      </div>
+    </section>
+
     <!-- ============ ② 动态推演 ============ -->
     <section id="view-run" class="view">
       <div class="kpis">
@@ -2669,6 +2728,7 @@ const PHONE_APPS=[
   {v:"town",  e:"🏘",n:"仲恺各镇",g:"linear-gradient(135deg,#f59e0b,#ef4444)",dock:true},
   {v:"home",  e:"🎯",n:"现场体验",g:"linear-gradient(135deg,#8b5cf6,#6366f1)",dock:true},
   {v:"fund",  e:"📊",n:"仲恺家底",g:"linear-gradient(135deg,#0ea5e9,#6366f1)",dock:true},
+  {v:"signal",e:"🌱",n:"苗头推演",g:"linear-gradient(135deg,#fbbf24,#f97316)",dock:true},
   {v:"run",   e:"▶", n:"动态推演",g:"linear-gradient(135deg,#10b981,#059669)",dock:true},
   {v:"mc",    e:"🎲",n:"批量重跑",g:"linear-gradient(135deg,#06b6d4,#0e7490)"},
   {v:"sens",  e:"🌪",n:"变量影响",g:"linear-gradient(135deg,#ec4899,#be185d)"},
@@ -2682,6 +2742,7 @@ const APP_TITLE={
   town:{t:"仲恺生活地图",s:"下班周末去哪 · 5镇街+4园区"},
   home:{t:"现场体验",s:"选身份，看一件事怎么传到你身上"},
   fund:{t:"仲恺家底",s:"近三年趋势 · 2025基本面 · 十五五目标"},
+  signal:{t:"苗头推演",s:"从趋势里挑出4个苗头，选方向看可能结果"},
   run:{t:"动态推演",s:"看产业网络如何一步步演化"},
   mc:{t:"批量重跑",s:"同规则反复跑，看结局稳不稳"},
   sens:{t:"变量影响",s:"哪个旋钮一动，结局变化最大"},
@@ -2696,7 +2757,7 @@ function phoneIco(a){
 function renderHomeScreen(){
   const all=PHONE_APPS;
   const groups=[
-    {h:"家底与推演",vs:["fund","mc","sens"]},
+    {h:"家底与推演",vs:["fund","signal","mc","sens"]},
     {h:"研究资料",vs:["iv","ledger","data"]},
     {h:"系统",vs:["world"]}
   ];
@@ -2987,7 +3048,6 @@ function goHome(){setPhoneState("home");islandLive("",false);setTimeout(playChat
 function initFundCharts(){
   if(typeof echarts==="undefined")return;
   const dark={backgroundColor:"transparent",textStyle:{color:"#94a3b8"}};
-  // 近三年趋势
   const c1=echarts.init(document.getElementById("chart-trend"));
   c1.setOption({...dark,
     tooltip:{trigger:"axis"},
@@ -3001,14 +3061,12 @@ function initFundCharts(){
       {name:"三产增速",type:"line",data:[null,-2.0,2.2],smooth:true,lineStyle:{color:"#fbbf24"},itemStyle:{color:"#fbbf24"}}
     ]
   });
-  // 三次产业结构饼图
   const c2=echarts.init(document.getElementById("chart-structure"));
   c2.setOption({...dark,
     tooltip:{trigger:"item"},
     series:[{type:"pie",radius:["40%","70%"],label:{color:"#e2e8f0",fontSize:10},
       data:[{value:70.5,name:"二产",itemStyle:{color:"#818cf8"}},{value:28.5,name:"三产",itemStyle:{color:"#fbbf24"}},{value:1.0,name:"一产",itemStyle:{color:"#34d399"}}]}]
   });
-  // 十五五目标差距条形图
   const c3=echarts.init(document.getElementById("chart-gap"));
   c3.setOption({...dark,
     tooltip:{trigger:"axis"},
@@ -3022,6 +3080,16 @@ function initFundCharts(){
     ],label:{show:true,position:"right",color:"#e2e8f0",formatter:"{c}%"}}]
   });
   window.addEventListener("resize",()=>{c1.resize();c2.resize();c3.resize();});
+}
+function showSignal(idx,dir){
+  const results=[
+    {good:"工业继续加速（+14%）：规上工业总产值2030年约6800亿，超6500亿目标约300亿。GDP年均增速约8.5%。",bad:"投资退潮传导（+8%）：规上工业总产值2030年约5800亿，距6500亿目标差700亿。GDP年均增速约6.0%。"},
+    {good:"三产加速（+5%）：生产性服务业2030年约420亿，超400亿目标。三产占比从28.5%提升到约32%。",bad:"三产再失速（+0%）：生产性服务业2030年约330亿，距400亿目标差70亿。三产占比仍约28%。"},
+    {good:"恢复持续（+8%）：GDP 2030年约1700亿，距2000亿目标差300亿。需要额外动能。",bad:"只是反弹（+5%）：GDP 2030年约1550亿，距2000亿目标差450亿。十五五目标缺口扩大。"},
+    {good:"触底企稳（−20%）：房地产对消费和财政的拖累减轻。社零增速维持5-6%。",bad:"继续下行（−60%）：房地产相关消费（建材、家电、家具）继续下滑。地方财政压力加大。"}
+  ];
+  const el=document.getElementById("signal-result-"+idx);
+  if(el){el.style.display="block";el.innerHTML=(dir===0?"✅ ":"⚠️ ")+results[idx][dir];}
 }
 /* 第一屏（钩子）：进群按钮 + 上滑进群，不做点击解锁 */
 (function(){
