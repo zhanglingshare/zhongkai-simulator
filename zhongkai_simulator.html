@@ -3034,6 +3034,8 @@ function islandLive(txt,on){
   else{is.classList.remove("live");}
 }
 function unlockPhone(openV){
+  document.getElementById("zeropage").style.display="none";
+  document.getElementById("presspage").style.display="none";
   if(openV){openApp(openV);}
   else{setPhoneState("home");setTimeout(playChat,260);}
 }
