@@ -273,6 +273,11 @@
   .fate-step h3{margin:0 0 8px;font-size:15.5px;color:var(--ink)}
   .fate-net{width:100%;height:300px;display:block;background:radial-gradient(700px 320px at 60% -80px, rgba(56,189,248,.10), transparent 60%), #0a1120;border-radius:12px;margin:8px 0;border:1px solid var(--line)}
   .fate-meta{font-size:12px;color:var(--sub);margin:6px 0}
+  .fate-switch{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px}
+  .fs-btn{border:1px solid rgba(125,211,252,.3);background:rgba(125,211,252,.08);
+    color:#dff2ff;border-radius:16px;padding:6px 10px;font-size:11.5px;cursor:pointer;
+    transition:all .15s}
+  .fs-btn.on{background:linear-gradient(135deg,#0ea5e9,#2563eb);border-color:#38bdf8;color:#fff;font-weight:700}
   .fate-result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
   .fate-result-grid .cell{background:linear-gradient(180deg,rgba(140,170,225,.06),rgba(140,170,225,.02));border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
   .fate-result-grid .v{font-size:22px;font-weight:800;font-family:var(--font-num);color:var(--ink);text-shadow:0 0 16px rgba(125,211,252,.25)}
@@ -421,17 +426,29 @@
     transition:transform .62s cubic-bezier(.32,.72,0,1),opacity .5s}
   .phone-frame.state-home .lockscreen,
   .phone-frame.state-app .lockscreen{transform:translateY(-103%);opacity:.85}
-  .ls-wall{position:absolute;inset:0;z-index:0;
+  .ls-wall{position:absolute;inset:0;z-index:0;overflow:hidden;background:#050810}
+  .lsw-slide{display:block;position:absolute;inset:0;background-size:cover;background-position:center;
+    opacity:0;will-change:transform,opacity}
+  .lsw-slide:nth-child(1){animation:sw1 36s ease-in-out infinite,kb1 36s ease-in-out infinite}
+  .lsw-slide:nth-child(2){animation:sw2 36s ease-in-out infinite,kb2 36s ease-in-out infinite}
+  .lsw-slide:nth-child(3){animation:sw3 36s ease-in-out infinite,kb3 36s ease-in-out infinite}
+  @keyframes sw1{0%,27%{opacity:1}33%{opacity:0}95%{opacity:0}100%{opacity:1}}
+  @keyframes sw2{0%,27%{opacity:0}33%{opacity:1}62%{opacity:1}67%{opacity:0}100%{opacity:0}}
+  @keyframes sw3{0%,62%{opacity:0}67%{opacity:1}95%{opacity:1}100%{opacity:0}}
+  @keyframes kb1{0%{transform:scale(1.12) translate(0,0)}27%{transform:scale(1.22) translate(-2%,-1.5%)}33%,100%{transform:scale(1.12)}}
+  @keyframes kb2{0%,33%{transform:scale(1.2) translate(-2%,1.5%)}62%{transform:scale(1.1) translate(0,0)}67%,100%{transform:scale(1.2)}}
+  @keyframes kb3{0%,67%{transform:scale(1.1) translate(1%,0)}95%{transform:scale(1.22) translate(-1.5%,-1.5%)}100%{transform:scale(1.1)}}
+  .lsw-glow{display:block;position:absolute;inset:-30%;pointer-events:none;
     background:
-      radial-gradient(120% 75% at 18% 4%, rgba(30,64,175,.55), transparent 58%),
-      radial-gradient(110% 70% at 92% 8%, rgba(124,58,237,.45), transparent 55%),
-      radial-gradient(100% 90% at 50% 105%, rgba(8,145,178,.5), transparent 62%),
-      linear-gradient(180deg,#0b1430,#050810);
-    background-size:220% 220%;animation:wallflow 18s ease-in-out infinite alternate}
-  @keyframes wallflow{
-    0%{background-position:6% 0%,100% 0%,50% 100%,0 0}
-    50%{background-position:90% 35%,5% 45%,58% 70%,0 0}
-    100%{background-position:10% 65%,100% 85%,42% 38%,0 0}}
+      radial-gradient(40% 25% at 20% 15%,rgba(125,211,252,.20),transparent 70%),
+      linear-gradient(115deg,transparent 40%,rgba(255,255,255,.10) 50%,transparent 60%);
+    animation:glowSweep 10s ease-in-out infinite alternate}
+  @keyframes glowSweep{0%{transform:translate(-12%,8%)}100%{transform:translate(12%,-8%)}}
+  .lsw-veil{display:block;position:absolute;inset:0;pointer-events:none;
+    background:
+      linear-gradient(180deg,rgba(3,6,16,.40),transparent 20%),
+      linear-gradient(0deg,rgba(3,6,16,.62),transparent 28%),
+      linear-gradient(180deg,transparent 55%,rgba(3,6,16,.25))}
   .ls-top{position:relative;z-index:2;display:flex;justify-content:flex-end;align-items:center;
     padding:16px 26px 0;gap:7px;color:#fff;font-size:13px;font-weight:600}
   .ls-mid{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;
@@ -485,6 +502,21 @@
     background:rgba(255,255,255,.14);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
     border-radius:30px;padding:12px 14px;margin:0 6px;border:1px solid rgba(255,255,255,.1)}
   .hs-dock .hs-name{display:none}
+  /* 应用抽屉：分组列表（带说明） */
+  .ap-group{margin-bottom:13px}
+  .ap-gh{font-size:11px;font-weight:700;color:#94a3b8;letter-spacing:1px;padding:0 6px 6px;opacity:.85}
+  .ap-row{display:flex;align-items:center;gap:11px;width:100%;text-align:left;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);
+    border-radius:14px;padding:9px 12px;margin-bottom:7px;color:#fff;cursor:pointer;
+    transition:background .15s,transform .12s}
+  .ap-row:active{transform:scale(.98);background:rgba(255,255,255,.12)}
+  .ap-ico{width:38px;height:38px;border-radius:11px;flex:none;display:flex;align-items:center;
+    justify-content:center;font-size:20px;box-shadow:0 4px 10px rgba(0,0,0,.3)}
+  .ap-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+  .ap-txt b{font-size:14px;font-weight:700}
+  .ap-txt i{font-size:11px;color:#b6c2d6;font-style:normal;line-height:1.4;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ap-chev{font-size:21px;color:#7dd3fc;opacity:.7;flex:none;line-height:1}
   /* ===== 群聊主屏（微信风格 · 浅色暖底） ===== */
   .hs-chat{position:absolute;inset:0;display:flex;flex-direction:column;
     background:linear-gradient(180deg,#ededed,#e8e8e6);color:#1f2733}
@@ -573,7 +605,7 @@
   .apps-back{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;
     border-radius:9px;padding:6px 12px;font-size:12.5px;cursor:pointer}
   .apps-nav-sp{width:74px}
-  .hs-apps .hs-grid{flex:1;align-content:start;overflow-y:auto;padding:8px 10px 12px}
+  .hs-apps .hs-grid{flex:1;display:block;overflow-y:auto;padding:10px 14px 12px}
   .hs-apps .hs-dock{margin:0 14px 14px}
   /* App 层 */
   .app-layer{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;
@@ -645,7 +677,7 @@
     .home-bar{bottom:9px}
   }
   @media (prefers-reduced-motion:reduce){
-    .ls-wall{animation:none}.ls-swipe{animation:none}
+    .lsw-slide,.lsw-glow,.ls-swipe{animation:none}.lsw-slide{opacity:1}
     .lockscreen,.homescreen,.app-layer,.island{transition-duration:.01ms}
   }
 </style>
@@ -660,7 +692,13 @@
 
       <!-- 锁屏 -->
       <div class="lockscreen" id="lockscreen">
-        <div class="ls-wall"></div>
+        <div class="ls-wall">
+          <i class="lsw-slide" style="background-image:url('images/wallpaper-mountain.jpg')"></i>
+          <i class="lsw-slide" style="background-image:url('images/wallpaper-city.jpg')"></i>
+          <i class="lsw-slide" style="background-image:url('images/wallpaper-night.jpg')"></i>
+          <i class="lsw-glow"></i>
+          <i class="lsw-veil"></i>
+        </div>
         <div class="ls-top"><span>📶</span><span>📡</span><span>🔋</span></div>
         <div class="ls-mid">
           <div class="ls-date" id="ls-date">—</div>
@@ -711,7 +749,7 @@
           </div>
           <div class="hs-apps-nav">
             <button class="apps-back" id="apps-back" type="button">‹ 回群聊</button>
-            <b>全部应用</b>
+            <b>专业工作台</b>
             <span class="apps-nav-sp"></span>
           </div>
           <div class="hs-grid" id="hs-grid"></div>
@@ -2273,9 +2311,21 @@ function phoneIco(a){
   return `<div class="hs-ico" style="background:${a.g}">${a.e}${a.badge?`<span class="hs-badge" id="hs-badge-hot" style="display:none">0</span>`:""}</div>`;
 }
 function renderHomeScreen(){
-  const cell=a=>`<button class="hs-app" type="button" onclick="openApp('${a.v}')">${phoneIco(a)}<span class="hs-name">${a.n}</span></button>`;
-  $("#hs-grid").innerHTML=PHONE_APPS.filter(a=>!a.dock).map(cell).join("");
-  $("#hs-dock").innerHTML=PHONE_APPS.filter(a=>a.dock).map(cell).join("");
+  const all=PHONE_APPS;
+  const groups=[
+    {h:"分析与压力",vs:["mc","sens"]},
+    {h:"研究资料",vs:["iv","ledger","data"]},
+    {h:"系统",vs:["world"]}
+  ];
+  const byV=v=>all.find(a=>a.v===v);
+  const row=a=>`<button class="ap-row" type="button" onclick="openApp('${a.v}')">
+    <span class="ap-ico" style="background:${a.g}">${a.e}</span>
+    <span class="ap-txt"><b>${a.n}</b><i>${APP_TITLE[a.v].s}</i></span>
+    <span class="ap-chev">›</span></button>`;
+  $("#hs-grid").innerHTML=groups.map(g=>
+    `<div class="ap-group"><div class="ap-gh">${g.h}</div>${g.vs.map(v=>row(byV(v))).join("")}</div>`).join("");
+  $("#hs-dock").innerHTML=all.filter(a=>a.dock).map(a=>
+    `<button class="hs-app" type="button" onclick="openApp('${a.v}')">${phoneIco(a)}<span class="hs-name">${a.n}</span></button>`).join("");
 }
 /* ===== 仲恺街坊群（主屏） ===== */
 const NEIGHBORS={
@@ -2385,7 +2435,7 @@ function quickSay(i){
 }
 function openApps(){$("#hs-apps").classList.add("on");}
 function closeApps(){$("#hs-apps").classList.remove("on");}
-function startFate(){openApp('home');}
+function startFate(){openFate('work');}
 function pad2(x){return String(x).padStart(2,"0");}
 function tickClock(){
   const d=new Date(),hh=pad2(d.getHours()),mm=pad2(d.getMinutes());
@@ -2542,6 +2592,13 @@ function closeFate(){
   $("#fate-modal").classList.remove("on");
   if(fateState.playIv){clearInterval(fateState.playIv);fateState.playIv=null;}
 }
+function switchFateIdent(k){
+  if(k===fateState.ident)return;
+  fateState.ident=k;
+  fateState.step=0;
+  if(fateState.newsShocks){fateState.newsShocks=null;fateState.newsNote=null;}
+  renderFate();
+}
 function renderFate(){
   const it=FATE_IDENTS[fateState.ident];if(!it)return;
   const curShocks=()=>fateState.newsShocks||it.shocks;
@@ -2558,6 +2615,9 @@ function renderFate(){
   const body=$("#fate-body");
   if(fateState.step===0){ /* ① 你的问题 */
     body.innerHTML=`<div class="fate-step">
+      <div class="fate-switch">
+        ${["work","shop","live","grad"].map(k=>`<button type="button" class="fs-btn ${k===fateState.ident?"on":""}" onclick="switchFateIdent('${k}')">${FATE_IDENTS[k].emoji} ${FATE_IDENTS[k].label}</button>`).join("")}
+      </div>
       <h3>${it.emoji} ${it.q}</h3>
       ${newsCard}
       <div class="fate-meta">${it.data}</div>
