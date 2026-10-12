@@ -466,40 +466,38 @@
       linear-gradient(180deg,rgba(3,6,16,.40),transparent 20%),
       linear-gradient(0deg,rgba(3,6,16,.62),transparent 28%),
       linear-gradient(180deg,transparent 55%,rgba(3,6,16,.25))}
-  /* 暖心语录：完全作为背景层，逐条缓慢淡入 */
-  .lsw-warm{position:absolute;left:0;right:0;top:42%;height:130px;pointer-events:none;z-index:4}
-  .lsw-warm .lw-q{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    padding:0 34px;font-size:16.5px;font-weight:700;color:#fff;opacity:0;letter-spacing:.3px;
-    text-align:center;line-height:1.5;
-    text-shadow:0 1px 8px rgba(0,0,0,.8),0 0 22px rgba(0,0,0,.55),0 1px 2px rgba(0,0,0,.85);
-    animation:lwc 15s ease-in-out infinite}
-  .lsw-warm .lw-q:nth-child(2){animation-delay:5s}
-  .lsw-warm .lw-q:nth-child(3){animation-delay:10s}
-  @keyframes lwc{0%{opacity:0}6%{opacity:.52}27%{opacity:.52}33%{opacity:0}100%{opacity:0}}
-  .ls-top{position:relative;z-index:2;display:flex;justify-content:flex-end;align-items:center;
-    padding:16px 26px 0;gap:7px;color:#fff;font-size:13px;font-weight:600}
-  .ls-mid{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;
-    justify-content:center;padding:0 20px}
-  .ls-date{font-size:16px;font-weight:600;margin-bottom:6px;color:#fff;opacity:.92}
-  .ls-clock{font-size:80px;font-weight:200;letter-spacing:-3px;line-height:1;color:#fff;
-    font-family:var(--font-num);text-shadow:0 6px 36px rgba(0,0,0,.5);font-variant-numeric:tabular-nums}
-  .ls-locks{position:relative;z-index:2;padding:0 18px 24px;display:flex;flex-direction:column;gap:14px}
-  .ls-notify{display:flex;gap:11px;align-items:flex-start;background:rgba(255,255,255,.16);
-    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:18px;
-    padding:11px 14px;color:#fff;border:1px solid rgba(255,255,255,.12);text-align:left;
-    box-shadow:0 8px 24px rgba(0,0,0,.3);cursor:pointer;width:100%}
-  .ls-notify .n-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;
-    justify-content:center;font-size:19px;flex:none;background:linear-gradient(135deg,#0ea5e9,#2563eb)}
-  .ls-notify b{font-size:13px;display:block}
-  .ls-notify span{font-size:12px;opacity:.85}
-  .ls-bottom{display:flex;justify-content:space-between;align-items:center;padding:0 6px}
-  .ls-round{width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.16);
-    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-size:20px;
-    cursor:pointer;display:flex;align-items:center;justify-content:center}
-  .ls-swipe{flex:1;text-align:center;font-size:12px;font-weight:600;opacity:.9;
-    animation:swiphint 2s ease-in-out infinite}
-  @keyframes swiphint{0%,100%{transform:translateY(0);opacity:.65}50%{transform:translateY(-6px);opacity:1}}
-  /* 锁屏：对号入座 */
+  .ls-top{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;
+    padding:15px 22px 0;color:#fff}
+  .lst-time{display:flex;flex-direction:column;gap:3px}
+  .ls-date{font-size:13px;font-weight:600;color:#fff;opacity:.88}
+  .lst-ic{display:flex;gap:6px;font-size:12px;font-weight:600;padding-top:4px}
+  /* 热点卡片飞入（钩子主体） */
+  .ls-cards{position:relative;z-index:2;flex:1;min-height:0;padding:4px 16px;
+    display:flex;flex-direction:column;justify-content:center;gap:11px;overflow:hidden}
+  .lc-card{flex:none;position:relative;display:flex;gap:11px;align-items:flex-start;
+    background:rgba(255,255,255,.17);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:12px 13px;color:#fff;
+    text-align:left;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.28);
+    animation:lcfly .62s cubic-bezier(.34,1.56,.64,1)}
+  .lc-card:active{transform:scale(.98)}
+  @keyframes lcfly{0%{opacity:0;transform:translateY(-150%) scale(.9) rotate(-1.4deg)}100%{opacity:1;transform:none}}
+  .lc-card.leave{opacity:0!important;transform:translateY(70px) scale(.92)!important;transition:.45s}
+  .lc-ico{width:36px;height:36px;border-radius:11px;flex:none;display:flex;align-items:center;
+    justify-content:center;font-size:19px;background:linear-gradient(135deg,#0ea5e9,#2563eb)}
+  .lc-body{flex:1;min-width:0}
+  .lc-lv{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;
+    background:rgba(255,255,255,.18);margin-bottom:6px}
+  .lc-t{font-size:13.5px;font-weight:700;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;
+    -webkit-box-orient:vertical;overflow:hidden}
+  .lc-meta{display:flex;justify-content:space-between;align-items:center;margin-top:7px;
+    font-size:11px;color:rgba(255,255,255,.72)}
+  .lc-link{color:#93c5fd;font-weight:700;display:flex;align-items:center;gap:3px}
+  .ls-locks{position:relative;z-index:2;padding:10px 16px 22px;display:flex;flex-direction:column;gap:11px}
+  .ls-enter{flex:none;background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;border:0;
+    border-radius:16px;padding:13px;font-size:14px;font-weight:700;text-align:center;cursor:pointer;
+    box-shadow:0 8px 24px rgba(37,99,235,.35)}
+  .ls-enter:active{transform:scale(.98)}
+  /* 对号入座 */
   .ls-ask{background:rgba(255,255,255,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
     border-radius:18px;padding:13px 14px 12px;border:1px solid rgba(255,255,255,.12);
     box-shadow:0 8px 24px rgba(0,0,0,.28)}
@@ -511,31 +509,6 @@
     transition:all .15s;font-size:11px;font-weight:600}
   .la-tags button span{font-size:22px;line-height:1}
   .la-tags button:active{transform:scale(.92);background:rgba(255,255,255,.22)}
-  /* 锁屏：身边消息流 */
-  .ls-feed{display:flex;flex-direction:column;gap:7px;min-height:18px}
-  .lf-item{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.14);
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:15px;
-    padding:8px 12px;border:1px solid rgba(255,255,255,.10);
-    animation:lfpush .4s ease;color:#fff}
-  @keyframes lfpush{0%{opacity:0;transform:translateY(-12px) scale(.96)}100%{opacity:1;transform:none}}
-  .lf-item .lf-ico{width:25px;height:25px;border-radius:7px;flex:none;display:flex;
-    align-items:center;justify-content:center;font-size:14px;background:rgba(255,255,255,.18)}
-  .lf-item .lf-t{font-size:12px;line-height:1.3;flex:1;min-width:0;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .lf-item .lf-time{font-size:10px;opacity:.6;flex:none}
-  /* 暖心重点板块：固定凸显 */
-  .ls-warm{background:linear-gradient(160deg,rgba(251,191,36,.18),rgba(251,146,60,.10));
-    border:1px solid rgba(251,191,36,.32);border-radius:18px;padding:11px 13px;
-    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-    box-shadow:0 8px 28px rgba(251,146,60,.14)}
-  .lw-title{font-size:12.5px;font-weight:800;color:#fde68a;margin-bottom:9px;
-    display:flex;align-items:center;gap:6px;letter-spacing:.2px}
-  .lw-item{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:#fef3e2;
-    line-height:1.45;margin-bottom:8px}
-  .lw-item:last-child{margin-bottom:0}
-  .lw-item .lw-ico{flex:none;width:24px;height:24px;border-radius:7px;
-    background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:13px}
-  .lw-item .lw-t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   /* 主屏 */
   .homescreen{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;
     padding:0;color:#fff;
@@ -762,13 +735,13 @@
           <i class="lsw-slide" style="background-image:url('images/wallpaper-night.jpg')"></i>
           <i class="lsw-glow"></i>
           <i class="lsw-veil"></i>
-          <div class="lsw-warm" id="lsw-warm"></div>
         </div>
-        <div class="ls-top"><span>📶</span><span>📡</span><span>🔋</span></div>
-        <div class="ls-mid">
-          <div class="ls-date" id="ls-date">—</div>
-          <div class="ls-clock" id="ls-clock">--:--</div>
+        <div class="ls-top">
+          <div class="lst-time"><div class="ls-date" id="ls-date">—</div></div>
+          <div class="lst-ic"><span>📶</span><span>📡</span><span>🔋</span></div>
         </div>
+        <!-- 热点卡片飞入（钩子主体） -->
+        <div class="ls-cards" id="ls-cards"></div>
         <div class="ls-locks">
           <!-- 对号入座：你是哪一种 -->
           <div class="ls-ask">
@@ -780,13 +753,7 @@
               <button type="button" onclick="openFate('grad')"><span>🎓</span>毕业</button>
             </div>
           </div>
-          <!-- 身边消息推送 -->
-          <div class="ls-feed" id="ls-feed"></div>
-          <div class="ls-bottom">
-            <button class="ls-round" type="button">🔦</button>
-            <div class="ls-swipe" id="ls-swipe">上滑，看看你的选择会怎样</div>
-            <button class="ls-round" type="button">📷</button>
-          </div>
+          <div class="ls-enter" id="ls-enter">进街坊群看看 →</div>
         </div>
       </div>
 
@@ -2512,64 +2479,64 @@ function startFate(){openFate('work');}
 function pad2(x){return String(x).padStart(2,"0");}
 function tickClock(){
   const d=new Date(),hh=pad2(d.getHours()),mm=pad2(d.getMinutes());
-  $("#ls-clock").textContent=hh+":"+mm;
+  if($("#ls-clock"))$("#ls-clock").textContent=hh+":"+mm;
   $("#hs-time").textContent=hh+":"+mm;
   if($("#hs-time-2"))$("#hs-time-2").textContent=hh+":"+mm;
   const wk=["周日","周一","周二","周三","周四","周五","周六"][d.getDay()];
   $("#ls-date").textContent=(d.getMonth()+1)+"月"+d.getDate()+"日 "+wk;
 }
-let lockFeedIv=null;
-const WARM_SHORT={
-  "🤝":"骑手路遇车祸，暂停配送守护生命",
-  "💪":"台风里，60名骑手清障护城",
-  "🏊":"潼侨河边，3人合力救起一个生命"
-};
-function renderLockWarm(d){
-  const w=$("#lsw-warm"); if(!w)return;
-  const g=(d.items||[]).filter(x=>x.cat==="gossip").slice(0,3);
-  if(!g.length){w.style.display="none";return;}
-  w.style.display="";
-  w.innerHTML=g.map(x=>`<div class="lw-q">${x.emoji} ${WARM_SHORT[x.emoji]||x.title}</div>`).join("");
+let lockCardIv=null;
+/* 按类别均衡交错，接地气的（好玩/美食/暖心）优先飞入，避免前几张全是官方 */
+function interleaveCards(items){
+  const order=["fun","food","gossip","city","tourism","agriculture","livelihood","industry"];
+  const byCat={};
+  items.forEach(x=>{(byCat[x.cat]=byCat[x.cat]||[]).push(x);});
+  const out=[];let added=true;
+  while(added){
+    added=false;
+    order.forEach(c=>{ if(byCat[c]&&byCat[c].length){out.push(byCat[c].shift());added=true;} });
+  }
+  return out;
 }
 function refreshLockNotify(){
   fetch("hot.json?_="+Date.now()).then(r=>r.json()).then(d=>{
     const n=d.count||0;
     const b=$("#hs-badge-hot");
     if(b){b.textContent=n;b.style.display=n?"flex":"none";}
-    renderLockWarm(d);
-    const CATS={livelihood:"🏥",city:"🚇",fun:"🎉",food:"🍜",gossip:"😊",tourism:"🏞️",agriculture:"🌾",industry:"🏭"};
-    const byCat={};
-    (d.items||[]).forEach(x=>{
-      if(x.cat==="industry"||x.cat==="gossip")return;
-      (byCat[x.cat]=byCat[x.cat]||[]).push(x);
-    });
-    const cats=Object.keys(byCat);
-    const maxn=Math.max.apply(null,cats.map(c=>byCat[c].length));
-    const mixed=[];
-    for(let i=0;i<maxn;i++){
-      cats.forEach(c=>{ if(byCat[c][i])mixed.push(byCat[c][i]); });
-    }
-    const items=mixed.map(x=>({ico:x.emoji||CATS[x.cat]||"📌",t:x.title}));
-    startLockFeed(items);
+    startLockCards(d.items||[]);
   }).catch(()=>{});
 }
-function startLockFeed(list){
-  const feed=$("#ls-feed"); if(!feed)return;
-  if(lockFeedIv){clearInterval(lockFeedIv);lockFeedIv=null;}
-  feed.innerHTML="";
-  if(!list.length)return;
+function startLockCards(rawItems){
+  const items=interleaveCards(rawItems);
+  const c=$("#ls-cards"); if(!c)return;
+  if(lockCardIv){clearInterval(lockCardIv);lockCardIv=null;}
+  c.innerHTML="";
+  if(!items.length)return;
   let i=0;
   const push=()=>{
-    const x=list[i%list.length];
+    const x=items[i%items.length];
     const el=document.createElement("div");
-    el.className="lf-item";
-    el.innerHTML=`<span class="lf-ico">${x.ico}</span><span class="lf-t">${escapeHtml(x.t)}</span><span class="lf-time">现在</span>`;
-    feed.appendChild(el);
-    while(feed.children.length>3)feed.removeChild(feed.firstChild);
+    el.className="lc-card";
+    el.setAttribute("role","button");
+    el.innerHTML=`<span class="lc-ico">${x.emoji||"📌"}</span>
+      <div class="lc-body">
+        <span class="lc-lv">${x.srcLevel||"热点"}</span>
+        <div class="lc-t">${escapeHtml(x.title)}</div>
+        <div class="lc-meta"><span>${escapeHtml(x.source||"")}</span><span class="lc-link">查看原文 →</span></div>
+      </div>`;
+    el.addEventListener("click",function(){
+      if(x.url)window.open(x.url,"_blank","noopener");
+    });
+    c.insertBefore(el,c.firstChild);
+    if(c.children.length>3){
+      const old=c.lastChild;
+      old.classList.add("leave");
+      setTimeout(()=>{if(old.parentNode)old.parentNode.removeChild(old);},450);
+    }
     i++;
   };
   push();
-  lockFeedIv=setInterval(push,2600);
+  lockCardIv=setInterval(push,3200);
 }
 function setPhoneState(s){
   $("#phone-frame").classList.remove("state-locked","state-home","state-app");
@@ -2601,14 +2568,11 @@ function openApp(v){
   const ap=$(".in-phone .app");if(ap)ap.scrollTop=0;
 }
 function goHome(){setPhoneState("home");islandLive("",false);setTimeout(playChat,260);}
-/* 锁屏：点击解锁、点通知进今日、上滑解锁 */
+/* 第一屏（钩子）：进群按钮 + 上滑进群，不做点击解锁 */
 (function(){
   const ls=$("#lockscreen");let sy=0;
-  ls.addEventListener("click",function(e){
-    if(e.target.closest("#ls-notify")){e.preventDefault();unlockPhone();return;}
-    if(e.target.closest(".ls-round"))return;
-    unlockPhone();
-  });
+  const enter=$("#ls-enter");
+  if(enter)enter.addEventListener("click",function(e){e.stopPropagation();unlockPhone();});
   ls.addEventListener("touchstart",e=>{sy=e.touches[0].clientY;},{passive:true});
   ls.addEventListener("touchend",e=>{
     if(sy-e.changedTouches[0].clientY>50)unlockPhone();
