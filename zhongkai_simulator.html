@@ -300,6 +300,11 @@
   .worry-card{margin-top:14px;padding:14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:12px;display:flex;flex-direction:column;gap:6px}
   .worry-card b{font-size:15px;color:#fecaca}
   .worry-card span{font-size:12px;line-height:1.5;color:#94a3b8}
+  .pick-section{font-size:12px;color:#94a3b8;margin-bottom:6px}
+  .pick-btn{display:flex;flex-direction:column;gap:4px;width:100%;padding:12px;background:rgba(148,163,184,.08);border:1px solid rgba(148,163,184,.15);border-radius:10px;margin-bottom:8px;text-align:left;cursor:pointer}
+  .pick-btn span:first-child{font-size:14px;color:#e2e8f0;font-weight:600}
+  .pick-btn span.muted{font-size:11px;color:#94a3b8}
+  .pick-btn.opp{background:rgba(52,211,153,.06);border-color:rgba(52,211,153,.2)}
   .fate-switch{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px}
   .fs-btn{border:1px solid rgba(125,211,252,.3);background:rgba(125,211,252,.08);
     color:#dff2ff;border-radius:16px;padding:6px 10px;font-size:11.5px;cursor:pointer;
@@ -2945,7 +2950,13 @@ const FATE_IDENTS={
     hook:"下一步，你会看到冲击波怎样穿过这张由 1144 家企业织成的网",
     data:"2025 公开：规上工业企业 1144 家 · 高新技术企业 1053 家 · 规上工业总产值 4037.12 亿（A 级）",
     mech:"模型内可观察：链主订单冲击 → 配套企业存续与产业协同；个人就业结果未建模，以下为可能传导机制，不是预测。",
-    worry:{short:"链主订单波动",title:"链主订单少了，配套厂会不会跟着晃？",detail:"网里的链主就那么几家——它们订单少了，配套厂、你手上的项目，都可能受影响。",basis:"公开数据：规上工业企业1144家，链主集中度高（2025统计公报）",choice:"A"}},
+    worry:{short:"链主订单波动",title:"链主订单少了，配套厂会不会跟着晃？",detail:"网里的链主就那么几家——它们订单少了，配套厂、你手上的项目，都可能受影响。",basis:"公开数据：规上工业企业1144家，链主集中度高（2025统计公报）",choice:"A"},
+    picks:{
+      worry1:{label:"链主订单少了",desc:"链主集中度高，订单一波动配套厂跟着晃",choice:"A"},
+      worry2:{label:"三产偏弱",desc:"想吃好饭看电影还得跑惠城",choice:"B"},
+      opp1:{label:"融深融湾",desc:"紧邻深圳，产业外溢人才资本在流入",choice:"C"},
+      opp2:{label:"三大链主扩产",desc:"德赛亿纬TCL华星都在建新厂房",choice:"A"}
+    }},
   small:{emoji:"🏭",label:"小厂打工人",q:"链主订单少了，配套厂会不会跟着晃？",
     shocks:["订单外流","供应链中断"],
     scene:"你在一家配套小厂上班——做PCB板、连接器、显示模组。链主一打喷嚏，你们老板就开始紧张。",
@@ -2953,7 +2964,13 @@ const FATE_IDENTS={
     hook:"下一步，看看链主订单波动，怎么一层层传到配套小厂",
     data:"2025 公开：规上工业企业 1144 家，其中配套企业占大多数（A 级）",
     mech:"模型内可观察：链主订单 → 配套企业能量与存续；个人就业结果未建模，以下为可能机制。",
-    worry:{short:"配套厂跟着晃",title:"链主订单少了，我上班的小厂撑得住吗？",detail:"配套小厂靠链主吃饭——链主订单一少，你们厂的排产、加班、甚至岗位，都可能受影响。",basis:"公开数据：1144家规上企业中配套占大多数，链主集中度高（2025统计公报）",choice:"A"}},
+    worry:{short:"配套厂跟着晃",title:"链主订单少了，我上班的小厂撑得住吗？",detail:"配套小厂靠链主吃饭——链主订单一少，你们厂的排产、加班、甚至岗位，都可能受影响。",basis:"公开数据：1144家规上企业中配套占大多数，链主集中度高（2025统计公报）",choice:"A"},
+    picks:{
+      worry1:{label:"配套厂订单少了",desc:"链主打喷嚏，小厂跟着紧张",choice:"A"},
+      worry2:{label:"检测物流跑深圳",desc:"做个检测还得跑深圳，成本高",choice:"B"},
+      opp1:{label:"融深融湾",desc:"深圳外溢，配套厂机会多",choice:"C"},
+      opp2:{label:"三大链主扩产",desc:"链主建新厂房，配套订单会增加",choice:"A"}
+    }},
   boss:{emoji:"💼",label:"开小厂的",q:"链主订单少了，我的厂还能撑多久？",
     shocks:["订单外流","融资收紧"],
     scene:"你开了一家配套小厂，给链主做PCB板/连接器。链主订单少了，你账上的现金能撑几个月？",
@@ -2961,7 +2978,13 @@ const FATE_IDENTS={
     hook:"下一步，看看链主订单波动，怎么影响你这家小厂的现金流",
     data:"2025 公开：规上工业总产值 4037.12 亿，+12.2%（A 级）",
     mech:"模型内可观察：链主订单 → 配套企业能量与存续；企业现金流未建模，以下为可能机制。",
-    worry:{short:"现金流紧张",title:"链主订单少了，我的厂账上现金能撑几个月？",detail:"你开的配套小厂，检测、物流、融资还得跑深圳——链主订单再少，账上的现金就撑不住了。",basis:"公开数据：生产性服务业330亿差目标70亿，检测/物流/金融本地供给不足（2025统计公报）",choice:"A"}},
+    worry:{short:"现金流紧张",title:"链主订单少了，我的厂账上现金能撑几个月？",detail:"你开的配套小厂，检测、物流、融资还得跑深圳——链主订单再少，账上的现金就撑不住了。",basis:"公开数据：生产性服务业330亿差目标70亿，检测/物流/金融本地供给不足（2025统计公报）",choice:"A"},
+    picks:{
+      worry1:{label:"现金流撑不住",desc:"链主订单少，账上现金能撑几个月？",choice:"A"},
+      worry2:{label:"检测物流跑深圳",desc:"做个检测找个物流还得跑深圳",choice:"B"},
+      opp1:{label:"生产性服务业补上来",desc:"检测物流融资本地就能解决",choice:"B"},
+      opp2:{label:"融深融湾",desc:"深圳外溢，订单机会多",choice:"C"}
+    }},
   shop:{emoji:"🏪",label:"开店的",q:"大厂订单少了，周边人流会不会跟着淡？",
     shocks:["订单外流","人流下降"],
     scene:"你在产业园附近开了一家餐馆/便利店，靠的是周边工厂上下班的人潮。可最近，来光顾的人似乎少了。",
@@ -2969,7 +2992,13 @@ const FATE_IDENTS={
     hook:"下一步，看看大厂订单的波动，怎样一层层传到你的小店门口",
     data:"2025 公开：社会消费品零售总额 173.40 亿，+5.3%（A 级）",
     mech:"模型内可观察：配套主体承压 → 生产性服务网络覆盖变化；小店营业额未建模，以下为可能机制。",
-    worry:{short:"人流淡了",title:"工厂越开越多，人却留不住——我的店靠谁养？",detail:"社零增速5.3%，比工业增速慢一半。工厂建了，人没留下——晚上八九点，街上就没人了。",basis:"公开数据：社零173.4亿，增速5.3%，远低于工业增速12.2%（2025统计公报）",choice:"B"}},
+    worry:{short:"人流淡了",title:"工厂越开越多，人却留不住——我的店靠谁养？",detail:"社零增速5.3%，比工业增速慢一半。工厂建了，人没留下——晚上八九点，街上就没人了。",basis:"公开数据：社零173.4亿，增速5.3%，远低于工业增速12.2%（2025统计公报）",choice:"B"},
+    picks:{
+      worry1:{label:"人流淡了",desc:"工厂建了人没留下，晚上街上没人",choice:"B"},
+      worry2:{label:"三产偏弱",desc:"商圈配套不足，留不住消费",choice:"B"},
+      opp1:{label:"融深融湾",desc:"深圳人过来，消费机会多",choice:"C"},
+      opp2:{label:"国庆文旅火爆",desc:"戏曲+山湖实景出圈，人流在涨",choice:"B"}
+    }},
   live:{emoji:"🏠",label:"住仲恺的",q:"产业在跑，城市配套跟不跟得上？",
     shocks:["用地收紧","学位紧张"],
     scene:"你在仲恺安家，每天通勤、送娃、看病。产业在往前跑，你希望城市的脚步也跟得上。",
@@ -2977,7 +3006,13 @@ const FATE_IDENTS={
     hook:"下一步，看看产业的变化，会怎样牵动城市的载体与服务",
     data:"政策方向：「产业旺、城市兴、人安好」（公开文件表述）；房价/学位/医院未建模",
     mech:"模型不计算房价与公共服务供需；以下展示模型内可观察的服务网络与载体设施变化。",
-    worry:{short:"配套跟不上",title:"产业很强，但三产只占28%——想吃好饭看电影还得跑惠城",detail:"三产增加值330.7亿，仅占GDP约28%——工业很强，但服务业还没跟上。想吃个好饭、看个电影，还得开车去惠城。",basis:"公开数据：三产增加值330.7亿，占GDP约28%，远低于工业占比（2025统计公报）",choice:"B"}},
+    worry:{short:"配套跟不上",title:"产业很强，但三产只占28%——想吃好饭看电影还得跑惠城",detail:"三产增加值330.7亿，仅占GDP约28%——工业很强，但服务业还没跟上。想吃个好饭、看个电影，还得开车去惠城。",basis:"公开数据：三产增加值330.7亿，占GDP约28%，远低于工业占比（2025统计公报）",choice:"B"},
+    picks:{
+      worry1:{label:"三产偏弱",desc:"想吃好饭看电影还得跑惠城",choice:"B"},
+      worry2:{label:"学位医疗配套",desc:"产业在跑，城市配套跟不跟得上？",choice:"B"},
+      opp1:{label:"四环南路通车",desc:"四环全线闭环，到惠城更近了",choice:"C"},
+      opp2:{label:"学校医院落地",desc:"12个班学位+中信医院接管，配套在补",choice:"C"}
+    }},
   grad:{emoji:"🎓",label:"刚毕业的",q:"手里攥着简历，要不要留下来？",
     shocks:["人才流失","订单外流"],
     scene:"你刚毕业，手里攥着简历。仲恺工厂林立，可这个决定——值得你留下来吗？",
@@ -2985,7 +3020,13 @@ const FATE_IDENTS={
     hook:"下一步，看看这座城市的景气波动，会给你的选择带来什么",
     data:"政策方向：就业与人才引进（公开文件表述）；个体求职结果未建模",
     mech:"模型内可观察：景气与人才主体存续；个人求职结果未建模，以下为可能机制。",
-    worry:{short:"留不留",title:"深圳房子五六万，这边才一万多——年轻人迟早要往这边搬",detail:"紧挨着深圳，深圳的产业外溢、人才、资本都在往这边流。可三产偏弱，你留下来，周末去哪玩？",basis:"公开数据：三产占GDP仅28%，生产性服务业差70亿；区位紧邻深圳（2025统计公报）",choice:"C"}}
+    worry:{short:"留不留",title:"深圳房子五六万，这边才一万多——年轻人迟早要往这边搬",detail:"紧挨着深圳，深圳的产业外溢、人才、资本都在往这边流。可三产偏弱，你留下来，周末去哪玩？",basis:"公开数据：三产占GDP仅28%，生产性服务业差70亿；区位紧邻深圳（2025统计公报）",choice:"C"},
+    picks:{
+      worry1:{label:"三产偏弱",desc:"留下来周末去哪玩？",choice:"B"},
+      worry2:{label:"就业不确定",desc:"链主订单波动，工作稳不稳定？",choice:"A"},
+      opp1:{label:"融深融湾",desc:"深圳外溢，机会多",choice:"C"},
+      opp2:{label:"人工智能基金",desc:"6亿创投基金，创业机会多",choice:"C"}
+    }}
 };
 const FATE_CHOICES={
   A:{label:"稳定生产与供应",short:"稳定生产",
@@ -3094,22 +3135,29 @@ function renderFate(){
       $("#fate-play-note").innerHTML=`正在推进第 ${t} / 20 步…<button class="btn sm" onclick="skipFatePlay()">跳过 →</button>`;
     },130);
     fateNetRender(s,$("#fate-svg"));
-  }else if(fateState.step===2){ /* ③ 网会怎样：自动跑，不用选 */
+  }else if(fateState.step===2){ /* ③ 网会怎样：极简勾选担忧+机遇 */
     $("#fate-prev").style.display="";
     const it=FATE_IDENTS[fateState.ident];
     body.innerHTML=`<div class="fate-step">
-      <h3>🌊 在你担心的情况下，网会怎样？</h3>
-      <div class="fate-meta">你担心的「${it.worry.short}」，我们按公开数据做了合理设定，自动跑一遍——看这张网会往哪个方向晃。<b>这是推演，不是预测。</b></div>
-      <div class="worry-card"><b>${it.worry.title}</b><span class="muted">${it.worry.detail}</span><span class="muted" style="color:#fbbf24;font-size:11px">依据：${it.worry.basis}</span></div>
-      <div class="muted" style="text-align:center;margin-top:16px">正在跑模拟…</div>
+      <h3>🎯 你最关心哪个？</h3>
+      <div class="fate-meta">这张网现在有几个压力、也有机遇。你最关心哪个？选一个，我们按公开数据跑一遍——看它会怎样影响这张网。<b>这是推演，不是预测。</b></div>
+      <div class="pick-section"><b>⚠️ 你最担心的</b></div>
+      <button class="pick-btn" data-pick="worry1"><span>${it.picks.worry1.label}</span><span class="muted">${it.picks.worry1.desc}</span></button>
+      <button class="pick-btn" data-pick="worry2"><span>${it.picks.worry2.label}</span><span class="muted">${it.picks.worry2.desc}</span></button>
+      <div class="pick-section" style="margin-top:12px"><b>🌟 你最想抓住的机遇</b></div>
+      <button class="pick-btn opp" data-pick="opp1"><span>${it.picks.opp1.label}</span><span class="muted">${it.picks.opp1.desc}</span></button>
+      <button class="pick-btn opp" data-pick="opp2"><span>${it.picks.opp2.label}</span><span class="muted">${it.picks.opp2.desc}</span></button>
     </div>`;
-    /* 自动用该角色对应的担忧参数跑 */
-    setTimeout(()=>{
-      fateState.choice = it.worry.choice || "A";
+    $$(".pick-btn").forEach(b=>b.addEventListener("click",()=>{
+      $$(".pick-btn").forEach(x=>x.style.borderColor="var(--line)");
+      b.style.borderColor="var(--blue)";
+      fateState.pickedPick=b.dataset.pick;
+      fateState.choice = it.picks[b.dataset.pick].choice || "A";
       $("#fate-next").style.display="";
       $("#fate-next").textContent="看现场笔记 →";
       $("#fate-next").onclick=()=>{fateState.step=3;renderFate();};
-    },800);
+    }));
+    $("#fate-next").style.display="none";
   }else{ /* ④ 结果与分享 */
     $("#fate-prev").style.display="none";
     const r=runFateChoice(fateState.choice);
