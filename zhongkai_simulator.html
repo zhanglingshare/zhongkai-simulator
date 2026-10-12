@@ -37,10 +37,18 @@
   header.top .brand{font-size:15.5px;font-weight:700;display:flex;align-items:center;gap:8px;white-space:nowrap;color:var(--ink)}
   header.top .ver{font-size:11px;color:#04121f;background:linear-gradient(135deg,#7dd3fc,#38bdf8);border-radius:4px;padding:1px 7px;font-weight:700}
   .statusbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-left:auto;justify-content:flex-end}
+  .mob-menu{display:none;align-items:center;gap:5px;border:1px solid var(--line);background:rgba(56,189,248,.10);color:#7dd3fc;border-radius:9px;padding:5px 12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
   .pill{font-size:11.5px;color:var(--sub);background:rgba(140,170,225,.07);border:1px solid var(--line);border-radius:999px;padding:2px 10px;white-space:nowrap}
   .pill.mode{background:rgba(56,189,248,.12);color:#7dd3fc;border-color:rgba(56,189,248,.4);font-weight:600}
   .pill.phase-locked{background:rgba(251,191,36,.10);color:#fcd34d;border-color:rgba(251,191,36,.35)}
   .pill.mono{font-family:var(--font-num)}
+  .shock-tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
+  .shock-tag{font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 10px;border:1px solid;white-space:nowrap}
+  .shock-tag.lv-official{color:#168568;background:#e8f5f0;border-color:#bcdcc9}
+  .shock-tag.lv-estimate{color:#b7791f;background:#fdf6e7;border-color:#ecd9ad}
+  .shock-tag.lv-hypo{color:#c24141;background:#fdeeec;border-color:#f0c2c2}
+  .shock-tag.lv-media{color:#2458c6;background:#eef2fb;border-color:#c7d3ec}
+  .shock-tag.lv-none{color:#6b7280;background:#f3f4f6;border-color:#d8dbe0}
   /* ---------- 整体布局 ---------- */
   .app{display:grid;grid-template-columns:var(--side-w) 1fr;min-height:calc(100vh - var(--top-h))}
   aside.side{background:linear-gradient(180deg,rgba(9,14,26,.94),rgba(6,10,18,.94));border-right:1px solid var(--line);padding:14px 10px;position:sticky;top:var(--top-h);height:calc(100vh - var(--top-h));overflow:auto;backdrop-filter:blur(6px)}
@@ -287,7 +295,14 @@
   /* ---------- 移动端 ---------- */
   @media (max-width:900px){
     .app{grid-template-columns:1fr}
-    aside.side{position:static;height:auto;display:flex;flex-wrap:wrap;gap:4px;padding:8px 12px;border-right:0;border-bottom:1px solid var(--line)}
+    header.top{flex-wrap:wrap;height:auto;gap:8px;padding:8px 12px;align-items:center}
+    header.top .brand{order:1}
+    .mob-menu{display:inline-flex;order:2;margin-left:auto}
+    .statusbar{order:3;flex-basis:100%;margin-left:0;justify-content:flex-start;display:none}
+    .statusbar .btn{flex:1;justify-content:center}
+    body.nav-open .statusbar{display:flex}
+    aside.side{position:static;height:auto;display:none;flex-wrap:wrap;gap:4px;padding:8px 12px;border-right:0;border-bottom:1px solid var(--line)}
+    body.nav-open aside.side{display:flex}
     aside.side .grp{display:none}
     aside.side .nav{width:auto;padding:6px 10px;font-size:12.5px;margin:0}
     main{padding:12px}
@@ -295,11 +310,14 @@
     #netsvg{height:340px}
     .drawer{width:100%;max-width:100%}
     .run-grid{grid-template-columns:1fr}
+    /* 宽表格独立横向滚动，不再撑爆整页造成 320px 横向溢出 */
+    table{display:block;width:100%;max-width:100%;overflow-x:auto}
   }
 </style>
 </head>
 <body>
 <header class="top">
+  <button class="mob-menu" id="mob-menu" type="button" aria-label="打开菜单" aria-expanded="false">☰ 菜单</button>
   <div class="brand">🏭 仲恺 2030 · 未来实验 <span class="ver">V1.2e</span></div>
   <div class="statusbar">
     <span class="pill mode" id="st-mode">探索模拟</span>
@@ -1777,8 +1795,16 @@ function switchView(v){
   $$(".view").forEach(p=>p.classList.toggle("on",p.id==="view-"+v));
   if(v==="hot")ensureHot();
   if(v==="town")ensureTown();
+  closeMobMenu();
 }
 $$(".nav").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.v)));
+/* 手机汉堡菜单：按需展开/收起状态条与导航，首屏只留项目名 */
+function closeMobMenu(){document.body.classList.remove("nav-open");const m=$("#mob-menu");if(m){m.textContent="☰ 菜单";m.setAttribute("aria-expanded","false");}}
+$("#mob-menu").onclick=function(){
+  const open=document.body.classList.toggle("nav-open");
+  this.textContent=open?"✕ 关闭":"☰ 菜单";
+  this.setAttribute("aria-expanded",open?"true":"false");
+};
 $("#entry-explore").onclick=()=>{
   if(experimentState.mode==="formal"&&!confirm("当前为正式研究。进入探索后，新操作将不再记录到实验 "+experimentState.runId+"（原档案保留）。继续？"))return;
   setMode("explore");
@@ -1863,7 +1889,7 @@ function renderFate(){
         <div class="muted" style="margin-top:4px">产业网络演化、企业存续、景气/风险/协同、冲击传播——都是模型内可复现计算。</div></div>
       <div class="ivw" style="margin-top:8px"><b>它不算什么</b>
         <div class="muted" style="margin-top:4px">${it.mech}</div></div>
-      <div class="muted" style="margin-top:10px">下一步：一场真实的冲击会被注入仲恺基准世界（同一起点 7，任何人都能复跑）。</div>
+      <div class="muted" style="margin-top:10px">下一步：一个<b>模拟冲击情景</b>会被注入仲恺基准世界（同一起点 7，任何人都能复跑；情景用于检验可能的后果，不代表事情已经发生）。</div>
     </div>`;
     $("#fate-next").textContent="看这场冲击 →";
     $("#fate-next").onclick=()=>{fateState.step=1;renderFate();};
@@ -1873,9 +1899,15 @@ function renderFate(){
     const it=FATE_IDENTS[fateState.ident];
     $("#fate-next").style.display="none";
     $("#fate-prev").style.display="";
+    const tagLine=curShocks().map(n=>{
+      const b=SHOCK_BASIS[n];
+      if(!b)return `<span class="shock-tag lv-none">${n} · 依据待核实</span>`;
+      return `<span class="shock-tag lv-${b.lv}">${n} · ${SHOCK_LV[b.lv][0]}</span>`;
+    }).join("");
     body.innerHTML=`<div class="fate-step">
-      <h3>⚡ 一场冲击正在发生：${curShocks().join(" + ")}</h3>
-      <div class="fate-meta">冲击均有现实苗头（依据标注见「数据与证据」）；模型内在第 5 步注入。动画播放的每一步，都是模型真实计算。</div>
+      <h3>⚡ 模拟冲击情景：${curShocks().join(" + ")}</h3>
+      <div class="shock-tags">${tagLine}</div>
+      <div class="fate-meta">这是<b>模拟情景</b>，不是正在发生的真实事件：上面每个冲击都标了依据等级（官方统计 / 合理估计 / 纯假设），完整依据与出处见「数据与证据」。模型在第 5 步注入冲击，动画播放的每一步都是模型真实计算。</div>
       <svg id="fate-svg" class="fate-net" viewBox="0 0 340 260" preserveAspectRatio="xMidYMid meet"></svg>
       <div class="muted" id="fate-play-note" style="text-align:center">正在推进第 0 / 20 步…（可跳过）</div>
     </div>`;
@@ -1895,7 +1927,7 @@ function renderFate(){
     $("#fate-prev").style.display="";
     body.innerHTML=`<div class="fate-step">
       <h3>现在，轮到你作决定</h3>
-      <div class="fate-meta">2030 年之前，你所在的仲恺正经历${curShocks().join("、")}，配套承压、部分合作中断。你只有有限的政策资源，先处理什么？</div>
+      <div class="fate-meta">在这个<b>模拟情景</b>里，2030 年之前你所在的仲恺遇到了${curShocks().join("、")}，配套承压、部分合作中断。你只有有限的政策资源，先处理什么？（这是假设的推演，不是现实预告。）</div>
       ${Object.keys(FATE_CHOICES).map(k=>{const c=FATE_CHOICES[k];
         return `<button class="fate-choice" data-c="${k}"><b>${c.label}</b><span class="muted">${c.note}</span></button>`;}).join("")}
       <div class="muted" style="margin-top:8px">三个选项对应模型内不同的干预力度；<b>尚未实证标定的部分已注明，不宣称三者现实等价或可直接比较</b>。</div>
@@ -1914,7 +1946,7 @@ function renderFate(){
     fateState.picked=r;
     const d=r.delta;
     const zs=x=>Math.abs(x)<0.005?"≈0":(x>=0?'+':'−')+Math.abs(x).toFixed(2);
-    const suTxt=Math.abs(d.su*100)<0.05?"0.0pp":(d.su>=0?'+':'−')+Math.abs(d.su*100).toFixed(1)+"pp";
+    const suTxt=Math.abs(d.su*100)<0.05?"0.0个百分点":(d.su>=0?'+':'−')+Math.abs(d.su*100).toFixed(1)+"个百分点";
     const suCls=Math.abs(d.su*100)<0.05?"flat":(d.su>=0?'up':'down');
     body.innerHTML=`<div class="fate-step">
       <h3>📊 结果：你选择了「${FATE_CHOICES[fateState.choice].short}」</h3>
@@ -1935,9 +1967,11 @@ function renderFate(){
       </div>
     </div>`;
     $("#fate-share-dl").onclick=()=>drawFateCard(r);
-    $("#fate-share-link").onclick=()=>{
+    $("#fate-share-link").onclick=async function(){
       const u=location.origin+location.pathname+`#fate=${fateState.ident}&choice=${fateState.choice}&seed=${r.seed}`;
-      copyText(u);$("#fate-share-link").textContent="✓ 已复制（朋友打开会自动跑同一情景）";
+      this.textContent="复制中…";
+      const ok=await copyText(u);
+      this.textContent=ok?"✓ 已复制（朋友打开会自动跑同一情景）":"✗ 复制失败，请长按本页链接手动复制";
     };
     $("#fate-retry").onclick=()=>{fateState.step=2;renderFate();};
     $("#fate-next").style.display="";$("#fate-next").textContent="完成";
@@ -2102,10 +2136,22 @@ function roundRect(g,x,y,w,h,r){
   g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);
   g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();
 }
-function copyText(txt){
-  const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);
-  ta.select();try{document.execCommand("copy");}catch(e){}
-  document.body.removeChild(ta);
+async function copyText(txt){
+  /* 真校验：剪贴板 API 优先，失败用 textarea 兜底；返回是否真的复制成功，不再盲目提示"已复制" */
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      await navigator.clipboard.writeText(txt);
+      const chk=await navigator.clipboard.readText().catch(()=>null);
+      if(chk===null||chk===txt)return true; /* 部分浏览器不允许读剪贴板，写入不报错即视为成功 */
+    }
+  }catch(e){}
+  try{
+    const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.focus();ta.select();
+    const ok=document.execCommand("copy");
+    document.body.removeChild(ta);
+    return !!ok;
+  }catch(e){return false;}
 }
 $$(".fate-card").forEach(c=>c.addEventListener("click",()=>openFate(c.dataset.ident)));
 $("#fate-cancel").onclick=closeFate;
@@ -2129,13 +2175,19 @@ const RELATE={
   fun:"🎡 <b>和你有啥关系：</b>遛娃、约会、发呆不用老往远处跑，家门口又多一个去处。"
 };
 const isWorkPark=n=>/科技园|智慧区|产业园/.test(n);
+/* 本机缓存：拉取成功就存一份；离线/失败时读回上次成功的快照并标注"离线显示·更新于xx"，不再假装联网重试 */
+const zkCache={get(k){try{return JSON.parse(localStorage.getItem("zk_cache_"+k))||null;}catch(e){return null;}},set(k,v){try{localStorage.setItem("zk_cache_"+k,JSON.stringify(v));}catch(e){}}};
 async function loadHot(){
-  try{const r=await fetch("hot.json?ts="+Date.now());if(!r.ok)throw 0;hotData=await r.json();}
-  catch(e){hotData=null;}
+  try{
+    const r=await fetch("hot.json?ts="+Date.now());if(!r.ok)throw 0;
+    hotData=await r.json();zkCache.set("hot",hotData);
+  }catch(e){const c=zkCache.get("hot");if(c){c._offline=true;hotData=c;}else hotData=null;}
 }
 async function loadLife(){
-  try{const r=await fetch("life.json?ts="+Date.now());if(!r.ok)throw 0;lifeData=await r.json();}
-  catch(e){lifeData=null;}
+  try{
+    const r=await fetch("life.json?ts="+Date.now());if(!r.ok)throw 0;
+    lifeData=await r.json();zkCache.set("life",lifeData);
+  }catch(e){const c=zkCache.get("life");if(c){c._offline=true;lifeData=c;}else lifeData=null;}
 }
 function tierCls(t){return t==="高"?"high":(t==="较高"?"mid":"low");}
 /* 顶部统计只读结构化指标（d.stats，由雷达端输出并注明统计期/口径），不再从摘要正则抽数冠"今年" */
@@ -2162,8 +2214,8 @@ function placeHit(text){return !!myPlace&&text.indexOf(myPlace)>=0;}
 function renderHot(){
   const scan=$("#hot-scan"),list=$("#hot-list"),tabs=$("#hot-tabs"),note=$("#hot-note");
   if(!scan)return;
-  if(!hotData){scan.innerHTML="今日话题读取失败：可能处于断网离线状态（联网后自动重试，历史话题不丢失）。";return;}
-  scan.innerHTML=`今日仲恺 · 最近抓取 ${hotData.fetched_at||hotData.updated} · ${hotData.count} 条话题 · ${hotData.frequency||"每日更新一次"}`;
+  if(!hotData){scan.innerHTML=`今日话题暂时读不到（可能没联网，本机也没有历史快照）。<button class="btn sm" onclick="retryHot()">↻ 重新尝试</button>`;return;}
+  scan.innerHTML=`今日仲恺 · ${hotData._offline?'离线显示 · 更新于 '+(hotData.fetched_at||hotData.updated):'最近抓取 '+(hotData.fetched_at||hotData.updated)} · ${hotData.count} 条话题 · ${hotData.frequency||"每日更新一次"}`;
   note.innerHTML=hotData.note||"";
   renderHotStats(hotData);
   renderPlaceChips("hot-places",ZK_PLACES,()=>renderHot());
@@ -2216,8 +2268,8 @@ function townCard(t,kind){
 function renderTown(){
   const scan=$("#town-scan"),pulse=$("#town-pulse"),grid=$("#town-grid"),note=$("#town-note");
   if(!scan)return;
-  if(!lifeData){scan.innerHTML="各镇数据读取失败：可能处于断网离线状态（联网后自动重试）。";return;}
-  scan.innerHTML=`仲恺生活地图 · ${lifeData.updated} · 5 镇街 + 4 园区 · ${lifeData.freq||"每日更新一次"}`;
+  if(!lifeData){scan.innerHTML=`各镇数据暂时读不到（可能没联网，本机也没有历史快照）。<button class="btn sm" onclick="retryTown()">↻ 重新尝试</button>`;return;}
+  scan.innerHTML=`仲恺生活地图 · ${lifeData._offline?'离线显示 · 更新于 '+lifeData.updated:lifeData.updated} · 5 镇街 + 4 园区 · ${lifeData.freq||"每日更新一次"}`;
   pulse.innerHTML="📡 <b>这两天，仲恺人的朋友圈在刷：</b><br>"+(lifeData.pulse||[]).map(escapeHtml).join("<br>");
   note.innerHTML=(lifeData.note||"")+"　"+(lifeData.sourceLabel||"");
   renderPlaceChips("town-places",(lifeData.towns||[]).map(t=>t.n),()=>renderTown());
@@ -2231,6 +2283,8 @@ function renderTown(){
 }
 async function ensureHot(){if(!hotData)await loadHot();renderHot();}
 async function ensureTown(){if(!lifeData)await loadLife();renderTown();}
+async function retryHot(){const scan=$("#hot-scan");if(scan)scan.innerHTML="正在重新尝试…";await loadHot();renderHot();}
+async function retryTown(){const scan=$("#town-scan");if(scan)scan.innerHTML="正在重新尝试…";await loadLife();renderTown();}
 
 function routeHash(){
   const h=location.hash;
