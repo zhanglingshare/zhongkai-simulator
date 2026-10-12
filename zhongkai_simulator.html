@@ -2725,10 +2725,10 @@ $$(".nav").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.v)));
 /* ================= 手机 OS（V1.3 · 锁屏/主屏/灵动岛） ================= */
 const PHONE_APPS=[
   {v:"hot",   e:"📰",n:"今日仲恺",g:"linear-gradient(135deg,#0ea5e9,#2563eb)",dock:true,badge:true},
-  {v:"town",  e:"🏘",n:"仲恺各镇",g:"linear-gradient(135deg,#f59e0b,#ef4444)",dock:true},
+  {v:"town",  e:"🏘",n:"仲恺各镇",g:"linear-gradient(135deg,#f59e0b,#ef4444)"},
   {v:"home",  e:"🎯",n:"现场体验",g:"linear-gradient(135deg,#8b5cf6,#6366f1)",dock:true},
   {v:"fund",  e:"📊",n:"仲恺家底",g:"linear-gradient(135deg,#0ea5e9,#6366f1)",dock:true},
-  {v:"signal",e:"🌱",n:"苗头推演",g:"linear-gradient(135deg,#fbbf24,#f97316)",dock:true},
+  {v:"signal",e:"🌱",n:"苗头推演",g:"linear-gradient(135deg,#fbbf24,#f97316)"},
   {v:"run",   e:"▶", n:"动态推演",g:"linear-gradient(135deg,#10b981,#059669)",dock:true},
   {v:"mc",    e:"🎲",n:"批量重跑",g:"linear-gradient(135deg,#06b6d4,#0e7490)"},
   {v:"sens",  e:"🌪",n:"变量影响",g:"linear-gradient(135deg,#ec4899,#be185d)"},
@@ -2757,6 +2757,7 @@ function phoneIco(a){
 function renderHomeScreen(){
   const all=PHONE_APPS;
   const groups=[
+    {h:"生活入口",vs:["hot","town"]},
     {h:"决策主线",vs:["fund","signal"]},
     {h:"研究工作台",vs:["mc","sens","iv","ledger","data","world"]}
   ];
