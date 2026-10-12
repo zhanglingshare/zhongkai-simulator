@@ -1,0 +1,223 @@
+{
+  "schema_version": 2,
+  "region": "zhongkai",
+  "updated": "2026-10-13 07:51",
+  "fetched_at": "2026-10-13 07:51",
+  "frequency": "每日更新一次",
+  "count": 10,
+  "stats": [
+    {
+      "n": "5.8%",
+      "cap": "地区生产总值<br>同比增长",
+      "scope": "2026 上半年 · 官方公报",
+      "warm": false
+    },
+    {
+      "n": "14 · 19",
+      "cap": "产业项目<br>开工 · 竣工投产（宗）",
+      "scope": "2026 上半年 · 官方",
+      "warm": false
+    },
+    {
+      "n": "378万",
+      "cap": "国庆接待游客<br>（全市口径含仲恺）",
+      "scope": "10.01–10.08 · 南方+",
+      "warm": true
+    }
+  ],
+  "note": "话题按编辑关注程度排序，标注关注档（高/较高/中）与来源级别；每条显示原报道时间、最近抓取与核验状态（官方原文或≥2独立来源=已核验，单源媒体/本地=待核实），缺失标「待核实」。本页不展示平台后台真实阅读、转发、点赞数据。话题均来自公开渠道，每日更新。",
+  "items": [
+    {
+      "title": "四环南路平南互通通车：四环路全线闭环，仲恺⇌惠城更近",
+      "cat": "city",
+      "emoji": "🚇",
+      "tier": "高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区官网",
+      "url": "https://www.hzzk.gov.cn/zntj/content/post_5865673.html",
+      "summary": "10月7日四环南路平南互通段L线开放交通，市区往返仲恺通勤大幅缩短；R线计划10月30日完工。",
+      "published_at": "2026-10-09",
+      "event_date": "2026-10-07",
+      "fetched_at": "2026-10-13 07:51",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "direction": "利好",
+        "note": "通勤利好；模型当前只推演承压情景，如需观察通勤中断对产业的影响可手动进入实验"
+      }
+    },
+    {
+      "title": "10月1日起，中信惠州医院由仲恺高新区人民医院接管",
+      "cat": "livelihood",
+      "emoji": "🏥",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区官网公告",
+      "url": "https://www.hzzk.gov.cn/hzzkjywhwsjkj/gkmlpt/content/5/5854/mpost_5854994.html",
+      "summary": "原中信惠州医院成为仲恺高新区人民医院总院区，医保定点10月起系统自动切换，无需自己跑。",
+      "published_at": "2026-09-18",
+      "event_date": "2026-10-01",
+      "fetched_at": "2026-10-13 07:51",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "direction": "中性",
+        "note": "医疗资源未建模，仅提供报道"
+      }
+    },
+    {
+      "title": "首期规模6亿元！仲恺人工智能创投基金组建成立",
+      "cat": "industry",
+      "emoji": "🤖",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区官网",
+      "url": "https://www.hzzk.gov.cn/bmpd/kjcxhtzcjj/gzdt/content/post_5855307.html",
+      "summary": "9月15日签约，首期6亿元的人工智能创投基金正式组建落地，主投智能终端、超高清显示、能源电子及AI、机器人等方向。",
+      "published_at": "2026-09-20",
+      "event_date": "2026-09-15",
+      "fetched_at": "2026-10-13 07:51",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "direction": "利好",
+        "note": "资本供给信号；模型暂无创投基金机制，暂不入模"
+      }
+    },
+    {
+      "title": "357创新产业带澄海片区工业用地挂牌出让",
+      "cat": "industry",
+      "emoji": "🏗️",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区官网",
+      "url": "https://www.hzzk.gov.cn/hzzkggzyzx/gkmlpt/content/5/5861/post_5861037.html",
+      "summary": "ZKCH-02-45-01号工业用地9月29日起挂牌公告，10月19日开拍；土地供给是未来项目落地的先行信号。",
+      "published_at": "2026-09-29",
+      "event_date": "2026-09-29",
+      "fetched_at": "2026-10-13 07:51",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "direction": "中性",
+        "note": "挂牌≠投产；模型不把供地公告当作产值参数"
+      }
+    },
+    {
+      "title": "12个班540个学位！廖承志红军小学幸福校区揭牌",
+      "cat": "livelihood",
+      "emoji": "🏫",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区官网（转惠州日报）",
+      "url": "https://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/zwdt/zwyw/content/post_5843824.html",
+      "summary": "9月1日开学首日，陈江街道幸福村廖承志红军小学幸福校区揭牌，新增540个学位。",
+      "published_at": "2026-09-01",
+      "event_date": "2026-09-01",
+      "fetched_at": "2026-10-13 07:51",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "direction": "利好",
+        "note": "学位供需未建模，不提供对应模拟；仅查看报道"
+      }
+    },
+    {
+      "title": "校企共建智能制造实训基地落地",
+      "cat": "livelihood",
+      "emoji": "🔧",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区官网",
+      "url": "https://www.hzzk.gov.cn/hzzkshswglj/gkmlpt/content/5/5854/mpost_5854445.html",
+      "summary": "区社会事务管理局联合潼湖生态智慧区，把企业真实生产场景搬进实训教学，培育适配智能制造的应用型技能人才。",
+      "published_at": "2026-09-18",
+      "event_date": "2026-09-18",
+      "fetched_at": "2026-10-13 07:51",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "direction": "利好",
+        "note": "技能人才培育机制未建模，仅提供报道"
+      }
+    },
+    {
+      "title": "中国戏曲文化周仲恺分会场：岭南戏曲撞上智能制造",
+      "cat": "fun",
+      "emoji": "🎭",
+      "tier": "较高",
+      "srcLevel": "媒体报道",
+      "live": false,
+      "source": "南方都市报",
+      "url": "http://m.toutiao.com/group/7692788579327623734/",
+      "summary": "国庆期间，仲恺仲力磁场里粤剧、潮剧、客家山歌与3D打印脸谱、具身智能同台，十城联动大湾区分会场。",
+      "published_at": "2026-10-04",
+      "event_date": "2026-10-01",
+      "fetched_at": "2026-10-13 07:51",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "life"
+      }
+    },
+    {
+      "title": "国庆惠州迎客378万人次：仲恺戏曲+山湖实景出圈",
+      "cat": "fun",
+      "emoji": "🌊",
+      "tier": "中",
+      "srcLevel": "媒体报道",
+      "live": false,
+      "source": "南方+",
+      "url": "http://m.toutiao.com/group/7694453541104075304/",
+      "summary": "国庆假期全市接待游客378万人次、吸金35.2亿元（全市口径，含仲恺片区）；仲恺仲力磁场戏曲与山湖实景创新融合。",
+      "published_at": "2026-10-09",
+      "event_date": "2026-10-01 至 2026-10-08",
+      "fetched_at": "2026-10-13 07:51",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "life"
+      }
+    },
+    {
+      "title": "国庆来仲恺：吃非遗碌鹅，游山水田园",
+      "cat": "food",
+      "emoji": "🦢",
+      "tier": "中",
+      "srcLevel": "媒体报道",
+      "live": false,
+      "source": "惠州发布",
+      "url": "http://m.toutiao.com/group/7692251024086483491/",
+      "summary": "沥林碌鹅制作技艺是市级非遗、上过央视；国庆假期循鹅香出发，看戏、摘果、逛古村。",
+      "published_at": "2026-10-03",
+      "event_date": "2026-10-01 至 2026-10-08",
+      "fetched_at": "2026-10-13 07:51",
+      "verified_status": "待核实",
+      "fate": {
+        "kind": "life"
+      }
+    },
+    {
+      "title": "潼湖榴莲文化美食嘉年华：国庆天天有得逛",
+      "cat": "food",
+      "emoji": "🍉",
+      "tier": "中",
+      "srcLevel": "市民讨论",
+      "live": false,
+      "source": "惠州本地宝",
+      "url": "https://huizhou.bendibao.com/tour/hzgqhdgltopic/",
+      "summary": "10月1日—6日潼湖汇趣前广场，榴莲美食、潮汕英歌舞、演出活动连轴转，免费开放。",
+      "published_at": "2026-09-30",
+      "event_date": "2026-10-01 至 2026-10-06",
+      "fetched_at": "2026-10-13 07:51",
+      "verified_status": "待核实",
+      "fate": {
+        "kind": "life"
+      }
+    }
+  ]
+}
