@@ -507,6 +507,20 @@
     font-size:11px;color:rgba(255,255,255,.72)}
   .lc-link{color:#93c5fd;font-weight:700;display:flex;align-items:center;gap:3px}
   .ls-locks{position:relative;z-index:2;padding:10px 16px 22px;display:flex;flex-direction:column;gap:11px}
+  /* 立柱 */
+  .ls-pillar{position:relative;z-index:2;flex:none;margin:6px 16px 0;padding:16px 16px 14px;
+    background:linear-gradient(160deg,rgba(245,158,11,.14),rgba(239,68,68,.08));
+    border:1px solid rgba(251,191,36,.3);border-radius:16px;text-align:center}
+  .ls-pillar .lp-who{font-size:10.5px;color:var(--sub);line-height:1.5;margin-bottom:9px}
+  .ls-pillar .lp-head{font-size:13px;font-weight:700;color:#fde68a;margin-bottom:6px}
+  .ls-pillar .lp-num{font-size:52px;font-weight:900;font-family:var(--font-num);color:#fbbf24;
+    line-height:1;text-shadow:0 0 24px rgba(251,191,36,.4)}
+  .ls-pillar .lp-yi{font-size:20px;font-weight:700;margin-left:2px}
+  .ls-pillar .lp-sub{font-size:12px;color:var(--ink);margin-top:5px;font-weight:600}
+  .ls-pillar .lp-human{font-size:11.5px;color:var(--sub);line-height:1.6;margin:9px 4px 11px}
+  .ls-pillar .lp-rel{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+  .ls-pillar .lp-rel span{font-size:10.5px;color:#fde68a;background:rgba(251,191,36,.1);
+    border:1px solid rgba(251,191,36,.25);border-radius:20px;padding:4px 9px}
   .ls-enter{flex:none;background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;border:0;
     border-radius:16px;padding:13px;font-size:14px;font-weight:700;text-align:center;cursor:pointer;
     box-shadow:0 8px 24px rgba(37,99,235,.35)}
@@ -768,6 +782,20 @@
         </div>
         <!-- 热点卡片飞入（钩子主体） -->
         <div class="ls-cards" id="ls-cards"></div>
+        <!-- 立柱：仲恺是谁·家底·目标·跟我啥关系 -->
+        <div class="ls-pillar" id="ls-pillar">
+          <div class="lp-who">5镇街·4园区·1144家规上企业 · 从一座老镇长成国家级高新区</div>
+          <div class="lp-head">🏔️ 仲恺 2030，要再翻一座山</div>
+          <div class="lp-num">839<span class="lp-yi">亿</span></div>
+          <div class="lp-sub">GDP 从 1160 亿到 2000 亿，就差这一截</div>
+          <div class="lp-human">这不是报表上的数——是未来 5 年要新长出来的产业、要招的厂、要建的学校和路</div>
+          <div class="lp-rel">
+            <span>👷 新厂＝新岗位</span>
+            <span>🏪 新厂＝新客流</span>
+            <span>🏠 新园＝新配套</span>
+            <span>🎓 新产＝留得住</span>
+          </div>
+        </div>
         <div class="ls-locks">
           <!-- 今日打卡：好吃好玩，点一下打卡 -->
           <div class="ls-check">
