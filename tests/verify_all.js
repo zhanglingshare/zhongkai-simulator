@@ -286,8 +286,12 @@ ok(html.includes('HOT_CATS') && html.includes('HOT_FATE') && html.includes('indu
   '话题→身份实验映射（产业→上班/民生→毕业/城市→生活/好吃→开店）');
 ok(html.includes('function renderHot') && html.includes('function renderTown') && html.includes('function ensureHot') && html.includes('function ensureTown'),
   '加载与渲染函数完整');
-ok(html.includes('模拟这个情景') && html.includes('查看原始报道'), '话题卡片可溯源 + 一键进入命运实验');
+ok(html.includes('openFate(') && html.includes('查看原始报道'), '话题卡片可溯源 + 一键进入命运实验');
 ok(html.includes('5 镇街 + 4 园区'), '仲恺各镇按 5 镇街 + 4 园区设计（非照搬博罗 17 镇）');
+ok(html.includes('仲恺打工人的每日情报站') && html.includes('和你有啥关系') && html.includes('zk_myplace'),
+  '今日仲恺接地气：打工人视角 + 人话翻译 + 本机「你在哪」参与');
+ok(html.includes('五个镇街 · 烟火生活') && html.includes('四个园区 · 上班那点事') && html.includes('下班打牙祭'),
+  '仲恺各镇生活圈：镇街烟火 / 园区上班分组 + 生活化标签');
 const hd=JSON.parse(fs.readFileSync(path.join(__dirname,'..','hot.json'),'utf8'));
 ok(hd.region==='zhongkai'&&hd.count>=8&&hd.count<=14&&hd.items.every(i=>i.title&&i.url&&i.cat), `hot.json 合法（${hd.count} 条，全部可溯源）`);
 const ld=JSON.parse(fs.readFileSync(path.join(__dirname,'..','life.json'),'utf8'));

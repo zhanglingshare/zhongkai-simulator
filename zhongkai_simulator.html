@@ -120,6 +120,56 @@
   .town-card .row{font-size:12.5px;color:var(--sub);margin-top:4px;line-height:1.65}
   .town-card .row .k{display:inline-block;width:40px;color:var(--mut)}
   .town-card .why{margin-top:7px;padding-top:6px;border-top:1px dashed var(--line);font-size:12px;color:var(--sub)}
+  /* ---------- 今日仲恺 / 仲恺各镇 · 接地气生活层 ---------- */
+  .zk-hero{position:relative;border-radius:16px;padding:20px 22px;margin-bottom:14px;overflow:hidden;
+    background:
+      radial-gradient(560px 200px at 8% -40px,rgba(56,189,248,.18),transparent 60%),
+      radial-gradient(480px 220px at 96% -60px,rgba(251,146,60,.14),transparent 58%),
+      linear-gradient(180deg,rgba(20,32,60,.55),rgba(10,16,32,.4));
+    border:1px solid var(--line-hi)}
+  .zk-hero .kicker{display:inline-block;font-size:11.5px;letter-spacing:2px;color:#7dd3fc;font-weight:700;margin-bottom:8px}
+  .zk-hero .lead{font-size:15.5px;line-height:1.85;color:var(--ink);font-weight:600}
+  .zk-hero .lead em{color:#fcd34d;font-style:normal}
+  .zk-hero .sub2{font-size:12.5px;color:var(--sub);margin-top:9px;line-height:1.7}
+  .zk-hero .sub2 b{color:#fcd34d}
+  .zk-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px;margin:15px 0 6px}
+  .zk-stat{background:rgba(6,12,26,.55);border:1px solid var(--line);border-radius:12px;padding:12px 10px;text-align:center}
+  .zk-stat .num{font-family:var(--font-num);font-size:25px;font-weight:800;line-height:1.1;
+    background:linear-gradient(180deg,#7dd3fc,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .zk-stat .num.warm{background:linear-gradient(180deg,#fcd34d,#fb923c);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .zk-stat .cap{font-size:11px;color:var(--sub);margin-top:5px;line-height:1.5}
+  .zk-you{background:linear-gradient(90deg,rgba(56,189,248,.10),rgba(56,189,248,.02));border:1px solid rgba(56,189,248,.30);
+    border-radius:12px;padding:11px 14px;margin:12px 0;font-size:13px}
+  .zk-you .q{color:#bae6fd;font-weight:700;margin-bottom:8px;line-height:1.6}
+  .zk-you .chip{cursor:pointer;user-select:none}
+  .zk-you .chip.mine{background:rgba(251,191,36,.18);border-color:#fbbf24;color:#fcd34d;font-weight:700;box-shadow:0 0 12px rgba(251,191,36,.18)}
+  .zk-you .echo{margin-top:9px;font-size:12px;color:#fcd34d;line-height:1.65;display:none}
+  .zk-you .echo.show{display:block}
+  .hot-item{position:relative;overflow:hidden}
+  .hot-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--mut)}
+  .hot-item.cat-industry::before{background:#38bdf8}
+  .hot-item.cat-livelihood::before{background:#34d399}
+  .hot-item.cat-city::before{background:#a78bfa}
+  .hot-item.cat-food::before{background:#fb923c}
+  .hot-item.cat-fun::before{background:#f472b6}
+  .hot-item.mine-card{border-color:#fbbf24 !important;box-shadow:0 0 0 1px rgba(251,191,36,.40) inset,0 6px 22px rgba(251,191,36,.12)}
+  .mine-flag{font-size:10px;font-weight:700;color:#060a13;background:#fbbf24;border-radius:6px;padding:1px 6px;margin-left:6px;white-space:nowrap}
+  .relate{margin-top:8px;padding:7px 10px;border-radius:9px;font-size:12px;line-height:1.65;
+    background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.22);color:#fde68a}
+  .relate b{color:#fcd34d}
+  .life-sec-title{font-size:13.5px;font-weight:800;margin:18px 0 9px;display:flex;align-items:center;gap:8px;color:var(--ink)}
+  .life-sec-title .cnt{font-size:11px;color:var(--mut);font-weight:500}
+  .life-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:6px}
+  .town-card.life{border-left:3px solid #fb923c}
+  .town-card.work{border-left:3px solid #38bdf8;background:linear-gradient(180deg,rgba(56,189,248,.07),rgba(56,189,248,.02))}
+  .town-card.work .tag{color:#7dd3fc;background:rgba(56,189,248,.14)}
+  .town-card.mine{border-color:#fbbf24 !important;box-shadow:0 0 0 1px rgba(251,191,36,.45) inset,0 8px 26px rgba(251,191,36,.14)}
+  .town-card .k2{display:inline-block;width:84px;color:var(--mut);font-size:12px}
+  .town-card.work .k2{width:96px}
+  .zk-pulse{background:linear-gradient(90deg,rgba(244,114,182,.12),rgba(251,191,36,.05));border:1px solid rgba(244,114,182,.30);
+    border-radius:12px;padding:10px 14px;margin-bottom:6px;font-size:12.5px;color:#fbcfe8;line-height:1.85}
+  .zk-pulse b{color:#f9a8d4}
+  @media (max-width:1100px){.life-grid{grid-template-columns:1fr}}
   .entry-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
   .entry{background:linear-gradient(180deg,rgba(140,170,225,.07),rgba(140,170,225,.03));border:1px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;transition:box-shadow .15s,border-color .15s,transform .12s}
   .entry:hover{border-color:var(--blue);box-shadow:0 8px 30px rgba(56,189,248,.14);transform:translateY(-2px)}
@@ -288,8 +338,8 @@
           <span>2025 真实数据：GDP <b>1160.39 亿</b></span><span>规上工业 <b>1144 家</b></span><span>高新技术企业 <b>1053 家</b></span>
         </div>
         <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-          <button class="btn sm" onclick="switchView('hot');renderHot()">📰 今日仲恺 · 每天更新的真实话题</button>
-          <button class="btn sm" onclick="switchView('town');renderTown()">🏘 仲恺各镇 · 5镇街+4园区生活</button>
+          <button class="btn sm" onclick="switchView('hot');renderHot()">📰 今日仲恺 · 打工人每日情报站</button>
+          <button class="btn sm" onclick="switchView('town');renderTown()">🏘 仲恺生活地图 · 下班周末去哪</button>
         </div>
       </div>
       <div class="fate-grid">
@@ -583,7 +633,18 @@
     <!-- ============ 今日仲恺（每日情报，hot.json） ============ -->
     <section id="view-hot" class="view">
       <div class="card">
-        <h2>📰 今日仲恺 <span class="tag">每天更新的真实话题 · 每条可溯源</span></h2>
+        <h2>📰 今日仲恺 <span class="tag">仲恺打工人的每日情报站 · 每条都连着你的日子</span></h2>
+        <div class="zk-hero">
+          <span class="kicker">ZHONGKAI DAILY · 给在仲恺打拼的你</span>
+          <div class="lead">你可能在陈江的电子厂倒夜班，在潼湖智慧区的新厂房里调设备，在惠环租着房子、等着城际通车——仲恺每天的新闻，其实都连着你的<em>工位、工资和周末</em>。</div>
+          <div class="zk-stats" id="hot-stats"></div>
+          <div class="sub2">下面每一条，我们都帮你翻译成一句大白话：<b>这事和你有啥关系</b>。消息全部来自公开渠道，每天更新一次。</div>
+        </div>
+        <div class="zk-you" id="hot-you">
+          <div class="q">📍 你在仲恺哪儿打拼？点一下，把你那边的消息标出来（只存在你自己手机上，不上传）</div>
+          <div class="chip-row" id="hot-places"></div>
+          <div class="echo" id="hot-echo"></div>
+        </div>
         <div class="muted" style="margin-bottom:8px" id="hot-scan">正在读取今日话题…</div>
         <div class="chip-row" id="hot-tabs" style="margin-bottom:10px"></div>
         <div id="hot-list"></div>
@@ -594,9 +655,18 @@
     <!-- ============ 仲恺各镇（生活风向标，life.json） ============ -->
     <section id="view-town" class="view">
       <div class="card">
-        <h2>🏘 仲恺各镇 <span class="tag">5 镇街 + 4 园区 · 产业与生活的一张图</span></h2>
+        <h2>🏘 仲恺生活地图 <span class="tag">你在哪个园区上班，下班、周末去哪</span></h2>
+        <div class="zk-hero">
+          <span class="kicker">ZHONGKAI LIFE · 5 镇街 + 4 园区的活法</span>
+          <div class="lead">仲恺不大，可你在哪栋厂房、哪个园区上班，下班那口<em>热乎气</em>、周末能带娃、能约会、能发呆的地方，就完全不一样。</div>
+          <div class="sub2">五个镇街管<b>烟火</b>，四个园区管<b>上班</b>。点下面你待的地方，直接定位你的生活圈。</div>
+        </div>
+        <div class="zk-pulse" id="town-pulse"></div>
+        <div class="zk-you" id="town-you">
+          <div class="q">🏭 你在哪个镇街 / 园区？点一下，定位你的生活圈（只存在你自己手机上，不上传）</div>
+          <div class="chip-row" id="town-places"></div>
+        </div>
         <div class="muted" style="margin-bottom:8px" id="town-scan">正在读取各镇生活数据…</div>
-        <div class="livebar" id="town-pulse"></div>
         <div id="town-grid"></div>
         <div class="muted" style="margin-top:12px;font-size:12px" id="town-note"></div>
       </div>
@@ -2013,9 +2083,19 @@ $("#fate-prev").onclick=()=>{if(fateState.step===1){if(fateState.playIv){clearIn
 /* hash 路由：打开 #fate=ident&choice=X&seed=N 自动重跑同情景 */
 /* ================= 今日仲恺 + 仲恺各镇（数据页面，V1.2c） ================= */
 /* ================= 深色霓虹主题重构（V1.2d） ================= */
-let hotData=null,lifeData=null,hotTab="all";
-const HOT_CATS=[["all","全部"],["industry","产业"],["livelihood","民生"],["city","城市"],["food","好吃"],["fun","好玩"]];
+const zkStore={get(){try{return (typeof localStorage!=="undefined"&&localStorage.getItem("zk_myplace"))||"";}catch(e){return "";}},set(v){try{if(typeof localStorage!=="undefined")localStorage.setItem("zk_myplace",v);}catch(e){}}};
+let hotData=null,lifeData=null,hotTab="all",myPlace=zkStore.get();
+const HOT_CATS=[["all","全部"],["industry","招工·岗位"],["livelihood","学位·就医"],["city","通勤·城建"],["food","打牙祭"],["fun","周末去哪"]];
 const HOT_FATE={industry:"work",food:"shop",city:"live",livelihood:"grad",fun:"live"};
+const ZK_PLACES=["陈江","惠环","沥林","潼侨","潼湖","东江科技园","惠南科技园","潼湖生态智慧区","人工智能产业园"];
+const RELATE={
+  industry:"🏭 <b>和你有啥关系：</b>新厂房、新项目投产，后面往往跟着招工和配套订单——找工作、想换厂、在厂边做小生意的，都值得盯紧。",
+  livelihood:"🎒 <b>和你有啥关系：</b>学位、医院、养老这些，听着像新闻，落到谁家就是实打实的方便，尤其是带娃的家庭。",
+  city:"🚄 <b>和你有啥关系：</b>路通了、街开了，你回家的时间、下班能逛的地方，跟着一起变。",
+  food:"🍜 <b>和你有啥关系：</b>又多一个能凑热闹、打牙祭的地方，这周末的口有着落了。",
+  fun:"🎡 <b>和你有啥关系：</b>遛娃、约会、发呆不用老往远处跑，家门口又多一个去处。"
+};
+const isWorkPark=n=>/科技园|智慧区|产业园/.test(n);
 async function loadHot(){
   try{const r=await fetch("hot.json?ts="+Date.now());if(!r.ok)throw 0;hotData=await r.json();}
   catch(e){hotData=null;}
@@ -2025,45 +2105,96 @@ async function loadLife(){
   catch(e){lifeData=null;}
 }
 function tierCls(t){return t==="高"?"high":(t==="较高"?"mid":"low");}
+/* 从今日话题文本里动态抠硬数字，抠不到就不显示，绝不杜撰 */
+function hotStats(d){
+  const txt=(d.items||[]).map(i=>i.title+" "+(i.summary||"")).join("　");
+  const out=[];
+  const kg=txt.match(/(\d+)\s*宗[^，。、]*?开工/), jg=txt.match(/(\d+)\s*宗[^，。、]*?竣工/);
+  if(kg&&jg) out.push({n:kg[1]+"·"+jg[1],warm:false,cap:"今年产业项目<br>开工 · 竣工投产（宗）"});
+  else if(kg) out.push({n:kg[1],warm:false,cap:"今年新开工<br>产业项目（宗）"});
+  const xw=txt.match(/新增[^，。、]*?(\d+)\s*个?\s*公办学位/)||txt.match(/(\d+)\s*个?\s*公办学位/);
+  if(xw) out.push({n:xw[1],warm:true,cap:"今年新增<br>公办学位（个）"});
+  out.push({n:"9",warm:false,cap:"5 镇街 + 4 园区<br>各有各的活法"});
+  out.push({n:String(d.count||(d.items||[]).length),warm:true,cap:"今天为你扒到<br>的话题（条）"});
+  return out;
+}
+function renderHotStats(d){
+  const el=$("#hot-stats"); if(!el)return;
+  el.innerHTML=hotStats(d).map(s=>`<div class="zk-stat"><div class="num${s.warm?' warm':''}">${s.n}</div><div class="cap">${s.cap}</div></div>`).join("");
+}
+function renderPlaceChips(cid,places,onPick){
+  const box=$("#"+cid); if(!box)return;
+  box.innerHTML=places.map(p=>`<button class="chip ${p===myPlace?'mine':''}" data-p="${escapeHtml(p)}">${escapeHtml(p)}</button>`).join("");
+  $$("#"+cid+" .chip").forEach(b=>b.addEventListener("click",()=>{
+    const p=b.dataset.p;
+    myPlace=(myPlace===p)?"":p;
+    zkStore.set(myPlace);
+    onPick(myPlace);
+  }));
+}
+function placeHit(text){return !!myPlace&&text.indexOf(myPlace)>=0;}
 function renderHot(){
   const scan=$("#hot-scan"),list=$("#hot-list"),tabs=$("#hot-tabs"),note=$("#hot-note");
   if(!scan)return;
   if(!hotData){scan.innerHTML="今日话题读取失败：可能处于断网离线状态（联网后自动重试，历史话题不丢失）。";return;}
   scan.innerHTML=`今日仲恺 · ${hotData.updated} · ${hotData.count} 条话题 · ${hotData.frequency||"每日更新一次"}`;
   note.innerHTML=hotData.note||"";
+  renderHotStats(hotData);
+  renderPlaceChips("hot-places",ZK_PLACES,()=>renderHot());
+  const echo=$("#hot-echo");
+  if(myPlace){echo.classList.add("show");echo.innerHTML=`原来你在 <b>${escapeHtml(myPlace)}</b>！下面和你那边有关的消息，已经帮你用「你那边」标出来了。`;}else{echo.classList.remove("show");echo.innerHTML="";}
   tabs.innerHTML=HOT_CATS.map(([k,n])=>`<button class="chip ${k===hotTab?"on":""}" data-c="${k}">${n}</button>`).join("");
   $$("#hot-tabs .chip").forEach(b=>b.addEventListener("click",()=>{hotTab=b.dataset.c;renderHot();}));
   const items=hotData.items.filter(i=>hotTab==="all"||i.cat===hotTab);
   list.innerHTML=items.map(i=>{
     const fid=HOT_FATE[i.cat]||"work";
-    return `<div class="hot-item">
+    const text=i.title+" "+(i.summary||"");
+    const mine=placeHit(text);
+    return `<div class="hot-item cat-${i.cat||'city'} ${mine?'mine-card':''}">
       <div class="em">${i.emoji||"📌"}</div>
       <div style="flex:1;min-width:0">
-        <div class="tt">${escapeHtml(i.title)}</div>
+        <div class="tt">${escapeHtml(i.title)}${mine?'<span class="mine-flag">你那边</span>':''}</div>
         <div class="sm">${escapeHtml(i.summary||"")}</div>
+        <div class="relate">${RELATE[i.cat]||RELATE.city}</div>
         <div class="badges"><span class="b-tier ${tierCls(i.tier)}">热度${i.tier}</span><span class="b-src">${escapeHtml(i.srcLevel||"公开来源")}</span>
           ${i.url?`<a class="b-src" href="${i.url}" target="_blank" rel="noopener">查看原始报道 ↗</a>`:""}</div>
       </div>
-      <div class="act"><button class="btn sm" onclick="openFate('${fid}')">${FATE_IDENTS[fid].emoji} 模拟这个情景</button></div>
+      <div class="act"><button class="btn sm" onclick="openFate('${fid}')">${FATE_IDENTS[fid].emoji} 要是变了，跑一遍</button></div>
     </div>`;
   }).join("")||'<div class="muted">该分类暂无话题。</div>';
+}
+function townCard(t,kind){
+  const lv=t.level==="高"?"high":(t.level==="较高"?"mid":"low");
+  const mine=(t.n===myPlace)?' mine':'';
+  if(kind==="work"){
+    return `<div class="town-card work${mine}" data-n="${escapeHtml(t.n)}">
+      <div class="hd"><span class="n">${escapeHtml(t.n)}</span><span class="tag">${escapeHtml(t.tag||"")}</span><span class="b-tier ${lv}" style="margin-left:auto">人气${t.level||"中"}</span></div>
+      <div class="row"><span class="k2">🧃 园区周边</span>${escapeHtml((t.plays||[]).join(" · "))||"配套完善中"}</div>
+      <div class="why">💼 <b>在这上班：</b>${escapeHtml(t.why||"")}</div>
+    </div>`;
+  }
+  return `<div class="town-card life${mine}" data-n="${escapeHtml(t.n)}">
+    <div class="hd"><span class="n">${escapeHtml(t.n)}</span><span class="tag">${escapeHtml(t.tag||"")}</span><span class="b-tier ${lv}" style="margin-left:auto">人气${t.level||"中"}</span></div>
+    <div class="row"><span class="k2">🍜 下班打牙祭</span>${escapeHtml((t.foods||[]).join(" · "))||"—"}</div>
+    <div class="row"><span class="k2">🚶 周末去哪晃</span>${escapeHtml((t.plays||[]).join(" · "))||"—"}</div>
+    <div class="why">🔥 <b>为啥这儿热闹：</b>${escapeHtml(t.why||"")}</div>
+  </div>`;
 }
 function renderTown(){
   const scan=$("#town-scan"),pulse=$("#town-pulse"),grid=$("#town-grid"),note=$("#town-note");
   if(!scan)return;
   if(!lifeData){scan.innerHTML="各镇数据读取失败：可能处于断网离线状态（联网后自动重试）。";return;}
-  scan.innerHTML=`仲恺各镇 · ${lifeData.updated} · 5 镇街 + 4 园区 · ${lifeData.freq||"每日更新一次"}`;
-  pulse.innerHTML="📡 <b>最近大家在聊：</b>"+(lifeData.pulse||[]).map(escapeHtml).join("　｜　");
+  scan.innerHTML=`仲恺生活地图 · ${lifeData.updated} · 5 镇街 + 4 园区 · ${lifeData.freq||"每日更新一次"}`;
+  pulse.innerHTML="📡 <b>这两天，仲恺人的朋友圈在刷：</b><br>"+(lifeData.pulse||[]).map(escapeHtml).join("<br>");
   note.innerHTML=(lifeData.note||"")+"　"+(lifeData.sourceLabel||"");
-  grid.innerHTML=(lifeData.towns||[]).map(t=>{
-    const lv=t.level==="高"?"high":(t.level==="较高"?"mid":"low");
-    return `<div class="town-card">
-      <div class="hd"><span class="n">${escapeHtml(t.n)}</span><span class="tag">${escapeHtml(t.tag||"")}</span><span class="b-tier ${lv}" style="margin-left:auto">人气${t.level||"中"}</span></div>
-      <div class="row"><span class="k">去哪玩</span>${escapeHtml((t.plays||[]).join(" · "))||"—"}</div>
-      <div class="row"><span class="k">吃什么</span>${escapeHtml((t.foods||[]).join(" · "))||"—"}</div>
-      <div class="why">${escapeHtml(t.why||"")}</div>
-    </div>`;
-  }).join("")||'<div class="muted">暂无镇街数据。</div>';
+  renderPlaceChips("town-places",(lifeData.towns||[]).map(t=>t.n),()=>renderTown());
+  const towns=lifeData.towns||[];
+  const life=towns.filter(t=>!isWorkPark(t.n)), work=towns.filter(t=>isWorkPark(t.n));
+  let html="";
+  if(life.length)html+=`<div class="life-sec-title">🏘 五个镇街 · 烟火生活 <span class="cnt">下班吃啥、周末去哪，都在这儿</span></div><div class="life-grid">${life.map(t=>townCard(t,"life")).join("")}</div>`;
+  if(work.length)html+=`<div class="life-sec-title">🏭 四个园区 · 上班那点事 <span class="cnt">在这上班，配套和最近的烟火气</span></div><div class="life-grid">${work.map(t=>townCard(t,"work")).join("")}</div>`;
+  grid.innerHTML=html||'<div class="muted">暂无镇街数据。</div>';
+  if(myPlace){const card=grid.querySelector('[data-n="'+myPlace+'"]');if(card)card.scrollIntoView({behavior:"smooth",block:"center"});}
 }
 async function ensureHot(){if(!hotData)await loadHot();renderHot();}
 async function ensureTown(){if(!lifeData)await loadLife();renderTown();}
