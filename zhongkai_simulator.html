@@ -369,9 +369,224 @@
     /* 宽表格独立横向滚动，不再撑爆整页造成 320px 横向溢出 */
     table{display:block;width:100%;max-width:100%;overflow-x:auto}
   }
+
+  /* ================= 手机 OS（V1.3 · 整个首页即一台手机） ================= */
+  .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:22px;
+    background:
+      radial-gradient(900px 520px at 50% -160px, rgba(56,189,248,.10), transparent 60%),
+      radial-gradient(720px 620px at 100% 115%, rgba(124,58,237,.12), transparent 60%),
+      radial-gradient(720px 620px at 0% 115%, rgba(8,145,178,.12), transparent 60%),
+      linear-gradient(180deg,#05080f,#04070e);overflow:hidden}
+  .stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:radial-gradient(1.4px 1.4px at 50% 50%,rgba(148,197,255,.20),transparent 60%);
+    background-size:62px 62px;opacity:.45}
+  .phone-frame{position:relative;width:390px;height:min(844px,calc(100vh - 44px));
+    padding:11px;border-radius:56px;flex:none;
+    background:linear-gradient(155deg,#3a3f49 0%,#10131a 38%,#070a10 60%,#2b303a 100%);
+    box-shadow:
+      0 0 0 2px #000,
+      0 0 0 3.5px rgba(255,255,255,.07),
+      0 46px 100px rgba(0,0,0,.78),
+      0 0 135px rgba(56,189,248,.16),
+      inset 0 0 3px rgba(255,255,255,.15);
+    --pf-radius:46px}
+  .phone-screen{position:relative;width:100%;height:100%;border-radius:var(--pf-radius);
+    overflow:hidden;background:#050810;isolation:isolate}
+  /* 灵动岛 */
+  .island{position:absolute;top:12px;left:50%;transform:translateX(-50%);
+    height:34px;width:116px;background:#000;border-radius:20px;z-index:70;
+    display:flex;align-items:center;justify-content:center;gap:7px;overflow:hidden;
+    color:#fff;font-size:11.5px;font-weight:600;white-space:nowrap;
+    transition:width .38s cubic-bezier(.32,.72,0,1.25);cursor:pointer}
+  .island .is-ico{display:none;font-size:14px}
+  .island .is-txt{opacity:0;max-width:0;overflow:hidden;transition:opacity .3s,max-width .35s}
+  .island.live{width:236px}
+  .island.live .is-ico{display:block}
+  .island.live .is-txt{opacity:1;max-width:160px}
+  /* 锁屏 */
+  .lockscreen{position:absolute;inset:0;z-index:60;display:flex;flex-direction:column;
+    border-radius:var(--pf-radius);overflow:hidden;
+    transition:transform .62s cubic-bezier(.32,.72,0,1),opacity .5s}
+  .phone-frame.state-home .lockscreen,
+  .phone-frame.state-app .lockscreen{transform:translateY(-103%);opacity:.85}
+  .ls-wall{position:absolute;inset:0;z-index:0;
+    background:
+      radial-gradient(120% 75% at 18% 4%, rgba(30,64,175,.55), transparent 58%),
+      radial-gradient(110% 70% at 92% 8%, rgba(124,58,237,.45), transparent 55%),
+      radial-gradient(100% 90% at 50% 105%, rgba(8,145,178,.5), transparent 62%),
+      linear-gradient(180deg,#0b1430,#050810);
+    background-size:220% 220%;animation:wallflow 18s ease-in-out infinite alternate}
+  @keyframes wallflow{
+    0%{background-position:6% 0%,100% 0%,50% 100%,0 0}
+    50%{background-position:90% 35%,5% 45%,58% 70%,0 0}
+    100%{background-position:10% 65%,100% 85%,42% 38%,0 0}}
+  .ls-top{position:relative;z-index:2;display:flex;justify-content:flex-end;align-items:center;
+    padding:16px 26px 0;gap:7px;color:#fff;font-size:13px;font-weight:600}
+  .ls-mid{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;padding:0 20px}
+  .ls-date{font-size:16px;font-weight:600;margin-bottom:6px;color:#fff;opacity:.92}
+  .ls-clock{font-size:80px;font-weight:200;letter-spacing:-3px;line-height:1;color:#fff;
+    font-family:var(--font-num);text-shadow:0 6px 36px rgba(0,0,0,.5);font-variant-numeric:tabular-nums}
+  .ls-locks{position:relative;z-index:2;padding:0 18px 24px;display:flex;flex-direction:column;gap:14px}
+  .ls-notify{display:flex;gap:11px;align-items:flex-start;background:rgba(255,255,255,.16);
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:18px;
+    padding:11px 14px;color:#fff;border:1px solid rgba(255,255,255,.12);text-align:left;
+    box-shadow:0 8px 24px rgba(0,0,0,.3);cursor:pointer;width:100%}
+  .ls-notify .n-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;
+    justify-content:center;font-size:19px;flex:none;background:linear-gradient(135deg,#0ea5e9,#2563eb)}
+  .ls-notify b{font-size:13px;display:block}
+  .ls-notify span{font-size:12px;opacity:.85}
+  .ls-bottom{display:flex;justify-content:space-between;align-items:center;padding:0 6px}
+  .ls-round{width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.16);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;font-size:20px;
+    cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .ls-swipe{flex:1;text-align:center;font-size:12px;font-weight:600;opacity:.9;
+    animation:swiphint 2s ease-in-out infinite}
+  @keyframes swiphint{0%,100%{transform:translateY(0);opacity:.65}50%{transform:translateY(-6px);opacity:1}}
+  /* 主屏 */
+  .homescreen{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;
+    padding:8px 16px 14px;color:#fff;
+    background:
+      radial-gradient(120% 60% at 50% -10%, rgba(56,189,248,.28), transparent 60%),
+      radial-gradient(120% 90% at 50% 110%, rgba(124,58,237,.25), transparent 60%),
+      linear-gradient(180deg,#0a1430,#070b18);
+    opacity:0;transform:scale(1.12);pointer-events:none;
+    transition:opacity .45s,transform .45s cubic-bezier(.32,.72,0,1)}
+  .phone-frame.state-home .homescreen{opacity:1;transform:none;pointer-events:auto}
+  .phone-frame.state-app .homescreen{opacity:0;transform:scale(.82);pointer-events:none}
+  .hs-status{display:flex;justify-content:space-between;align-items:center;padding:0 14px;height:44px;
+    font-size:13.5px;font-weight:600;flex:none;font-variant-numeric:tabular-nums}
+  .hs-status .os-r{display:flex;gap:6px;align-items:center}
+  .hs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:21px 8px;align-content:start;
+    padding:12px 4px 16px;flex:1}
+  .hs-app{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;
+    cursor:pointer;color:#fff;padding:0;transition:transform .13s}
+  .hs-app:active{transform:scale(.88)}
+  .hs-ico{width:60px;height:60px;border-radius:17px;display:flex;align-items:center;justify-content:center;
+    font-size:31px;box-shadow:0 7px 17px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2);
+    position:relative;overflow:visible}
+  .hs-badge{position:absolute;top:-6px;right:-6px;min-width:19px;height:19px;border-radius:10px;
+    background:#ff3b30;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;
+    justify-content:center;padding:0 5px;box-shadow:0 0 0 1.5px rgba(255,255,255,.3)}
+  .hs-name{font-size:11px;font-weight:500;text-shadow:0 1px 4px rgba(0,0,0,.7)}
+  .hs-dock{display:flex;justify-content:space-around;align-items:center;
+    background:rgba(255,255,255,.14);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+    border-radius:30px;padding:12px 14px;margin:0 6px;border:1px solid rgba(255,255,255,.1)}
+  .hs-dock .hs-name{display:none}
+  /* App 层 */
+  .app-layer{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;
+    background:#070d1a;border-radius:var(--pf-radius);overflow:hidden;
+    opacity:0;transform:scale(1.1);pointer-events:none;
+    transition:opacity .38s,transform .38s cubic-bezier(.32,.72,0,1)}
+  .phone-frame.state-app .app-layer{opacity:1;transform:none;pointer-events:auto}
+  .app-topbar{display:none}
+  .home-bar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+    width:134px;height:5px;border-radius:3px;background:rgba(255,255,255,.55);z-index:80;cursor:pointer}
+  /* 强制窄屏（手机内，无视浏览器视口宽度） */
+  .in-phone .app-topbar{display:flex;align-items:center;gap:10px;flex:none;
+    padding:46px 16px 10px;background:linear-gradient(180deg,rgba(10,16,30,.97),rgba(8,13,24,.97));
+    border-bottom:1px solid var(--line);color:#fff;z-index:20}
+  .in-phone .app-topbar .tb-home{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);
+    background:rgba(56,189,248,.12);color:#7dd3fc;font-size:17px;cursor:pointer;display:flex;
+    align-items:center;justify-content:center;flex:none}
+  .in-phone .app-topbar .tb-title{font-size:15px;font-weight:700;flex:1;line-height:1.2}
+  .in-phone .app-topbar .tb-title small{display:block;font-size:10.5px;font-weight:500;color:var(--sub)}
+  .in-phone .app-topbar .tb-go{flex:none;border:1px solid rgba(251,191,36,.4);background:rgba(251,191,36,.1);
+    color:#fcd34d;border-radius:9px;padding:6px 11px;font-size:12px;font-weight:700;cursor:pointer}
+  .in-phone header.top{display:none}
+  .in-phone .app{display:block;flex:1;min-height:0;overflow:auto}
+  .in-phone aside.side{display:none}
+  .in-phone main{padding:14px 13px 30px;min-width:0}
+  .in-phone footer{flex:none;padding:12px 14px 22px}
+  .in-phone .kpis{grid-template-columns:repeat(3,1fr)}
+  .in-phone #netsvg{height:320px}
+  .in-phone .drawer{width:100%;max-width:100%}
+  .in-phone .run-grid{grid-template-columns:1fr}
+  .in-phone table{display:block;width:100%;max-width:100%;overflow-x:auto}
+  .in-phone .story{flex-direction:column}
+  .in-phone .story .seg{min-width:0}
+  .in-phone .app::after{content:"";display:block;height:20px}
+  /* 手机 OS 顶部栏已有标题，隐藏卡片内重复的 h2 */
+  .in-phone .view>.card>h2{display:none}
+  /* 今日仲恺：消息列表提到首屏，hero/位置选择后置 */
+  .in-phone #view-hot>.card{display:flex;flex-direction:column}
+  .in-phone #view-hot h2{order:1}
+  .in-phone #view-hot #hot-scan{order:2}
+  .in-phone #view-hot #hot-tabs{order:3}
+  .in-phone #view-hot #hot-phone{order:4}
+  .in-phone #view-hot #hot-list{order:5}
+  .in-phone #view-hot #hot-note{order:6}
+  .in-phone #view-hot .zk-you{order:7}
+  .in-phone #view-hot .zk-hero{order:8}
+  /* 仲恺各镇：生活卡片为主，hero 后置 */
+  .in-phone #view-town>.card{display:flex;flex-direction:column}
+  .in-phone #view-town h2{order:1}
+  .in-phone #view-town #town-pulse{order:2}
+  .in-phone #view-town #town-scan{order:3}
+  .in-phone #view-town #town-grid{order:4}
+  .in-phone #view-town #town-note{order:5}
+  .in-phone #view-town #town-you{order:6}
+  .in-phone #view-town .zk-hero{order:7}
+  /* 手机端：全屏，无外壳 */
+  @media (max-width:460px){
+    .stage{padding:0}
+    .phone-frame{width:100vw;height:100vh;height:100dvh;border-radius:0;padding:0;
+      box-shadow:none;--pf-radius:0}
+    .island{top:11px}
+    .home-bar{bottom:9px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .ls-wall{animation:none}.ls-swipe{animation:none}
+    .lockscreen,.homescreen,.app-layer,.island{transition-duration:.01ms}
+  }
 </style>
 </head>
-<body>
+<body class="in-phone">
+<div class="stage">
+  <div class="phone-frame state-locked" id="phone-frame">
+    <div class="phone-screen">
+      <div class="island" id="island">
+        <span class="is-ico">📡</span><span class="is-txt" id="island-txt">正在接收今日消息</span>
+      </div>
+
+      <!-- 锁屏 -->
+      <div class="lockscreen" id="lockscreen">
+        <div class="ls-wall"></div>
+        <div class="ls-top"><span>📶</span><span>📡</span><span>🔋</span></div>
+        <div class="ls-mid">
+          <div class="ls-date" id="ls-date">—</div>
+          <div class="ls-clock" id="ls-clock">--:--</div>
+        </div>
+        <div class="ls-locks">
+          <div class="ls-notify" id="ls-notify">
+            <div class="n-ico">📰</div>
+            <div><b id="ls-notify-title">今日仲恺</b><span id="ls-notify-sub">正在接收今日消息…</span></div>
+          </div>
+          <div class="ls-bottom">
+            <button class="ls-round" type="button">🔦</button>
+            <div class="ls-swipe" id="ls-swipe">轻点或上滑解锁</div>
+            <button class="ls-round" type="button">📷</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 主屏 -->
+      <div class="homescreen" id="homescreen">
+        <div class="hs-status">
+          <span id="hs-time">--:--</span>
+          <span class="os-r"><span>📶</span><span>📡</span><span>🔋</span></span>
+        </div>
+        <div class="hs-grid" id="hs-grid"></div>
+        <div class="hs-dock" id="hs-dock"></div>
+      </div>
+
+      <!-- App 层（现有内容） -->
+      <div class="app-layer">
+        <div class="app-topbar">
+          <button class="tb-home" type="button" onclick="goHome()" title="回主屏">⌂</button>
+          <div class="tb-title" id="tb-title">—</div>
+          <button class="tb-go" id="tb-go" type="button" style="display:none">正式研究</button>
+        </div>
 <header class="top">
   <button class="mob-menu" id="mob-menu" type="button" aria-label="打开菜单" aria-expanded="false">☰ 菜单</button>
   <div class="brand">🏭 仲恺 2030 · 未来实验 <span class="ver">V1.2e</span></div>
@@ -842,6 +1057,11 @@
   仲恺版是一台区域经济“风洞”：承载力模型出真分布 · 产业链时序自己演 · 三层网络让景气传播 · 网络审查真查漏项 · 变量影响找关键抓手。
   参数可回统计公报核对，反事实不可验证。数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）。License: MIT。
 </footer>
+      </div><!-- /app-layer -->
+      <div class="home-bar" onclick="goHome()" title="回主屏"></div>
+    </div><!-- /phone-screen -->
+  </div><!-- /phone-frame -->
+</div><!-- /stage -->
 
 <script>
 "use strict";
@@ -1865,6 +2085,110 @@ function switchView(v){
   closeMobMenu();
 }
 $$(".nav").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.v)));
+
+/* ================= 手机 OS（V1.3 · 锁屏/主屏/灵动岛） ================= */
+const PHONE_APPS=[
+  {v:"hot",   e:"📰",n:"今日仲恺",g:"linear-gradient(135deg,#0ea5e9,#2563eb)",dock:true,badge:true},
+  {v:"town",  e:"🏘",n:"仲恺各镇",g:"linear-gradient(135deg,#f59e0b,#ef4444)",dock:true},
+  {v:"home",  e:"🎯",n:"命运实验",g:"linear-gradient(135deg,#8b5cf6,#6366f1)",dock:true},
+  {v:"run",   e:"▶", n:"动态推演",g:"linear-gradient(135deg,#10b981,#059669)",dock:true},
+  {v:"mc",    e:"🎲",n:"批量重跑",g:"linear-gradient(135deg,#06b6d4,#0e7490)"},
+  {v:"sens",  e:"🌪",n:"变量影响",g:"linear-gradient(135deg,#ec4899,#be185d)"},
+  {v:"iv",    e:"👤",n:"主体档案",g:"linear-gradient(135deg,#f97316,#c2410c)"},
+  {v:"ledger",e:"📒",n:"决策档案",g:"linear-gradient(135deg,#84cc16,#4d7c0f)"},
+  {v:"data",  e:"🧬",n:"数据证据",g:"linear-gradient(135deg,#64748b,#334155)"},
+  {v:"world", e:"⚙️", n:"世界管理",g:"linear-gradient(135deg,#475569,#1e293b)"}
+];
+const APP_TITLE={
+  hot:{t:"今日仲恺",s:"打工人每日情报站 · 每日更新"},
+  town:{t:"仲恺生活地图",s:"下班周末去哪 · 5镇街+4园区"},
+  home:{t:"命运实验",s:"选身份，体验一座城市的选择"},
+  run:{t:"动态推演",s:"看产业网络如何一步步演化"},
+  mc:{t:"批量重跑",s:"同规则反复跑，看结局稳不稳"},
+  sens:{t:"变量影响",s:"哪个旋钮一动，结局变化最大"},
+  iv:{t:"主体档案",s:"行为与记忆 · 局部关系"},
+  ledger:{t:"决策档案",s:"预判 · 事件 · 结果 · 报告"},
+  data:{t:"数据与证据",s:"数字出处 · 指标来源"},
+  world:{t:"世界管理",s:"基准恢复 · 数据导入导出"}
+};
+function phoneIco(a){
+  return `<div class="hs-ico" style="background:${a.g}">${a.e}${a.badge?`<span class="hs-badge" id="hs-badge-hot" style="display:none">0</span>`:""}</div>`;
+}
+function renderHomeScreen(){
+  const cell=a=>`<button class="hs-app" type="button" onclick="openApp('${a.v}')">${phoneIco(a)}<span class="hs-name">${a.n}</span></button>`;
+  $("#hs-grid").innerHTML=PHONE_APPS.filter(a=>!a.dock).map(cell).join("");
+  $("#hs-dock").innerHTML=PHONE_APPS.filter(a=>a.dock).map(cell).join("");
+}
+function pad2(x){return String(x).padStart(2,"0");}
+function tickClock(){
+  const d=new Date(),hh=pad2(d.getHours()),mm=pad2(d.getMinutes());
+  $("#ls-clock").textContent=hh+":"+mm;
+  $("#hs-time").textContent=hh+":"+mm;
+  const wk=["周日","周一","周二","周三","周四","周五","周六"][d.getDay()];
+  $("#ls-date").textContent=(d.getMonth()+1)+"月"+d.getDate()+"日 "+wk;
+}
+function refreshLockNotify(){
+  fetch("hot.json?_="+Date.now()).then(r=>r.json()).then(d=>{
+    const n=d.count||0;
+    $("#ls-notify-sub").textContent=n+" 条新消息 · 每日更新";
+    const b=$("#hs-badge-hot");
+    if(b){b.textContent=n;b.style.display=n?"flex":"none";}
+  }).catch(()=>{});
+}
+function setPhoneState(s){
+  $("#phone-frame").classList.remove("state-locked","state-home","state-app");
+  $("#phone-frame").classList.add("state-"+s);
+}
+function islandLive(txt,on){
+  const is=$("#island");
+  if(on){is.classList.add("live");$("#island-txt").textContent=txt;}
+  else{is.classList.remove("live");}
+}
+function unlockPhone(openV){
+  if(openV){openApp(openV);}
+  else{setPhoneState("home");}
+}
+function openApp(v){
+  setPhoneState("app");
+  switchView(v);
+  if(v==="hot"){
+    islandLive("正在接收今日消息",true);
+    setTimeout(()=>{if($("#phone-frame").classList.contains("state-app"))islandLive("今日消息已接收",true);},4200);
+  }else if(v==="town"){
+    islandLive("生活地图已更新",true);
+  }else{
+    islandLive("",false);
+  }
+  const ti=APP_TITLE[v]||{t:"",s:""};
+  $("#tb-title").innerHTML=ti.t+"<small>"+ti.s+"</small>";
+  $("#tb-go").style.display=(v==="home")?"inline-flex":"none";
+  const ap=$(".in-phone .app");if(ap)ap.scrollTop=0;
+}
+function goHome(){setPhoneState("home");islandLive("",false);}
+/* 锁屏：点击解锁、点通知进今日、上滑解锁 */
+(function(){
+  const ls=$("#lockscreen");let sy=0;
+  ls.addEventListener("click",function(e){
+    if(e.target.closest("#ls-notify")){e.preventDefault();unlockPhone("hot");return;}
+    if(e.target.closest(".ls-round"))return;
+    unlockPhone();
+  });
+  ls.addEventListener("touchstart",e=>{sy=e.touches[0].clientY;},{passive:true});
+  ls.addEventListener("touchend",e=>{
+    if(sy-e.changedTouches[0].clientY>50)unlockPhone();
+  },{passive:true});
+})();
+/* 灵动岛：App 状态下点击回主屏 */
+$("#island").addEventListener("click",function(){
+  if($("#phone-frame").classList.contains("state-app"))goHome();
+});
+/* 正式研究入口（命运实验页） */
+$("#tb-go").addEventListener("click",function(){
+  if(typeof openPrep==="function")openPrep();
+});
+/* 初始化 */
+renderHomeScreen();tickClock();setInterval(tickClock,10000);
+refreshLockNotify();setPhoneState("locked");
 /* 手机汉堡菜单：按需展开/收起状态条与导航，首屏只留项目名 */
 function closeMobMenu(){document.body.classList.remove("nav-open");const m=$("#mob-menu");if(m){m.textContent="☰ 菜单";m.setAttribute("aria-expanded","false");}}
 $("#mob-menu").onclick=function(){
