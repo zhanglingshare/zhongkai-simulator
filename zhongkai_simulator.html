@@ -514,10 +514,10 @@
     align-items:center;padding:40px 26px;text-align:center}
   .zp-tag{font-size:11px;color:#7dd3fc;letter-spacing:.15em;margin-bottom:18px}
   .zp-title{font-size:26px;font-weight:900;color:#f1f5f9;line-height:1.35;margin-bottom:14px}
-  /* 真实产业网络（零号页背景） */
-  .zp-net{width:100%;height:auto;margin-bottom:22px}
-  .zp-net .zpl{stroke:#38bdf8;stroke-width:.8;opacity:0;transition:opacity .8s}
-  .zp-net .zpn{opacity:0;transition:opacity .8s}
+  /* 真实产业网络（零号页完整渲染） */
+  .zp-net{width:100%;height:auto;margin-bottom:22px;border-radius:10px;background:rgba(13,23,48,.5)}
+  .zp-net .zpl{opacity:0;transition:opacity 1s}
+  .zp-net .zpn{opacity:0;transition:opacity 1s}
   .zp-net .on{opacity:1}
   /* 网络生长时间线 */
   .zp-grow{width:100%;margin-bottom:24px;text-align:left}
@@ -806,7 +806,7 @@
           <div class="zp-tag">仲恺高新区 · 产业风洞</div>
           <h1 class="zp-title">这张网，<br>是怎么长出来的？</h1>
 
-          <svg class="zp-net" viewBox="0 0 340 200" id="zp-net-real"></svg>
+          <svg class="zp-net" viewBox="0 0 760 560" id="zp-net-full"></svg>
 
           <div class="zp-grow">
             <div class="grow-step">
@@ -2610,29 +2610,29 @@ $("#zp-go").onclick=()=>{
   zp.style.opacity="0";
   setTimeout(()=>{zp.style.display="none";},460);
 };
-/* 零号页：真实产业网络 + 生长动画 */
+/* 零号页：完整产业网络 + 自动播放生长动画 */
 function drawZpNet(){
-  var svg=document.getElementById('zp-net-real');
+  var svg=document.getElementById('zp-net-full');
   if(!svg||typeof sim==='undefined') return;
-  var W=340, H=200;
-  var pos=layoutForce(sim.agents, sim.edges, W, H);
-  var colorMap={anchor:"#a78bfa",oem:"#818cf8",supplier:"#22d3ee",service:"#fb923c",
-    talent:"#fbbf24",capital:"#34d399",land:"#a3e635",infra:"#93a4c4"};
-  var sizeMap={anchor:8.5,oem:6};
-  var html='';
+  const W=760,H=560;
+  var pos=layoutForce(sim.agents,sim.edges,W,H);
+  var eCol=e=>e.layer==="hist"?"#818cf8":(e.layer==="affinity"?"#cbd5e1":"#c9b8a3");
+  var html="";
   sim.edges.forEach(function(e){
-    var p=pos[e.a], q=pos[e.b];
-    if(!p||!q) return;
-    html+='<line class="zpl" x1="'+p.x.toFixed(1)+'" y1="'+p.y.toFixed(1)+'" x2="'+q.x.toFixed(1)+'" y2="'+q.y.toFixed(1)+'"/>';
+    var p=pos[e.a],q=pos[e.b];if(!p||!q)return;
+    html+='<line class="zpl" x1="'+p.x.toFixed(1)+'" y1="'+p.y.toFixed(1)+'" x2="'+q.x.toFixed(1)+'" y2="'+q.y.toFixed(1)+'" style="stroke:'+eCol(e)+';stroke-width:'+(e.layer==="hist"?1.8:1)+';'+(e.layer==="hist"?"":"stroke-dasharray:4 4;")+'"/>';
   });
   sim.agents.forEach(function(a){
-    var p=pos[a.name]; if(!p) return;
-    var r=sizeMap[a.type]||4;
-    var c=colorMap[a.type]||"#38bdf8";
-    var glow=a.type==='anchor'?' filter:drop-shadow(0 0 7px rgba(167,139,250,.9))':'';
-    html+='<circle class="zpn" cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+r+'" fill="'+c+'" style="'+glow+'"/>';
+    var p=pos[a.name];if(!p)return;
+    var cfg=TYPE_CFG[a.type];
+    var r=(11+a.energy*11).toFixed(1);
+    var ring=a.sentiment>.12?"#34d399":a.sentiment<-.12?"#f87171":"#93a4c4";
+    html+='<g class="zpn"><circle cx="'+p.x+'" cy="'+p.y+'" r="'+r+'" fill="'+typeColor(a.type)+'" stroke="'+ring+'" stroke-width="3.5"></circle>'+
+      '<text x="'+p.x+'" y="'+(p.y+4)+'" text-anchor="middle" font-size="13" font-weight="600" fill="#fff" paint-order="stroke" stroke="rgba(0,0,0,.3)" stroke-width="1.5">'+cfg.cn+'</text>'+
+      '<text x="'+p.x+'" y="'+(p.y+Number(r)+16).toFixed(1)+'" text-anchor="middle" font-size="11" fill="#a8b9d8" paint-order="stroke" stroke="#0b1220" stroke-width="3">'+a.name+'</text></g>';
   });
   svg.innerHTML=html;
+  // 自动播放：链主/整机先亮 → 配套 → 服务/人才/资本/载体/设施 → 连线
   var nodes=svg.querySelectorAll('.zpn'), lines=svg.querySelectorAll('.zpl');
   var aIdx=[], cIdx=[], oIdx=[];
   sim.agents.forEach(function(a,i){
@@ -2640,13 +2640,13 @@ function drawZpNet(){
     else if(a.type==='supplier') cIdx.push(i);
     else oIdx.push(i);
   });
-  aIdx.forEach(function(i,k){setTimeout(function(){nodes[i].classList.add('on');},300+k*180);});
-  var t1=300+aIdx.length*180;
-  cIdx.forEach(function(i,k){setTimeout(function(){nodes[i].classList.add('on');},t1+k*100);});
-  var t2=t1+cIdx.length*100;
-  oIdx.forEach(function(i,k){setTimeout(function(){nodes[i].classList.add('on');},t2+k*80);});
-  var t3=t2+oIdx.length*80;
-  lines.forEach(function(l,k){setTimeout(function(){l.classList.add('on');},t3+k*40);});
+  aIdx.forEach(function(i,k){setTimeout(function(){nodes[i].classList.add('on');},300+k*250);});
+  var t1=300+aIdx.length*250;
+  cIdx.forEach(function(i,k){setTimeout(function(){nodes[i].classList.add('on');},t1+k*150);});
+  var t2=t1+cIdx.length*150;
+  oIdx.forEach(function(i,k){setTimeout(function(){nodes[i].classList.add('on');},t2+k*100);});
+  var t3=t2+oIdx.length*100;
+  lines.forEach(function(l,k){setTimeout(function(){l.classList.add('on');},t3+k*30);});
 }
 drawZpNet();
 let lockCardIv=null;
