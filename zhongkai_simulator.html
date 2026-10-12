@@ -133,6 +133,19 @@
   .barrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   footer{padding:14px 22px;color:var(--sub);font-size:12px;border-top:1px solid var(--line);background:#fff}
   .hintbtn{font-size:11px;color:var(--blue);cursor:pointer;background:none;border:0;padding:0}
+  /* ---------- 人话解读层（V1.1：打动吃瓜群众与决策者） ---------- */
+  .hook{background:linear-gradient(135deg,#312e81 0%,#0e7490 100%);color:#fff;border-radius:12px;padding:15px 20px;margin-bottom:16px;font-size:15px;font-weight:600;line-height:1.6}
+  .hook .q{color:#c7d2fe;font-weight:700}
+  .hook .num{color:#fbbf24}
+  .story{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+  .story .seg{flex:1;min-width:200px;background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .story .seg b{display:block;font-size:12.5px;margin-bottom:5px;color:var(--ink)}
+  .story .seg .muted{font-size:12.5px;line-height:1.6}
+  .big-num{font-size:30px;font-weight:800;line-height:1.05;color:var(--ink)}
+  .big-num small{font-size:12px;font-weight:500;color:var(--sub);margin-left:5px}
+  .tag-good{color:#168568;background:#e8f5f0;border-radius:999px;padding:1px 9px;font-size:11px;font-weight:600}
+  .tag-warn{color:#b7791f;background:#fdf6e7;border-radius:999px;padding:1px 9px;font-size:11px;font-weight:600}
+  .tag-bad{color:#c24141;background:#fdeeec;border-radius:999px;padding:1px 9px;font-size:11px;font-weight:600}
   /* ---------- 移动端 ---------- */
   @media (max-width:900px){
     .app{grid-template-columns:1fr}
@@ -153,7 +166,7 @@
   <div class="statusbar">
     <span class="pill mode" id="st-mode">探索模拟</span>
     <span class="pill" id="st-world">世界：仲恺基准</span>
-    <span class="pill mono">Seed <span id="st-seed">7</span></span>
+    <span class="pill mono">起点 <span id="st-seed">7</span></span>
     <span class="pill mono">t=<span id="st-tick">0</span>/20</span>
     <span class="pill" id="st-phase">状态：空闲</span>
     <span class="pill mono" id="st-runid" style="display:none"></span>
@@ -168,8 +181,8 @@
     <button class="nav on" data-v="home">◎ 概览</button>
     <button class="nav" data-v="run">▶ 动态推演</button>
     <div class="grp">分析</div>
-    <button class="nav" data-v="mc">🎲 蒙特卡洛</button>
-    <button class="nav" data-v="sens">🌪 敏感性分析</button>
+    <button class="nav" data-v="mc">🎲 批量重跑</button>
+    <button class="nav" data-v="sens">🌪 变量影响</button>
     <div class="grp">研究资料</div>
     <button class="nav" data-v="iv">👤 主体档案</button>
     <button class="nav" data-v="ledger">📒 决策档案</button>
@@ -188,6 +201,7 @@
           <span>基准世界 <b>2025</b></span><span><b>41</b> 个候选主体</span><span><b>71</b> 条基础关系</span><span><b>15</b> 条时序因果链</span><span>单文件 · 零依赖 · 断网可用</span>
         </div>
       </div>
+      <div class="hook"><span class="q">仲恺的下一问：</span>产值破 <span class="num">4000 亿</span>，工业投资却 <span class="num">−23.6%</span>——链主一走，配套会成片死吗？用 <span class="num">1000 次</span>重跑找答案。</div>
       <div class="entry-row">
         <div class="entry" id="entry-explore">
           <h3>快速探索</h3>
@@ -204,12 +218,12 @@
         <h2>现有研究能力</h2>
         <div class="ability-grid">
           <div class="ability"><b>🕸 产业网络</b><span class="muted">主体与关系 · 动态演化</span></div>
-          <div class="ability"><b>⚡ 冲击实验</b><span class="muted">14 种预设事件 · 注入与传播</span></div>
-          <div class="ability"><b>🎲 蒙特卡洛</b><span class="muted">批量重跑 · 结果分布</span></div>
-          <div class="ability"><b>🌪 敏感性</b><span class="muted">参数响应 · 龙卷风排序</span></div>
-          <div class="ability"><b>👤 主体访谈</b><span class="muted">行为与记忆 · 局部关系</span></div>
+          <div class="ability"><b>⚡ 冲击实验</b><span class="muted">14 种情景 · 每个都标依据</span></div>
+          <div class="ability"><b>🎲 批量重跑</b><span class="muted">同一套规则反复跑 · 看结局稳不稳</span></div>
+          <div class="ability"><b>🌪 变量影响</b><span class="muted">哪个旋钮一动，结局变化最大</span></div>
+          <div class="ability"><b>👤 主体档案</b><span class="muted">行为与记忆 · 局部关系</span></div>
           <div class="ability"><b>📒 决策档案</b><span class="muted">预判 · 事件 · 结果 · 报告</span></div>
-          <div class="ability"><b>🧬 数据与证据</b><span class="muted">参数血统 · 指标来源</span></div>
+          <div class="ability"><b>🧬 数据与证据</b><span class="muted">数字出处 · 指标来源</span></div>
           <div class="ability"><b>🌍 世界管理</b><span class="muted">基准恢复 · 数据导入导出</span></div>
         </div>
       </div>
@@ -223,6 +237,11 @@
         <div class="kpi"><div class="v" id="k-di">–</div><div class="l">风险</div><div class="bar"><span id="b-di"></span></div></div>
         <div class="kpi"><div class="v" id="k-mo">–</div><div class="l">信心</div><div class="bar"><span id="b-mo"></span></div></div>
         <div class="kpi"><div class="v" id="k-su">–</div><div class="l">存续</div><div class="bar"><span id="b-su"></span></div></div>
+      </div>
+
+      <div class="card" id="story-card" style="display:none">
+        <h2>🗣 这一局，人话版 <span class="tag">叙事模板 · 非模型预测</span></h2>
+        <div id="story-body"></div>
       </div>
 
       <div class="run-grid">
@@ -280,6 +299,7 @@
               </select>
               <button class="btn gold" id="btn-shock">注入冲击</button>
             </div>
+            <div id="shock-basis"></div>
             <div class="row">
               <select id="remove-sel"></select>
               <button class="btn" id="btn-remove">移除主体</button>
@@ -318,21 +338,22 @@
     <!-- ============ ③ 蒙特卡洛 ============ -->
     <section id="view-mc" class="view">
       <div class="card">
-        <h2>🎲 批量重跑 <span class="tag">跑1次看故事，跑1000次看结构</span></h2>
+        <h2>🎲 批量重跑 <span class="tag">同一套规则反复跑 · 看结局稳不稳</span></h2>
         <div class="row">
-          <label class="muted">局数</label>
+          <label class="muted">遍数</label>
           <select id="mc-n"><option value="200">200</option><option value="400" selected>400</option><option value="1000">1000</option></select>
-          <label class="muted">世界种子</label>
+          <label class="muted">世界起点</label>
           <input type="number" id="mc-seed" value="7" style="width:80px">
           <button class="btn primary" id="btn-mc">运行</button>
         </div>
         <div id="mc-progress" class="muted"></div>
+        <div id="mc-story"></div>
         <div id="mc-results"></div>
       </div>
       <div class="card">
-        <h2>📐 仲恺基准参考结果 <span class="tag">400 局 · 本页面同源内核重算</span></h2>
+        <h2>📐 仲恺基准参考结果 <span class="tag">400 遍 · 结果可复算</span></h2>
         <table id="baseline-table">
-          <thead><tr><th>指标</th><th>mean</th><th>sd</th><th>P10</th><th>P50</th><th>P90</th></tr></thead>
+          <thead><tr><th>指标</th><th>均值</th><th>波动</th><th>最差10%</th><th>一半的局</th><th>最好10%</th></tr></thead>
           <tbody>
             <tr><td>景气</td><td>0.5367</td><td>0.2288</td><td>0.1920</td><td>0.5760</td><td>0.8647</td></tr>
             <tr><td>协同</td><td>0.7824</td><td>0.0882</td><td>0.6305</td><td>0.8253</td><td>0.8474</td></tr>
@@ -347,14 +368,14 @@
     <!-- ============ ④ 敏感性 ============ -->
     <section id="view-sens" class="view">
       <div class="card">
-        <h2>🌪 敏感性排序 <span class="tag">哪个变量一动，结论就翻</span></h2>
-        <div class="muted">对每个关键变量做 ±扰动，用同源内核重跑多局，比较「景气/存续」的变化幅度，按敏感度从大到小排序（龙卷风图）。</div>
+        <h2>🌪 变量影响排序 <span class="tag">哪个旋钮一动，结局变化最大</span></h2>
+        <div class="muted">逐个改变一个关键变量，反复重跑多遍，看它对「景气 / 存续」的影响有多大，从大到小排出来（影响条越长越关键）。</div>
         <div class="row">
-          <label class="muted">每档局数</label>
+          <label class="muted">每档遍数</label>
           <input type="number" id="sens-n" value="40" min="10" style="width:80px">
-          <label class="muted">扰动幅度</label>
+          <label class="muted">变量变动幅度</label>
           <input type="number" id="sens-delta" value="0.15" step="0.05" style="width:80px">
-          <button class="btn primary" id="btn-sens">运行敏感性分析</button>
+          <button class="btn primary" id="btn-sens">运行变量影响分析</button>
         </div>
         <div id="sens-progress" class="muted"></div>
         <div id="sens-results"></div>
@@ -396,13 +417,13 @@
     <!-- ============ ⑦ 数据与证据 ============ -->
     <section id="view-data" class="view">
       <div class="card">
-        <h2>🧬 数据与证据 <span class="tag">参数血统 · 指标来源 · 边界声明</span></h2>
+        <h2>🧬 数据与证据 <span class="tag">数字出处 · 指标来源 · 边界声明</span></h2>
         <div id="data-lineage" class="muted"></div>
       </div>
       <div class="card">
-        <h2>📋 参数血统与检验状态 <span class="tag">A=公报直接核对 · B=可由公报推算 · C=需持续检验 · D=无法验证</span></h2>
-        <table id="param-table"><thead><tr><th style="text-align:left">参数</th><th>值</th><th>血统</th><th>检验计划(月)</th></tr></thead><tbody></tbody></table>
-        <div class="muted" style="margin-top:8px">「检验计划」仅作后续复核登记，不代替参数是否已验证的判断；未填不阻断探索，但正式研究要求给出复核安排。</div>
+        <h2>📋 参数来源与复核状态 <span class="tag">官方统计 · 公开报道 · 合理估计 · 纯假设</span></h2>
+        <table id="param-table"><thead><tr><th style="text-align:left">参数</th><th>值</th><th>来源档位</th><th>复核计划(月)</th></tr></thead><tbody></tbody></table>
+        <div class="muted" style="margin-top:8px">「复核计划」仅作后续对照安排，不代替参数是否已验证的判断；未填不阻断探索，但正式研究要求给出复核安排。</div>
       </div>
       <div class="card">
         <h2>📖 术语对照 <span class="tag">旧称保留在帮助说明</span></h2>
@@ -419,6 +440,11 @@
             <tr><td style="text-align:left">指标扰动</td><td style="text-align:left">干扰参数</td></tr>
             <tr><td style="text-align:left">主体档案与访谈</td><td style="text-align:left">访谈</td></tr>
             <tr><td style="text-align:left">数据与证据</td><td style="text-align:left">数据血统</td></tr>
+            <tr><td style="text-align:left">批量重跑</td><td style="text-align:left">蒙特卡洛</td></tr>
+            <tr><td style="text-align:left">变量影响</td><td style="text-align:left">敏感性分析</td></tr>
+            <tr><td style="text-align:left">世界起点</td><td style="text-align:left">随机种子 Seed</td></tr>
+            <tr><td style="text-align:left">来源档位（官方统计 / 公开报道 / 合理估计 / 纯假设）</td><td style="text-align:left">参数血统 A/B/C/D</td></tr>
+            <tr><td style="text-align:left">冲击依据卡</td><td style="text-align:left">（新增：每个冲击标注现实苗头或纯假设）</td></tr>
           </tbody>
         </table>
       </div>
@@ -442,11 +468,11 @@
         </div>
         <div id="up-preview"></div>
         <div class="row" style="margin-top:8px">
-          <label class="muted">世界种子</label>
+          <label class="muted">世界起点</label>
           <input type="number" id="up-seed" value="7" style="width:70px">
           <button class="btn primary" id="btn-build">生成世界</button>
           <button class="btn" id="btn-restore">恢复仲恺基准</button>
-          <button class="btn" id="btn-export-seed">导出当前世界种子(JSON)</button>
+          <button class="btn" id="btn-export-seed">导出当前世界(JSON)</button>
         </div>
         <div class="muted" id="up-note" style="margin-top:6px"></div>
       </div>
@@ -482,7 +508,7 @@
 </div>
 
 <footer>
-  仲恺版是一台区域经济“风洞”：承载力模型出真分布 · 产业链时序自己演 · 三层网络让景气传播 · 网络审查真查漏项 · 敏感性排序找关键变量。
+  仲恺版是一台区域经济“风洞”：承载力模型出真分布 · 产业链时序自己演 · 三层网络让景气传播 · 网络审查真查漏项 · 变量影响找关键抓手。
   参数可回统计公报核对，反事实不可验证。数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）。License: MIT。
 </footer>
 
@@ -1241,7 +1267,7 @@ const $=s=>document.querySelector(s);
 const $$=s=>Array.from(document.querySelectorAll(s));
 const MET_CN={abundance:"景气",order:"协同",disaster:"风险",mood:"信心",survivors:"存续"};
 const MET_COLOR={abundance:"#168568",order:"#2458c6",disaster:"#c24141",mood:"#b7791f",survivors:"#0891b2"};
-/* 17 项公开指标（2025）：[名称, 数值, 映射状态, 血统] */
+/* 17 项公开指标（2025）：[名称, 数值, 映射状态, 来源] */
 const INDICATOR_TABLE=[
   ["地区生产总值 GDP","1160.39 亿，+7.1%","景气","A"],
   ["规上工业总产值","4037.12 亿，+12.2%","景气","A"],
@@ -1606,8 +1632,8 @@ function previewMiss(){
 }
 function prepStep3HTML(){
   return `
-  <div class="muted" style="margin-bottom:8px">逐项确认参数证据状态。允许带着<b>明确披露的假设</b>开展实验，但不能把它们标记为已经实证验证。血统 C/D 级参数若尚未标定，请标记「未验证假设」。</div>
-  <table><thead><tr><th style="text-align:left">参数</th><th>值</th><th>血统</th><th>证据状态</th></tr></thead><tbody>
+  <div class="muted" style="margin-bottom:8px">逐项确认参数证据状态。允许带着<b>明确披露的假设</b>开展实验，但不能把它们标记为已经实证验证。来源为「合理估计 / 纯假设」的参数若尚未标定，请标记「未验证假设」。</div>
+  <table><thead><tr><th style="text-align:left">参数</th><th>值</th><th>来源档位</th><th>证据状态</th></tr></thead><tbody>
   ${PARAM_LINEAGE.map((p,i)=>`<tr><td style="text-align:left">${p[0]}<div class="muted" style="font-size:10px">${escapeHtml(p[3])}</div></td><td>${p[1]}</td><td>${p[2]}</td>
     <td><select class="pstate" data-i="${i}"><option value="">未标记</option><option value="ok">来源已核对</option><option value="assume">未验证假设</option><option value="issue">存在待处理问题</option></select></td></tr>`).join("")}
   </tbody></table>
@@ -1625,7 +1651,7 @@ function prepStep4HTML(){
     <tr><td style="text-align:left">参数证据</td><td>已逐项标记；复核安排：${escapeHtml(prepDraft.reviewPlan)||"—"}</td></tr>
     <tr><td style="text-align:left">研究预判</td><td style="text-align:left">${escapeHtml(prepDraft.prediction)||"—（未填写，仍可锁定，报告将标注无预判）"}</td></tr>
   </tbody></table>
-  <div class="muted" style="margin-top:10px">确认后：生成实验编号，冻结世界、种子、研究问题与预判，进入正式推演。锁定后预判不能原地覆盖；如需修改将生成修订记录或新实验。</div>`;
+  <div class="muted" style="margin-top:10px">确认后：生成实验编号，冻结世界、起点、研究问题与预判，进入正式推演。锁定后预判不能原地覆盖；如需修改将生成修订记录或新实验。</div>`;
 }
 $("#prep-cancel").onclick=()=>{
   if(prepStep>1&&experimentState.phase==="preparing"&&!confirm("放弃当前实验准备？"))return;
@@ -1699,7 +1725,7 @@ $("#prep-lock").onclick=()=>{
   sim._log("experiment_lock",{run_id:experimentState.runId,question:prepDraft.question});
   switchView("run");
   render();
-  alert("已锁定正式实验 "+experimentState.runId+"：\n研究问题、世界、种子与预判已冻结。\n播放/单步/时间轴可自由回放；未计划的干预会先询问是否转探索分支。");
+  alert("已锁定正式实验 "+experimentState.runId+"：\n研究问题、世界、起点与预判已冻结。\n播放/单步/时间轴可自由回放；未计划的干预会先询问是否转探索分支。");
 };
 function plannedEventsFrom(exp){
   const map={
@@ -1744,6 +1770,37 @@ $("#track").oninput=e=>{
 };
 
 /* ================= 实验干预（冲击/移除/扰动） ================= */
+/* 冲击依据卡：每个冲击标注「现实苗头」或「纯假设」。不杜撰——有苗头才挂依据，没有就明说。 */
+const SHOCK_BASIS={
+  "链主外迁":{lv:"hypo",note:"暂无公开苗头。这是「最坏情况」推演：链主真走了，看镇上哪些企业先倒下。",src:"压测标准情景（非现实信号）"},
+  "芯片断供":{lv:"estimate",note:"外贸突破 1500 亿，产业对外部供应链依赖高；芯片短缺在历史上多次冲击电子制造。",src:"仲恺 2025 统计公报 + 公开报道"},
+  "订单外流":{lv:"estimate",note:"外贸突破 1500 亿——订单大头在外面，外部一波动，订单就跟着波动。",src:"仲恺 2025 统计公报（外贸进出口）"},
+  "产能过剩":{lv:"official",note:"工业投资已连续两年下滑（−23.6%），扩张失速本身就是产能风险的信号。",src:"仲恺 2025 统计公报（工业投资）"},
+  "政策收紧":{lv:"hypo",note:"暂无公开苗头。政策周期正常波动情景，压测用。",src:"压测标准情景（非现实信号）"},
+  "用地收紧":{lv:"hypo",note:"暂无公开苗头。用地是园区扩张的硬约束，压测「地不够用」会怎样。",src:"压测标准情景（非现实信号）"},
+  "限电":{lv:"estimate",note:"全社会用电量 +14.4% 高增长，用电紧张有现实基础；当前无公开限电信号。",src:"仲恺 2025 统计公报（全社会用电量）"},
+  "融资难":{lv:"estimate",note:"工业投资 −23.6%，企业扩产意愿与能力偏弱，融资环境是关键变量。",src:"仲恺 2025 统计公报（工业投资）"},
+  "关税摩擦":{lv:"official",note:"外贸破 1500 亿、外部依赖高；全球关税摩擦是持续公开议题。",src:"仲恺 2025 统计公报 + 公开报道"},
+  "供应链中断":{lv:"estimate",note:"外部依赖高 + 电子制造链条长，中间任一环断都会连锁传导。",src:"仲恺 2025 统计公报（外贸进出口）"},
+  "人才流失":{lv:"estimate",note:"三产增加值 +2.2% 远低于工业 +14%，生活配套弱会拖累留人。",src:"仲恺 2025 统计公报（三产增加值）"},
+  "订单爆发":{lv:"estimate",note:"实际利用外资 +167.6%、用电 +14.4%——外部需求有支撑时订单可能放量。",src:"仲恺 2025 统计公报"},
+  "政策利好":{lv:"estimate",note:"实际利用外资 +167.6%，说明营商环境有吸引力；政策再加码情景。",src:"仲恺 2025 统计公报"},
+  "技术突破":{lv:"hypo",note:"暂无公开苗头。假设出现新技术突破，看谁吃到红利。",src:"压测标准情景（非现实信号）"}
+};
+const SHOCK_LV={official:["官方统计","#168568","#e8f5f0"],media:["公开报道","#2458c6","#eef2fb"],estimate:["合理估计","#b7791f","#fdf6e7"],hypo:["纯假设·压测","#c24141","#fdeeec"]};
+function renderShockBasis(){
+  const type=$("#shock-sel").value;
+  const b=SHOCK_BASIS[type];
+  const box=$("#shock-basis");
+  if(!b){box.innerHTML="";return;}
+  const [cn,fg,bg]=SHOCK_LV[b.lv];
+  box.innerHTML=`<div class="diffbox" style="border-color:${bg};background:${bg}">
+    <div><span style="color:${fg};font-weight:700">依据 · ${cn}</span> <span class="muted">（${escapeHtml(b.src)}）</span></div>
+    <div class="muted" style="margin-top:3px">${escapeHtml(b.note)}</div>
+    <div class="muted" style="margin-top:3px">${b.lv==="hypo"?"→ 无现实苗头，仅作压力测试，不是现实推演。":"→ 有公开依据，可回查。"}</div>
+  </div>`;
+}
+$("#shock-sel").onchange=renderShockBasis;
 function logFormalEvent(kind,detail){
   if(experimentState.mode!=="formal"||experimentState.phase==="preparing")return;
   experimentState.revisions.push({at:new Date().toISOString(),tick:sim.tick,action:kind,detail});
@@ -1815,18 +1872,29 @@ $("#btn-nl").onclick=()=>{
 $("#nl-hint").onclick=()=>{$("#nl-input").value="TCL华星外迁";};
 
 /* ================= 蒙特卡洛 ================= */
+function mcPlain(stats,n){
+  const a=stats.abundance,p=stats.survivors,d=stats.disaster;
+  const survP10=(p.p10*100).toFixed(0);
+  const riskTag=d.p90>0.35?'<span class="tag-bad">尾部风险高</span>':d.p90>0.2?'<span class="tag-warn">有尾部风险</span>':'<span class="tag-good">尾部风险低</span>';
+  return `<div class="story">
+    <div class="seg"><b>一句话结论</b><div>同一套规则反复跑 ${n} 遍：一半的局景气在 <b>${a.p50.toFixed(2)}</b> 上下；最差那 10% 的局，只有 <b>${survP10}%</b> 的企业能挺住。${riskTag}</div></div>
+    <div class="seg"><b>最扎心的一个数</b><div class="big-num">${survP10}<small>% 存续（最差10%的局）</small></div><div class="muted">最好那 10% 的局，企业基本全在。</div></div>
+    <div class="seg"><b>这个数哪来的</b><div class="muted">同一个起点反复重跑 ${n} 遍得到的统计，不是单次运气；任何人来复跑，结果一模一样。</div></div>
+  </div>`;
+}
 function doMC(){
   const n=parseInt($("#mc-n").value),seed=parseInt($("#mc-seed").value)||7;
   const res=$("#mc-results");res.innerHTML="";
   $("#mc-progress").textContent="运行中…";
   setTimeout(()=>{
     const stats=runMonteCarlo(seed,n,sim.params,(i,t)=>{$("#mc-progress").textContent=`进度 ${i}/${t}`;});
-    $("#mc-progress").textContent=`完成 ${n} 局（种子 ${seed}）${experimentState.mode==="formal"?" · 已记入实验 "+experimentState.runId:""}`;
+    $("#mc-progress").textContent=`完成 ${n} 遍（起点 ${seed}）${experimentState.mode==="formal"?" · 已记入实验 "+experimentState.runId:""}`;
+    $("#mc-story").innerHTML=mcPlain(stats,n);
     let html="";
     ["abundance","order","disaster","mood","survivors"].forEach(k=>{
       const s=stats[k];
       html+=`<div style="margin:10px 0"><b>${MET_CN[k]}</b>
-        <span class="muted">mean ${s.mean.toFixed(3)} · sd ${s.sd.toFixed(3)} · P10 ${s.p10.toFixed(3)} · P50 ${s.p50.toFixed(3)} · P90 ${s.p90.toFixed(3)}</span>
+        <span class="muted">均值 ${s.mean.toFixed(3)} · 波动 ${s.sd.toFixed(3)} · 最差10% ${s.p10.toFixed(3)} · 中位 ${s.p50.toFixed(3)} · 最好10% ${s.p90.toFixed(3)}</span>
         <div class="hist">${histSVG(s.values,s.p50,s.p10,s.p90,MET_COLOR[k])}</div></div>`;
     });
     res.innerHTML=html;
@@ -1845,9 +1913,9 @@ function histSVG(values,p50,p10,p90,color){
   count.forEach((c,i)=>{const h=c/mx*(H-2*pad);
     rects+=`<rect x="${pad+i*bw}" y="${H-pad-h}" width="${bw-1}" height="${h}" fill="${color}" opacity=".75"></rect>`;});
   const line=v=>`<line x1="${x(v)}" y1="${pad-6}" x2="${x(v)}" y2="${H-pad}" stroke="#334155" stroke-width="1.2" stroke-dasharray="3 3"></line>`;
-  const labels=`<text x="${x(p10)}" y="${pad-9}" font-size="9" fill="#334155">P10</text>
-    <text x="${x(p50)}" y="${pad-9}" font-size="9" fill="#ca8a04">P50</text>
-    <text x="${x(p90)}" y="${pad-9}" font-size="9" fill="#334155">P90</text>`;
+  const labels=`<text x="${x(p10)}" y="${pad-9}" font-size="9" fill="#334155">最差10%</text>
+    <text x="${x(p50)}" y="${pad-9}" font-size="9" fill="#ca8a04">中位</text>
+    <text x="${x(p90)}" y="${pad-9}" font-size="9" fill="#334155">最好10%</text>`;
   return `<svg viewBox="0 0 ${W} ${H}">${rects}${line(p10)}${line(p50)}${line(p90)}${labels}
     <text x="${pad}" y="${H-4}" font-size="9" fill="#64748b">${lo.toFixed(2)}</text>
     <text x="${W-pad-20}" y="${H-4}" font-size="9" fill="#64748b">${hi.toFixed(2)}</text></svg>`;
@@ -1885,18 +1953,19 @@ function tornadoSVG(rows){
   let axis="";
   [lo,(lo+hi)/2,hi].forEach(v=>{axis+=`<line x1="${x(v)}" y1="${top-6}" x2="${x(v)}" y2="${H-30}" stroke="#e8edf3"></line>
     <text x="${x(v)}" y="${H-16}" text-anchor="middle" font-size="9" fill="#94a3b8">${v.toFixed(2)}</text>`;});
-  const head=`<text x="${pad}" y="16" font-size="11" fill="#1f2733">景气（增长动能）对各变量 ±扰动的响应 · 黑线=基准 · 条长=敏感度</text>`;
-  const rank=`<div class="muted" style="margin-top:6px">敏感度排序（景气）：<b>${rows.map(r=>r.cn).join(" &gt; ")}</b>。<br>越靠前，越该优先盯紧、或作为政策抓手；外部依赖条向左伸表示依赖越高、景气越低。</div>`;
+  const head=`<text x="${pad}" y="16" font-size="11" fill="#1f2733">景气（增长动能）对各个变量的响应 · 黑线=基准 · 条越长影响越大</text>`;
+  const rank=`<div class="muted" style="margin-top:6px">影响排序（景气）：<b>${rows.map(r=>r.cn).join(" &gt; ")}</b>。<br>越靠前，越该优先盯紧、或作为政策抓手；外部依赖条向左伸表示依赖越高、景气越低。</div>`;
   return `<svg viewBox="0 0 ${W} ${H}" style="width:100%">${head}${axis}${bars}</svg>${rank}`;
 }
 $("#btn-sens").onclick=doSens;
 
 /* ================= 数据与证据 + 报告 ================= */
 function buildParamTable(){
+  const CN={A:"官方统计",B:"公开报道",C:"合理估计",D:"纯假设"};
   $("#param-table tbody").innerHTML=PARAM_LINEAGE.map((p,i)=>
     `<tr><td style="text-align:left">${p[0]}<span class="grade ${p[2]}">${p[2]}</span>
       <div class="muted" style="font-size:10px">${escapeHtml(p[3])}</div></td>
-      <td>${p[1]}</td><td>${p[2]}</td>
+      <td>${p[1]}</td><td>${p[2]} ${CN[p[2]]||""}</td>
       <td>${p[4]?`<input type="number" class="pcheck" data-i="${i}" min="1" style="width:70px" placeholder="月">`:"—"}</td></tr>`).join("");
 }
 function buildMissRoles(){
@@ -1907,7 +1976,7 @@ function buildMissRoles(){
 function renderReport(){
   $("#data-lineage").innerHTML=`
     · 数据来源（2025，公开）：仲恺高新区<b>统计公报</b>、管委会工作报告、计划执行草案、经济运行简析及权威媒体报道。<br>
-    · 本单文件内置 <b>${CANDIDATES.length}</b> 个真实主体（每局按种子抽 24：5 家链主 w≥3 必入，其余加权抽样）、<b>${RELATIONS.length}</b> 条产业链关系、<b>${CAUSAL.length}</b> 条时序因果链。<br>
+    · 本单文件内置 <b>${CANDIDATES.length}</b> 个真实主体（每局按起点抽 24：5 家链主 w≥3 必入，其余加权抽样）、<b>${RELATIONS.length}</b> 条产业链关系、<b>${CAUSAL.length}</b> 条时序因果链。<br>
     · 载体 / 资本 / 设施 / 服务业为净产出，链主 / 整机 / 配套 / 人才为净消耗——区域承载力模型基础。<br>
     · <b>17 项公开指标（2025）→ 状态映射：</b>
     <table style="margin-top:6px"><thead><tr><th style="text-align:left">公开指标</th><th>数值</th><th>映射</th></tr></thead><tbody>
@@ -1920,7 +1989,7 @@ function renderReport(){
   $("#ledger-mode-tag").textContent=st.mode==="formal"?"正式研究"+(st.runId?" · "+st.runId:""):"探索性模拟";
   $("#btn-export-manifest").style.display=(st.mode==="formal"&&st.manifest)?"":"none";
   if(st.mode==="explore"){
-    note.innerHTML=`当前为<b>探索性模拟</b>：结果可查看、可复现（同种子可重跑），但未登记研究问题与预判，不能生成正式研究档案。`;
+    note.innerHTML=`当前为<b>探索性模拟</b>：结果可查看、可复现（同起点可重跑），但未登记研究问题与预判，不能生成正式研究档案。`;
     box.classList.remove("locked-report");
     box.innerHTML=reportHTML()+'<div class="row" style="margin-top:10px"><button class="btn primary sm" id="btn-to-formal">以此为基础开始正式研究 →</button></div>';
     const b=$("#btn-to-formal");if(b)b.onclick=()=>openPrep();
@@ -1933,9 +2002,28 @@ function renderReport(){
   note.innerHTML="";box.classList.remove("locked-report");
   box.innerHTML=reportHTML()+formalReportBlock();
 }
+function plainConclusion(){
+  const r=sim.report();const f=r.final;
+  const su=r.survivors*100;
+  let head;
+  if(r.survivors<0.6)head=`这一轮只有 <b>${su.toFixed(0)}%</b> 的企业挺了过来，链上有成片没撑住的。`;
+  else if(r.survivors<0.85)head=`有 <b>${(100-su).toFixed(0)}%</b> 的企业没能挺过这轮，主要伤在${f.disaster>0.3?"风险传导":"景气不足"}上。`;
+  else head=`主体基本都在（存续 <b>${su.toFixed(0)}%</b>），但景气只有 <b>${f.abundance.toFixed(2)}</b>，看谁在扛、谁在等。`;
+  if(f.disaster>0.3)head+=`风险到了 <b>${f.disaster.toFixed(2)}</b>，属高位，坏局会传染。`;
+  else if(f.disaster>0.15)head+=`风险中等（<b>${f.disaster.toFixed(2)}</b>）。`;
+  else head+=`风险处于低位（<b>${f.disaster.toFixed(2)}</b>）。`;
+  const useSu=r.survivors<0.85;
+  return {head,keyNum:useSu?su.toFixed(0):(f.abundance*100).toFixed(0),keyUnit:useSu?"% 存续（这一轮）":"景气×100（这一轮）",su:su.toFixed(0),risk:f.disaster};
+}
 function reportHTML(){
   const r=sim.report();const f=r.final;
-  return `<div class="ivw">
+  const pc=plainConclusion();
+  return `<div class="story">
+    <div class="seg"><b>这一轮说人话</b><div>${pc.head}</div></div>
+    <div class="seg"><b>最扎心的一个数</b><div class="big-num">${pc.keyNum}<small>${pc.keyUnit}</small></div><div class="muted">单局故事，别当预测；想看得更稳，去「批量重跑」。</div></div>
+    <div class="seg"><b>边界</b><div class="muted">这是模型内比较，不是现实预言；同一起点任何人来复跑，结果一模一样。</div></div>
+  </div>
+  <div class="ivw">
     <div class="ivgrid">
       <div class="cell">景气：<b>${f.abundance.toFixed(3)}</b></div>
       <div class="cell">协同：<b>${f.order.toFixed(3)}</b></div>
@@ -1957,10 +2045,10 @@ function formalReportBlock(){
       <div class="cell">研究预判</div><div class="cell" style="text-align:left">${escapeHtml(m.research.prediction)||"—（未填写）"}</div>
       <div class="cell">主要指标</div><div class="cell" style="text-align:left">${m.research.primary_metrics.map(x=>MET_CN[x]||x).join("、")}</div>
       <div class="cell">网络处理</div><div class="cell" style="text-align:left">${({unchanged:"保留原始基准",add:"补充主体（生成副本）",uncertain:"保留 + 不确定性说明"}[m.network_review]||m.network_review)}</div>
-      <div class="cell">世界 / 种子</div><div class="cell" style="text-align:left">${escapeHtml(m.world)} · Seed ${m.seed} / ${m.ticks} 步</div>
+      <div class="cell">世界 / 起点</div><div class="cell" style="text-align:left">${escapeHtml(m.world)} · 起点 ${m.seed} / ${m.ticks} 步</div>
       <div class="cell">当前终态</div><div class="cell" style="text-align:left">景气 ${f.abundance.toFixed(3)} · 协同 ${f.order.toFixed(3)} · 风险 ${f.disaster.toFixed(3)} · 信心 ${f.mood.toFixed(3)} · 存续 ${(sim.survivors()*100).toFixed(0)}%</div>
     </div>
-    <div class="muted" style="margin-top:6px">预判与实际结果分开展示，不自动解释为预测成功与否。同种子、同配置可复现本局。</div></div>`;
+    <div class="muted" style="margin-top:6px">预判与实际结果分开展示，不自动解释为预测成功与否。同起点、同配置可复现本局。</div></div>`;
 }
 
 /* ================= 世界管理（导入/导出） ================= */
@@ -2024,11 +2112,11 @@ function buildWorldFromUpload(){
   const seed=parseInt($("#up-seed").value)||7;
   const r=applyWorld(ents,rels,seed,pendingWorld.params);
   if(!r.ok)return alert(r.msg);
-  worldSource=`自定义世界（${r.cand} 主体 / ${r.rel} 关系，种子 ${seed}）`;
+  worldSource=`自定义世界（${r.cand} 主体 / ${r.rel} 关系，起点 ${seed}）`;
   sim=r.sim;posCache=null;
   experimentState.mode="explore";experimentState.phase="idle";experimentState.runId=null;experimentState.manifest=null;experimentState.plannedEvents=[];
   refreshSelectors();switchView("run");render();
-  $("#up-note").innerHTML=`<b>已生成</b>：${worldSource}。播放、蒙特卡洛、敏感性、访谈均已切到新世界；预置基线表仍是仲恺 400 局基准，可用于对比。`;
+  $("#up-note").innerHTML=`<b>已生成</b>：${worldSource}。播放、批量重跑、变量影响、主体档案均已切到新世界；预置基线表仍是仲恺 400 遍基准，可用于对比。`;
 }
 $("#btn-restore").onclick=()=>{
   CAUSAL=_ORIG_CAUSAL_.map(c=>({...c}));
@@ -2075,6 +2163,7 @@ function download(name,text){
 buildParamTable();
 refreshSelectors();
 updateStatusBar();
+renderShockBasis();
 render();
 
 </script>

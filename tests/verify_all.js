@@ -113,6 +113,28 @@ ok(cntGates <= 2, `「验模三门」仅限帮助/术语对照（UI 区 ${cntGat
 ok(cntGod <= 2, `「上帝视角」仅限帮助/术语对照（UI 区 ${cntGod} 次）`);
 ok(html.includes('产业协同仿真实验室'), '新标题「产业协同仿真实验室」');
 
+/* ---------- 5. 人话呈现层（V1.1）断言 ---------- */
+console.log('· 人话呈现层（冲击依据卡 / 一句话结论 / 术语人话化）');
+const SHOCK_BASIS_BLOCK = (html.match(/const SHOCK_BASIS=\{([\s\S]*?)\n\};/) || [])[1] || '';
+const basisTypes = [...SHOCK_BASIS_BLOCK.matchAll(/"([^"]+)":\{lv:"(official|media|estimate|hypo)",note:"([^"]+)",src:"([^"]+)"\}/g)].map((mm) => mm[1]);
+ok(basisTypes.length === 14, `SHOCK_BASIS 覆盖全部冲击（实际 ${basisTypes.length} 条）`);
+ok(['链主外迁', '芯片断供', '订单外流', '产能过剩', '政策收紧', '用地收紧', '限电', '融资难', '关税摩擦', '供应链中断', '人才流失', '订单爆发', '政策利好', '技术突破'].every((w) => basisTypes.includes(w)), 'SHOCK_BASIS 包含 14 个冲击名');
+ok(SHOCK_BASIS_BLOCK.length > 0 && !/蒙特卡洛|敏感性/.test(SHOCK_BASIS_BLOCK), '依据卡文案不出现算法术语');
+ok(html.includes('id="shock-basis"') && html.includes('renderShockBasis'), '冲击依据卡渲染（注入前显示）');
+ok(html.includes('id="mc-story"') && html.includes('function mcPlain'), '批量重跑人话总结（mcPlain）');
+ok(html.includes('function plainConclusion'), '报告一句话结论（plainConclusion）');
+ok(html.includes('有公开依据，可回查') && html.includes('无现实苗头，仅作压力测试'), '冲击区分「有依据 / 纯假设」两类');
+ok(html.includes('依据 · '), '依据卡带人话来源档位（官方统计/公开报道/合理估计/纯假设）');
+ok(uiOnly.includes('批量重跑') && uiOnly.includes('变量影响'), '导航人话化：批量重跑 / 变量影响');
+ok(uiOnly.includes('世界起点'), '顶栏人话化：Seed → 世界起点');
+/* 裸算法术语只允许出现在「术语对照表」（帮助语境），主操作界面不可见 */
+const uiVisible = uiOnly
+  .replace(/<!--[\s\S]*?-->/g, '')
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/\/\/[^\n]*/g, '');
+const uiTech = ['蒙特卡洛', '敏感性分析', '随机种子'].map((w) => [w, (uiVisible.match(new RegExp(w, 'g')) || []).length]);
+uiTech.forEach(([w, n]) => ok(n <= 1, `裸算法术语「${w}」仅限术语对照表（可见 ${n} 处）`));
+
 /* ---------- 汇总 ---------- */
 console.log(failed === 0
   ? '✓ verify_all PASS — 回归一致 + 结构完整'
