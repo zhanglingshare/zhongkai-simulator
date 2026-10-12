@@ -3079,7 +3079,11 @@ function switchFateIdent(k){
 }
 function renderFate(){
   const it=FATE_IDENTS[fateState.ident];if(!it)return;
-  $("#fate-h2").innerHTML=`${it.emoji} ${it.label}`;
+  $("#fate-h2").innerHTML=`
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
+      ${["work","small","boss","shop","live","grad"].map(k=>`<button type="button" class="fs-btn ${k===fateState.ident?"on":""}" style="font-size:12px;padding:6px 10px" onclick="switchFateIdent('${k}')">${FATE_IDENTS[k].emoji} ${FATE_IDENTS[k].label}</button>`).join("")}
+    </div>
+  `;
   /* 去掉四步导航，一页搞定 */
   for(let i=1;i<=4;i++){const el=$("#fst-"+i);if(el)el.style.display="none";}
   $("#fate-prev").style.display="none";
