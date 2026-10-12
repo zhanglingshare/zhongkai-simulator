@@ -457,7 +457,7 @@
   @keyframes swiphint{0%,100%{transform:translateY(0);opacity:.65}50%{transform:translateY(-6px);opacity:1}}
   /* 主屏 */
   .homescreen{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;
-    padding:8px 16px 14px;color:#fff;
+    padding:0;color:#fff;
     background:
       radial-gradient(120% 60% at 50% -10%, rgba(56,189,248,.28), transparent 60%),
       radial-gradient(120% 90% at 50% 110%, rgba(124,58,237,.25), transparent 60%),
@@ -485,6 +485,96 @@
     background:rgba(255,255,255,.14);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
     border-radius:30px;padding:12px 14px;margin:0 6px;border:1px solid rgba(255,255,255,.1)}
   .hs-dock .hs-name{display:none}
+  /* ===== 群聊主屏（微信风格 · 浅色暖底） ===== */
+  .hs-chat{position:absolute;inset:0;display:flex;flex-direction:column;
+    background:linear-gradient(180deg,#ededed,#e8e8e6);color:#1f2733}
+  .chat-status{display:flex;justify-content:space-between;align-items:center;
+    padding:0 18px;height:44px;flex:none;font-size:14px;font-weight:600;
+    font-variant-numeric:tabular-nums;color:#0f172a}
+  .chat-status .os-r{display:flex;gap:7px;align-items:center}
+  .chat-nav{display:flex;align-items:center;gap:8px;padding:6px 12px 10px;flex:none;
+    background:#ededed;border-bottom:1px solid rgba(0,0,0,.06)}
+  .chat-nav-back{font-size:30px;font-weight:300;color:#333;line-height:1;width:24px;cursor:pointer}
+  .chat-nav-title{flex:1;display:flex;flex-direction:column;align-items:center;line-height:1.25}
+  .chat-nav-title b{font-size:16px;color:#1f2733}
+  .chat-nav-title span{font-size:10px;color:#8a909c}
+  .chat-nav-more{font-size:24px;font-weight:700;color:#333;width:24px;text-align:center;line-height:1}
+  .chat-body{flex:1;min-height:0;overflow-y:auto;padding:14px 11px 8px;
+    display:flex;flex-direction:column;gap:13px;background:linear-gradient(180deg,#ededed,#e9e9e7)}
+  .cmsg{display:flex;gap:8px;align-items:flex-start;max-width:88%;flex:none;
+    opacity:0;transform:translateY(14px);animation:msgIn .42s cubic-bezier(.22,.9,.3,1) forwards}
+  @keyframes msgIn{to{opacity:1;transform:none}}
+  .cmsg.me{align-self:flex-end;flex-direction:row-reverse}
+  .cmsg .m-avatar{width:38px;height:38px;border-radius:9px;flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:20px;
+    box-shadow:0 2px 6px rgba(0,0,0,.12)}
+  .cmsg .m-col{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .cmsg .m-name{font-size:11px;color:#9aa0ac;padding:0 4px}
+  .cmsg.me .m-name{display:none}
+  .cmsg .m-bubble{position:relative;padding:9px 12px;border-radius:10px;
+    font-size:14px;line-height:1.5;word-break:break-word;
+    background:#fff;color:#1f2733;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .cmsg.me .m-bubble{background:#95ec69;color:#0f172a}
+  .cmsg .m-bubble::before{content:"";position:absolute;top:11px;left:-5px;
+    border:5px solid transparent;border-right-color:#fff}
+  .cmsg.me .m-bubble::before{left:auto;right:-5px;border-right-color:transparent;
+    border-left-color:#95ec69}
+  /* 卡片式气泡（目标卡） */
+  .cmsg .m-card{position:relative;padding:0;border-radius:10px;overflow:hidden;min-width:196px;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .m-card .mc-h{padding:9px 12px;font-weight:700;font-size:13px;color:#fff;line-height:1.35}
+  .m-card .mc-b{padding:9px 12px;font-size:12.5px;line-height:1.55;color:#475569}
+  .mini-r{display:flex;align-items:center;gap:8px;margin:7px 0}
+  .mini-r>span{width:64px;font-size:11px;color:#334155;flex:none;display:flex;flex-direction:column}
+  .mini-r>span i{font-size:9.5px;color:#94a3b8;font-style:normal}
+  .mini-bar{flex:1;height:6px;border-radius:3px;background:rgba(0,0,0,.08);overflow:hidden}
+  .mini-bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#38bdf8,#f59e0b)}
+  .mini-r em{font-style:normal;font-size:10.5px;font-weight:700;color:#ea580c;width:30px;text-align:right}
+  .mini-note{font-size:9.5px;color:#94a3b8;margin-top:7px;line-height:1.45}
+  /* 正在输入 */
+  .typing{display:flex;gap:8px;align-items:flex-start;max-width:88%;flex:none;opacity:0;transition:opacity .25s}
+  .typing.in{opacity:1}
+  .typing .m-bubble{display:flex;gap:4px;padding:12px 14px}
+  .typing .dot{width:7px;height:7px;border-radius:50%;background:#b6bcc7;animation:typingB 1s infinite}
+  .typing .dot:nth-child(2){animation-delay:.15s}
+  .typing .dot:nth-child(3){animation-delay:.3s}
+  @keyframes typingB{0%,60%,100%{transform:translateY(0);opacity:.5}
+    30%{transform:translateY(-4px);opacity:1}}
+  /* 快捷表态 */
+  .chat-quick{flex:none;display:flex;gap:7px;flex-wrap:wrap;padding:8px 11px 4px;
+    background:#ededed;border-top:1px solid rgba(0,0,0,.05)}
+  .chat-quick button{border:1px solid rgba(0,0,0,.1);background:#fff;color:#334155;
+    border-radius:17px;padding:7px 13px;font-size:12.5px;font-weight:600;cursor:pointer;
+    transition:transform .1s}
+  .chat-quick button:active{transform:scale(.93)}
+  /* 底部输入栏 */
+  .chat-bar{flex:none;display:flex;align-items:center;gap:8px;padding:8px 10px 14px;
+    background:#f7f7f7;border-top:1px solid rgba(0,0,0,.06)}
+  .chat-apps-btn{width:38px;height:38px;border-radius:10px;border:1px solid rgba(0,0,0,.1);
+    background:#fff;font-size:19px;color:#334155;cursor:pointer;flex:none}
+  .chat-input{flex:1;height:38px;border-radius:19px;background:#fff;border:1px solid rgba(0,0,0,.08);
+    display:flex;align-items:center;padding:0 16px;font-size:13.5px;color:#9aa0ac}
+  .chat-go-btn{height:38px;border:0;border-radius:19px;padding:0 15px;flex:none;
+    background:linear-gradient(135deg,#f59e0b,#ef4444);color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+  .chat-go-btn.pulse{animation:goPulse 1.2s infinite}
+  @keyframes goPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.5)}
+    50%{box-shadow:0 0 0 11px rgba(239,68,68,0)}}
+  /* 应用抽屉（原桌面图标） */
+  .hs-apps{position:absolute;inset:0;display:flex;flex-direction:column;
+    background:
+      radial-gradient(120% 60% at 50% -10%, rgba(56,189,248,.28), transparent 60%),
+      radial-gradient(120% 90% at 50% 110%, rgba(124,58,237,.25), transparent 60%),
+      linear-gradient(180deg,#0a1430,#070b18);
+    transform:translateX(100%);pointer-events:none;
+    transition:transform .34s cubic-bezier(.32,.72,0,1)}
+  .hs-apps.on{transform:none;pointer-events:auto}
+  .hs-apps-nav{display:flex;align-items:center;gap:10px;padding:2px 16px 10px;flex:none}
+  .hs-apps-nav b{flex:1;text-align:center;font-size:15px}
+  .apps-back{border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;
+    border-radius:9px;padding:6px 12px;font-size:12.5px;cursor:pointer}
+  .apps-nav-sp{width:74px}
+  .hs-apps .hs-grid{flex:1;align-content:start;overflow-y:auto;padding:8px 10px 12px}
+  .hs-apps .hs-dock{margin:0 14px 14px}
   /* App 层 */
   .app-layer{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;
     background:#070d1a;border-radius:var(--pf-radius);overflow:hidden;
@@ -589,14 +679,44 @@
         </div>
       </div>
 
-      <!-- 主屏 -->
+      <!-- 主屏：群聊（默认）+ 应用抽屉 -->
       <div class="homescreen" id="homescreen">
-        <div class="hs-status">
-          <span id="hs-time">--:--</span>
-          <span class="os-r"><span>📶</span><span>📡</span><span>🔋</span></span>
+        <!-- 群聊（默认） -->
+        <div class="hs-chat" id="hs-chat">
+          <div class="chat-status">
+            <span id="hs-time">--:--</span>
+            <span class="os-r"><span>📶</span><span>📡</span><span>🔋</span></span>
+          </div>
+          <div class="chat-nav">
+            <span class="chat-nav-back">‹</span>
+            <div class="chat-nav-title">
+              <b>仲恺街坊群</b>
+              <span>模拟社区 · 话题来自每日公开报道</span>
+            </div>
+            <span class="chat-nav-more">⋯</span>
+          </div>
+          <div class="chat-body" id="chat-body"></div>
+          <div class="chat-quick" id="chat-quick"></div>
+          <div class="chat-bar">
+            <button class="chat-apps-btn" id="chat-apps-open" type="button" title="全部应用">▦</button>
+            <div class="chat-input">我也说一句…</div>
+            <button class="chat-go-btn" id="chat-go" type="button">🎯 开一局</button>
+          </div>
         </div>
-        <div class="hs-grid" id="hs-grid"></div>
-        <div class="hs-dock" id="hs-dock"></div>
+        <!-- 应用抽屉 -->
+        <div class="hs-apps" id="hs-apps">
+          <div class="hs-status">
+            <span id="hs-time-2">--:--</span>
+            <span class="os-r"><span>📶</span><span>📡</span><span>🔋</span></span>
+          </div>
+          <div class="hs-apps-nav">
+            <button class="apps-back" id="apps-back" type="button">‹ 回群聊</button>
+            <b>全部应用</b>
+            <span class="apps-nav-sp"></span>
+          </div>
+          <div class="hs-grid" id="hs-grid"></div>
+          <div class="hs-dock" id="hs-dock"></div>
+        </div>
       </div>
 
       <!-- App 层（现有内容） -->
@@ -2157,11 +2277,121 @@ function renderHomeScreen(){
   $("#hs-grid").innerHTML=PHONE_APPS.filter(a=>!a.dock).map(cell).join("");
   $("#hs-dock").innerHTML=PHONE_APPS.filter(a=>a.dock).map(cell).join("");
 }
+/* ===== 仲恺街坊群（主屏） ===== */
+const NEIGHBORS={
+  jie:{n:"阿杰",a:"🏭",bg:"linear-gradient(135deg,#38bdf8,#2563eb)"},
+  chen:{n:"陈姐",a:"🍜",bg:"linear-gradient(135deg,#fbbf24,#f97316)"},
+  wang:{n:"老王",a:"🌾",bg:"linear-gradient(135deg,#4ade80,#16a34a)"},
+  li:{n:"小李",a:"🎓",bg:"linear-gradient(135deg,#c084fc,#9333ea)"},
+  fang:{n:"阿芳",a:"🦢",bg:"linear-gradient(135deg,#f472b6,#db2777)"}
+};
+const CHAT_SCRIPT=[
+  {who:"jie",t:"今天四环南路平南互通通了！我从惠城过来上班，明显快了一截 🚇"},
+  {who:"chen",t:"我早上去进货也顺了。听说 R 线月底也能完工，往后更方便"},
+  {who:"fang",t:"国庆沥林碌鹅又火了，市级非遗还上过央视，好多人专门来吃 🦢"},
+  {who:"li",t:"国庆全市 378 万游客呢！仲恺戏曲文化周，粤剧潮剧配 3D 打印脸谱，挺有意思 🎭"},
+  {who:"wang",t:"潼湖榴莲嘉年华你们去没？免费看潮汕英歌舞，天天有得逛 🍉"},
+  {who:"jie",t:"说起来，咱仲恺那个 6 亿的人工智能创投基金成立了，主投智能终端、机器人，咱们厂能沾上不 🤖"},
+  {who:"chen",t:"新学校也开学了，廖承志红军小学幸福校区，多了 540 个学位，我家娃上学方便 🏫"},
+  {who:"fang",t:"医院也有变化，原来中信惠州医院由区人民医院接管了，医保 10 月起自动切，不用自己跑 🏥"},
+  {who:"li",t:"智能制造实训基地落地了，把企业真车间搬进学校，像我这种刚毕业的，能更快上手 🔧"},
+  {who:"wang",t:"357 那边又有工业用地挂牌了，10 月 19 号开拍，估计要建新厂 🏗️"},
+  {who:"jie",t:"你们算过没？仲恺 2030 年要翻到 GDP 超 2000 亿、规上工业 6500 亿 🏔️",card:"goal",pause:true},
+  {who:"chen",t:"缺口 839 亿呢……这跟咱们开店的、上班的，也都有关系吧？"},
+  {who:"li",t:"要是我能拍板，也想先试试——通勤、留人、还是让新厂子按时达产，先做哪个，结果真不一样"},
+  {who:"fang",t:"要不你进去开一局？挑个身份，看看你的选择会怎样，还能生成自己的决策卡 👇"}
+];
+const QUICK_SAY=[
+  {t:"跟我有关",reply:"嗯，这笔账其实连着咱们每个人的工作、收入和生活"},
+  {t:"先把人留住",reply:"留人是个好方向，进局子里可以看看它具体怎么影响"},
+  {t:"先让新厂达产",reply:"让新厂子按时达产，正是要翻的那座山的关键"},
+  {t:"通勤要更顺",reply:"通勤顺了，招工、上班、消费都跟着变，去开开看"}
+];
+function goalCardHTML(){
+  const rows=[
+    {n:"GDP",t:"1160→2000亿",p:58},
+    {n:"规上工业",t:"4037→6500亿",p:62},
+    {n:"生产性服务",t:"331→400亿",p:83}
+  ];
+  return `<div class="m-card"><div class="mc-h" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">🎯 2030 · 再翻一座山</div>
+    <div class="mc-b">${rows.map(r=>`<div class="mini-r"><span>${r.n}<i>${r.t}</i></span>
+      <div class="mini-bar"><i style="width:${r.p}%"></i></div><em>${r.p}%</em></div>`).join("")}
+    <div class="mini-note">2025 年已实现基线与 2030 公开目标的比较，非实时完成率；目标来自仲恺“十五五”公开部署</div></div></div>`;
+}
+function chatMsgHTML(m){
+  const p=NEIGHBORS[m.who];
+  const inner=m.card==="goal"?goalCardHTML():`<div class="m-bubble">${m.t}</div>`;
+  return `<div class="cmsg"><div class="m-avatar" style="background:${p.bg}">${p.a}</div>
+    <div class="m-col"><span class="m-name">${p.n}</span>${inner}</div></div>`;
+}
+function typingHTML(){
+  return `<div class="typing" id="chat-typing"><div class="m-avatar" style="background:linear-gradient(135deg,#cbd5e1,#94a3b8)">💬</div>
+    <div class="m-bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></div>`;
+}
+let chatState={played:false,playing:false,idx:0,timer:null};
+function scrollChat(){const b=$("#chat-body");b.scrollTop=b.scrollHeight;}
+function playChat(){
+  if(chatState.played)return;
+  chatState.playing=true;chatState.idx=0;
+  const body=$("#chat-body");body.innerHTML="";
+  $("#chat-quick").innerHTML="";
+  function step(){
+    if(chatState.idx>=CHAT_SCRIPT.length){finishChat();return;}
+    const m=CHAT_SCRIPT[chatState.idx];
+    const showTyping=m.pause||(chatState.idx>0&&chatState.idx%4===0);
+    function add(){
+      const t=$("#chat-typing");if(t)t.remove();
+      body.insertAdjacentHTML("beforeend",chatMsgHTML(m));
+      scrollChat();
+      chatState.idx++;
+      chatState.timer=setTimeout(step,(m.card?1100:430)+Math.random()*280);
+    }
+    if(showTyping){
+      body.insertAdjacentHTML("beforeend",typingHTML());
+      scrollChat();
+      requestAnimationFrame(()=>{const t=$("#chat-typing");if(t)t.classList.add("in");});
+      chatState.timer=setTimeout(add,m.pause?900:650);
+    }else add();
+  }
+  step();
+}
+function finishChat(){
+  const t=$("#chat-typing");if(t)t.remove();
+  chatState.playing=false;chatState.played=true;
+  clearTimeout(chatState.timer);
+  const body=$("#chat-body");
+  for(let i=chatState.idx;i<CHAT_SCRIPT.length;i++){
+    body.insertAdjacentHTML("beforeend",chatMsgHTML(CHAT_SCRIPT[i]));
+  }
+  chatState.idx=CHAT_SCRIPT.length;
+  scrollChat();
+  $("#chat-quick").innerHTML=QUICK_SAY.map((q,i)=>
+    `<button type="button" onclick="quickSay(${i})">${q.t}</button>`).join("");
+}
+function quickSay(i){
+  const body=$("#chat-body");
+  body.insertAdjacentHTML("beforeend",
+    `<div class="cmsg me"><div class="m-avatar" style="background:linear-gradient(135deg,#34d399,#059669)">🙂</div>
+      <div class="m-col"><div class="m-bubble">${QUICK_SAY[i].t}</div></div></div>`);
+  scrollChat();
+  setTimeout(()=>{
+    body.insertAdjacentHTML("beforeend",
+      `<div class="cmsg"><div class="m-avatar" style="background:linear-gradient(135deg,#f472b6,#db2777)">🦢</div>
+        <div class="m-col"><span class="m-name">阿芳</span><div class="m-bubble">${QUICK_SAY[i].reply} 那要不要开一局，看看你的选择会怎样？🎯</div></div></div>`);
+    scrollChat();
+    const go=$("#chat-go");go.classList.add("pulse");
+    setTimeout(()=>go.classList.remove("pulse"),2600);
+  },500);
+}
+function openApps(){$("#hs-apps").classList.add("on");}
+function closeApps(){$("#hs-apps").classList.remove("on");}
+function startFate(){openApp('home');}
 function pad2(x){return String(x).padStart(2,"0");}
 function tickClock(){
   const d=new Date(),hh=pad2(d.getHours()),mm=pad2(d.getMinutes());
   $("#ls-clock").textContent=hh+":"+mm;
   $("#hs-time").textContent=hh+":"+mm;
+  if($("#hs-time-2"))$("#hs-time-2").textContent=hh+":"+mm;
   const wk=["周日","周一","周二","周三","周四","周五","周六"][d.getDay()];
   $("#ls-date").textContent=(d.getMonth()+1)+"月"+d.getDate()+"日 "+wk;
 }
@@ -2184,7 +2414,7 @@ function islandLive(txt,on){
 }
 function unlockPhone(openV){
   if(openV){openApp(openV);}
-  else{setPhoneState("home");}
+  else{setPhoneState("home");setTimeout(playChat,260);}
 }
 function openApp(v){
   setPhoneState("app");
@@ -2202,12 +2432,12 @@ function openApp(v){
   $("#tb-go").style.display=(v==="home")?"inline-flex":"none";
   const ap=$(".in-phone .app");if(ap)ap.scrollTop=0;
 }
-function goHome(){setPhoneState("home");islandLive("",false);}
+function goHome(){setPhoneState("home");islandLive("",false);setTimeout(playChat,260);}
 /* 锁屏：点击解锁、点通知进今日、上滑解锁 */
 (function(){
   const ls=$("#lockscreen");let sy=0;
   ls.addEventListener("click",function(e){
-    if(e.target.closest("#ls-notify")){e.preventDefault();unlockPhone("home");return;}
+    if(e.target.closest("#ls-notify")){e.preventDefault();unlockPhone();return;}
     if(e.target.closest(".ls-round"))return;
     unlockPhone();
   });
@@ -2227,6 +2457,17 @@ $("#tb-go").addEventListener("click",function(){
 /* 初始化 */
 renderHomeScreen();tickClock();setInterval(tickClock,10000);
 refreshLockNotify();setPhoneState("locked");
+/* 群聊事件绑定：应用抽屉、开一局、返回、播放中点击跳过 */
+(function(){
+  const on=(id,ev,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};
+  on("chat-apps-open","click",openApps);
+  on("apps-back","click",closeApps);
+  on("chat-go","click",startFate);
+  const back=document.querySelector(".chat-nav-back");
+  if(back)back.addEventListener("click",function(){if(chatState.playing)finishChat();});
+  const body=$("#chat-body");
+  if(body)body.addEventListener("click",function(){if(chatState.playing)finishChat();});
+})();
 /* 弹窗/抽屉移入手机屏，确保不跳出手机框 */
 (function(){
   const ps=document.querySelector(".phone-screen");
