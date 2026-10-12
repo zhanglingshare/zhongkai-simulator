@@ -535,20 +535,24 @@
   .zb-opp{padding:8px 12px;border-radius:8px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25);font-size:12px;color:#6ee7b7;margin-bottom:6px;line-height:1.5}
   .zb-chal{padding:8px 12px;border-radius:8px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25);font-size:12px;color:#fcd34d;line-height:1.5}
   /* 压力页 */
-  .pr-charts{margin-bottom:22px;display:flex;flex-direction:column;gap:10px}
-  .pr-chart-row{display:flex;align-items:center;gap:8px}
-  .pr-label{font-size:11px;color:#94a3b8;width:72px;flex-shrink:0;text-align:right}
-  .pr-bar-wrap{flex:1;display:flex;flex-direction:column;gap:2px;height:36px;justify-content:center}
-  .pr-bar{height:14px;border-radius:4px;font-size:9px;line-height:14px;padding:0 6px;color:#fff;white-space:nowrap;overflow:hidden}
-  .pr-bar.now{background:linear-gradient(90deg,#818cf8,#6366f1)}
-  .pr-bar.warn{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
-  .pr-bar.target{background:rgba(148,163,184,.25);border:1px dashed rgba(148,163,184,.4);color:#94a3b8}
+  .pr-charts{margin-bottom:22px;display:flex;flex-direction:column;gap:14px}
+  .pr-chart-head{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;margin-bottom:6px}
+  .pr-chart-head span{color:#94a3b8}
+  .pr-chart-head b{color:#fbbf24;font-family:var(--font-num);font-size:14px;font-weight:800}
+  .pr-chart-head i{font-style:normal;color:#64748b;font-size:11px}
+  .pr-track{height:18px;background:rgba(148,163,184,.1);border-radius:9px;overflow:hidden;display:flex}
+  .pr-fill{height:100%;background:linear-gradient(90deg,#818cf8,#6366f1)}
+  .pr-fill.warn{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
+  .pr-remain{flex:1;background:repeating-linear-gradient(45deg,rgba(148,163,184,.12),rgba(148,163,184,.12) 4px,transparent 4px,transparent 8px)}
+  .pr-chart-foot{font-size:11px;color:#94a3b8;margin-top:4px}
+  .pr-chart-foot b{color:#e2e8f0;font-family:var(--font-num)}
   .pr-level{border-radius:12px;padding:12px;margin-bottom:10px}
   .pr-level-tag{font-size:12px;font-weight:700;margin-bottom:8px}
   .pr-item{font-size:12.5px;line-height:1.6;margin-bottom:6px}
   .pr-item:last-child{margin-bottom:0}
   .pr-item b{display:block;color:#e2e8f0;margin-bottom:2px}
-  .pr-item i{display:block;font-style:normal;color:#94a3b8;font-size:11.5px;line-height:1.5}
+  .pr-item i{display:block;font-style:normal;color:#94a3b8;font-size:11.5px;line-height:1.5;margin-top:2px}
+  .pr-talk{margin:6px 0 0;padding:6px 10px;border-left:3px solid rgba(251,191,36,.4);background:rgba(251,191,36,.06);border-radius:0 6px 6px 0;font-size:12px;color:#fde68a;line-height:1.5}
   .pr-red{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25)}
   .pr-red .pr-level-tag{color:#fca5a5}
   .pr-yellow{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25)}
@@ -893,48 +897,42 @@
 
           <!-- 基本盘：2025 vs 2030 目标对比 -->
           <div class="pr-charts">
-            <div class="pr-chart-row">
-              <div class="pr-label">GDP</div>
-              <div class="pr-bar-wrap">
-                <div class="pr-bar now" style="width:58%">1160亿</div>
-                <div class="pr-bar target" style="width:100%">2000亿目标</div>
-              </div>
+            <div class="pr-chart">
+              <div class="pr-chart-head"><span>GDP</span><b>1160亿</b><i>→ 2000亿目标</i></div>
+              <div class="pr-track"><div class="pr-fill" style="width:58%"></div><div class="pr-remain"></div></div>
+              <div class="pr-chart-foot">已完成 <b>58%</b>，还差 <b>840亿</b></div>
             </div>
-            <div class="pr-chart-row">
-              <div class="pr-label">规上工业</div>
-              <div class="pr-bar-wrap">
-                <div class="pr-bar now" style="width:62%">4037亿</div>
-                <div class="pr-bar target" style="width:100%">6500亿目标</div>
-              </div>
+            <div class="pr-chart">
+              <div class="pr-chart-head"><span>规上工业总产值</span><b>4037亿</b><i>→ 6500亿目标</i></div>
+              <div class="pr-track"><div class="pr-fill" style="width:62%"></div><div class="pr-remain"></div></div>
+              <div class="pr-chart-foot">已完成 <b>62%</b>，还差 <b>2463亿</b></div>
             </div>
-            <div class="pr-chart-row">
-              <div class="pr-label">生产性服务业</div>
-              <div class="pr-bar-wrap">
-                <div class="pr-bar warn" style="width:82%">330亿</div>
-                <div class="pr-bar target" style="width:100%">400亿目标</div>
-              </div>
+            <div class="pr-chart pr-warn">
+              <div class="pr-chart-head"><span>生产性服务业</span><b>330亿</b><i>→ 400亿目标</i></div>
+              <div class="pr-track"><div class="pr-fill warn" style="width:82%"></div><div class="pr-remain"></div></div>
+              <div class="pr-chart-foot">已完成 <b>82%</b>，还差 <b>70亿</b>——这是最紧的一块</div>
             </div>
           </div>
 
           <!-- 🔴 已显现的压力 -->
           <div class="pr-level pr-red">
             <div class="pr-level-tag">🔴 已经显现</div>
-            <div class="pr-item"><b>三产偏弱</b><i>三产增加值 330.7 亿，仅占 GDP 约 28%——工业很强，但服务业还没跟上</i></div>
-            <div class="pr-item"><b>生产性服务业差一截</b><i>目标 400 亿，现在 330 亿，还差 70 亿——检测认证、软件信息、供应链服务还不够厚</i></div>
+            <div class="pr-item"><b>三产偏弱</b><i>三产增加值 330.7 亿，仅占 GDP 约 28%——工业很强，但服务业还没跟上</i><p class="pr-talk">人话：仲恺人想吃个好饭、看个电影，还得开车去惠城。晚上八九点，街上就没人了。</p></div>
+            <div class="pr-item"><b>生产性服务业差一截</b><i>目标 400 亿，现在 330 亿，还差 70 亿——检测认证、软件信息、供应链服务还不够厚</i><p class="pr-talk">人话：工厂要做检测、找物流、对接金融，还得跑深圳。这70亿不是数字，是企业在外面花的钱。</p></div>
           </div>
 
           <!-- 🟡 有苗头的压力 -->
           <div class="pr-level pr-yellow">
             <div class="pr-level-tag">🟡 有苗头</div>
-            <div class="pr-item"><b>消费偏弱</b><i>社零 173.4 亿，增速 5.3%——工业涨得快，但本地人花的钱、本地商圈的人气还没跟上</i></div>
-            <div class="pr-item"><b>链主依赖</b><i>网里的链主就那么几家——它们扩产，网就长；它们订单少了，配套厂也跟着晃</i></div>
+            <div class="pr-item"><b>消费偏弱</b><i>社零 173.4 亿，增速 5.3%——工业涨得快，但本地人花的钱、本地商圈的人气还没跟上</i><p class="pr-talk">人话：工厂越开越多，人却留不住。人不留下，商圈就长不出来。</p></div>
+            <div class="pr-item"><b>链主依赖</b><i>网里的链主就那么几家——它们扩产，网就长；它们订单少了，配套厂也跟着晃</i><p class="pr-talk">人话：德赛西威打个喷嚏，陈江的配套厂就得感冒。不能把鸡蛋都放在几个篮子里。</p></div>
           </div>
 
           <!-- 🌊 机遇 -->
           <div class="pr-level pr-green">
             <div class="pr-level-tag">🌊 机遇</div>
-            <div class="pr-item"><b>融深融湾</b><i>紧挨着深圳，深圳的产业外溢、人才、资本都在往这边流</i></div>
-            <div class="pr-item"><b>三大链主在扩产</b><i>智能终端、新能源、半导体显示——德赛西威、亿纬锂能、TCL华星都在加码</i></div>
+            <div class="pr-item"><b>融深融湾</b><i>紧挨着深圳，深圳的产业外溢、人才、资本都在往这边流</i><p class="pr-talk">人话：深圳房子五六万，这边才一万多。年轻人迟早要往这边搬。</p></div>
+            <div class="pr-item"><b>三大链主在扩产</b><i>智能终端、新能源、半导体显示——德赛西威、亿纬锂能、TCL华星都在加码</i><p class="pr-talk">人话：亿纬、TCL华星都在建新厂房，这是真金白银的信心——它们赌仲恺未来五年行。</p></div>
           </div>
 
           <button class="zp-go" id="pr-go">压力看完了，把我放进这张网里 →</button>
