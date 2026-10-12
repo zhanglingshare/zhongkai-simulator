@@ -286,6 +286,13 @@
           </div>
 
           <div class="sub-block">
+            <h3>🕸 网络演化 <span class="tag" style="font-weight:400">动态自适应产业网络（V1.2）</span></h3>
+            <label class="checkrow"><input type="checkbox" id="dyn-net">
+              <span><b>开启动态网络</b> — 主体退出后经营关系随之失效，信号不再穿过已退出主体；关闭 = 静态对照模式（V1.0 结果逐位一致）。<span class="muted">开启后点「重置」生效。</span></span>
+            </label>
+          </div>
+
+          <div class="sub-block">
             <h3>🧪 实验干预 <span class="tag" style="font-weight:400">旧称「上帝视角」</span></h3>
             <div class="row">
               <select id="shock-sel">
@@ -682,7 +689,8 @@ const PARAM_LINEAGE=[
   ["invest",.35,"B","投资强度（由工业投资增速 −23.6% 对照）",false],
   ["external",.62,"B","外部依赖（由外贸破 1500 亿、芯片进口对照）",false],
   ["service",.30,"B","服务业配套（由三产增加值 +2.2% 对照）",false],
-  ["land",.45,"C","用地供给（由存量工业用地、供地节奏对照）",false]
+  ["land",.45,"C","用地供给（由存量工业用地、供地节奏对照）",false],
+  ["dynamicNetwork",0,"D","动态网络演化开关（0=静态对照，结果与 V1.0 逐位一致；1=自适应产业网络，运行中自行断链/重连）",false]
 ];
 
 /* ================= 仿真内核 ================= */
@@ -691,10 +699,10 @@ class Sim{
     this.seed=seed;
     this.params=Object.assign({n_agents:24,ticks:20,pool_ratio:.55,abundance0:.5,order0:.5,
       disaster0:.2,disaster_rate:.08,mood_gain:.6,spread_rate:.22,spread_depth:2,
-      invest:.35,external:.62,service:.30,land:.45},params||{});
+      invest:.35,external:.62,service:.30,land:.45,dynamicNetwork:0},params||{});
     this.rng=mulberry32(seed);
     this.tick=0;
-    this.agents=[]; this.edges=[]; this.timeline=[]; this.snapshots=[]; this.ledger=[]; this.gold=[];
+    this.agents=[]; this.edges=[]; this.activeEdges=[]; this.timeline=[]; this.snapshots=[]; this.ledger=[]; this.gold=[];
     this.addedCount=0;
     this.state={abundance:this.params.abundance0,order:this.params.order0,disaster:this.params.disaster0,mood:0};
     this._sampleAgents();
@@ -733,10 +741,16 @@ class Sim{
     const landBoost=(this.params.land-.5)*.28+(this.params.service-.5)*.18;
     this.Kcap=clamp(.62+(p-c)*7+landBoost,.15,.90);
   }
-  _addEdge(a,b,layer,rel){
+  _addEdge(a,b,layer,rel,origin,reason){
     if(a===b)return;
     if(this.edges.some(e=>(e.a===a&&e.b===b)||(e.a===b&&e.b===a)))return;
-    this.edges.push({a,b,layer,rel});
+    const e={a,b,layer,rel,origin:origin||(layer==="hist"?"observed":"inferred"),reason:reason||"初始关系"};
+    this.edges.push(e);
+    if(this.activeEdges.length){
+      this.activeEdges.push({id:"e"+(this.activeEdges.length+1),a:e.a,b:e.b,layer:e.layer,rel:e.rel,
+        origin:e.origin,status:"active",strength:this._initStrength(e),
+        createdTick:this.tick,endedTick:null,endReason:null,reason:e.reason});
+    }
   }
   _buildNetwork(){
     this.edges=[];
@@ -765,10 +779,44 @@ class Sim{
       const ca=contactCount[p[0]]||0,cb=contactCount[p[1]]||0;
       if(ca<2&&cb<2){this._addEdge(p[0],p[1],"contact","同域");contactCount[p[0]]=ca+1;contactCount[p[1]]=cb+1;}
     });
+    this._syncActiveEdges();
+  }
+  /* ---- 动态自适应产业网络（V1.2）----
+     两层分离：this.edges=仲恺产业事实网络（史料/预设/补录，永不随动画改写）；
+     this.activeEdges=动态经营合作网络（每步演化，含状态/来源/强度/时间）。
+     dynamicNetwork=0（默认）时全部函数走旧路径，结果与 V1.0 逐位一致。 */
+  _initStrength(e){
+    return e.layer==="hist"?clamp(.6+e.rel.length*.02,.6,.9):.35;
+  }
+  _syncActiveEdges(){
+    this.activeEdges=this.edges.map((e,i)=>({
+      id:"e"+(i+1),a:e.a,b:e.b,layer:e.layer,rel:e.rel,
+      origin:e.origin||"observed",
+      status:"active",strength:this._initStrength(e),
+      createdTick:0,endedTick:null,endReason:null,reason:e.reason||"初始关系"
+    }));
+  }
+  _endEdgesOf(name,reason){
+    if(this.params.dynamicNetwork!==1)return;
+    this.activeEdges.forEach(e=>{
+      if(e.status==="active"&&(e.a===name||e.b===name)){
+        e.status="broken";e.endedTick=this.tick;e.endReason=reason;
+        this.timeline.push({tick:this.tick,kind:"net",text:`关系失效：${e.a}—${e.b}（${reason}）`});
+      }
+    });
   }
   _neighbors(name){
     const nb=[];
-    this.edges.forEach(e=>{if(e.a===name)nb.push(e.b);else if(e.b===name)nb.push(e.a);});
+    const dyn=this.params.dynamicNetwork===1;
+    const pool=dyn?this.activeEdges:this.edges;
+    pool.forEach(e=>{
+      if(dyn){
+        if(e.status!=="active")return;
+        const A=this._byName(e.a),B=this._byName(e.b);
+        if(!A||!B||!A.alive||!B.alive)return;
+      }
+      if(e.a===name)nb.push(e.b);else if(e.b===name)nb.push(e.a);
+    });
     return nb;
   }
   _mapTick(t){return clamp(Math.round((t-26)/(240-26)*this.params.ticks),0,this.params.ticks-1);}
@@ -783,6 +831,7 @@ class Sim{
     else {verb="断链外迁";label="产业链危机中"}
     a.memory.push(`${a.name}${verb}`);
     this.timeline.push({tick:this.tick,kind:"death",text:`${label}${a.name}${verb}`});
+    this._endEdgesOf(a.name,"主体退出");
   }
 
   /* ---- 单步：双拍闭环 ---- */
@@ -958,6 +1007,7 @@ class Sim{
       this.agents.filter(a=>a.alive&&TYPE_CFG[a.type].living&&a.w<3).forEach(a=>{
         if(this.rng()<cfg.kill){
           a.alive=false;a.memory.push(`${a.name}受「${type}」波及，${a.type==="talent"?"流失":"退链"}`);killed++;
+          this._endEdgesOf(a.name,"冲击波及");
         }
       });
     }
@@ -971,6 +1021,7 @@ class Sim{
     if(!ag)return {ok:false,msg:`「${name}」不在本局候选`};
     if(!ag.alive)return {ok:false,msg:`「${name}」已不在场`};
     ag.alive=false; ag.memory.push(`${name}被移除`);
+    this._endEdgesOf(name,"人为移除");
     this.gold.push(this.tick+1);
     this.timeline.push({tick:this.tick+1,kind:"gold",text:`[上帝] 移除 ${name}`});
     this._log("remove",{name});
@@ -993,7 +1044,7 @@ class Sim{
         power:cfg.power,renown:cfg.renown,energy:.7,sentiment:0,alive:true,memory:[`${r[0]}补入：${r[1]}`]});
       // 连 3 条边：连到权重最高的若干在场主体
       const targets=[...this.agents].filter(a=>a.name!==r[0]).sort((x,y)=>y.w-x.w).slice(0,3);
-      targets.forEach(tg=>{this._addEdge(r[0],tg.name,"hist","补录");edgesAdded++;});
+      targets.forEach(tg=>{this._addEdge(r[0],tg.name,"hist","补录","inferred","审图补录");edgesAdded++;});
       added++;this.addedCount++;
     });
     this._computeKcap();
@@ -1064,13 +1115,18 @@ class Sim{
   }
   survivors(){const l=this.agents.filter(a=>a.alive).length;return l/this.agents.length;}
   _snap(){return {tick:this.tick,state:clone(this.state),agents:clone(this.agents),
+    edges:clone(this.edges),activeEdges:clone(this.activeEdges),
     timeline:clone(this.timeline),gold:clone(this.gold)};}
-  seek(t){
+  seek(t,readonly){
     if(t<0||t>=this.snapshots.length)return;
     const snap=clone(this.snapshots[t]);
     this.tick=snap.tick;this.state=snap.state;this.agents=snap.agents;
+    if(snap.edges)this.edges=snap.edges;
+    if(snap.activeEdges)this.activeEdges=snap.activeEdges;
     this.timeline=snap.timeline;this.gold=snap.gold;
-    this.snapshots=this.snapshots.slice(0,t+1);
+    /* readonly=只读回放：不截断后续快照，也不篡改已完成的实验轨迹；
+       缺省（写模式）保持 V1.0 语义：从旧时点重跑时截断后续快照。 */
+    if(!readonly)this.snapshots=this.snapshots.slice(0,t+1);
     this._log("seek",{tick:t});
   }
   report(){
@@ -1289,6 +1345,7 @@ const INDICATOR_TABLE=[
 ];
 
 let sim=new Sim(7);
+let dynNet=false; // 动态网络开关（V1.2）；重建 Sim 时生效
 let worldSource="仲恺基准（内置 41 主体 / 71 关系 / 15 因果链）";
 let pendingWorld=null;
 let currentIv=null;
@@ -1406,14 +1463,25 @@ function renderNetwork(){
   const agentFilter=a=>(!netType||a.type===netType)&&(!netSearch||a.name.includes(netSearch));
   const edgeFilter=e=>!netLayer||e.layer===netLayer;
   const eCol=e=>e.layer==="hist"?"#818cf8":(e.layer==="affinity"?"#cbd5e1":"#c9b8a3");
+  const dynOn=sim.params.dynamicNetwork===1;
+  const edgePool=dynOn?sim.activeEdges:sim.edges;
   let html="";
-  sim.edges.filter(edgeFilter).forEach(e=>{
+  edgePool.filter(edgeFilter).forEach(e=>{
     const p=posCache[e.a],q=posCache[e.b];if(!p||!q)return;
     const pa=sim._byName(e.a),pb=sim._byName(e.b);
-    const op=((pa&&pa.alive?1:.25)*(pb&&pb.alive?1:.25)*.85).toFixed(2);
-    const dash=e.layer==="hist"?"":"stroke-dasharray:4 4;";
+    let color,width,dash,op;
+    if(dynOn&&e.status==="broken"){
+      color="#c24141";width=1.4;dash="stroke-dasharray:6 4;";
+      op=(.38*(pa&&pa.alive?1:.4)*(pb&&pb.alive?1:.4)).toFixed(2);
+    }else if(dynOn&&e.origin==="simulated"){
+      color="#168568";width=2.2;dash="";op=".9";
+    }else{
+      color=eCol(e);width=e.layer==="hist"?1.8:1;
+      dash=e.layer==="hist"?"":"stroke-dasharray:4 4;";
+      op=((pa&&pa.alive?1:.25)*(pb&&pb.alive?1:.25)*.85).toFixed(2);
+    }
     html+=`<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${q.x.toFixed(1)}" y2="${q.y.toFixed(1)}"
-      style="stroke:${eCol(e)};stroke-width:${e.layer==="hist"?1.8:1};${dash}opacity:${op}"><title>${escapeHtml(e.rel)}（${escapeHtml(e.a)}→${escapeHtml(e.b)}）</title></line>`;
+      style="stroke:${color};stroke-width:${width};${dash}opacity:${op}"><title>${escapeHtml(e.rel)}（${escapeHtml(e.a)}→${escapeHtml(e.b)}）${e.status==="broken"?" · 已失效":""}</title></line>`;
   });
   const searchHit=netSearch?new Set(sim.agents.filter(a=>a.name.includes(netSearch)).map(a=>a.name)):null;
   sim.agents.filter(agentFilter).forEach(a=>{
@@ -1439,11 +1507,15 @@ function renderNetwork(){
     }
   });
   const legend=[["anchor","链主"],["oem","整机"],["supplier","配套"],["service","服务"],["talent","人才"],["capital","资本"],["land","载体"],["infra","设施"]];
-  html+=`<g opacity=".97"><rect x="556" y="4" width="200" height="130" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1"></rect>`;
+  html+=`<g opacity=".97"><rect x="556" y="4" width="200" height="158" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1"></rect>`;
   legend.forEach((g,i)=>{
     const x=556+14+(i<4?0:100),y=24+(i%4)*26;
     html+=`<circle cx="${x+6}" cy="${y-5}" r="6" fill="${typeColor(g[0])}"></circle><text x="${x+20}" y="${y}" font-size="11" fill="#334155">${g[1]}</text>`;
   });
+  if(dynOn){
+    html+=`<line x1="570" y1="132" x2="604" y2="132" stroke="#c24141" stroke-width="1.4" stroke-dasharray="6 4"></line><text x="612" y="135" font-size="10.5" fill="#475569">失效关系（动态网络）</text>`;
+    html+=`<line x1="570" y1="148" x2="604" y2="148" stroke="#168568" stroke-width="2.2"></line><text x="612" y="151" font-size="10.5" fill="#475569">模拟生成的新合作</text>`;
+  }
   html+=`</g>`;
   svg.innerHTML=html;
   svg.querySelectorAll(".node").forEach(n=>n.addEventListener("click",()=>openDrawer(n.dataset.name)));
@@ -1740,16 +1812,26 @@ function plannedEventsFrom(exp){
 }
 
 /* ================= 实验控制（时间轴） ================= */
+/* 分支语义：拖动滑块是只读回放（不截断快照）；从旧时点继续单步/播放则截断为分支实验 */
+function ensureBranch(){
+  if(sim.tick<sim.snapshots.length-1){
+    sim.snapshots=sim.snapshots.slice(0,sim.tick+1);
+  }
+}
 $("#btn-step").onclick=()=>{
   if(!gate("step").ok)return;
-  sim.step();posCache=null;render();
+  ensureBranch();sim.step();posCache=null;render();
+};
+$("#dyn-net").onchange=e=>{
+  dynNet=e.target.checked;
+  $("#dyn-net").parentElement.querySelector("b").textContent=dynNet?"动态网络已开启（重置后生效）":"开启动态网络";
 };
 $("#btn-reset").onclick=()=>{
   if(!gate("reset").ok)return;
   if(experimentState.mode==="formal"&&experimentState.phase==="locked"){
     experimentState.revisions.push({at:new Date().toISOString(),action:"reset",note:"重置世界为初始状态重新运行（原实验档案与预判保留）"});
   }
-  sim=new Sim(sim.seed);posCache=null;refreshSelectors();render();
+  sim=new Sim(sim.seed,{dynamicNetwork:dynNet?1:0});posCache=null;refreshSelectors();render();
 };
 $("#btn-play").onclick=function(){
   if(playing){clearInterval(playTimer);playing=false;this.textContent="▶ 播放";return;}
@@ -1761,12 +1843,12 @@ $("#btn-play").onclick=function(){
       if(experimentState.mode==="formal"&&experimentState.phase==="locked")setPhase("completed");
       return;
     }
-    sim.step();posCache=null;render();
+    ensureBranch();sim.step();posCache=null;render();
   },650);
 };
 $("#track").oninput=e=>{
   if(!gate("viewHistory").ok)return;
-  sim.seek(parseInt(e.target.value));posCache=null;render();
+  sim.seek(parseInt(e.target.value),true);posCache=null;render();
 };
 
 /* ================= 实验干预（冲击/移除/扰动） ================= */

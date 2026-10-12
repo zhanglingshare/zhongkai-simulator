@@ -135,6 +135,55 @@ const uiVisible = uiOnly
 const uiTech = ['蒙特卡洛', '敏感性分析', '随机种子'].map((w) => [w, (uiVisible.match(new RegExp(w, 'g')) || []).length]);
 uiTech.forEach(([w, n]) => ok(n <= 1, `裸算法术语「${w}」仅限术语对照表（可见 ${n} 处）`));
 
+/* ---------- 6. 动态自适应产业网络（V1.2 · P0：状态/传播修正/快照） ---------- */
+console.log('· 动态自适应产业网络（P0：动态关系状态 / 传播修正 / 网络快照）');
+const dsim = new K.Sim(7, { dynamicNetwork: 1 });
+ok(dsim.activeEdges.length === dsim.edges.length, `动态模式初始化：activeEdges 与事实边一一对应（${dsim.activeEdges.length}）`);
+ok(dsim.activeEdges.every((e) => e.status === 'active' && e.origin && e.strength > 0 && e.createdTick === 0 && e.endedTick === null),
+  '动态边带完整字段（status/origin/strength/createdTick/endedTick）');
+ok(dsim.activeEdges.filter((e) => e.origin === 'observed').length > 0, '初始关系 origin=observed（事实层）');
+dsim.step();
+const s1 = dsim.snapshots[dsim.snapshots.length - 1];
+ok(Array.isArray(s1.edges) && Array.isArray(s1.activeEdges), 'step 后快照包含 edges 与 activeEdges');
+
+/* 主体退出 → 关联经营关系失效，且不再作为传播中间节点 */
+const victim = dsim.agents.find((a) => a.alive && dsim.activeEdges.some((e) => e.a === a.name || e.b === a.name));
+const victimName = victim.name;
+const victimEdges = dsim.activeEdges.filter((e) => e.a === victimName || e.b === victimName);
+dsim.removeAgent(victimName);
+ok(victimEdges.length > 0 && dsim.activeEdges.filter((e) => (e.a === victimName || e.b === victimName) && e.status === 'broken').length === victimEdges.length,
+  '主体退出后其全部活跃经营关系标记失效');
+ok(dsim.activeEdges.some((e) => (e.a === victimName || e.b === victimName) && e.endedTick === dsim.tick), '失效关系记录 endedTick');
+ok(dsim._neighbors(victimName).length === 0, '死亡主体不再被 _neighbors 返回（传播修正）');
+ok(dsim.timeline.some((x) => x.kind === 'net'), '失效关系写入事件记录');
+
+/* legacy 对照：V1.0 行为原样保留（不过滤） */
+const lsim = new K.Sim(7);
+const lv = lsim.agents.find((a) => a.alive);
+lsim.removeAgent(lv.name);
+ok(lsim._neighbors(lv.name).length > 0, 'legacy 模式 _neighbors 保留 V1.0 行为（含已退出主体）');
+
+/* 同种子动态演化可复现 */
+const run6 = (e) => { const s = new K.Sim(7, { dynamicNetwork: 1 }); for (let t = 0; t < 6; t++) s.step(); return s; };
+const dA = run6(), dB = run6();
+ok(JSON.stringify(dA.activeEdges.map((e) => [e.a, e.b, e.status, e.endedTick])) === JSON.stringify(dB.activeEdges.map((e) => [e.a, e.b, e.status, e.endedTick])),
+  '同种子动态网络演化可复现（6 步边状态一致）');
+ok(JSON.stringify(dA.snapshots.map((x) => x.activeEdges.length)) === JSON.stringify(dB.snapshots.map((x) => x.activeEdges.length)), '同种子快照序列一致');
+
+/* seek 只读回放 vs 分支语义 */
+const d3 = new K.Sim(7, { dynamicNetwork: 1 });
+for (let t = 0; t < 10; t++) d3.step();
+const beforeLen = d3.snapshots.length;
+d3.seek(3, true);
+ok(d3.snapshots.length === beforeLen, '只读回放（readonly）不截断后续快照');
+d3.seek(3);
+ok(d3.snapshots.length === 4, '写模式回放截断后续快照（分支语义）');
+const l2 = new K.Sim(7);
+for (let t = 0; t < 5; t++) l2.step();
+const lb = l2.snapshots.length;
+l2.seek(2);
+ok(l2.snapshots.length === 3 && lb === 6, 'legacy 模式 seek 默认仍截断（V1.0 语义保留）');
+
 /* ---------- 汇总 ---------- */
 console.log(failed === 0
   ? '✓ verify_all PASS — 回归一致 + 结构完整'
