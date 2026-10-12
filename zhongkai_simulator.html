@@ -477,18 +477,22 @@
     border-radius:16px;padding:13px;font-size:14px;font-weight:700;text-align:center;cursor:pointer;
     box-shadow:0 8px 24px rgba(37,99,235,.35)}
   .ls-enter:active{transform:scale(.98)}
-  /* 对号入座 */
-  .ls-ask{background:rgba(255,255,255,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-    border-radius:18px;padding:13px 14px 12px;border:1px solid rgba(255,255,255,.12);
-    box-shadow:0 8px 24px rgba(0,0,0,.28)}
-  .la-q{font-size:13px;font-weight:700;color:#fff;margin-bottom:10px;text-align:center}
-  .la-tags{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-  .la-tags button{display:flex;flex-direction:column;align-items:center;gap:5px;
-    background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.12);
-    border-radius:14px;padding:9px 0 8px;color:#fff;cursor:pointer;
-    transition:all .15s;font-size:11px;font-weight:600}
-  .la-tags button span{font-size:22px;line-height:1}
-  .la-tags button:active{transform:scale(.92);background:rgba(255,255,255,.22)}
+  /* 镇园好生活入口 */
+  .ls-towns{flex:none;background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.05));
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-radius:18px;padding:12px 13px 10px;border:1px solid rgba(255,255,255,.16);
+    box-shadow:0 8px 24px rgba(0,0,0,.24);cursor:pointer;text-align:left}
+  .ls-towns:active{transform:scale(.98)}
+  .lt-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+  .lt-title{font-size:13px;font-weight:700;color:#fff}
+  .lt-count{font-size:10px;font-weight:600;color:rgba(255,255,255,.6)}
+  .lt-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+  .lt-item{display:flex;flex-direction:column;align-items:center;gap:4px;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10);
+    border-radius:12px;padding:7px 0 6px;color:#fff;font-size:10.5px;font-weight:600}
+  .lt-item span{font-size:18px;line-height:1}
+  .lt-parks{font-size:10px;color:rgba(255,255,255,.55);text-align:center;margin-top:9px}
+  .lt-go{font-size:12px;font-weight:700;color:#7dd3fc;text-align:center;margin-top:7px}
   /* 主屏 */
   .homescreen{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;
     padding:0;color:#fff;
@@ -718,14 +722,17 @@
         <div class="ls-cards" id="ls-cards"></div>
         <div class="ls-locks">
           <!-- 对号入座：你是哪一种 -->
-          <div class="ls-ask">
-            <div class="la-q">你在仲恺，哪一种最像你？</div>
-            <div class="la-tags">
-              <button type="button" onclick="openFate('work')"><span>👷</span>上班</button>
-              <button type="button" onclick="openFate('shop')"><span>🏪</span>开店</button>
-              <button type="button" onclick="openFate('live')"><span>🏠</span>生活</button>
-              <button type="button" onclick="openFate('grad')"><span>🎓</span>毕业</button>
+          <div class="ls-towns" onclick="openApp('town')">
+            <div class="lt-head"><span class="lt-title">仲恺各镇园好生活</span><span class="lt-count">5镇街·4园区</span></div>
+            <div class="lt-grid">
+              <div class="lt-item"><span>🛍</span>陈江</div>
+              <div class="lt-item"><span>🏙</span>惠环</div>
+              <div class="lt-item"><span>🍗</span>沥林</div>
+              <div class="lt-item"><span>🥟</span>潼侨</div>
+              <div class="lt-item"><span>🌊</span>潼湖</div>
             </div>
+            <div class="lt-parks">东江 · 惠南 · 智慧区 · AI 四大产业园</div>
+            <div class="lt-go">进各镇好吃好玩 →</div>
           </div>
           <div class="ls-enter" id="ls-enter">进街坊群看看 →</div>
         </div>
