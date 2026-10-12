@@ -507,20 +507,42 @@
     font-size:11px;color:rgba(255,255,255,.72)}
   .lc-link{color:#93c5fd;font-weight:700;display:flex;align-items:center;gap:3px}
   .ls-locks{position:relative;z-index:2;padding:10px 16px 22px;display:flex;flex-direction:column;gap:11px}
-  /* 立柱 */
-  .ls-pillar{position:relative;z-index:2;flex:none;margin:6px 16px 0;padding:16px 16px 14px;
-    background:linear-gradient(160deg,rgba(245,158,11,.14),rgba(239,68,68,.08));
-    border:1px solid rgba(251,191,36,.3);border-radius:16px;text-align:center}
-  .ls-pillar .lp-who{font-size:10.5px;color:var(--sub);line-height:1.5;margin-bottom:9px}
-  .ls-pillar .lp-head{font-size:13px;font-weight:700;color:#fde68a;margin-bottom:6px}
-  .ls-pillar .lp-num{font-size:52px;font-weight:900;font-family:var(--font-num);color:#fbbf24;
-    line-height:1;text-shadow:0 0 24px rgba(251,191,36,.4)}
-  .ls-pillar .lp-yi{font-size:20px;font-weight:700;margin-left:2px}
-  .ls-pillar .lp-sub{font-size:12px;color:var(--ink);margin-top:5px;font-weight:600}
-  .ls-pillar .lp-human{font-size:11.5px;color:var(--sub);line-height:1.6;margin:9px 4px 11px}
-  .ls-pillar .lp-rel{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
-  .ls-pillar .lp-rel span{font-size:10.5px;color:#fde68a;background:rgba(251,191,36,.1);
-    border:1px solid rgba(251,191,36,.25);border-radius:20px;padding:4px 9px}
+  /* 零号页：先立柱 */
+  .zeropage{position:fixed;inset:0;z-index:100;overflow-y:auto;
+    background:radial-gradient(120% 80% at 50% 0%,#1e293b 0%,#0b1120 60%,#060a14 100%)}
+  .zp-inner{min-height:100%;display:flex;flex-direction:column;justify-content:center;
+    align-items:center;padding:40px 26px;text-align:center}
+  .zp-tag{font-size:11px;color:#7dd3fc;letter-spacing:.15em;margin-bottom:18px}
+  .zp-title{font-size:26px;font-weight:900;color:#f1f5f9;line-height:1.35;margin-bottom:24px}
+  /* 网络生长时间线 */
+  .zp-grow{width:100%;margin-bottom:24px;text-align:left}
+  .grow-step{display:flex;gap:11px;align-items:flex-start;padding:7px 0}
+  .grow-step .gs-dot{flex:none;width:11px;height:11px;border-radius:50%;margin-top:5px;
+    background:#38bdf8;box-shadow:0 0 10px rgba(56,189,248,.6)}
+  .grow-step b{display:block;font-size:14px;color:#e2e8f0}
+  .grow-step i{display:block;font-style:normal;font-size:11.5px;color:#94a3b8;margin-top:2px;line-height:1.5}
+  .grow-now{margin-top:10px;padding:10px 12px;border-radius:10px;text-align:center;
+    background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);
+    font-size:12px;font-weight:700;color:#7dd3fc}
+  /* 你在网里 */
+  .zp-you{width:100%;margin-bottom:22px}
+  .zp-you-title{font-size:15px;font-weight:800;color:#fde68a;text-align:center;margin-bottom:11px}
+  .zp-rel{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:100%}
+  .zp-rel>div{background:rgba(140,170,225,.06);border:1px solid var(--line);border-radius:12px;
+    padding:11px 10px;text-align:left}
+  .zp-rel span{font-size:16px;margin-right:6px}
+  .zp-rel b{font-size:12.5px;color:#e2e8f0}
+  .zp-rel i{display:block;font-style:normal;font-size:11px;color:#94a3b8;margin-top:3px;line-height:1.5}
+  .zp-gap{background:linear-gradient(160deg,rgba(245,158,11,.16),rgba(239,68,68,.08));
+    border:1px solid rgba(251,191,36,.35);border-radius:18px;padding:20px 16px;margin-bottom:20px;width:100%}
+  .zp-gap-label{font-size:13px;font-weight:700;color:#fde68a;margin-bottom:8px}
+  .zp-gap-num{font-size:44px;font-weight:900;font-family:var(--font-num);color:#fbbf24;line-height:1;
+    text-shadow:0 0 28px rgba(251,191,36,.45)}
+  .zp-gap-num span{font-size:56px}
+  .zp-gap-sub{font-size:12px;color:#cbd5e1;margin-top:8px;line-height:1.6}
+  .zp-go{width:100%;padding:15px;border:0;border-radius:14px;font-size:16px;font-weight:800;color:#fff;
+    background:linear-gradient(135deg,#0ea5e9,#2563eb);box-shadow:0 8px 24px rgba(14,165,233,.35)}
+  .zp-src{font-size:10px;color:#64748b;margin-top:14px}
   .ls-enter{flex:none;background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;border:0;
     border-radius:16px;padding:13px;font-size:14px;font-weight:700;text-align:center;cursor:pointer;
     box-shadow:0 8px 24px rgba(37,99,235,.35)}
@@ -773,6 +795,53 @@
         <span class="is-ico">📡</span><span class="is-txt" id="island-txt">正在接收今日消息</span>
       </div>
 
+      <!-- 零号页：先立柱——这张网怎么长出来·你就在网里·2030要再翻一倍 -->
+      <div class="zeropage" id="zeropage">
+        <div class="zp-inner">
+          <div class="zp-tag">仲恺高新区 · 产业风洞</div>
+          <h1 class="zp-title">这张网，<br>是怎么长出来的？</h1>
+
+          <div class="zp-grow">
+            <div class="grow-step">
+              <span class="gs-dot"></span>
+              <div><b>从一片老镇开始</b><i>没有大厂、没有商圈，只有农田和旧街</i></div>
+            </div>
+            <div class="grow-step">
+              <span class="gs-dot"></span>
+              <div><b>一家龙头企业来了</b><i>链主落户，带来第一根产业链</i></div>
+            </div>
+            <div class="grow-step">
+              <span class="gs-dot"></span>
+              <div><b>配套厂跟着来了</b><i>上百家配套围着链主转，网开始成形</i></div>
+            </div>
+            <div class="grow-step">
+              <span class="gs-dot"></span>
+              <div><b>学校、医院、商圈跟着起来</b><i>人留下来，网才真正长住</i></div>
+            </div>
+            <div class="grow-now">今天 · 5镇街·4园区·1144家规上企业·1053家高企</div>
+          </div>
+
+          <div class="zp-you">
+            <div class="zp-you-title">你，就在这张网里</div>
+            <div class="zp-rel">
+              <div><span>👷</span><b>上班</b><i>你在网的一条链上——是链主还是配套？</i></div>
+              <div><span>🏪</span><b>开店</b><i>你的客流，靠网里有多少人上班</i></div>
+              <div><span>🏠</span><b>过日子</b><i>你住的这片，是网长出来的</i></div>
+              <div><span>🎓</span><b>毕业</b><i>你留不留，看网还能不能继续长</i></div>
+            </div>
+          </div>
+
+          <div class="zp-gap">
+            <div class="zp-gap-label">🏔️ 2030，这张网还要再翻一倍</div>
+            <div class="zp-gap-num">还差 <span>839</span> 亿</div>
+            <div class="zp-gap-sub">GDP 从 1160 亿 → 2000 亿 —— 网还要再长出多少条链、多少个厂、多少所学校</div>
+          </div>
+
+          <button class="zp-go" id="zp-go">我看明白了，进仲恺看看 →</button>
+          <div class="zp-src">公开数据：仲恺高新区统计公报 / 管委会工作报告（2025）</div>
+        </div>
+      </div>
+
       <!-- 锁屏 -->
       <div class="lockscreen" id="lockscreen">
         <div class="ls-wall"></div>
@@ -782,20 +851,6 @@
         </div>
         <!-- 热点卡片飞入（钩子主体） -->
         <div class="ls-cards" id="ls-cards"></div>
-        <!-- 立柱：仲恺是谁·家底·目标·跟我啥关系 -->
-        <div class="ls-pillar" id="ls-pillar">
-          <div class="lp-who">5镇街·4园区·1144家规上企业 · 从一座老镇长成国家级高新区</div>
-          <div class="lp-head">🏔️ 仲恺 2030，要再翻一座山</div>
-          <div class="lp-num">839<span class="lp-yi">亿</span></div>
-          <div class="lp-sub">GDP 从 1160 亿到 2000 亿，就差这一截</div>
-          <div class="lp-human">这不是报表上的数——是未来 5 年要新长出来的产业、要招的厂、要建的学校和路</div>
-          <div class="lp-rel">
-            <span>👷 新厂＝新岗位</span>
-            <span>🏪 新厂＝新客流</span>
-            <span>🏠 新园＝新配套</span>
-            <span>🎓 新产＝留得住</span>
-          </div>
-        </div>
         <div class="ls-locks">
           <!-- 今日打卡：好吃好玩，点一下打卡 -->
           <div class="ls-check">
@@ -2541,6 +2596,13 @@ function tickClock(){
   const wk=["周日","周一","周二","周三","周四","周五","周六"][d.getDay()];
   $("#ls-date").textContent=(d.getMonth()+1)+"月"+d.getDate()+"日 "+wk;
 }
+/* 零号页：立柱看完，进锁屏 */
+$("#zp-go").onclick=()=>{
+  const zp=$("#zeropage");
+  zp.style.transition="opacity .45s";
+  zp.style.opacity="0";
+  setTimeout(()=>{zp.style.display="none";},460);
+};
 let lockCardIv=null;
 /* 按类别均衡交错，接地气的（好玩/美食/暖心）优先飞入，避免前几张全是官方 */
 function interleaveCards(items){
