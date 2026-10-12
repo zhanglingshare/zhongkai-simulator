@@ -480,7 +480,7 @@ function drawNet(){
       edges.forEach(e=>{
         let a,b;
         if(e.a===i)b=e.b;else if(e.b===i)b=e.a;else return;
-        const dx=nodes[b].x-nodes[i].x,dy=nodes[b].y-nodes[i].dy;
+        const dx=nodes[b].x-nodes[i].x,dy=nodes[b].y-nodes[i].y;
         const d=Math.sqrt(dx*dx+dy*dy)+0.01;
         const f=(d-60)*0.02;
         fx+=f*dx/d;fy+=f*dy/d;
@@ -578,6 +578,7 @@ function renderHot(){
     </div>`).join("");
 }
 renderHot();
+setTimeout(drawNet,200);
 </script>
 
 <script>
