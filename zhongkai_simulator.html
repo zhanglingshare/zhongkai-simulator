@@ -260,6 +260,12 @@
               <option value="hist">产业链关系</option>
               <option value="affinity">同类亲和</option>
               <option value="contact">同域接触</option>
+              <option value="dyn">模拟新合作</option>
+            </select>
+            <select id="net-view">
+              <option value="structure">结构模式</option>
+              <option value="change">关系变化</option>
+              <option value="risk">风险传播</option>
             </select>
             <button class="btn sm" id="net-reset">重置视图</button>
             <button class="btn sm" id="net-full">⛶ 全屏</button>
@@ -701,6 +707,7 @@ class Sim{
       disaster0:.2,disaster_rate:.08,mood_gain:.6,spread_rate:.22,spread_depth:2,
       invest:.35,external:.62,service:.30,land:.45,dynamicNetwork:0},params||{});
     this.rng=mulberry32(seed);
+    this.netRng=mulberry32(seed*31+7); /* V1.2 网络演化独立随机数流：不改动既有 Agent 随机序列 */
     this.tick=0;
     this.agents=[]; this.edges=[]; this.activeEdges=[]; this.timeline=[]; this.snapshots=[]; this.ledger=[]; this.gold=[];
     this.addedCount=0;
@@ -803,6 +810,121 @@ class Sim{
         e.status="broken";e.endedTick=this.tick;e.endReason=reason;
         this.timeline.push({tick:this.tick,kind:"net",text:`关系失效：${e.a}—${e.b}（${reason}）`});
       }
+    });
+  }
+  /* ---- P1：关系增强 / 减弱 / 需求萎缩断裂（确定性为主，不消耗 netRng） ---- */
+  _updateActiveRelationships(){
+    const st=this.state;
+    const boom=st.abundance>.6&&st.disaster<.3;
+    const slump=st.abundance<.4;
+    this.activeEdges.forEach(e=>{
+      if(e.status!=="active")return;
+      const A=this._byName(e.a),B=this._byName(e.b);
+      if(!A||!B||!A.alive||!B.alive){
+        e.status="broken";e.endedTick=this.tick;e.endReason="主体退出";
+        this.timeline.push({tick:this.tick,kind:"net",text:`关系失效：${e.a}—${e.b}（主体退出）`});
+        return;
+      }
+      if(boom&&A.energy>.5&&B.energy>.5){
+        e.strength=clamp(e.strength+.02,0,1); /* 景气共振：持续合作增强 */
+      }else if(slump){
+        e.strength=clamp(e.strength-.03,0,1); /* 需求萎缩：合作转弱 */
+        if(e.strength<.22){
+          e.status="broken";e.endedTick=this.tick;e.endReason="需求萎缩，合作转弱而断裂";
+          this.timeline.push({tick:this.tick,kind:"net",text:`关系失效：${e.a}—${e.b}（需求萎缩转弱断裂）`});
+        }
+      }
+    });
+  }
+  /* ---- P1：供需匹配 / 断供替代（独立 netRng 流，同种子可复现） ---- */
+  _matchPotentialPartners(){
+    const st=this.state;
+    if(st.abundance<.25||st.disaster>.75)return; /* 极端环境下不扩张 */
+    const brokenThisTick=new Set();
+    this.activeEdges.filter(e=>e.status==="broken"&&e.endedTick===this.tick).forEach(e=>{brokenThisTick.add(e.a);brokenThisTick.add(e.b);});
+    this.agents.filter(a=>a.alive&&(a.type==="oem"||a.type==="supplier")).forEach(buyer=>{
+      const activeCnt=this.activeEdges.filter(e=>e.status==="active"&&(e.a===buyer.name||e.b===buyer.name)).length;
+      const lost=this.activeEdges.filter(e=>e.status==="broken"&&(e.a===buyer.name||e.b===buyer.name)).length;
+      if(lost===0&&activeCnt>=2)return;          /* 无断供且关系充足 */
+      if(!brokenThisTick.has(buyer.name)&&activeCnt>=3)return; /* 非本次断供且关系较多 */
+      const needType=buyer.type==="oem"?"supplier":"anchor";  /* 整机需要配套、配套需要链主订单 */
+      const pool=this.agents.filter(s=>
+        s.alive&&s.type===needType&&s.name!==buyer.name&&s.energy>.3&&
+        !this.activeEdges.some(e=>e.status==="active"&&((e.a===buyer.name&&e.b===s.name)||(e.a===s.name&&e.b===buyer.name)))
+      );
+      pool.sort((x,y)=>{
+        const dx=Math.abs(x.t-buyer.t),dy=Math.abs(y.t-buyer.t);
+        const sx=x.power*x.renown*x.energy,sy=y.power*y.renown*y.energy;
+        return (dy-dx)*.02+(sy-sx); /* 能力×声誉×能量主导，时序接近作微调 */
+      });
+      const cap=Math.max(1,lost+1); /* 资源/能力约束：新增合作上限 = 断供损失数 + 1，不无限连边 */
+      let added=0;
+      pool.forEach(p=>{
+        if(added>=cap)return;
+        if(this.netRng()<.55){ /* 匹配成功率（成本/协调约束），独立随机数流 */
+          this._addActiveEdge(buyer.name,p.name,"供应合作","simulated",brokenThisTick.has(buyer.name)?"断供替代":"供应补强");
+          this.timeline.push({tick:this.tick,kind:"net",text:`新合作：${buyer.name} ↔ ${p.name}（${brokenThisTick.has(buyer.name)?"断供替代":"供应补强"}）`});
+          added++;
+        }
+      });
+    });
+  }
+  /* 只写入动态经营合作网络，绝不写入事实网络 this.edges */
+  _addActiveEdge(a,b,rel,origin,reason){
+    if(a===b)return;
+    if(this.activeEdges.some(e=>e.status!=="broken"&&((e.a===a&&e.b===b)||(e.a===b&&e.b===a))))return;
+    this.activeEdges.push({
+      id:"e"+(this.activeEdges.length+1),a,b,layer:"dyn",rel,
+      origin,status:"active",strength:clamp(.4+.2*this.netRng(),.4,.6),
+      createdTick:this.tick,endedTick:null,endReason:null,reason
+    });
+  }
+  /* ---- P2：网络反馈耦合——有效网络影响主体经营与协同 ---- */
+  _applyNetworkConsequences(){
+    const st=this.state;
+    const netCounts={};
+    this.activeEdges.filter(e=>e.status==="active").forEach(e=>{
+      netCounts[e.a]=(netCounts[e.a]||0)+1;
+      netCounts[e.b]=(netCounts[e.b]||0)+1;
+    });
+    let serviced=0,totalLiving=0,isolated=0;
+    this.agents.forEach(ag=>{
+      if(!ag.alive||!TYPE_CFG[ag.type].living)return;
+      totalLiving++;
+      const c=netCounts[ag.name]||0;
+      if(c===0){ag.energy=clamp(ag.energy-.015,0,1);isolated++;} /* 孤立拖累 */
+      else if(c>=2){ag.energy=clamp(ag.energy+.008,0,1);}        /* 有网加分（微，封顶由后续 clamp） */
+      if(ag.type==="service"&&c>0)serviced++;
+    });
+    const coverage=totalLiving?serviced/totalLiving:0;
+    st.order=clamp(st.order+coverage*.015,0,1); /* 服务网络覆盖润滑协同 */
+    this._log("net_consequences",{coverage:coverage.toFixed(3),isolated});
+  }
+  /* ---- P2：候选池主体有条件进入（招商/产业扩张期；候选池外不凭空造真实企业） ---- */
+  _enterCandidates(){
+    const st=this.state;
+    if(st.abundance<.45||st.disaster>.35)return; /* 环境差：不扩张 */
+    let entered=[];
+    for(const c of CANDIDATES){
+      if(entered.length>=2)break;                /* 单步最多 2 家，防网络膨胀 */
+      if(this._byName(c[0]))continue;            /* 已在场 */
+      if(c[3]>=3)continue;                       /* 链主必入机制已覆盖 */
+      if(this.netRng()<.12){                     /* 入场概率（独立随机数流） */
+        const cfg=TYPE_CFG[c[1]];
+        this.agents.push({name:c[0],type:c[1],t:c[2],w:c[3],
+          power:cfg.power,renown:cfg.renown,
+          energy:cfg.living?clamp(.4+.3*cfg.power,.18,.9):1,
+          sentiment:0,alive:true,memory:[`${c[0]}入场（招商/产业扩张期）`]});
+        entered.push(c[0]);
+        this.timeline.push({tick:this.tick,kind:"net",text:`主体进入：${c[0]}（${cfg.cn}，候选池招商/扩张）`});
+      }
+    }
+    if(entered.length)this._computeKcap();
+    entered.forEach(nm=>{ /* 入场主体顺势连 1–2 条初始合作（匹配在场强者） */
+      const targets=[...this.agents].filter(a=>a.alive&&a.name!==nm).sort((x,y)=>y.w-x.w).slice(0,2);
+      targets.forEach(tg=>{
+        if(this.netRng()<.7)this._addActiveEdge(nm,tg.name,"配套合作","simulated","新主体入场建立合作");
+      });
     });
   }
   _neighbors(name){
@@ -957,6 +1079,13 @@ class Sim{
       });
     }
     st.abundance=clamp(st.abundance,0,1);st.order=clamp(st.order,0,1);st.disaster=clamp(st.disaster,0,1);
+    /* V1.2 P1+P2：动态网络演化阶段（仅在动态模式执行；关闭时本段零副作用，V1.0 结果不变） */
+    if(this.params.dynamicNetwork===1){
+      this._updateActiveRelationships();
+      this._matchPotentialPartners();
+      this._applyNetworkConsequences();
+      this._enterCandidates();
+    }
     this._log("step",{tick:this.tick,state:clone(st)});
     this.snapshots.push(this._snap());
   }
@@ -1351,7 +1480,7 @@ let pendingWorld=null;
 let currentIv=null;
 let playing=false, playTimer=null;
 let posCache=null;
-let netType="", netLayer="", netSearch="";
+let netType="", netLayer="", netSearch="", netView="structure";
 
 /* ================= 实验状态控制器（V1.0） ================= */
 const experimentState={
@@ -1465,15 +1594,22 @@ function renderNetwork(){
   const eCol=e=>e.layer==="hist"?"#818cf8":(e.layer==="affinity"?"#cbd5e1":"#c9b8a3");
   const dynOn=sim.params.dynamicNetwork===1;
   const edgePool=dynOn?sim.activeEdges:sim.edges;
+  /* 视图（V1.2 P3）：structure=结构模式（现状）；change=只显示变化（新合作+失效）；risk=高亮失效波及节点 */
+  const showChange=netView==="change";
+  const showRisk=netView==="risk";
   let html="";
   edgePool.filter(edgeFilter).forEach(e=>{
     const p=posCache[e.a],q=posCache[e.b];if(!p||!q)return;
     const pa=sim._byName(e.a),pb=sim._byName(e.b);
+    const isBroken=dynOn&&e.status==="broken";
+    const isNew=dynOn&&e.origin==="simulated";
+    if(showChange&&!isBroken&&!isNew)return; /* 变化模式：只画变化 */
+    if(showRisk&&!isBroken)return;           /* 风险模式：只画失效边 */
     let color,width,dash,op;
-    if(dynOn&&e.status==="broken"){
+    if(isBroken){
       color="#c24141";width=1.4;dash="stroke-dasharray:6 4;";
       op=(.38*(pa&&pa.alive?1:.4)*(pb&&pb.alive?1:.4)).toFixed(2);
-    }else if(dynOn&&e.origin==="simulated"){
+    }else if(isNew){
       color="#168568";width=2.2;dash="";op=".9";
     }else{
       color=eCol(e);width=e.layer==="hist"?1.8:1;
@@ -1491,8 +1627,10 @@ function renderNetwork(){
     if(a.alive){
       const r=(11+a.energy*11).toFixed(1);
       const ring=a.sentiment>.12?"#168568":a.sentiment<-.12?"#c24141":"#94a3b8";
+      const riskHit=showRisk&&dynOn&&sim.activeEdges.some(e=>e.status==="broken"&&(e.a===a.name||e.b===a.name));
       html+=`<g class="node" data-name="${a.name}" style="cursor:pointer"${hl?' opacity="1"':""}>
         ${hl?`<circle cx="${p.x}" cy="${p.y}" r="${(+r+6).toFixed(1)}" fill="none" stroke="#2458c6" stroke-width="2" stroke-dasharray="3 3"></circle>`:""}
+        ${riskHit?`<circle cx="${p.x}" cy="${p.y}" r="${(+r+8).toFixed(1)}" fill="none" stroke="#c24141" stroke-width="2.4" stroke-dasharray="4 3"></circle>`:""}
         <circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${typeColor(a.type)}" stroke="${ring}" stroke-width="3.5"></circle>
         <text x="${p.x}" y="${p.y+4}" text-anchor="middle" font-size="12" font-weight="600" fill="#fff" paint-order="stroke" stroke="rgba(0,0,0,.28)" stroke-width="1.5">${cfg.cn}</text>
         <text x="${p.x}" y="${(p.y+Number(r)+14).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="#475569" paint-order="stroke" stroke="#fcfdff" stroke-width="3">${a.name}</text>
@@ -1526,6 +1664,7 @@ function typeColor(t){return {anchor:"#312e81",oem:"#4f46e5",supplier:"#0e7490",
 /* 网络工具 */
 $("#net-type").onchange=e=>{netType=e.target.value;renderNetwork();};
 $("#net-layer").onchange=e=>{netLayer=e.target.value;renderNetwork();};
+$("#net-view").onchange=e=>{netView=e.target.value;renderNetwork();};
 $("#net-search").oninput=e=>{netSearch=e.target.value.trim();renderNetwork();};
 $("#net-reset").onclick=()=>{$("#net-type").value="";$("#net-layer").value="";$("#net-search").value="";netType="";netLayer="";netSearch="";renderNetwork();};
 $("#net-full").onclick=()=>{
@@ -2097,6 +2236,72 @@ function plainConclusion(){
   const useSu=r.survivors<0.85;
   return {head,keyNum:useSu?su.toFixed(0):(f.abundance*100).toFixed(0),keyUnit:useSu?"% 存续（这一轮）":"景气×100（这一轮）",su:su.toFixed(0),risk:f.disaster};
 }
+/* V1.2 P3：网络演化统计（动态模式；legacy 模式不调用） */
+function netStats(sim){
+  const live=sim.agents.filter(a=>a.alive);
+  const active=sim.activeEdges.filter(e=>e.status==="active");
+  const broken=sim.activeEdges.filter(e=>e.status==="broken");
+  const simulated=sim.activeEdges.filter(e=>e.origin==="simulated"&&e.status==="active");
+  const cnt={};
+  active.forEach(e=>{cnt[e.a]=(cnt[e.a]||0)+1;cnt[e.b]=(cnt[e.b]||0)+1;});
+  const isolated=live.filter(a=>TYPE_CFG[a.type].living&&!(cnt[a.name]||0)).length;
+  const seen=new Set();let maxComp=0;
+  live.forEach(a=>{
+    if(seen.has(a.name))return;
+    const comp=[a.name];seen.add(a.name);
+    for(let i=0;i<comp.length;i++){
+      sim._neighbors(comp[i]).forEach(nb=>{if(!seen.has(nb)){seen.add(nb);comp.push(nb);}});
+    }
+    if(comp.length>maxComp)maxComp=comp.length;
+  });
+  const brokenEnds=new Set(),simEnds=new Set();
+  broken.forEach(e=>{brokenEnds.add(e.a);brokenEnds.add(e.b);});
+  simulated.forEach(e=>{simEnds.add(e.a);simEnds.add(e.b);});
+  let replaced=0;
+  brokenEnds.forEach(n=>{if(simEnds.has(n))replaced++;});
+  const replaceRate=brokenEnds.size?replaced/brokenEnds.size:0;
+  const netEv=sim.timeline.filter(x=>x.kind==="net");
+  const firstBroken=netEv.find(x=>x.text.includes("关系失效"));
+  const lastBroken=[...netEv].reverse().find(x=>x.text.includes("关系失效"));
+  const span=firstBroken&&lastBroken?Math.max(0,lastBroken.tick-firstBroken.tick):0;
+  return {live:live.length,active:active.length,newE:simulated.length,broken:broken.length,
+    isolated,maxComp,replaceRate,span};
+}
+function netReportBlock(){
+  if(sim.params.dynamicNetwork!==1)return `
+    <div class="seg" style="margin-top:10px"><b>🕸 产业网络</b>
+    <div class="muted">静态对照模式（V1.0 行为）：网络为固定事实关系，不随运行演化。勾选「实验控制 → 网络演化」并重置后，本报告将给出网络建立/断裂/重组的完整分析。</div></div>`;
+  const st=netStats(sim);
+  const picks=[0,5,10,20].map(t=>{
+    const sn=sim.snapshots[t]||sim.snapshots[sim.snapshots.length-1];
+    const act=sn.activeEdges.filter(e=>e.status==="active").length;
+    const brk=sn.activeEdges.filter(e=>e.status==="broken").length;
+    const alive=sn.agents.filter(a=>a.alive).length;
+    return `<td style="text-align:center">活跃 ${alive}<br>有效 ${act}<br>失效 ${brk}</td>`;
+  }).join("");
+  const evs=sim.timeline.filter(x=>x.kind==="net").slice(-12).map(e=>{
+    const isNew=e.text.includes("新合作")||e.text.includes("主体进入");
+    return `<tr><td>t=${e.tick}</td><td>${isNew?"建立":"失效"}</td><td style="text-align:left">${escapeHtml(e.text)}</td></tr>`;
+  }).join("");
+  return `
+    <div class="seg" style="margin-top:10px"><b>🕸 产业网络演化与冲击传播分析</b>（动态网络模式）
+    <table style="margin-top:6px"><thead><tr><th style="text-align:left">指标</th><th>本局终值</th><th style="text-align:left">说明</th></tr></thead><tbody>
+      <tr><td style="text-align:left">活跃主体数</td><td>${st.live}</td><td style="text-align:left">仍参与本局经济活动的主体</td></tr>
+      <tr><td style="text-align:left">有效经营关系数</td><td>${st.active}</td><td style="text-align:left">真实参与传播的活跃连接</td></tr>
+      <tr><td style="text-align:left">新建关系数</td><td>${st.newE}</td><td style="text-align:left">模拟中自行生成的合作（origin=simulated，非真实商业联系）</td></tr>
+      <tr><td style="text-align:left">失效关系数</td><td>${st.broken}</td><td style="text-align:left">主体退出 / 冲击波及 / 需求萎缩所致</td></tr>
+      <tr><td style="text-align:left">孤立主体数</td><td>${st.isolated}</td><td style="text-align:left">存活但失去全部有效合作的经营主体</td></tr>
+      <tr><td style="text-align:left">最大连通分量</td><td>${st.maxComp}</td><td style="text-align:left">仍连成一个主要网络的存续主体数</td></tr>
+      <tr><td style="text-align:left">供应替代率</td><td>${(st.replaceRate*100).toFixed(0)}%</td><td style="text-align:left">断链端点中获得新替代合作的比例</td></tr>
+      <tr><td style="text-align:left">网络稳定用时</td><td>${st.span} 步</td><td style="text-align:left">首次失效到最后一次失效的间隔（口径：以失效事件计）</td></tr>
+    </tbody></table>
+    <b>四时点快照</b>
+    <table style="margin-top:6px"><thead><tr><th style="text-align:center">t=0 初始</th><th style="text-align:center">t=5 运行中</th><th style="text-align:center">t=10 冲击期</th><th style="text-align:center">t=20 终局</th></tr></thead><tbody><tr>${picks}</tr></tbody></table>
+    <div class="muted" style="text-align:center">各行：活跃主体 / 有效关系 / 失效关系</div>
+    <b>关系变化记录（近 12 条）</b>
+    <table style="margin-top:6px"><thead><tr><th>时点</th><th>类型</th><th style="text-align:left">变化</th></tr></thead><tbody>${evs||'<tr><td colspan="3" class="muted">— 无网络变化事件</td></tr>'}</tbody></table>
+    <div class="muted" style="margin-top:6px">图例区分：产业链事实关系（蓝）、模拟新合作（绿）、失效关系（红虚线）。新合作是模型推演假设，不是仲恺真实企业间已有商业联系；动态网络开/关都可复现、可对照。</div></div>`;
+}
 function reportHTML(){
   const r=sim.report();const f=r.final;
   const pc=plainConclusion();
@@ -2115,7 +2320,8 @@ function reportHTML(){
     <div class="cell" style="margin:6px 0">存续率：<b>${(r.survivors*100).toFixed(0)}%</b>（在场 ${r.alive.length}）</div>
     <b>产业事件（${r.histEvents.length}）</b><div class="muted">${r.histEvents.map(e=>"· "+escapeHtml(e)).join("<br>")||"—"}</div>
     <b style="display:block;margin-top:6px">退场（${r.deaths.length}）</b><div class="muted" style="color:#c24141">${r.deaths.map(e=>"· "+escapeHtml(e)).join("<br>")||"—"}</div>
-    </div>`;
+    </div>
+    ${netReportBlock()}`;
 }
 function formalReportBlock(){
   const m=experimentState.manifest; if(!m)return "";

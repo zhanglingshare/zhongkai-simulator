@@ -184,6 +184,75 @@ const lb = l2.snapshots.length;
 l2.seek(2);
 ok(l2.snapshots.length === 3 && lb === 6, 'legacy 模式 seek 默认仍截断（V1.0 语义保留）');
 
+/* ---------- 7. 动态自适应产业网络（V1.2 · P1：自主建边/增强/断裂/重组） ---------- */
+console.log('· 动态自适应产业网络（P1：自主建边 / 断供替代 / 可复现）');
+const runNet = (seed, steps) => {
+  const s = new K.Sim(seed, { dynamicNetwork: 1 });
+  for (let t = 0; t < steps; t++) s.step();
+  return s;
+};
+/* 独立随机数流：动态模式开启不影响 legacy 随机序列（P0 已证 legacy 逐位一致）；此处证 netRng 存在且可复现 */
+const n1 = runNet(7, 20), n2 = runNet(7, 20);
+ok(JSON.stringify(n1.activeEdges.map((e) => [e.a, e.b, e.status, e.strength, e.createdTick, e.endedTick])) ===
+   JSON.stringify(n2.activeEdges.map((e) => [e.a, e.b, e.status, e.strength, e.createdTick, e.endedTick])),
+  'P1 同种子 20 步关系演化序列逐位一致（建立/断裂/强度全复现）');
+const simEdges = n1.activeEdges.filter((e) => e.origin === 'simulated');
+ok(simEdges.length > 0, `动态模式产生了模拟新合作（${simEdges.length} 条）`);
+ok(simEdges.every((e) => e.layer === 'dyn' && e.origin === 'simulated' && e.strength > 0 && e.strength <= 1 && e.createdTick > 0),
+  '新合作边：layer=dyn、origin=simulated、强度 0–1（创建时 0.4–0.6，演化中可变）、记录建立时点');
+ok(n1.edges.length === new K.Sim(7, { dynamicNetwork: 1 }).edges.length, '事实网络 this.edges 不被模拟新合作污染（长度不变）');
+/* 断供替代/供应补强：事件记录包含新合作 */
+ok(n1.timeline.some((x) => x.kind === 'net' && x.text.includes('新合作')), '事件记录包含新合作（断供替代或供应补强）');
+/* 新增合作受资源上限约束：任一主体新增活跃合作数 ≤ 其断供损失数 + 1 */
+const countAdded = {};
+n1.timeline.filter((x) => x.kind === 'net' && x.text.includes('新合作')).forEach((x) => {
+  const mm = x.text.match(/新合作：(.+?) ↔ /);
+  if (mm) countAdded[mm[1]] = (countAdded[mm[1]] || 0) + 1;
+});
+ok(Object.values(countAdded).every((c) => c <= 2), '单个主体单步新增合作受上限约束（≤2，断供损失+1）');
+/* legacy 模式：动态机制零副作用，不生成任何模拟新边 */
+const legacySim = new K.Sim(7);
+for (let t = 0; t < 20; t++) legacySim.step();
+ok(legacySim.activeEdges.every((e) => e.origin !== 'simulated'), 'legacy 模式不生成模拟新合作');
+
+/* ---------- 8. 动态自适应产业网络（V1.2 · P2：反馈耦合 / 主体进入） ---------- */
+console.log('· 动态自适应产业网络（P2：网络反馈耦合 / 候选池主体进入）');
+const runFull = (seed) => { const s = new K.Sim(seed, { dynamicNetwork: 1 }); for (let t = 0; t < 20; t++) s.step(); return s; };
+const ent = runFull(99);
+ok(ent.timeline.some((x) => x.kind === 'net' && x.text.includes('主体进入')), '景气好时候选池主体有条件进入（事件记录）');
+ok(ent.agents.length > 24, `主体进入后本局主体数增加（${ent.agents.length} > 24）`);
+const poolNames = new Set(K.CANDIDATES.map((c) => c[0]));
+ok(ent.agents.every((a) => poolNames.has(a.name)), '主体进入只来自候选池，不虚构候选池外真实企业');
+ok(ent.ledger.some((l) => l.type === 'net_consequences'), '网络反馈写入审计记录（net_consequences）');
+const eA = runFull(99), eB = runFull(99);
+ok(JSON.stringify(eA.agents.map((a) => [a.name, a.alive])) === JSON.stringify(eB.agents.map((a) => [a.name, a.alive])),
+  'P2 同种子主体进入序列一致');
+ok(JSON.stringify(eA.activeEdges.map((e) => [e.a, e.b, e.status, e.createdTick])) ===
+   JSON.stringify(eB.activeEdges.map((e) => [e.a, e.b, e.status, e.createdTick])), 'P2 同种子关系演化一致（含进入连边）');
+/* 网络改变模型：动态 vs legacy 指标不同（seed7 已证 36 条关系失效改变传播） */
+const lg7 = new K.Sim(7);
+for (let t = 0; t < 20; t++) lg7.step();
+const dy7 = runFull(7);
+ok(JSON.stringify([lg7.state.abundance, lg7.state.order, lg7.state.disaster, lg7.survivors()]) !==
+   JSON.stringify([dy7.state.abundance, dy7.state.order, dy7.state.disaster, dy7.survivors()]),
+  '动态模式与 legacy 指标不同（网络改变模型，模型改变网络）');
+ok(dy7.activeEdges.filter((e) => e.status === 'active').length < lg7.edges.length,
+  '萧条局动态网络萎缩（活跃关系数 < 初始事实边数）——允许网络变小，不强制恢复');
+
+/* ---------- 9. 动态自适应产业网络（V1.2 · P3：可视化 / 报告章节） ---------- */
+console.log('· 动态自适应产业网络（P3：视图 / 报告章节 / 快照对齐）');
+ok(html.includes('id="net-view"') && html.includes('value="structure"') && html.includes('value="change"') && html.includes('value="risk"'),
+  '推演页提供三种网络视图（结构 / 关系变化 / 风险传播）');
+ok(html.includes('value="dyn"') && html.includes('模拟新合作'), '关系筛选含「模拟新合作」层');
+ok(html.includes('function netStats') && html.includes('function netReportBlock'), '报告含网络统计与章节生成函数');
+ok(html.includes('产业网络演化与冲击传播分析'), '报告章节《产业网络演化与冲击传播分析》');
+ok(html.includes('供应替代率') && html.includes('最大连通分量') && html.includes('孤立主体数') && html.includes('网络稳定用时'),
+  '报告指标齐全（活跃/有效/新建/失效/孤立/连通/替代率/稳定用时）');
+ok(html.includes('四时点快照') && html.includes('关系变化记录'), '报告含四时点快照与关系变化记录');
+const snapSim = new K.Sim(7, { dynamicNetwork: 1 });
+for (let t = 0; t < 20; t++) snapSim.step();
+ok(snapSim.snapshots.every((sn, i) => sn.tick === i), `快照索引与 tick 对齐（${snapSim.snapshots.length} 条：t0 初始 + 20 步）`);
+
 /* ---------- 汇总 ---------- */
 console.log(failed === 0
   ? '✓ verify_all PASS — 回归一致 + 结构完整'
