@@ -3079,101 +3079,39 @@ function switchFateIdent(k){
 }
 function renderFate(){
   const it=FATE_IDENTS[fateState.ident];if(!it)return;
-  const curShocks=()=>fateState.newsShocks||it.shocks;
-  const newsCard=fateState.newsNote?`<div class="news-fate-card">
-    <div class="nf-head">📰 由这条新闻进入的情景</div>
-    <div class="nf-row"><b>新闻事实</b>${escapeHtml(fateState.newsNote.facts)}</div>
-    <div class="nf-row"><b>影响对象/方向</b>${escapeHtml(fateState.newsNote.objects)} · ${escapeHtml(fateState.newsNote.direction)}</div>
-    <div class="nf-row"><b>实验假设（不是新闻数值）</b>${escapeHtml(fateState.newsNote.assumption)}</div>
-  </div>`:"";
-  $("#fate-h2").innerHTML=`把你放进这张网里 <span class="tag">${it.emoji} ${it.label}</span>`;
-  [1,2,3,4].forEach(i=>{$("#fst-"+i).classList.toggle("on",fateState.step===i-1);
-    $("#fst-"+i).classList.toggle("done",fateState.step>i-1);});
-  $("#fate-prev").style.display=(fateState.step===1||fateState.step===3)?"":"none";
+  $("#fate-h2").innerHTML=`${it.emoji} ${it.label}`;
+  /* 去掉四步导航，一页搞定 */
+  for(let i=1;i<=4;i++){const el=$("#fst-"+i);if(el)el.style.display="none";}
+  $("#fate-prev").style.display="none";
   const body=$("#fate-body");
-  if(fateState.step===0){ /* ① 你站在哪看 */
-    body.innerHTML=`<div class="fate-step">
-      <div class="qbig">这件事，你站在哪个位置看？</div>
-      <div class="fate-switch">
-        ${["work","small","boss","shop","live","grad"].map(k=>`<button type="button" class="fs-btn ${k===fateState.ident?"on":""}" onclick="switchFateIdent('${k}')">${FATE_IDENTS[k].emoji} ${FATE_IDENTS[k].label}</button>`).join("")}
-      </div>
-      <div class="fate-scene"><span class="fs-ico">${it.emoji}</span><p>${it.scene}</p></div>
-      ${newsCard}
-      <div class="fate-stats">
-        ${it.stats.map(s=>`<div class="fstat"><b>${s.v}</b><span>${s.l}</span></div>`).join("")}
-      </div>
-    </div>`;
-    $("#fate-next").textContent="看看这件事怎么传 →";
-    $("#fate-next").onclick=()=>{fateState.step=1;renderFate();};
-  }else if(fateState.step===1){ /* ② 发生了什么事：网络演化 */
-    if(!fateState.base){fateState.base=newFateSim();}
-    const s=fateState.base;
-    const it=FATE_IDENTS[fateState.ident];
-    $("#fate-next").style.display="none";
-    $("#fate-prev").style.display="";
-    const tagLine=curShocks().map(n=>{
-      const b=SHOCK_BASIS[n];
-      if(!b)return `<span class="shock-tag lv-none">${n} · 依据待核实</span>`;
-      return `<span class="shock-tag lv-${b.lv}">${n} · ${SHOCK_LV[b.lv][0]}</span>`;
-    }).join("");
-    body.innerHTML=`<div class="fate-step">
-      <h3>🔗 这件事，怎么一步步传过来</h3>
-      <div class="shock-tags">${tagLine}</div>
-      <div class="fate-meta">下面这张网是仲恺的企业、人才与配套关系。一件事发生后，看它怎么在网里传——哪条链先紧、哪条链松。每个事件都标了依据等级（官方统计 / 合理估计 / 待核实），完整出处见「数据与证据」。这是<b>推演演示</b>，不是正在发生的事。</div>
-      <svg id="fate-svg" class="fate-net" viewBox="0 0 340 260" preserveAspectRatio="xMidYMid meet"></svg>
-      <div class="muted" id="fate-play-note" style="text-align:center">正在推进第 0 / 20 步…（可跳过）</div>
-    </div>`;
-    let t=0;
-    fateState.playIv=setInterval(()=>{
-      if(t>=20){clearInterval(fateState.playIv);fateState.playIv=null;
-        $("#fate-play-note").innerHTML="这件事在网里传了 20 步：有的链先紧了，有的合作断了又接上。";
-        $("#fate-next").style.display="";$("#fate-next").textContent="看网会怎样 →";
-        $("#fate-next").onclick=()=>{fateState.step=2;renderFate();};
-        return;
-      }
-      t++;stepFateSim(s);fateNetRender(s,$("#fate-svg"));
-      $("#fate-play-note").innerHTML=`正在推进第 ${t} / 20 步…<button class="btn sm" onclick="skipFatePlay()">跳过 →</button>`;
-    },130);
-    fateNetRender(s,$("#fate-svg"));
-  }else if(fateState.step===2){ /* ③ 网会怎样：极简勾选担忧+机遇 */
-    $("#fate-prev").style.display="";
-    const it=FATE_IDENTS[fateState.ident];
-    body.innerHTML=`<div class="fate-step">
-      <h3>🎯 你最关心哪个？</h3>
-      <div class="fate-meta">这张网现在有几个压力、也有机遇。你最关心哪个？选一个，我们按公开数据跑一遍——看它会怎样影响这张网。<b>这是推演，不是预测。</b></div>
-      <div class="pick-section"><b>⚠️ 你最担心的</b></div>
-      <button class="pick-btn" data-pick="worry1"><span>${it.picks.worry1.label}</span><span class="muted">${it.picks.worry1.desc}</span></button>
-      <button class="pick-btn" data-pick="worry2"><span>${it.picks.worry2.label}</span><span class="muted">${it.picks.worry2.desc}</span></button>
-      <div class="pick-section" style="margin-top:12px"><b>🌟 你最想抓住的机遇</b></div>
-      <button class="pick-btn opp" data-pick="opp1"><span>${it.picks.opp1.label}</span><span class="muted">${it.picks.opp1.desc}</span></button>
-      <button class="pick-btn opp" data-pick="opp2"><span>${it.picks.opp2.label}</span><span class="muted">${it.picks.opp2.desc}</span></button>
-    </div>`;
-    $$(".pick-btn").forEach(b=>b.addEventListener("click",()=>{
-      $$(".pick-btn").forEach(x=>x.style.borderColor="var(--line)");
-      b.style.borderColor="var(--blue)";
-      fateState.pickedPick=b.dataset.pick;
-      fateState.choice = it.picks[b.dataset.pick].choice || "A";
-      $("#fate-next").style.display="";
-      $("#fate-next").textContent="看现场笔记 →";
-      $("#fate-next").onclick=()=>{fateState.step=3;renderFate();};
-    }));
-    $("#fate-next").style.display="none";
-  }else{ /* ④ 结果与分享 */
-    $("#fate-prev").style.display="none";
+  /* 一页：场景 + 2担忧+2机遇 + 选一个直接出结果 */
+  body.innerHTML=`<div class="fate-step">
+    <div class="fate-scene"><span class="fs-ico">${it.emoji}</span><p>${it.scene}</p></div>
+    <div class="fate-stats">
+      ${it.stats.map(s=>`<div class="fstat"><b>${s.v}</b><span>${s.l}</span></div>`).join("")}
+    </div>
+    <div class="pick-section"><b>⚠️ 你最担心的</b></div>
+    <button class="pick-btn" data-pick="worry1"><span>${it.picks.worry1.label}</span><span class="muted">${it.picks.worry1.desc}</span></button>
+    <button class="pick-btn" data-pick="worry2"><span>${it.picks.worry2.label}</span><span class="muted">${it.picks.worry2.desc}</span></button>
+    <div class="pick-section" style="margin-top:12px"><b>🌟 你最想抓住的机遇</b></div>
+    <button class="pick-btn opp" data-pick="opp1"><span>${it.picks.opp1.label}</span><span class="muted">${it.picks.opp1.desc}</span></button>
+    <button class="pick-btn opp" data-pick="opp2"><span>${it.picks.opp2.label}</span><span class="muted">${it.picks.opp2.desc}</span></button>
+    <div id="fate-result" style="display:none"></div>
+  </div>`;
+  $$("#fate-body .pick-btn").forEach(b=>b.addEventListener("click",()=>{
+    $$("#fate-body .pick-btn").forEach(x=>x.style.borderColor="var(--line)");
+    b.style.borderColor="var(--blue)";
+    fateState.choice = it.picks[b.dataset.pick].choice || "A";
+    fateState.pickedPick=b.dataset.pick;
     const r=runFateChoice(fateState.choice);
     fateState.picked=r;
     const d=r.delta;
     const zs=x=>Math.abs(x)<0.005?"≈0":(x>=0?'+':'−')+Math.abs(x).toFixed(2);
     const suTxt=Math.abs(d.su*100)<0.05?"0.0个百分点":(d.su>=0?'+':'−')+Math.abs(d.su*100).toFixed(1)+"个百分点";
     const suCls=Math.abs(d.su*100)<0.05?"flat":(d.su>=0?'up':'down');
-    body.innerHTML=`<div class="fate-step">
-      <div class="note-card">
-        <div class="nc-tag">📒 现场记录</div>
-        <div class="nc-title">${it.emoji} ${it.label}，你选的是「${it.picks[fateState.pickedPick].label}」</div>
-        <div class="nc-chain">这件事在网里传了 20 步，按公开数据设定参数，跑了一遍</div>
-        <div class="nc-src">依据：仲恺高新区2025统计公报 · 规上工业企业1144家 · 三产增加值330.7亿 · 社零173.4亿</div>
-      </div>
-      <div class="detail-head">同一起点（${r.seed}）下，与「什么都不做」对照，结果区间：</div>
+    $("#fate-result").style.display="";
+    $("#fate-result").innerHTML=`
+      <div class="detail-head" style="margin-top:16px">同一起点（${r.seed}）下，与「什么都不做」对照，结果区间：</div>
       <div class="fate-result-grid">
         <div class="cell"><div class="v">${(r.pick.survivors*100).toFixed(0)}%</div><div class="l">存续企业占比</div><div class="fate-delta ${suCls}">${suTxt}</div></div>
         <div class="cell"><div class="v">${r.pick.f.abundance.toFixed(2)}</div><div class="l">景气指数</div><div class="fate-delta ${Math.abs(d.ab)<0.005?'flat':(d.ab>=0?'up':'down')}">${zs(d.ab)}</div></div>
@@ -3181,26 +3119,21 @@ function renderFate(){
         <div class="cell"><div class="v">${r.pick.net.newE} / ${r.pick.net.broken}</div><div class="l">新合作 / 断裂</div></div>
       </div>
       <div class="muted" style="margin-top:10px;font-size:11px;line-height:1.5">↑ 以上为同一起点下的单次推演结果。模型参数基于公开数据设定，未做历史校准；存续比例、景气/风险指数为模型内计算值，不代表现实概率。</div>
-      <div class="share-note">这是公开数据下的推演记录，不是预测：同一起点、同配置，任何人都能复跑出这组数字。</div>
+      <div class="share-note">依据：仲恺高新区2025统计公报 · 规上工业企业1144家 · 三产增加值330.7亿 · 社零173.4亿</div>
       <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-        <button class="btn gold" id="fate-share-dl">⬇ 下载现场记录</button>
+        <button class="btn gold" onclick="drawFateCard(${JSON.stringify(r).replace(/"/g,'&quot;')})">⬇ 下载现场记录</button>
         <button class="btn" id="fate-share-link">🔗 复制可复现链接</button>
-        <button class="btn" id="fate-retry">↻ 换一个关注点再试</button>
       </div>
-      <button class="btn primary ramp-btn" id="fate-to-run">想看看怎么让这张网更好？<b>→ 进动态推演，对比不同情景</b></button>
-    </div>`;
-    $("#fate-share-dl").onclick=()=>drawFateCard(r);
+      <button class="btn primary ramp-btn" onclick="closeFate();openApp('run')">想看看怎么让这张网更好？→ 进动态推演</button>
+    `;
     $("#fate-share-link").onclick=async function(){
       const u=location.origin+location.pathname+`#fate=${fateState.ident}&choice=${fateState.choice}&seed=${r.seed}`;
       this.textContent="复制中…";
       const ok=await copyText(u);
       this.textContent=ok?"✓ 已复制（朋友打开会自动跑同一情景）":"✗ 复制失败，请长按本页链接手动复制";
     };
-    $("#fate-retry").onclick=()=>{fateState.step=2;renderFate();};
-    $("#fate-to-run").onclick=()=>{closeFate();openApp("run");};
-    $("#fate-next").style.display="";$("#fate-next").textContent="完成";
-    $("#fate-next").onclick=closeFate;
-  }
+  }));
+  $("#fate-next").style.display="none";
 }
 function skipFatePlay(){
   if(fateState.playIv){clearInterval(fateState.playIv);fateState.playIv=null;}
