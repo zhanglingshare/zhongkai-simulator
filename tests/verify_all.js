@@ -253,6 +253,22 @@ const snapSim = new K.Sim(7, { dynamicNetwork: 1 });
 for (let t = 0; t < 20; t++) snapSim.step();
 ok(snapSim.snapshots.every((sn, i) => sn.tick === i), `快照索引与 tick 对齐（${snapSim.snapshots.length} 条：t0 初始 + 20 步）`);
 
+/* ---------- 10. 仲恺 2030 · 一分钟命运实验（V1.2b · 大众入口） ---------- */
+console.log('· 大众入口（一分钟命运实验：身份 / 冲击 / 选择 / 结果 / 分享卡）');
+ok(html.includes('仲恺 2030 · 未来实验') && html.includes('五年后的仲恺，你还会选择留在这里吗？'),
+  '首页第一句从「2000 亿目标」改为个人问题');
+ok(html.includes('data-ident="work"') && html.includes('data-ident="shop"') && html.includes('data-ident="live"') && html.includes('data-ident="grad"'),
+  '四个生活身份入口（上班/开店/生活/毕业）');
+ok(html.includes('id="fate-modal"') && html.includes('id="fate-svg"') && html.includes('id="fate-share-dl"'),
+  '一分钟命运实验（冲击播放 / 决策 / 分享卡）结构完整');
+ok(html.includes('FATE_CHOICES') && html.includes('invest:.50') && html.includes('service:.45') && html.includes('talentBoost'),
+  '三决策选项映射到已有内核干预（投资/服务业/人才近似）');
+ok(html.includes('尚未实证标定') && html.includes('不宣称三者现实等价') && html.includes('模型不计算房价'),
+  '边界声明：未标定近似 / 不等价比较 / 房价未建模 均如实标注');
+ok(html.includes('id="entry-explore"') && html.includes('id="entry-formal"'), '专业工作台入口保留（快速探索/正式研究）');
+ok(html.includes('routeHash') && html.includes('#fate=') && html.includes('choice='), '可复现 hash 路由（同情景分享）');
+ok(html.includes('fateMechanism') && html.includes('慢变量'), '结果解释含「慢变量/模型边界」诚实措辞');
+
 /* ---------- 汇总 ---------- */
 console.log(failed === 0
   ? '✓ verify_all PASS — 回归一致 + 结构完整'

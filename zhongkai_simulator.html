@@ -73,6 +73,31 @@
   .ability b{display:block;font-size:13px;margin-bottom:3px}
   .ability .muted{font-size:11.5px}
   @media (max-width:1100px){.ability-grid{grid-template-columns:repeat(2,1fr)}.entry-row{grid-template-columns:1fr}}
+  /* ---------- 仲恺 2030 · 未来实验（身份入口） ---------- */
+  .fate-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:10px}
+  .fate-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 16px;cursor:pointer;transition:box-shadow .15s,border-color .15s,transform .12s;position:relative;overflow:hidden}
+  .fate-card:hover{border-color:var(--blue);box-shadow:0 8px 24px rgba(36,88,198,.10);transform:translateY(-2px)}
+  .fate-card .fate-emoji{font-size:30px;line-height:1}
+  .fate-card .fate-title{font-size:15px;font-weight:700;margin:8px 0 4px;color:var(--ink)}
+  .fate-card .fate-q{font-size:12.5px;color:var(--sub);line-height:1.55;min-height:56px}
+  .fate-card .fate-go{font-size:12.5px;color:var(--blue);font-weight:600;margin-top:8px}
+  .fate-card::after{content:"";position:absolute;right:-24px;top:-24px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,rgba(36,88,198,.07),transparent 70%)}
+  @media (max-width:1100px){.fate-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:640px){.fate-grid{grid-template-columns:1fr}}
+  .fate-step h3{margin:0 0 8px;font-size:15.5px}
+  .fate-net{width:100%;height:300px;display:block;background:#0f172a;border-radius:10px;margin:8px 0}
+  .fate-meta{font-size:12px;color:var(--sub);margin:6px 0}
+  .fate-result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+  .fate-result-grid .cell{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center}
+  .fate-result-grid .v{font-size:17px;font-weight:700}
+  .fate-result-grid .l{font-size:11px;color:var(--sub)}
+  .fate-delta{font-size:11.5px;font-weight:600}
+  .fate-delta.up{color:var(--good)}.fate-delta.down{color:var(--bad)}
+  .fate-choice{display:block;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0;cursor:pointer;background:#fff;text-align:left;width:100%}
+  .fate-choice:hover{border-color:var(--blue)}
+  .fate-choice b{font-size:13.5px;display:block}
+  .fate-choice .muted{font-size:12px;margin-top:3px}
+  .share-note{font-size:11.5px;color:var(--sub);background:#f8fafc;border:1px dashed var(--line);border-radius:8px;padding:8px 10px;margin-top:10px}
   /* ---------- 推演工作台 ---------- */
   .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
   .kpi{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center}
@@ -192,30 +217,57 @@
   </aside>
 
   <main>
-    <!-- ============ ① 概览 ============ -->
+    <!-- ============ ① 概览（仲恺 2030 · 未来实验） ============ -->
     <section id="view-home" class="view on">
       <div class="hero">
-        <h1>仲恺高新区 · 产业协同实验室</h1>
-        <p class="sub">区域经济多主体仿真实验平台：把产业链依赖、企业行为与政策干预放进同一个可重复运行的实验环境。</p>
+        <h1>仲恺 2030 · 未来实验</h1>
+        <p class="sub" style="font-size:17px;font-weight:700;color:#fff">五年后的仲恺，你还会选择留在这里吗？</p>
+        <p class="sub">一座工业强区的未来，不只有产值，还有工作、家庭、小店和每个人的选择。</p>
         <div class="metas">
-          <span>基准世界 <b>2025</b></span><span><b>41</b> 个候选主体</span><span><b>71</b> 条基础关系</span><span><b>15</b> 条时序因果链</span><span>单文件 · 零依赖 · 断网可用</span>
+          <span>2025 真实基准（公开）：GDP <b>1160.39 亿</b></span><span>规上工业 <b>1144 家</b></span><span>高企 <b>1053 家</b></span><span>单文件 · 零依赖 · 断网可用</span>
         </div>
       </div>
-      <div class="hook"><span class="q">仲恺的下一问：</span>产值破 <span class="num">4000 亿</span>，工业投资却 <span class="num">−23.6%</span>——链主一走，配套会成片死吗？用 <span class="num">1000 次</span>重跑找答案。</div>
-      <div class="entry-row">
-        <div class="entry" id="entry-explore">
-          <h3>快速探索</h3>
-          <p>直接运行已有实验，观察动态网络、主体行为与指标变化。结果标注为「探索性模拟」。</p>
-          <div class="go">进入探索 →</div>
+      <div class="fate-grid">
+        <div class="fate-card" data-ident="work">
+          <div class="fate-emoji">👷</div>
+          <div class="fate-title">我在仲恺上班</div>
+          <div class="fate-q">大企业订单波动，会不会影响我的工作机会？</div>
+          <div class="fate-go">从我的问题开始 →</div>
         </div>
-        <div class="entry" id="entry-formal">
-          <h3>正式研究</h3>
-          <p>明确研究问题、检查世界结构、审查参数证据、锁定事前预判，生成可审计的实验档案。</p>
-          <div class="go">准备研究 →</div>
+        <div class="fate-card" data-ident="shop">
+          <div class="fate-emoji">🏪</div>
+          <div class="fate-title">我在仲恺开店</div>
+          <div class="fate-q">大企业订单减少，会不会影响周边消费？</div>
+          <div class="fate-go">从我的问题开始 →</div>
+        </div>
+        <div class="fate-card" data-ident="live">
+          <div class="fate-emoji">🏠</div>
+          <div class="fate-title">我在仲恺生活</div>
+          <div class="fate-q">产业发展和城市公共服务，能不能更协调？</div>
+          <div class="fate-go">从我的问题开始 →</div>
+        </div>
+        <div class="fate-card" data-ident="grad">
+          <div class="fate-emoji">🎓</div>
+          <div class="fate-title">我想留在仲恺</div>
+          <div class="fate-q">刚毕业，要不要留下来找工作？</div>
+          <div class="fate-go">从我的问题开始 →</div>
         </div>
       </div>
+      <div class="muted" style="margin:8px 2px 14px;font-size:12.5px">选择身份 → 体验一场产业冲击 → 做一次决策 → 看模型如何变化。结果不是个人命运预测，而是「同一情景下不同选择」的模型内比较，可复现、可对照。</div>
       <div class="card">
-        <h2>现有研究能力</h2>
+        <h2>专业工作台 <span class="tag">研究 / 数据 / 完整实验</span></h2>
+        <div class="entry-row">
+          <div class="entry" id="entry-explore">
+            <h3>快速探索</h3>
+            <p>直接运行已有实验，观察动态网络、主体行为与指标变化。结果标注为「探索性模拟」。</p>
+            <div class="go">进入探索 →</div>
+          </div>
+          <div class="entry" id="entry-formal">
+            <h3>正式研究</h3>
+            <p>明确研究问题、检查世界结构、审查参数证据、锁定事前预判，生成可审计的实验档案。</p>
+            <div class="go">准备研究 →</div>
+          </div>
+        </div>
         <div class="ability-grid">
           <div class="ability"><b>🕸 产业网络</b><span class="muted">主体与关系 · 动态演化</span></div>
           <div class="ability"><b>⚡ 冲击实验</b><span class="muted">14 种情景 · 每个都标依据</span></div>
@@ -497,6 +549,25 @@
 <div class="drawer" id="drawer">
   <button class="close" id="drawer-close">✕</button>
   <div id="drawer-body"></div>
+</div>
+
+<!-- 仲恺 2030 · 一分钟命运实验 -->
+<div class="modal-mask" id="fate-modal">
+  <div class="modal" style="max-width:860px">
+    <h2 id="fate-h2">仲恺 2030 · 一分钟命运实验 <span class="tag" id="fate-ident-tag"></span></h2>
+    <div class="steps">
+      <div class="st on" id="fst-1">① 你的问题</div>
+      <div class="st" id="fst-2">② 冲击发生</div>
+      <div class="st" id="fst-3">③ 你的选择</div>
+      <div class="st" id="fst-4">④ 结果与分享</div>
+    </div>
+    <div id="fate-body"></div>
+    <div class="actions">
+      <button class="btn" id="fate-cancel">关闭</button>
+      <button class="btn" id="fate-prev" style="display:none">← 上一步</button>
+      <button class="btn primary" id="fate-next">下一步 →</button>
+    </div>
+  </div>
 </div>
 
 <!-- 正式研究 · 实验准备向导 -->
@@ -1550,6 +1621,300 @@ $("#entry-explore").onclick=()=>{
   switchView("run");
 };
 $("#entry-formal").onclick=()=>{openPrep();};
+
+/* ================= 仲恺 2030 · 一分钟命运实验（大众入口，V1.2b） ================= */
+const FATE_IDENTS={
+  work:{emoji:"👷",label:"我在仲恺上班",q:"大企业订单波动，会不会影响我的工作机会？",
+    data:"2025 公开：规上工业企业 1144 家 · 高新技术企业 1053 家 · 工业总产值 4164 亿（A 级）",
+    mech:"模型内可观察：链主订单冲击 → 配套企业存续与产业协同；个人就业结果未建模，以下为可能传导机制，不是预测。"},
+  shop:{emoji:"🏪",label:"我在仲恺开店",q:"大企业订单减少，会不会影响周边消费？",
+    data:"2025 公开：社会消费品零售总额 173.40 亿，+5.3%（A 级）",
+    mech:"模型内可观察：配套主体承压 → 生产性服务网络覆盖变化；小店营业额未建模，以下为可能机制。"},
+  live:{emoji:"🏠",label:"我在仲恺生活",q:"产业发展和城市公共服务，能不能更协调？",
+    data:"政策方向：「产业旺、城市兴、人安好」（公开文件表述）；房价 / 学位 / 医院未建模",
+    mech:"模型不计算房价与公共服务供需；以下展示模型内可观察的服务网络与载体设施变化。"},
+  grad:{emoji:"🎓",label:"我想留在仲恺",q:"刚毕业，要不要留下来找工作？",
+    data:"政策方向：就业与人才引进（公开文件表述）；个体求职结果未建模",
+    mech:"模型内可观察：景气与人才主体存续；个人求职结果未建模，以下为可能机制。"}
+};
+const FATE_CHOICES={
+  A:{label:"稳定生产与供应",short:"稳定生产",
+    note:"对应模型内「扭转投资」杠杆：稳住项目投产与生产秩序（投资强度 +0.15）。",
+    params:{invest:.50}},
+  B:{label:"服务业与供应链重新连接",short:"服务业重连",
+    note:"对应模型内「补生产性服务业」杠杆：物流、检测、融资、研发重新连上产业链（服务业配套 +0.15）。",
+    params:{service:.45}},
+  C:{label:"增强人才与企业长期发展能力",short:"人才长期",
+    note:"模型内以「人才主体韧性 +0.1」近似（talent 主体经营能量上调）；人才政策效果尚未实证标定，仅作情景对比。",
+    params:{talentBoost:1}}
+};
+const fateState={ident:null,step:0,choice:null,base:null,picked:null,playIv:null};
+function openFate(ident){
+  fateState.ident=ident;fateState.step=0;fateState.choice=null;fateState.base=null;fateState.picked=null;
+  $("#fate-modal").classList.add("on");
+  renderFate();
+}
+function closeFate(){
+  $("#fate-modal").classList.remove("on");
+  if(fateState.playIv){clearInterval(fateState.playIv);fateState.playIv=null;}
+}
+function renderFate(){
+  const it=FATE_IDENTS[fateState.ident];if(!it)return;
+  $("#fate-h2").innerHTML=`仲恺 2030 · 一分钟命运实验 <span class="tag">${it.emoji} ${it.label}</span>`;
+  [1,2,3,4].forEach(i=>{$("#fst-"+i).classList.toggle("on",fateState.step===i-1);
+    $("#fst-"+i).classList.toggle("done",fateState.step>i-1);});
+  $("#fate-prev").style.display=(fateState.step===1||fateState.step===3)?"":"none";
+  const body=$("#fate-body");
+  if(fateState.step===0){ /* ① 你的问题 */
+    body.innerHTML=`<div class="fate-step">
+      <h3>${it.emoji} ${it.q}</h3>
+      <div class="fate-meta">${it.data}</div>
+      <div class="ivw"><b>这个模拟器能算什么</b>
+        <div class="muted" style="margin-top:4px">产业网络演化、企业存续、景气/风险/协同、冲击传播——都是模型内可复现计算。</div></div>
+      <div class="ivw" style="margin-top:8px"><b>它不算什么</b>
+        <div class="muted" style="margin-top:4px">${it.mech}</div></div>
+      <div class="muted" style="margin-top:10px">下一步：一场真实的冲击会被注入仲恺基准世界（同一起点 7，任何人都能复跑）。</div>
+    </div>`;
+    $("#fate-next").textContent="看这场冲击 →";
+    $("#fate-next").onclick=()=>{fateState.step=1;renderFate();startFatePlay();};
+  }else if(fateState.step===1){ /* ② 冲击发生：播放 */
+    if(!fateState.base){fateState.base=buildFateSim();}
+    const s=fateState.base;
+    $("#fate-next").style.display="none";
+    $("#fate-prev").style.display="";
+    body.innerHTML=`<div class="fate-step">
+      <h3>⚡ 一场冲击正在发生：链主外迁 + 芯片断供</h3>
+      <div class="fate-meta">同一情景有现实苗头：外需波动与关键零部件断供风险均有公开讨论；模型内以「链主外迁 + 芯片断供」双冲击注入（tick 5）。</div>
+      <svg id="fate-svg" class="fate-net" viewBox="0 0 340 260" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="muted" id="fate-play-note" style="text-align:center">正在推进第 0 / 20 步…（可跳过）</div>
+    </div>`;
+    let t=0;
+    fateState.playIv=setInterval(()=>{
+      if(t>=20){clearInterval(fateState.playIv);fateState.playIv=null;
+        $("#fate-play-note").innerHTML="冲击演化了 20 步：有的关系断裂，有的主体退出，有的合作重新建立。";
+        $("#fate-next").style.display="";$("#fate-next").textContent="轮到我的选择 →";
+        $("#fate-next").onclick=()=>{fateState.step=2;renderFate();};
+        return;
+      }
+      t++;s.step();fateNetRender(s,$("#fate-svg"));
+      $("#fate-play-note").innerHTML=`正在推进第 ${t} / 20 步…<button class="btn sm" onclick="skipFatePlay()">跳过 →</button>`;
+    },130);
+    fateNetRender(s,$("#fate-svg"));
+  }else if(fateState.step===2){ /* ③ 你的选择 */
+    $("#fate-prev").style.display="";
+    body.innerHTML=`<div class="fate-step">
+      <h3>现在，轮到你作决定</h3>
+      <div class="fate-meta">2030 年之前，一家重要链主遭遇外部订单冲击，配套承压、部分合作中断。你只有有限的政策资源，先处理什么？</div>
+      ${Object.keys(FATE_CHOICES).map(k=>{const c=FATE_CHOICES[k];
+        return `<button class="fate-choice" data-c="${k}"><b>${c.label}</b><span class="muted">${c.note}</span></button>`;}).join("")}
+      <div class="muted" style="margin-top:8px">三个选项对应模型内不同的干预力度；<b>尚未实证标定的部分已注明，不宣称三者现实等价或可直接比较</b>。</div>
+    </div>`;
+    $$(".fate-choice").forEach(b=>b.addEventListener("click",()=>{
+      $$(".fate-choice").forEach(x=>x.style.borderColor="var(--line)");
+      b.style.borderColor="var(--blue)";
+      fateState.choice=b.dataset.c;
+      $("#fate-next").style.display="";$("#fate-next").textContent="看结果 →";
+      $("#fate-next").onclick=()=>{fateState.step=3;renderFate();};
+    }));
+    $("#fate-next").style.display="none";
+  }else{ /* ④ 结果与分享 */
+    $("#fate-prev").style.display="none";
+    const r=runFateChoice(fateState.choice);
+    fateState.picked=r;
+    const d=r.delta;
+    body.innerHTML=`<div class="fate-step">
+      <h3>📊 结果：你选择了「${FATE_CHOICES[fateState.choice].short}」</h3>
+      <div class="fate-meta">同一起点（${r.seed}）· 同一双冲击 · 模型内计算 20 步；与「什么都不做」对照相比：</div>
+      <div class="fate-result-grid">
+        <div class="cell"><div class="v">${(r.pick.survivors*100).toFixed(0)}%</div><div class="l">存续（选了之后）</div><div class="fate-delta ${d.su>=0?'up':'down'}">${d.su>=0?'+':'−'}${Math.abs(d.su*100).toFixed(1)}pp</div></div>
+        <div class="cell"><div class="v">${r.pick.f.abundance.toFixed(2)}</div><div class="l">景气</div><div class="fate-delta ${d.ab>=0?'up':'down'}">${d.ab>=0?'+':''}${d.ab.toFixed(2)}</div></div>
+        <div class="cell"><div class="v">${r.pick.f.disaster.toFixed(2)}</div><div class="l">风险</div><div class="fate-delta ${d.di<=0?'up':'down'}">${d.di<=0?'−':'+'}${Math.abs(d.di).toFixed(2)}</div></div>
+        <div class="cell"><div class="v">${r.pick.net.newE} / ${r.pick.net.broken}</div><div class="l">新合作 / 断裂</div></div>
+      </div>
+      <div class="ivw"><b>${it.emoji} 这跟你有什么关系</b>
+        <div class="muted" style="margin-top:4px">${fateMechanism(fateState.ident,r)}</div></div>
+      <div class="share-note">模拟结果不是现实预测：同一起点、同配置，任何人都能复跑出这组数字。已标注的近似/未建模部分不构成政策建议。</div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn gold" id="fate-share-dl">⬇ 下载我的未来实验卡</button>
+        <button class="btn" id="fate-share-link">🔗 复制可复现链接</button>
+        <button class="btn" id="fate-retry">↻ 换一种选择再试</button>
+      </div>
+    </div>`;
+    $("#fate-share-dl").onclick=()=>drawFateCard(r);
+    $("#fate-share-link").onclick=()=>{
+      const u=location.origin+location.pathname+`#fate=${fateState.ident}&choice=${fateState.choice}&seed=${r.seed}`;
+      copyText(u);$("#fate-share-link").textContent="✓ 已复制（朋友打开会自动跑同一情景）";
+    };
+    $("#fate-retry").onclick=()=>{fateState.step=2;renderFate();};
+    $("#fate-next").style.display="";$("#fate-next").textContent="完成";
+    $("#fate-next").onclick=closeFate;
+  }
+}
+function skipFatePlay(){
+  if(fateState.playIv){clearInterval(fateState.playIv);fateState.playIv=null;}
+  const s=fateState.base;
+  while(s.tick<20)s.step();
+  fateNetRender(s,$("#fate-svg"));
+  $("#fate-play-note").innerHTML="冲击演化了 20 步：有的关系断裂，有的主体退出，有的合作重新建立。";
+  $("#fate-next").style.display="";$("#fate-next").textContent="轮到我的选择 →";
+  $("#fate-next").onclick=()=>{fateState.step=2;renderFate();};
+}
+function buildFateSim(){
+  const s=new Sim(7,{dynamicNetwork:1});
+  while(s.tick<5)s.step();
+  s.shock("链主外迁");s.shock("芯片断供");
+  return s;
+}
+function runFateChoice(choice){
+  const seed=7,cfg=FATE_CHOICES[choice];
+  const baseSim=buildFateSim();
+  while(baseSim.tick<20)baseSim.step();
+  const pickSim=new Sim(seed,{dynamicNetwork:1,...cfg.params});
+  while(pickSim.tick<5)pickSim.step();
+  if(cfg.params.talentBoost){ /* 人才近似：talent 主体韧性上调（模型内，未实证标定） */
+    pickSim.agents.filter(a=>a.alive&&a.type==="talent").forEach(a=>a.energy=clamp(a.energy+.1,0,1));
+    pickSim._log("fate_choice",{choice,note:"人才韧性近似，未实证标定"});
+  }
+  pickSim.shock("链主外迁");pickSim.shock("芯片断供");
+  while(pickSim.tick<20)pickSim.step();
+  const num=s=>s.report().final;
+  return {seed,choice,sim:pickSim,
+    base:{f:num(baseSim),survivors:baseSim.survivors(),net:netStats(baseSim)},
+    pick:{f:num(pickSim),survivors:pickSim.survivors(),net:netStats(pickSim)},
+    delta:{ab:num(pickSim).abundance-num(baseSim).abundance,
+           di:num(pickSim).disaster-num(baseSim).disaster,
+           su:pickSim.survivors()-baseSim.survivors()}};
+}
+function fateMechanism(ident,r){
+  const d=r.delta;
+  let head;
+  if(Math.abs(d.su)<0.005&&r.choice==="C"){
+    head=`模型内：这一选择在 20 步冲击窗口里几乎没改变结果（存续 ${(d.su*100).toFixed(1)}pp）——人才是慢变量，短期冲击期不显效。这不是选项无效，而是模型边界：长期政策需要更长窗口与实证标定才能评估。`;
+  }else if(d.su>=0){
+    head=`模型内：你的选择把存续率抬高了 ${(d.su*100).toFixed(1)} 个百分点，配套企业少退了一排。`;
+  }else{
+    head=`模型内：这一选择没有明显托住存续率（${(d.su*100).toFixed(1)}pp）。`;
+  }
+  const risk=d.di<=0?`风险端降了 ${Math.abs(d.di).toFixed(2)}，链条没有再传染。`:`风险端仍上行 ${d.di.toFixed(2)}。`;
+  const map={
+    work:`${head}${risk} 对「上班」的可能传导：配套企业留存 → 用工需求相对稳定；链条断裂会先体现在招聘减少与上下游观望（机制说明，非个人就业预测）。`,
+    shop:`${head}${risk} 对「开店」的可能传导：配套企业存活 → 园区周边消费人群与生产性服务需求相对稳定；周边小店营业额未建模。`,
+    live:`${head}${risk} 对「生活」的可能传导：服务网络覆盖变化 → 城市公共服务的产业侧支撑；房价 / 学位 / 医院未建模。`,
+    grad:`${head}${risk} 对「毕业选择」的可能传导：景气与企业存续 → 岗位供给与留人意愿；个人求职结果未建模。`
+  };
+  return map[ident]||head+risk;
+}
+function fateNetRender(s,el){
+  if(!el)return;
+  const W=340,H=260;
+  const pos=layoutForce(s.agents,s.edges,W,H);
+  let h="";
+  s.activeEdges.forEach(e=>{
+    const p=pos[e.a],q=pos[e.b];if(!p||!q)return;
+    if(e.status==="broken")h+=`<line x1="${p.x}" y1="${p.y}" x2="${q.x}" y2="${q.y}" stroke="#c24141" stroke-width="1.3" stroke-dasharray="5 4" opacity=".55"></line>`;
+    else if(e.origin==="simulated")h+=`<line x1="${p.x}" y1="${p.y}" x2="${q.x}" y2="${q.y}" stroke="#23b88f" stroke-width="2"></line>`;
+    else h+=`<line x1="${p.x}" y1="${p.y}" x2="${q.x}" y2="${q.y}" stroke="#7895bc" stroke-width="1" opacity=".7"></line>`;
+  });
+  s.agents.forEach(a=>{
+    const p=pos[a.name];if(!p)return;
+    if(a.alive){const r=3+Math.round(a.energy*5);
+      h+=`<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${typeColor(a.type)}" opacity=".92"></circle>`;}
+    else h+=`<circle cx="${p.x}" cy="${p.y}" r="3" fill="#64748b" opacity=".5"></circle>`;
+  });
+  el.innerHTML=h;
+}
+function drawFateCard(r){
+  const it=FATE_IDENTS[fateState.ident],ch=FATE_CHOICES[r.choice];
+  const cv=document.createElement("canvas");cv.width=1080;cv.height=1350;
+  const g=cv.getContext("2d");
+  const grad=g.createLinearGradient(0,0,0,1350);grad.addColorStop(0,"#0f172a");grad.addColorStop(1,"#1e293b");
+  g.fillStyle=grad;g.fillRect(0,0,1080,1350);
+  g.fillStyle="#fbbf24";g.font="800 52px system-ui";g.fillText("仲恺 2030 · 我的未来实验",60,110);
+  g.fillStyle="#e2e8f0";g.font="600 40px system-ui";g.fillText(`${it.emoji} ${it.label}`,60,190);
+  g.fillStyle="#94a3b8";g.font="26px system-ui";g.fillText("五年后的仲恺，你还会选择留在这里吗？",60,250);
+  g.fillStyle="#ffffff";g.font="700 44px system-ui";g.fillText(`我选择了「${ch.short}」`,60,350);
+  g.fillStyle="#cbd5e1";g.font="24px system-ui";wrapText(g,`${ch.note}`,60,400,960,34,2);
+  const cy0=560,cw=280,gap=30;
+  const cells=[
+    {v:(r.pick.survivors*100).toFixed(0)+"%",l:"存续（选了之后）",d:(r.delta.su>=0?"+":"−")+Math.abs(r.delta.su*100).toFixed(1)+"pp"},
+    {v:r.pick.f.abundance.toFixed(2),l:"景气",d:(r.delta.ab>=0?"+":"")+r.delta.ab.toFixed(2)},
+    {v:r.pick.f.disaster.toFixed(2),l:"风险",d:(r.delta.di<=0?"−":"+")+Math.abs(r.delta.di).toFixed(2)},
+    {v:r.pick.net.newE+" / "+r.pick.net.broken,l:"新合作 / 断裂",d:"模型内"}
+  ];
+  cells.forEach((c,i)=>{
+    const x=60+i*(cw+gap);
+    g.fillStyle="rgba(255,255,255,.06)";roundRect(g,x,cy0,cw,180,16);g.fill();
+    g.fillStyle="#fbbf24";g.font="800 56px system-ui";g.fillText(c.v,x+18,cy0+70);
+    g.fillStyle="#94a3b8";g.font="24px system-ui";g.fillText(c.l,x+18,cy0+112);
+    g.fillStyle=c.d.startsWith("+")?"#34d399":"#f87171";g.font="22px system-ui";g.fillText(c.d,x+18,cy0+148);
+  });
+  /* 迷你网络示意（真实仿真布局：失效红虚线 / 模拟新合作绿 / 事实关系灰） */
+  g.fillStyle="rgba(255,255,255,.04)";roundRect(g,60,800,960,280,16);g.fill();
+  const ppos=layoutForce(r.sim.agents,r.sim.edges,900,240);
+  g.save();g.translate(90,830);
+  r.sim.activeEdges.forEach(e=>{
+    const p=ppos[e.a],q=ppos[e.b];if(!p||!q)return;
+    g.strokeStyle=e.status==="broken"?"rgba(248,113,113,.65)":(e.origin==="simulated"?"rgba(52,211,153,.9)":"rgba(148,163,184,.55)");
+    g.lineWidth=e.status==="broken"?1.6:2.2;
+    g.setLineDash(e.status==="broken"?[7,5]:[]);
+    g.beginPath();g.moveTo(p.x,p.y);g.lineTo(q.x,q.y);g.stroke();
+  });
+  g.setLineDash([]);
+  r.sim.agents.forEach(a=>{
+    const p=ppos[a.name];if(!p)return;
+    g.fillStyle=a.alive?typeColor(a.type):"#475569";
+    g.globalAlpha=a.alive?1:.45;
+    g.beginPath();g.arc(p.x,p.y,a.alive?5.5:3,0,Math.PI*2);g.fill();
+  });
+  g.globalAlpha=1;
+  g.restore();
+  g.fillStyle="#cbd5e1";g.font="22px system-ui";
+  g.fillText(`起点 ${r.seed} · 双冲击（链主外迁+芯片断供）· 模型内 20 步`,60,1140);
+  g.fillStyle="#64748b";g.font="20px system-ui";
+  g.fillText("模拟结果不是现实预测；同一起点、同配置可复跑。",60,1190);
+  g.fillText("部分指标（人才近似等）尚未实证标定，不构成政策建议。",60,1224);
+  g.fillStyle="#334155";g.font="20px system-ui";g.fillText("zhongkai-simulator · 开源可复现",60,1270);
+  cv.toBlob(b=>{
+    const a=document.createElement("a");a.href=URL.createObjectURL(b);
+    a.download="仲恺未来实验卡.png";a.click();
+  },"image/png");
+}
+function wrapText(g,txt,x,y,maxW,lh,maxLines){
+  const words=String(txt).split("");
+  let line="",ln=0;
+  for(const ch of words){
+    if(g.measureText(line+ch).width>maxW){g.fillText(line,x,y+ln*lh);line=ch;ln++;
+      if(ln>=maxLines){g.fillText(line.slice(0,Math.max(0,line.length-1))+"…",x,y+ln*lh);return;}}
+    else line+=ch;
+  }
+  if(line)g.fillText(line,x,y+ln*lh);
+}
+function roundRect(g,x,y,w,h,r){
+  g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);
+  g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();
+}
+function copyText(txt){
+  const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);
+  ta.select();try{document.execCommand("copy");}catch(e){}
+  document.body.removeChild(ta);
+}
+$$(".fate-card").forEach(c=>c.addEventListener("click",()=>openFate(c.dataset.ident)));
+$("#fate-cancel").onclick=closeFate;
+$("#fate-prev").onclick=()=>{if(fateState.step===1){if(fateState.playIv){clearInterval(fateState.playIv);fateState.playIv=null;}fateState.step=0;renderFate();}
+  else if(fateState.step===3){fateState.step=2;renderFate();}};
+/* hash 路由：打开 #fate=ident&choice=X&seed=N 自动重跑同情景 */
+function routeHash(){
+  const h=location.hash;
+  if(!h||!h.includes("fate="))return;
+  const qs=new URLSearchParams(h.slice(1));
+  const ident=qs.get("fate"),choice=qs.get("choice"),seed=parseInt(qs.get("seed")||"7",10);
+  if(!ident||!FATE_IDENTS[ident])return;
+  fateState.ident=ident;fateState.choice=choice&&FATE_CHOICES[choice]?choice:"A";
+  $("#fate-modal").classList.add("on");
+  fateState.step=3;renderFate();
+}
+addEventListener("hashchange",routeHash);
+routeHash();
 
 /* ================= 基础渲染 ================= */
 function refreshSelectors(){

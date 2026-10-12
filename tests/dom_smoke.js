@@ -23,6 +23,8 @@ global.document = {
 };
 global.window = global;
 global.alert = () => {};
+global.addEventListener = () => {};
+global.location = { origin: 'x', pathname: '/x.html', hash: '' };
 global.requestAnimationFrame = (f) => f();
 
 const fs = require('fs');
