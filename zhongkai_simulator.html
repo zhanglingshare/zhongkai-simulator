@@ -282,22 +282,16 @@ p{font-size:14px;line-height:1.7;color:var(--sub)}
 <!-- ============ 第11页 全要素推演 ============ -->
 <div class="page" id="p-windtunnel">
   <div class="card">
-    <h2>🌪 全要素综合推演</h2>
-    <p>高阶战略版本：综合产业、投资、政策、外部环境等全要素，进行压力测试与情景推演。</p>
+    <h2>🌪 全要素综合推演 <span class="tag">高阶战略工作台</span></h2>
+    <p>这是最完整的推演版本：41个真实主体、71条关系、15条因果链，产业网络会自己演化。
+    可以播放、单步、注入冲击、移除主体、用自然语言下指令，观察景气、协同、风险、信心、存续的实时变化。</p>
   </div>
-  <div class="card">
-    <h3>参数调节</h3>
-    <div id="wt-sliders"></div>
-    <button class="btn p" style="margin-top:14px" onclick="runWindtunnel()">▶ 运行全要素推演</button>
+  <div style="background:#0b1220;border:1px solid var(--line);border-radius:12px;overflow:hidden">
+    <iframe src="windtunnel_full.html" style="width:100%;height:calc(100vh - 230px);min-height:640px;border:0;display:block"
+      title="全要素综合推演工作台" loading="lazy"></iframe>
   </div>
-  <div class="card">
-    <h3>推演结果</h3>
-    <div class="nums" id="wt-nums">
-      <div class="num"><div class="v" id="wt-p50">—</div><div class="l">GDP中位数</div></div>
-      <div class="num"><div class="v" id="wt-rate">—</div><div class="l">达标率</div></div>
-      <div class="num"><div class="v" id="wt-range">—</div><div class="l">80%区间</div></div>
-    </div>
-    <div class="chart" id="chart-wt" style="height:320px"></div>
+  <div style="margin-top:10px;text-align:right">
+    <a href="windtunnel_full.html" target="_blank" style="color:var(--blue);font-size:13px">⤢ 全屏打开推演工作台</a>
   </div>
 </div>
 
