@@ -835,9 +835,21 @@
     .lc-card{animation:none}
     .lockscreen,.homescreen,.app-layer,.island{transition-duration:.01ms}
   }
+  /* ============ 正常网页布局（放弃手机外壳） ============ */
+  .phone-frame{width:100%;height:auto;padding:0;border-radius:0;background:none;box-shadow:none;--pf-radius:0}
+  .phone-screen{overflow:visible}
+  .island{display:none}
+  .zeropage,.presspage{display:none !important}
+  .lockscreen{display:none}
+  .homescreen{display:none}
+  .app-layer{position:static;opacity:1;transform:none;pointer-events:auto;display:block}
+  .app-topbar{display:none}
+  header.top{display:flex}
+  .app{display:grid;min-height:calc(100vh - var(--top-h))}
+  aside.side{display:block}
 </style>
 </head>
-<body class="in-phone">
+<body>
 <div class="stage">
   <div class="phone-frame state-locked" id="phone-frame">
     <div class="phone-screen">
