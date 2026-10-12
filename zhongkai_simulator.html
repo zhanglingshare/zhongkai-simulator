@@ -466,6 +466,16 @@
       linear-gradient(180deg,rgba(3,6,16,.40),transparent 20%),
       linear-gradient(0deg,rgba(3,6,16,.62),transparent 28%),
       linear-gradient(180deg,transparent 55%,rgba(3,6,16,.25))}
+  /* 暖心语录：完全作为背景层，逐条缓慢淡入 */
+  .lsw-warm{position:absolute;left:0;right:0;top:42%;height:130px;pointer-events:none;z-index:4}
+  .lsw-warm .lw-q{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    padding:0 34px;font-size:16.5px;font-weight:700;color:#fff;opacity:0;letter-spacing:.3px;
+    text-align:center;line-height:1.5;
+    text-shadow:0 1px 8px rgba(0,0,0,.8),0 0 22px rgba(0,0,0,.55),0 1px 2px rgba(0,0,0,.85);
+    animation:lwc 15s ease-in-out infinite}
+  .lsw-warm .lw-q:nth-child(2){animation-delay:5s}
+  .lsw-warm .lw-q:nth-child(3){animation-delay:10s}
+  @keyframes lwc{0%{opacity:0}6%{opacity:.52}27%{opacity:.52}33%{opacity:0}100%{opacity:0}}
   .ls-top{position:relative;z-index:2;display:flex;justify-content:flex-end;align-items:center;
     padding:16px 26px 0;gap:7px;color:#fff;font-size:13px;font-weight:600}
   .ls-mid{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;align-items:center;
@@ -513,6 +523,19 @@
   .lf-item .lf-t{font-size:12px;line-height:1.3;flex:1;min-width:0;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .lf-item .lf-time{font-size:10px;opacity:.6;flex:none}
+  /* 暖心重点板块：固定凸显 */
+  .ls-warm{background:linear-gradient(160deg,rgba(251,191,36,.18),rgba(251,146,60,.10));
+    border:1px solid rgba(251,191,36,.32);border-radius:18px;padding:11px 13px;
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    box-shadow:0 8px 28px rgba(251,146,60,.14)}
+  .lw-title{font-size:12.5px;font-weight:800;color:#fde68a;margin-bottom:9px;
+    display:flex;align-items:center;gap:6px;letter-spacing:.2px}
+  .lw-item{display:flex;gap:9px;align-items:flex-start;font-size:12px;color:#fef3e2;
+    line-height:1.45;margin-bottom:8px}
+  .lw-item:last-child{margin-bottom:0}
+  .lw-item .lw-ico{flex:none;width:24px;height:24px;border-radius:7px;
+    background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;font-size:13px}
+  .lw-item .lw-t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   /* 主屏 */
   .homescreen{position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;
     padding:0;color:#fff;
@@ -739,6 +762,7 @@
           <i class="lsw-slide" style="background-image:url('images/wallpaper-night.jpg')"></i>
           <i class="lsw-glow"></i>
           <i class="lsw-veil"></i>
+          <div class="lsw-warm" id="lsw-warm"></div>
         </div>
         <div class="ls-top"><span>📶</span><span>📡</span><span>🔋</span></div>
         <div class="ls-mid">
@@ -2495,15 +2519,28 @@ function tickClock(){
   $("#ls-date").textContent=(d.getMonth()+1)+"月"+d.getDate()+"日 "+wk;
 }
 let lockFeedIv=null;
+const WARM_SHORT={
+  "🤝":"骑手路遇车祸，暂停配送守护生命",
+  "💪":"台风里，60名骑手清障护城",
+  "🏊":"潼侨河边，3人合力救起一个生命"
+};
+function renderLockWarm(d){
+  const w=$("#lsw-warm"); if(!w)return;
+  const g=(d.items||[]).filter(x=>x.cat==="gossip").slice(0,3);
+  if(!g.length){w.style.display="none";return;}
+  w.style.display="";
+  w.innerHTML=g.map(x=>`<div class="lw-q">${x.emoji} ${WARM_SHORT[x.emoji]||x.title}</div>`).join("");
+}
 function refreshLockNotify(){
   fetch("hot.json?_="+Date.now()).then(r=>r.json()).then(d=>{
     const n=d.count||0;
     const b=$("#hs-badge-hot");
     if(b){b.textContent=n;b.style.display=n?"flex":"none";}
+    renderLockWarm(d);
     const CATS={livelihood:"🏥",city:"🚇",fun:"🎉",food:"🍜",gossip:"😊",tourism:"🏞️",agriculture:"🌾",industry:"🏭"};
     const byCat={};
     (d.items||[]).forEach(x=>{
-      if(x.cat==="industry")return;
+      if(x.cat==="industry"||x.cat==="gossip")return;
       (byCat[x.cat]=byCat[x.cat]||[]).push(x);
     });
     const cats=Object.keys(byCat);
