@@ -61,6 +61,7 @@ t('选项B=服务业重连', F.FATE_CHOICES.B.params.service === 0.45);
 t('选项C=人才近似标注', F.FATE_CHOICES.C.params.talentBoost === 1 && F.FATE_CHOICES.C.note.includes('未实证标定'));
 
 // 2. 三选项真实可跑 + 结果有差异
+F.fateState.ident = 'work';
 const res = {};
 for (const k of ['A', 'B', 'C']) {
   res[k] = F.runFateChoice(k);
@@ -84,6 +85,39 @@ F.routeHash();
 t('hash 路由进入结果步', F.fateState.ident === 'work' && F.fateState.choice === 'B' && F.fateState.step === 3);
 // 直接打开 renderFate（step3）渲染结果
 try { F.renderFate(); t('结果页渲染不抛错', true); } catch (e) { t('结果页渲染不抛错', false); }
+
+// 4. 验收修复：时间口径统一（动画轨迹 == 基准轨迹，冲击在第 5 步注入，终局 tick=20）
+F.fateState.ident = 'work';
+const base = F.runFateChoice('A').base;
+// 动画轨迹 = newFateSim + 20 次 stepFateSim
+const FNS = eval(m[1] + '\n;newFateSim;'), SFS = eval(m[1] + '\n;stepFateSim;');
+const anim = FNS(); let animBroken = 0;
+for (let i = 0; i < 20; i++) { SFS(anim); animBroken = anim.tick === 5 ? 0 : animBroken; }
+t('动画终局 tick=20（不是 25）', anim.tick === 20);
+t('动画终局与基准逐位一致', JSON.stringify([anim.survivors(), anim.report().final.abundance, anim.report().final.disaster]) ===
+  JSON.stringify([base.survivors, base.f.abundance, base.f.disaster]));
+t('冲击在第 5 步注入（timeline 首条 net 事件 tick=6）', anim.timeline.some(e => e.kind === 'net' && e.tick === 6));
+
+// 5. 验收修复：政策组与基准前 5 步逐位同起点（差异全部来自危机后政策）
+const PNS = eval(m[1] + '\n;newFateSim;');
+const pSim = PNS(); for (let i = 0; i < 5; i++) pSim.step();
+F.injectShocks && F.injectShocks(pSim);
+const bSim = PNS(); for (let i = 0; i < 5; i++) bSim.step();
+F.injectShocks && F.injectShocks(bSim);
+t('政策组与基准在冲击前逐位一致', JSON.stringify({ s: pSim.state, a: pSim.agents.map(x => [x.name, x.alive, x.energy]) }) ===
+  JSON.stringify({ s: bSim.state, a: bSim.agents.map(x => [x.name, x.alive, x.energy]) }));
+
+// 6. 验收修复：四身份差异化冲击（不共用同一组冲击）
+t('身份差异化冲击(work=链主外迁+芯片断供)', JSON.stringify(F.FATE_IDENTS.work.shocks) === JSON.stringify(['链主外迁', '芯片断供']));
+t('身份差异化冲击(shop=订单外流+供应链中断)', JSON.stringify(F.FATE_IDENTS.shop.shocks) === JSON.stringify(['订单外流', '供应链中断']));
+t('身份差异化冲击(live=用地收紧+政策收紧)', JSON.stringify(F.FATE_IDENTS.live.shocks) === JSON.stringify(['用地收紧', '政策收紧']));
+t('身份差异化冲击(grad=人才流失+订单外流)', JSON.stringify(F.FATE_IDENTS.grad.shocks) === JSON.stringify(['人才流失', '订单外流']));
+
+// 7. 验收修复：未定义引用清理 + 布局缓存
+t('startFatePlay 未被引用', !html.includes('startFatePlay'));
+t('fateNetRender 布局缓存', html.includes('fatePosCache') && html.includes('fatePosCacheSeed'));
+t('报告四时点网络图 + 指标改名', html.includes('netSnapSVG') && html.includes('冲击传播时长') && !html.includes('网络稳定用时'));
+t('版本号统一 V1.2b', html.includes('V1.2b') && !html.includes('<span class="ver">V1.0'));
 
 console.log(`FATE SMOKE: ${ok} PASS / ${fail} FAIL`);
 process.exit(fail ? 1 : 0);

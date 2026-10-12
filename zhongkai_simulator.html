@@ -62,6 +62,10 @@
   .hero .sub{color:#b6c4d8;font-size:13.5px;margin:0 0 16px}
   .hero .metas{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#cfe0f4}
   .hero .metas b{color:#fff}
+  .net-snaps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px}
+  .snap{background:#fff;border-radius:8px}
+  .snap-t{font-size:11px;color:var(--mut);text-align:center;padding:3px 0}
+  @media (max-width:720px){.net-snaps{grid-template-columns:repeat(2,1fr)}}
   .entry-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
   .entry{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;cursor:pointer;transition:box-shadow .15s,border-color .15s}
   .entry:hover{border-color:var(--blue);box-shadow:0 6px 20px rgba(36,88,198,.08)}
@@ -187,7 +191,7 @@
 </head>
 <body>
 <header class="top">
-  <div class="brand">🏭 县镇区域经济未来决策 · 产业协同仿真实验室 <span class="ver">V1.0</span></div>
+  <div class="brand">🏭 仲恺 2030 · 未来实验 <span class="ver">V1.2b</span></div>
   <div class="statusbar">
     <span class="pill mode" id="st-mode">探索模拟</span>
     <span class="pill" id="st-world">世界：仲恺基准</span>
@@ -1625,15 +1629,19 @@ $("#entry-formal").onclick=()=>{openPrep();};
 /* ================= 仲恺 2030 · 一分钟命运实验（大众入口，V1.2b） ================= */
 const FATE_IDENTS={
   work:{emoji:"👷",label:"我在仲恺上班",q:"大企业订单波动，会不会影响我的工作机会？",
+    shocks:["链主外迁","芯片断供"],
     data:"2025 公开：规上工业企业 1144 家 · 高新技术企业 1053 家 · 工业总产值 4164 亿（A 级）",
     mech:"模型内可观察：链主订单冲击 → 配套企业存续与产业协同；个人就业结果未建模，以下为可能传导机制，不是预测。"},
   shop:{emoji:"🏪",label:"我在仲恺开店",q:"大企业订单减少，会不会影响周边消费？",
+    shocks:["订单外流","供应链中断"],
     data:"2025 公开：社会消费品零售总额 173.40 亿，+5.3%（A 级）",
     mech:"模型内可观察：配套主体承压 → 生产性服务网络覆盖变化；小店营业额未建模，以下为可能机制。"},
   live:{emoji:"🏠",label:"我在仲恺生活",q:"产业发展和城市公共服务，能不能更协调？",
+    shocks:["用地收紧","政策收紧"],
     data:"政策方向：「产业旺、城市兴、人安好」（公开文件表述）；房价 / 学位 / 医院未建模",
     mech:"模型不计算房价与公共服务供需；以下展示模型内可观察的服务网络与载体设施变化。"},
   grad:{emoji:"🎓",label:"我想留在仲恺",q:"刚毕业，要不要留下来找工作？",
+    shocks:["人才流失","订单外流"],
     data:"政策方向：就业与人才引进（公开文件表述）；个体求职结果未建模",
     mech:"模型内可观察：景气与人才主体存续；个人求职结果未建模，以下为可能机制。"}
 };
@@ -1676,15 +1684,16 @@ function renderFate(){
       <div class="muted" style="margin-top:10px">下一步：一场真实的冲击会被注入仲恺基准世界（同一起点 7，任何人都能复跑）。</div>
     </div>`;
     $("#fate-next").textContent="看这场冲击 →";
-    $("#fate-next").onclick=()=>{fateState.step=1;renderFate();startFatePlay();};
-  }else if(fateState.step===1){ /* ② 冲击发生：播放 */
-    if(!fateState.base){fateState.base=buildFateSim();}
+    $("#fate-next").onclick=()=>{fateState.step=1;renderFate();};
+  }else if(fateState.step===1){ /* ② 冲击发生：播放（tick 0→20，第 5 步注入本身份冲击） */
+    if(!fateState.base){fateState.base=newFateSim();}
     const s=fateState.base;
+    const it=FATE_IDENTS[fateState.ident];
     $("#fate-next").style.display="none";
     $("#fate-prev").style.display="";
     body.innerHTML=`<div class="fate-step">
-      <h3>⚡ 一场冲击正在发生：链主外迁 + 芯片断供</h3>
-      <div class="fate-meta">同一情景有现实苗头：外需波动与关键零部件断供风险均有公开讨论；模型内以「链主外迁 + 芯片断供」双冲击注入（tick 5）。</div>
+      <h3>⚡ 一场冲击正在发生：${it.shocks.join(" + ")}</h3>
+      <div class="fate-meta">冲击均有现实苗头（依据标注见「数据与证据」）；模型内在第 5 步注入。动画播放的每一步，都是模型真实计算。</div>
       <svg id="fate-svg" class="fate-net" viewBox="0 0 340 260" preserveAspectRatio="xMidYMid meet"></svg>
       <div class="muted" id="fate-play-note" style="text-align:center">正在推进第 0 / 20 步…（可跳过）</div>
     </div>`;
@@ -1696,7 +1705,7 @@ function renderFate(){
         $("#fate-next").onclick=()=>{fateState.step=2;renderFate();};
         return;
       }
-      t++;s.step();fateNetRender(s,$("#fate-svg"));
+      t++;stepFateSim(s);fateNetRender(s,$("#fate-svg"));
       $("#fate-play-note").innerHTML=`正在推进第 ${t} / 20 步…<button class="btn sm" onclick="skipFatePlay()">跳过 →</button>`;
     },130);
     fateNetRender(s,$("#fate-svg"));
@@ -1704,7 +1713,7 @@ function renderFate(){
     $("#fate-prev").style.display="";
     body.innerHTML=`<div class="fate-step">
       <h3>现在，轮到你作决定</h3>
-      <div class="fate-meta">2030 年之前，一家重要链主遭遇外部订单冲击，配套承压、部分合作中断。你只有有限的政策资源，先处理什么？</div>
+      <div class="fate-meta">2030 年之前，你所在的仲恺正经历${FATE_IDENTS[fateState.ident].shocks.join("、")}，配套承压、部分合作中断。你只有有限的政策资源，先处理什么？</div>
       ${Object.keys(FATE_CHOICES).map(k=>{const c=FATE_CHOICES[k];
         return `<button class="fate-choice" data-c="${k}"><b>${c.label}</b><span class="muted">${c.note}</span></button>`;}).join("")}
       <div class="muted" style="margin-top:8px">三个选项对应模型内不同的干预力度；<b>尚未实证标定的部分已注明，不宣称三者现实等价或可直接比较</b>。</div>
@@ -1724,7 +1733,7 @@ function renderFate(){
     const d=r.delta;
     body.innerHTML=`<div class="fate-step">
       <h3>📊 结果：你选择了「${FATE_CHOICES[fateState.choice].short}」</h3>
-      <div class="fate-meta">同一起点（${r.seed}）· 同一双冲击 · 模型内计算 20 步；与「什么都不做」对照相比：</div>
+      <div class="fate-meta">同一起点（${r.seed}）· 冲击「${FATE_IDENTS[fateState.ident].shocks.join(" + ")}」· 模型内计算 20 步（第 5 步注入冲击）；与「什么都不做」对照相比：</div>
       <div class="fate-result-grid">
         <div class="cell"><div class="v">${(r.pick.survivors*100).toFixed(0)}%</div><div class="l">存续（选了之后）</div><div class="fate-delta ${d.su>=0?'up':'down'}">${d.su>=0?'+':'−'}${Math.abs(d.su*100).toFixed(1)}pp</div></div>
         <div class="cell"><div class="v">${r.pick.f.abundance.toFixed(2)}</div><div class="l">景气</div><div class="fate-delta ${d.ab>=0?'up':'down'}">${d.ab>=0?'+':''}${d.ab.toFixed(2)}</div></div>
@@ -1753,29 +1762,34 @@ function renderFate(){
 function skipFatePlay(){
   if(fateState.playIv){clearInterval(fateState.playIv);fateState.playIv=null;}
   const s=fateState.base;
-  while(s.tick<20)s.step();
+  while(s.tick<20)stepFateSim(s);
   fateNetRender(s,$("#fate-svg"));
   $("#fate-play-note").innerHTML="冲击演化了 20 步：有的关系断裂，有的主体退出，有的合作重新建立。";
   $("#fate-next").style.display="";$("#fate-next").textContent="轮到我的选择 →";
   $("#fate-next").onclick=()=>{fateState.step=2;renderFate();};
 }
-function buildFateSim(){
-  const s=new Sim(7,{dynamicNetwork:1});
-  while(s.tick<5)s.step();
-  s.shock("链主外迁");s.shock("芯片断供");
-  return s;
+function newFateSim(){ return new Sim(7,{dynamicNetwork:1}); }
+function injectShocks(s){ (FATE_IDENTS[fateState.ident]||FATE_IDENTS.work).shocks.forEach(k=>s.shock(k)); }
+function stepFateSim(s){
+  s.step();
+  if(s.tick===5)injectShocks(s);   /* 统一口径：第 5 步注入本身份冲击 */
 }
 function runFateChoice(choice){
   const seed=7,cfg=FATE_CHOICES[choice];
-  const baseSim=buildFateSim();
+  /* 基准：无干预，同一轨迹（前 5 步 → 冲击 → 到 20） */
+  const baseSim=newFateSim();
+  while(baseSim.tick<5)baseSim.step();
+  injectShocks(baseSim);
   while(baseSim.tick<20)baseSim.step();
-  const pickSim=new Sim(seed,{dynamicNetwork:1,...cfg.params});
+  /* 政策组：前 5 步与基准逐位一致，冲击后才实施政策 */
+  const pickSim=newFateSim();
   while(pickSim.tick<5)pickSim.step();
+  injectShocks(pickSim);
+  Object.assign(pickSim.params,cfg.params);
   if(cfg.params.talentBoost){ /* 人才近似：talent 主体韧性上调（模型内，未实证标定） */
     pickSim.agents.filter(a=>a.alive&&a.type==="talent").forEach(a=>a.energy=clamp(a.energy+.1,0,1));
     pickSim._log("fate_choice",{choice,note:"人才韧性近似，未实证标定"});
   }
-  pickSim.shock("链主外迁");pickSim.shock("芯片断供");
   while(pickSim.tick<20)pickSim.step();
   const num=s=>s.report().final;
   return {seed,choice,sim:pickSim,
@@ -1792,6 +1806,8 @@ function fateMechanism(ident,r){
     head=`模型内：这一选择在 20 步冲击窗口里几乎没改变结果（存续 ${(d.su*100).toFixed(1)}pp）——人才是慢变量，短期冲击期不显效。这不是选项无效，而是模型边界：长期政策需要更长窗口与实证标定才能评估。`;
   }else if(d.su>=0){
     head=`模型内：你的选择把存续率抬高了 ${(d.su*100).toFixed(1)} 个百分点，配套企业少退了一排。`;
+  }else if(d.di<0){
+    head=`模型内：存续率略降 ${(d.su*100).toFixed(1)}pp，但风险端降了 ${Math.abs(d.di).toFixed(2)}、景气${d.ab>=0?"升了":"降了"} ${Math.abs(d.ab).toFixed(2)}——冲击传染被压住，部分主体在调整期出清（单局对参数敏感，看趋势请用「批量重跑」）。`;
   }else{
     head=`模型内：这一选择没有明显托住存续率（${(d.su*100).toFixed(1)}pp）。`;
   }
@@ -1804,19 +1820,24 @@ function fateMechanism(ident,r){
   };
   return map[ident]||head+risk;
 }
+let fatePosCache=null,fatePosCacheSeed=null;
 function fateNetRender(s,el){
   if(!el)return;
   const W=340,H=260;
-  const pos=layoutForce(s.agents,s.edges,W,H);
+  if(!fatePosCache||fatePosCacheSeed!==s.seed){ /* 布局只算一次，节点不随步数跳动 */
+    fatePosCache=layoutForce(s.agents,s.edges,W,H);
+    fatePosCacheSeed=s.seed;
+  }
+  const pos=fatePosCache;
   let h="";
   s.activeEdges.forEach(e=>{
-    const p=pos[e.a],q=pos[e.b];if(!p||!q)return;
+    const p=pos[e.a]||{x:170,y:130},q=pos[e.b]||{x:170,y:130};if(!p||!q)return;
     if(e.status==="broken")h+=`<line x1="${p.x}" y1="${p.y}" x2="${q.x}" y2="${q.y}" stroke="#c24141" stroke-width="1.3" stroke-dasharray="5 4" opacity=".55"></line>`;
     else if(e.origin==="simulated")h+=`<line x1="${p.x}" y1="${p.y}" x2="${q.x}" y2="${q.y}" stroke="#23b88f" stroke-width="2"></line>`;
     else h+=`<line x1="${p.x}" y1="${p.y}" x2="${q.x}" y2="${q.y}" stroke="#7895bc" stroke-width="1" opacity=".7"></line>`;
   });
   s.agents.forEach(a=>{
-    const p=pos[a.name];if(!p)return;
+    const p=pos[a.name]||{x:170,y:130};if(!p)return;
     if(a.alive){const r=3+Math.round(a.energy*5);
       h+=`<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${typeColor(a.type)}" opacity=".92"></circle>`;}
     else h+=`<circle cx="${p.x}" cy="${p.y}" r="3" fill="#64748b" opacity=".5"></circle>`;
@@ -1869,7 +1890,7 @@ function drawFateCard(r){
   g.globalAlpha=1;
   g.restore();
   g.fillStyle="#cbd5e1";g.font="22px system-ui";
-  g.fillText(`起点 ${r.seed} · 双冲击（链主外迁+芯片断供）· 模型内 20 步`,60,1140);
+  g.fillText(`起点 ${r.seed} · 冲击「${FATE_IDENTS[fateState.ident].shocks.join(" + ")}」· 模型内 20 步（第 5 步注入）`,60,1140);
   g.fillStyle="#64748b";g.font="20px system-ui";
   g.fillText("模拟结果不是现实预测；同一起点、同配置可复跑。",60,1190);
   g.fillText("部分指标（人才近似等）尚未实证标定，不构成政策建议。",60,1224);
@@ -2602,6 +2623,23 @@ function plainConclusion(){
   return {head,keyNum:useSu?su.toFixed(0):(f.abundance*100).toFixed(0),keyUnit:useSu?"% 存续（这一轮）":"景气×100（这一轮）",su:su.toFixed(0),risk:f.disaster};
 }
 /* V1.2 P3：网络演化统计（动态模式；legacy 模式不调用） */
+let snapPosCache=null;
+function netSnapSVG(sn,W,H){
+  if(!snapPosCache)snapPosCache=layoutForce(sn.agents,sn.activeEdges,W,H); /* 全报告同一布局 */
+  const pos=snapPosCache;
+  let h="";
+  sn.activeEdges.forEach(e=>{
+    const p=pos[e.a]||{x:W/2,y:H/2},q=pos[e.b]||{x:W/2,y:H/2};
+    const brk=e.status==="broken";
+    h+=`<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${q.x.toFixed(1)}" y2="${q.y.toFixed(1)}" stroke="${brk?"#c24141":"#7895bc"}" stroke-width="${brk?1:1.2}" ${brk?'stroke-dasharray="4 3"':""} opacity="${brk?".5":".8"}"></line>`;
+  });
+  sn.agents.forEach(a=>{
+    const p=pos[a.name]||{x:W/2,y:H/2};
+    if(a.alive)h+=`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.6" fill="${typeColor(a.type)}"></circle>`;
+    else h+=`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="1.8" fill="#94a3b8" opacity=".6"></circle>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;background:#fff;border:1px solid var(--line);border-radius:6px">${h}</svg>`;
+}
 function netStats(sim){
   const live=sim.agents.filter(a=>a.alive);
   const active=sim.activeEdges.filter(e=>e.status==="active");
@@ -2637,12 +2675,11 @@ function netReportBlock(){
     <div class="seg" style="margin-top:10px"><b>🕸 产业网络</b>
     <div class="muted">静态对照模式（V1.0 行为）：网络为固定事实关系，不随运行演化。勾选「实验控制 → 网络演化」并重置后，本报告将给出网络建立/断裂/重组的完整分析。</div></div>`;
   const st=netStats(sim);
+  const W=150,H=96;
+  snapPosCache=null; /* 四时点共用同一布局：只按 t0 主体计算一次，节点不随画面跳动 */
   const picks=[0,5,10,20].map(t=>{
     const sn=sim.snapshots[t]||sim.snapshots[sim.snapshots.length-1];
-    const act=sn.activeEdges.filter(e=>e.status==="active").length;
-    const brk=sn.activeEdges.filter(e=>e.status==="broken").length;
-    const alive=sn.agents.filter(a=>a.alive).length;
-    return `<td style="text-align:center">活跃 ${alive}<br>有效 ${act}<br>失效 ${brk}</td>`;
+    return `<div class="snap"><div class="snap-t">t=${t}</div>${netSnapSVG(sn,W,H)}</div>`;
   }).join("");
   const evs=sim.timeline.filter(x=>x.kind==="net").slice(-12).map(e=>{
     const isNew=e.text.includes("新合作")||e.text.includes("主体进入");
@@ -2658,11 +2695,11 @@ function netReportBlock(){
       <tr><td style="text-align:left">孤立主体数</td><td>${st.isolated}</td><td style="text-align:left">存活但失去全部有效合作的经营主体</td></tr>
       <tr><td style="text-align:left">最大连通分量</td><td>${st.maxComp}</td><td style="text-align:left">仍连成一个主要网络的存续主体数</td></tr>
       <tr><td style="text-align:left">供应替代率</td><td>${(st.replaceRate*100).toFixed(0)}%</td><td style="text-align:left">断链端点中获得新替代合作的比例</td></tr>
-      <tr><td style="text-align:left">网络稳定用时</td><td>${st.span} 步</td><td style="text-align:left">首次失效到最后一次失效的间隔（口径：以失效事件计）</td></tr>
+      <tr><td style="text-align:left">冲击传播时长</td><td>${st.span} 步</td><td style="text-align:left">首次失效到最后一次失效的间隔（口径：以失效事件计，不是「网络恢复稳定」所需时长）</td></tr>
     </tbody></table>
-    <b>四时点快照</b>
-    <table style="margin-top:6px"><thead><tr><th style="text-align:center">t=0 初始</th><th style="text-align:center">t=5 运行中</th><th style="text-align:center">t=10 冲击期</th><th style="text-align:center">t=20 终局</th></tr></thead><tbody><tr>${picks}</tr></tbody></table>
-    <div class="muted" style="text-align:center">各行：活跃主体 / 有效关系 / 失效关系</div>
+    <b>四时点快照（网络结构图，同一布局）</b>
+    <div class="net-snaps">${picks}</div>
+    <div class="muted" style="text-align:center">t=0 初始 → t=5 运行中 → t=10 冲击期 → t=20 终局；节点=主体（颜色按类型，灰=已退出），线=关系（红虚线=失效）</div>
     <b>关系变化记录（近 12 条）</b>
     <table style="margin-top:6px"><thead><tr><th>时点</th><th>类型</th><th style="text-align:left">变化</th></tr></thead><tbody>${evs||'<tr><td colspan="3" class="muted">— 无网络变化事件</td></tr>'}</tbody></table>
     <div class="muted" style="margin-top:6px">图例区分：产业链事实关系（蓝）、模拟新合作（绿）、失效关系（红虚线）。新合作是模型推演假设，不是仲恺真实企业间已有商业联系；动态网络开/关都可复现、可对照。</div></div>`;

@@ -246,9 +246,10 @@ ok(html.includes('id="net-view"') && html.includes('value="structure"') && html.
 ok(html.includes('value="dyn"') && html.includes('模拟新合作'), '关系筛选含「模拟新合作」层');
 ok(html.includes('function netStats') && html.includes('function netReportBlock'), '报告含网络统计与章节生成函数');
 ok(html.includes('产业网络演化与冲击传播分析'), '报告章节《产业网络演化与冲击传播分析》');
-ok(html.includes('供应替代率') && html.includes('最大连通分量') && html.includes('孤立主体数') && html.includes('网络稳定用时'),
-  '报告指标齐全（活跃/有效/新建/失效/孤立/连通/替代率/稳定用时）');
-ok(html.includes('四时点快照') && html.includes('关系变化记录'), '报告含四时点快照与关系变化记录');
+ok(html.includes('供应替代率') && html.includes('最大连通分量') && html.includes('孤立主体数') && html.includes('冲击传播时长'),
+  '报告指标齐全（活跃/有效/新建/失效/孤立/连通/替代率/冲击传播时长）');
+ok(html.includes('四时点快照') && html.includes('关系变化记录') && html.includes('netSnapSVG') && html.includes('net-snaps'),
+  '报告含四时点网络结构图与关系变化记录');
 const snapSim = new K.Sim(7, { dynamicNetwork: 1 });
 for (let t = 0; t < 20; t++) snapSim.step();
 ok(snapSim.snapshots.every((sn, i) => sn.tick === i), `快照索引与 tick 对齐（${snapSim.snapshots.length} 条：t0 初始 + 20 步）`);
@@ -268,6 +269,13 @@ ok(html.includes('尚未实证标定') && html.includes('不宣称三者现实�
 ok(html.includes('id="entry-explore"') && html.includes('id="entry-formal"'), '专业工作台入口保留（快速探索/正式研究）');
 ok(html.includes('routeHash') && html.includes('#fate=') && html.includes('choice='), '可复现 hash 路由（同情景分享）');
 ok(html.includes('fateMechanism') && html.includes('慢变量'), '结果解释含「慢变量/模型边界」诚实措辞');
+ok(html.includes('shocks:["链主外迁","芯片断供"]') && html.includes('shocks:["订单外流","供应链中断"]') && html.includes('shocks:["用地收紧","政策收紧"]') && html.includes('shocks:["人才流失","订单外流"]'),
+  '四身份差异化冲击（不共用同一组冲击）');
+ok(!html.includes('startFatePlay'), '未定义引用 startFatePlay 已清理');
+ok(html.includes('fatePosCache') && html.includes('fatePosCacheSeed'), 'fateNetRender 布局缓存（节点不跳动）');
+ok(html.includes('stepFateSim') && html.includes('if(s.tick===5)injectShocks') && html.includes('while(baseSim.tick<5)') && html.includes('injectShocks(baseSim)') && html.includes('while(pickSim.tick<5)') && html.includes('injectShocks(pickSim)') && html.includes('Object.assign(pickSim.params'),
+  '时间口径统一：动画与基准同一轨迹（前5步→第5步冲击→到20）；政策组前5步同起点、冲击后才生效');
+ok(html.includes('仲恺 2030 · 未来实验') && html.includes('V1.2b'), '品牌与版本号统一（V1.2b）');
 
 /* ---------- 汇总 ---------- */
 console.log(failed === 0
