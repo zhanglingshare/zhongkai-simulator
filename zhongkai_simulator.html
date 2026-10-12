@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>县镇区域经济未来决策 · 产业协同仿真实验室（仲恺高新区 demo）</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23312e81'/%3E%3Ccircle cx='20' cy='26' r='7' fill='%23818cf8'/%3E%3Ccircle cx='44' cy='20' r='7' fill='%230e7490'/%3E%3Ccircle cx='44' cy='42' r='7' fill='%23b45309'/%3E%3Cline x1='26' y1='29' x2='38' y2='22' stroke='%23e2e8f0' stroke-width='2.5'/%3E%3Cline x1='38' y1='25' x2='40' y2='36' stroke='%23e2e8f0' stroke-width='2.5'/%3E%3C/svg%3E">
 <style>
   :root{
@@ -1171,47 +1172,15 @@
         <div style="font-size:13px;color:#94a3b8;margin-bottom:12px">以下数据来自仲恺高新区2025年统计公报。只摆事实，不下判断。</div>
 
         <h3 style="font-size:16px;color:#e2e8f0;margin:16px 0 8px">📈 近三年趋势</h3>
-        <div style="overflow-x:auto;margin-bottom:16px">
-          <table style="width:100%;font-size:12px;border-collapse:collapse">
-            <tr style="border-bottom:1px solid rgba(148,163,184,.2)">
-              <td style="padding:6px;color:#94a3b8">指标</td>
-              <td style="padding:6px;text-align:center;color:#94a3b8">2023</td>
-              <td style="padding:6px;text-align:center;color:#94a3b8">2024</td>
-              <td style="padding:6px;text-align:center;color:#94a3b8">2025</td>
-              <td style="padding:6px;text-align:center;color:#94a3b8">趋势</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(148,163,184,.1)">
-              <td style="padding:6px">GDP增速</td>
-              <td style="padding:6px;text-align:center">+10.1%</td>
-              <td style="padding:6px;text-align:center;color:#fbbf24">+4.0%</td>
-              <td style="padding:6px;text-align:center;color:#34d399">+7.1%</td>
-              <td style="padding:6px;text-align:center;color:#94a3b8">V型恢复中</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(148,163,184,.1)">
-              <td style="padding:6px">规上工业总产值增速</td>
-              <td style="padding:6px;text-align:center">+4.7%</td>
-              <td style="padding:6px;text-align:center">+9.0%</td>
-              <td style="padding:6px;text-align:center;color:#34d399">+12.2%</td>
-              <td style="padding:6px;text-align:center;color:#94a3b8">逐年加速</td>
-            </tr>
-            <tr style="border-bottom:1px solid rgba(148,163,184,.1)">
-              <td style="padding:6px">三产增速</td>
-              <td style="padding:6px;text-align:center;color:#94a3b8">—</td>
-              <td style="padding:6px;text-align:center;color:#f87171">−2.0%</td>
-              <td style="padding:6px;text-align:center;color:#fbbf24">+2.2%</td>
-              <td style="padding:6px;text-align:center;color:#94a3b8">刚转正</td>
-            </tr>
-            <tr>
-              <td style="padding:6px">固定资产投资增速</td>
-              <td style="padding:6px;text-align:center;color:#94a3b8">—</td>
-              <td style="padding:6px;text-align:center;color:#94a3b8">—</td>
-              <td style="padding:6px;text-align:center;color:#f87171">−22.3%</td>
-              <td style="padding:6px;text-align:center;color:#94a3b8">大幅收缩</td>
-            </tr>
-          </table>
-        </div>
+        <div id="chart-trend" style="width:100%;height:220px;margin-bottom:16px"></div>
+        <div style="font-size:12px;color:#94a3b8;margin-bottom:16px;text-align:center">GDP增速V型恢复 · 工业逐年加速 · 三产刚转正</div>
 
         <h3 style="font-size:16px;color:#e2e8f0;margin:16px 0 8px">📊 2025年基本面</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+          <div id="chart-structure" style="width:100%;height:180px"></div>
+          <div id="chart-gap" style="width:100%;height:180px"></div>
+        </div>
+        <div style="font-size:12px;color:#94a3b8;margin-bottom:16px;text-align:center">左：三次产业结构（二产占70.5%） · 右：十五五目标完成度</div>
 
         <div style="background:rgba(148,163,184,.06);border-radius:10px;padding:12px;margin-bottom:10px">
           <div style="font-size:13px;color:#94a3b8;margin-bottom:6px">经济总量</div>
@@ -3012,8 +2981,48 @@ function openApp(v){
   $("#tb-title").innerHTML=ti.t+"<small>"+ti.s+"</small>";
   $("#tb-go").style.display=(v==="home")?"inline-flex":"none";
   const ap=$(".in-phone .app");if(ap)ap.scrollTop=0;
+  if(v==="fund"){setTimeout(initFundCharts,100);}
 }
 function goHome(){setPhoneState("home");islandLive("",false);setTimeout(playChat,260);}
+function initFundCharts(){
+  if(typeof echarts==="undefined")return;
+  const dark={backgroundColor:"transparent",textStyle:{color:"#94a3b8"}};
+  // 近三年趋势
+  const c1=echarts.init(document.getElementById("chart-trend"));
+  c1.setOption({...dark,
+    tooltip:{trigger:"axis"},
+    legend:{textStyle:{color:"#94a3b8"},top:0},
+    grid:{left:40,right:20,top:30,bottom:20},
+    xAxis:{type:"category",data:["2023","2024","2025"],axisLabel:{color:"#94a3b8"}},
+    yAxis:{type:"value",axisLabel:{color:"#94a3b8",formatter:"{value}%"}},
+    series:[
+      {name:"GDP增速",type:"line",data:[10.1,4.0,7.1],smooth:true,lineStyle:{color:"#818cf8"},itemStyle:{color:"#818cf8"}},
+      {name:"工业增速",type:"line",data:[4.7,9.0,12.2],smooth:true,lineStyle:{color:"#34d399"},itemStyle:{color:"#34d399"}},
+      {name:"三产增速",type:"line",data:[null,-2.0,2.2],smooth:true,lineStyle:{color:"#fbbf24"},itemStyle:{color:"#fbbf24"}}
+    ]
+  });
+  // 三次产业结构饼图
+  const c2=echarts.init(document.getElementById("chart-structure"));
+  c2.setOption({...dark,
+    tooltip:{trigger:"item"},
+    series:[{type:"pie",radius:["40%","70%"],label:{color:"#e2e8f0",fontSize:10},
+      data:[{value:70.5,name:"二产",itemStyle:{color:"#818cf8"}},{value:28.5,name:"三产",itemStyle:{color:"#fbbf24"}},{value:1.0,name:"一产",itemStyle:{color:"#34d399"}}]}]
+  });
+  // 十五五目标差距条形图
+  const c3=echarts.init(document.getElementById("chart-gap"));
+  c3.setOption({...dark,
+    tooltip:{trigger:"axis"},
+    grid:{left:60,right:20,top:10,bottom:20},
+    xAxis:{type:"value",axisLabel:{color:"#94a3b8"}},
+    yAxis:{type:"category",data:["GDP","工业","生产性服务业"],axisLabel:{color:"#94a3b8"}},
+    series:[{type:"bar",data:[
+      {value:58,itemStyle:{color:"#818cf8"}},
+      {value:62,itemStyle:{color:"#818cf8"}},
+      {value:82,itemStyle:{color:"#fbbf24"}}
+    ],label:{show:true,position:"right",color:"#e2e8f0",formatter:"{c}%"}}]
+  });
+  window.addEventListener("resize",()=>{c1.resize();c2.resize();c3.resize();});
+}
 /* 第一屏（钩子）：进群按钮 + 上滑进群，不做点击解锁 */
 (function(){
   const ls=$("#lockscreen");let sy=0;
