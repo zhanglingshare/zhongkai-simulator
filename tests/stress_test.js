@@ -3,7 +3,7 @@
  * 受控实验：四场景共享同一批种子（baseSeed*700+i），世界构成逐局一致（C 额外补入=处理本身）。
  */
 const fs=require('fs');
-const HTML='/Users/pro/Doubao/chats/2026-10-01/new-chat-1/zhongkai_sim_v0.8.html';
+const HTML=require('path').join(__dirname,'..','zhongkai_simulator.html');
 const html=fs.readFileSync(HTML,'utf8');
 const m=html.match(/\/\*KERNEL-BEGIN\*\/([\s\S]*?)\/\*KERNEL-END\*\//);
 if(!m)throw new Error('KERNEL not found');

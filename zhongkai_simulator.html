@@ -3,74 +3,121 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>县镇区域经济未来决策 · 命运重跑机器（仲恺高新区 demo）</title>
+<title>县镇区域经济未来决策 · 产业协同仿真实验室（仲恺高新区 demo）</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23312e81'/%3E%3Ccircle cx='20' cy='26' r='7' fill='%23818cf8'/%3E%3Ccircle cx='44' cy='20' r='7' fill='%230e7490'/%3E%3Ccircle cx='44' cy='42' r='7' fill='%23b45309'/%3E%3Cline x1='26' y1='29' x2='38' y2='22' stroke='%23e2e8f0' stroke-width='2.5'/%3E%3Cline x1='38' y1='25' x2='40' y2='36' stroke='%23e2e8f0' stroke-width='2.5'/%3E%3C/svg%3E">
 <style>
   :root{
-    --bg:#f4f6f9; --ink:#1f2733; --sub:#5b6675; --line:#d9dee6;
-    --card:#ffffff; --blue:#2563eb; --good:#16a34a; --bad:#dc2626; --warn:#d97706;
-    --gold:#ca8a04; --chip:#eef2f7;
+    --bg:#f5f7fa; --card:#ffffff; --ink:#1f2937; --sub:#64748b; --line:#e2e8f0;
+    --blue:#2458c6; --blue-soft:#eef2fb; --good:#168568; --good-soft:#e8f5f0;
+    --warn:#b7791f; --warn-soft:#fdf6e7; --bad:#c24141; --bad-soft:#fdeeec;
+    --gold:#ca8a04; --chip:#eef2f7; --side-w:216px; --top-h:60px;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:14px;line-height:1.55}
-  header.top{background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;position:sticky;top:0;z-index:30}
-  header.top h1{font-size:17px;margin:0;display:flex;align-items:center;gap:10px}
+  /* ---------- 顶栏 ---------- */
+  header.top{background:#fff;border-bottom:1px solid var(--line);height:var(--top-h);display:flex;align-items:center;gap:16px;padding:0 18px;position:sticky;top:0;z-index:40}
+  header.top .brand{font-size:15.5px;font-weight:700;display:flex;align-items:center;gap:8px;white-space:nowrap}
   header.top .ver{font-size:11px;color:#fff;background:var(--blue);border-radius:4px;padding:1px 7px}
-  .bounds{display:flex;gap:10px;flex-wrap:wrap;margin-top:9px}
-  .bounds .b{flex:1;min-width:230px;background:#fbfcfe;border:1px solid var(--line);border-left:3px solid var(--bad);border-radius:6px;padding:7px 10px;font-size:12.5px;color:var(--sub)}
-  .bounds .b b{color:var(--ink)}
-  .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(380px,.85fr);gap:14px;padding:14px 20px;align-items:start}
-  @media (max-width:1000px){.wrap{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+  .statusbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-left:auto;justify-content:flex-end}
+  .pill{font-size:11.5px;color:var(--sub);background:#f8fafc;border:1px solid var(--line);border-radius:999px;padding:2px 10px;white-space:nowrap}
+  .pill.mode{background:var(--blue-soft);color:var(--blue);border-color:#cdd9f2;font-weight:600}
+  .pill.phase-locked{background:var(--warn-soft);color:var(--warn);border-color:#ecd9ae}
+  .pill.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  /* ---------- 整体布局 ---------- */
+  .app{display:grid;grid-template-columns:var(--side-w) 1fr;min-height:calc(100vh - var(--top-h))}
+  aside.side{background:#fff;border-right:1px solid var(--line);padding:14px 10px;position:sticky;top:var(--top-h);height:calc(100vh - var(--top-h));overflow:auto}
+  aside.side .grp{font-size:11px;color:#94a3b8;letter-spacing:.08em;margin:16px 8px 6px;font-weight:600}
+  aside.side .grp:first-child{margin-top:2px}
+  aside.side .nav{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:none;color:var(--sub);font-size:13.5px;padding:8px 10px;border-radius:8px;cursor:pointer;margin-bottom:2px}
+  aside.side .nav:hover{background:#f1f5f9;color:var(--ink)}
+  aside.side .nav.on{background:var(--blue-soft);color:var(--blue);font-weight:600}
+  main{padding:18px 22px;min-width:0}
+  .view{display:none}
+  .view.on{display:block}
+  /* ---------- 通用卡片 ---------- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
   .card h2{font-size:14.5px;margin:0 0 10px;display:flex;align-items:center;gap:8px}
   .card h2 .tag{font-size:11px;background:var(--chip);color:var(--sub);border-radius:4px;padding:1px 7px;font-weight:500}
-  .netcard{position:sticky;top:118px}
-  #netsvg{width:100%;height:560px;display:block;background:#fcfdff;border:1px solid var(--line);border-radius:8px}
-  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--sub);margin-top:8px}
-  .legend i{display:inline-block;width:22px;height:0;border-top:2px solid #8892a0;vertical-align:middle;margin-right:5px}
-  .legend i.dash{border-top:2px dashed #b7c0cd}
-  .dotq{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:middle}
-  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
-  .kpi{background:#fbfcfe;border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center}
-  .kpi .v{font-size:17px;font-weight:700}
-  .kpi .l{font-size:11px;color:var(--sub)}
-  .bar{height:6px;border-radius:4px;background:#e7ebf1;margin-top:5px;overflow:hidden}
-  .bar>span{display:block;height:100%;border-radius:4px}
-  .tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:-4px 0 12px}
-  .tabs button{border:0;background:none;padding:8px 12px;cursor:pointer;font-size:13.5px;color:var(--sub);border-bottom:2px solid transparent}
-  .tabs button.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
-  .pane{display:none}.pane.on{display:block}
+  .muted{color:var(--sub);font-size:12.5px}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
   .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
   button.btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:7px 12px;cursor:pointer;font-size:13px}
   button.btn:hover{border-color:var(--blue);color:var(--blue)}
   button.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
   button.btn.primary:hover{filter:brightness(1.05);color:#fff}
   button.btn.gold{background:#fef7e3;border-color:#e8c66a;color:var(--gold)}
+  button.btn.sm{padding:4px 10px;font-size:12px}
   button.btn:disabled{opacity:.5;cursor:not-allowed}
   input[type=text],input[type=number],select,textarea{border:1px solid var(--line);border-radius:7px;padding:7px 9px;font-size:13px;font-family:inherit;background:#fff;color:var(--ink)}
   textarea{width:100%;resize:vertical}
   input[type=range]{width:100%}
   .chip{display:inline-block;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;margin:2px}
-  .gate{border:1px solid var(--line);border-radius:8px;padding:10px;margin:9px 0;background:#fbfcfe}
-  .gate.locked{border-left:3px solid var(--bad)}
-  .gate.done{border-left:3px solid var(--good);background:#f7fdf8}
-  .gate h3{margin:0 0 6px;font-size:13.5px;display:flex;justify-content:space-between;align-items:center}
-  .status-pill{font-size:11px;border-radius:999px;padding:2px 9px}
-  .status-pill.no{background:#fdeaea;color:var(--bad)}
-  .status-pill.yes{background:#e9f8ef;color:var(--good)}
-  label.ck{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin:6px 0;cursor:pointer}
-  .muted{color:var(--sub);font-size:12.5px}
-  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
   table{border-collapse:collapse;width:100%;font-size:12.5px}
   th,td{border:1px solid var(--line);padding:5px 8px;text-align:center}
   th{background:#f7f9fc;font-weight:600}
+  /* ---------- 首页概览 ---------- */
+  .hero{background:linear-gradient(135deg,#1e3a5f 0%,#0f172a 100%);color:#fff;border-radius:14px;padding:26px 28px;margin-bottom:16px}
+  .hero h1{margin:0 0 6px;font-size:22px}
+  .hero .sub{color:#b6c4d8;font-size:13.5px;margin:0 0 16px}
+  .hero .metas{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#cfe0f4}
+  .hero .metas b{color:#fff}
+  .entry-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+  .entry{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;cursor:pointer;transition:box-shadow .15s,border-color .15s}
+  .entry:hover{border-color:var(--blue);box-shadow:0 6px 20px rgba(36,88,198,.08)}
+  .entry h3{margin:0 0 6px;font-size:15.5px}
+  .entry p{margin:0 0 12px;font-size:12.5px;color:var(--sub)}
+  .entry .go{font-size:12.5px;color:var(--blue);font-weight:600}
+  .ability-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .ability{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;font-size:12.5px}
+  .ability b{display:block;font-size:13px;margin-bottom:3px}
+  .ability .muted{font-size:11.5px}
+  @media (max-width:1100px){.ability-grid{grid-template-columns:repeat(2,1fr)}.entry-row{grid-template-columns:1fr}}
+  /* ---------- 推演工作台 ---------- */
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center}
+  .kpi .v{font-size:16px;font-weight:700}
+  .kpi .l{font-size:11px;color:var(--sub)}
+  .bar{height:6px;border-radius:4px;background:#e7ebf1;margin-top:5px;overflow:hidden}
+  .bar>span{display:block;height:100%;border-radius:4px}
+  .run-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(320px,.9fr);gap:14px;align-items:start}
+  @media (max-width:1100px){.run-grid{grid-template-columns:1fr}}
+  #netsvg{width:100%;height:520px;display:block;background:#fcfdff;border:1px solid var(--line);border-radius:8px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--sub);margin-top:8px}
+  .legend i{display:inline-block;width:22px;height:0;border-top:2px solid #8892a0;vertical-align:middle;margin-right:5px}
+  .legend i.dash{border-top:2px dashed #b7c0cd}
+  .dotq{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;vertical-align:middle}
+  .net-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+  .net-tools input[type=text]{flex:1;min-width:140px}
+  .net-tools select{max-width:130px}
   .tl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  #track{flex:1;min-width:160px}
+  #track{flex:1;min-width:140px}
   .timeline-log{max-height:230px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px;background:#fcfdff}
   .ev{font-size:12.5px;padding:3px 0;border-bottom:1px dashed #eef1f5}
   .ev .tk{display:inline-block;min-width:42px;color:var(--sub);font-family:ui-monospace,monospace}
   .ev.gold{color:var(--gold);font-weight:600}
+  .sub-block{border:1px solid var(--line);border-radius:8px;padding:10px;margin:10px 0;background:#fbfcfe}
+  .sub-block h3{margin:0 0 6px;font-size:13.5px}
+  /* ---------- 准备向导（正式研究） ---------- */
+  .modal-mask{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:100;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow:auto}
+  .modal-mask.on{display:flex}
+  .modal{background:#fff;border-radius:14px;width:100%;max-width:760px;padding:22px 26px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  .modal h2{margin:0 0 4px;font-size:17px}
+  .modal .steps{display:flex;gap:6px;margin:14px 0}
+  .modal .steps .st{flex:1;text-align:center;font-size:11.5px;color:var(--sub);border:1px solid var(--line);border-radius:8px;padding:6px 4px;background:#f8fafc}
+  .modal .steps .st.on{background:var(--blue-soft);border-color:#cdd9f2;color:var(--blue);font-weight:600}
+  .modal .steps .st.done{background:var(--good-soft);border-color:#bfe0d3;color:var(--good)}
+  .modal .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+  .opt{display:block;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0;cursor:pointer;background:#fff}
+  .opt:hover{border-color:var(--blue)}
+  .opt.sel{border-color:var(--blue);background:var(--blue-soft)}
+  .opt b{font-size:13.5px}
+  .opt .muted{display:block;margin-top:3px}
+  .checkrow{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin:7px 0;cursor:pointer}
+  /* ---------- 主体抽屉 ---------- */
+  .drawer{position:fixed;top:var(--top-h);right:0;bottom:0;width:380px;max-width:92vw;background:#fff;border-left:1px solid var(--line);box-shadow:-8px 0 30px rgba(15,23,42,.12);transform:translateX(105%);transition:transform .18s;z-index:60;overflow:auto;padding:16px}
+  .drawer.on{transform:translateX(0)}
+  .drawer .close{float:right;border:0;background:none;font-size:16px;cursor:pointer;color:var(--sub)}
   .ivw{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fbfcfe}
   .ivw h3{margin:0 0 8px}
   .ivgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:8px 0}
@@ -79,38 +126,97 @@
   .hist svg{width:100%;height:150px;display:block}
   .locked-report{filter:blur(3px);pointer-events:none;user-select:none}
   .locknote{text-align:center;color:var(--bad);font-size:13px;margin:6px 0}
-  .missrole{border:1px solid var(--line);border-radius:8px;padding:8px;margin:6px 0;font-size:12.5px;background:#fff}
   .grade{font-size:10px;border-radius:4px;padding:1px 6px;margin-left:6px;color:#fff}
-  .grade.A{background:#16a34a}.grade.B{background:#2563eb}.grade.C{background:#d97706}.grade.D{background:#dc2626}
-  footer{padding:10px 20px;color:var(--sub);font-size:12px;border-top:1px solid var(--line);background:#fff}
+  .grade.A{background:#168568}.grade.B{background:#2458c6}.grade.C{background:#b7791f}.grade.D{background:#c24141}
+  .missrole{border:1px solid var(--line);border-radius:8px;padding:8px;margin:6px 0;font-size:12.5px;background:#fff}
+  .diffbox{font-size:12px;border:1px dashed #cdd9f2;border-radius:8px;padding:10px;margin:8px 0;background:#f8fafc}
+  .barrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  footer{padding:14px 22px;color:var(--sub);font-size:12px;border-top:1px solid var(--line);background:#fff}
   .hintbtn{font-size:11px;color:var(--blue);cursor:pointer;background:none;border:0;padding:0}
+  /* ---------- 移动端 ---------- */
+  @media (max-width:900px){
+    .app{grid-template-columns:1fr}
+    aside.side{position:static;height:auto;display:flex;flex-wrap:wrap;gap:4px;padding:8px 12px;border-right:0;border-bottom:1px solid var(--line)}
+    aside.side .grp{display:none}
+    aside.side .nav{width:auto;padding:6px 10px;font-size:12.5px;margin:0}
+    main{padding:12px}
+    .kpis{grid-template-columns:repeat(3,1fr)}
+    #netsvg{height:340px}
+    .drawer{width:100%;max-width:100%}
+    .run-grid{grid-template-columns:1fr}
+  }
 </style>
 </head>
 <body>
 <header class="top">
-  <h1>🏭 县镇区域经济未来决策 <span class="ver">v0.8.1</span>
-    <span class="muted" style="font-weight:400">仲恺高新区 demo · 单文件 · 零依赖 · 断网可用 · 真数据校准 · 可复现弱涌现</span></h1>
-  <div class="bounds">
-    <div class="b"><b>① 不是预测器。</b>不预测产值、不预测招商成败，只给叙事分布与结构。</div>
-    <div class="b"><b>② 不是真涌现。</b>24 主体是可复现的弱涌现，未达真实经济涌现量级。</div>
-    <div class="b" style="border-left-color:var(--good)"><b>③ 反事实不可验证，但参数可核对。</b>“当年不引进某链主会怎样”无法重演；但每个参数都能回到统计公报核对。</div>
+  <div class="brand">🏭 县镇区域经济未来决策 · 产业协同仿真实验室 <span class="ver">V1.0</span></div>
+  <div class="statusbar">
+    <span class="pill mode" id="st-mode">探索模拟</span>
+    <span class="pill" id="st-world">世界：仲恺基准</span>
+    <span class="pill mono">Seed <span id="st-seed">7</span></span>
+    <span class="pill mono">t=<span id="st-tick">0</span>/20</span>
+    <span class="pill" id="st-phase">状态：空闲</span>
+    <span class="pill mono" id="st-runid" style="display:none"></span>
+    <button class="btn sm" id="btn-prepare" title="以正式研究方式登记问题、审查条件并锁定预判">正式研究</button>
+    <button class="btn sm" id="btn-exit-formal" style="display:none" title="回到自由探索，不改动已锁定档案">退回探索</button>
   </div>
 </header>
 
-<div class="wrap">
-  <!-- 左：网络 + 全局KPI -->
-  <div>
-    <div class="card netcard">
-      <h2>🕸 区域产业协同活网络 <span class="tag">点节点 = 主体访谈</span><span id="world-lbl" style="float:right;font-size:12px;font-weight:400;color:#64748b"></span></h2>
-      <svg id="netsvg" viewBox="0 0 760 560" preserveAspectRatio="xMidYMid meet"></svg>
-      <div class="legend">
-        <span><i style="border-color:#2563eb"></i>供给/协作层(产业链关系)</span>
-        <span><i class="dash" style="border-color:#b7c0cd"></i>同类亲和</span>
-        <span><i class="dash" style="border-color:#d8b487"></i>同园/同域接触</span>
-        <span><span class="dotq" style="background:#16a34a"></span>景气/信心</span>
-        <span><span class="dotq" style="background:#dc2626"></span>风险/恐慌</span>
-        <span><span class="dotq" style="background:#94a3b8"></span>外迁/消亡</span>
+<div class="app">
+  <aside class="side">
+    <div class="grp">实验</div>
+    <button class="nav on" data-v="home">◎ 概览</button>
+    <button class="nav" data-v="run">▶ 动态推演</button>
+    <div class="grp">分析</div>
+    <button class="nav" data-v="mc">🎲 蒙特卡洛</button>
+    <button class="nav" data-v="sens">🌪 敏感性分析</button>
+    <div class="grp">研究资料</div>
+    <button class="nav" data-v="iv">👤 主体档案</button>
+    <button class="nav" data-v="ledger">📒 决策档案</button>
+    <button class="nav" data-v="data">🧬 数据与证据</button>
+    <div class="grp">高级设置</div>
+    <button class="nav" data-v="world">🌍 世界管理</button>
+  </aside>
+
+  <main>
+    <!-- ============ ① 概览 ============ -->
+    <section id="view-home" class="view on">
+      <div class="hero">
+        <h1>仲恺高新区 · 产业协同实验室</h1>
+        <p class="sub">区域经济多主体仿真实验平台：把产业链依赖、企业行为与政策干预放进同一个可重复运行的实验环境。</p>
+        <div class="metas">
+          <span>基准世界 <b>2025</b></span><span><b>41</b> 个候选主体</span><span><b>71</b> 条基础关系</span><span><b>15</b> 条时序因果链</span><span>单文件 · 零依赖 · 断网可用</span>
+        </div>
       </div>
+      <div class="entry-row">
+        <div class="entry" id="entry-explore">
+          <h3>快速探索</h3>
+          <p>直接运行已有实验，观察动态网络、主体行为与指标变化。结果标注为「探索性模拟」。</p>
+          <div class="go">进入探索 →</div>
+        </div>
+        <div class="entry" id="entry-formal">
+          <h3>正式研究</h3>
+          <p>明确研究问题、检查世界结构、审查参数证据、锁定事前预判，生成可审计的实验档案。</p>
+          <div class="go">准备研究 →</div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>现有研究能力</h2>
+        <div class="ability-grid">
+          <div class="ability"><b>🕸 产业网络</b><span class="muted">主体与关系 · 动态演化</span></div>
+          <div class="ability"><b>⚡ 冲击实验</b><span class="muted">14 种预设事件 · 注入与传播</span></div>
+          <div class="ability"><b>🎲 蒙特卡洛</b><span class="muted">批量重跑 · 结果分布</span></div>
+          <div class="ability"><b>🌪 敏感性</b><span class="muted">参数响应 · 龙卷风排序</span></div>
+          <div class="ability"><b>👤 主体访谈</b><span class="muted">行为与记忆 · 局部关系</span></div>
+          <div class="ability"><b>📒 决策档案</b><span class="muted">预判 · 事件 · 结果 · 报告</span></div>
+          <div class="ability"><b>🧬 数据与证据</b><span class="muted">参数血统 · 指标来源</span></div>
+          <div class="ability"><b>🌍 世界管理</b><span class="muted">基准恢复 · 数据导入导出</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ② 动态推演 ============ -->
+    <section id="view-run" class="view">
       <div class="kpis">
         <div class="kpi"><div class="v" id="k-ab">–</div><div class="l">景气</div><div class="bar"><span id="b-ab"></span></div></div>
         <div class="kpi"><div class="v" id="k-or">–</div><div class="l">协同</div><div class="bar"><span id="b-or"></span></div></div>
@@ -118,109 +224,210 @@
         <div class="kpi"><div class="v" id="k-mo">–</div><div class="l">信心</div><div class="bar"><span id="b-mo"></span></div></div>
         <div class="kpi"><div class="v" id="k-su">–</div><div class="l">存续</div><div class="bar"><span id="b-su"></span></div></div>
       </div>
-    </div>
-  </div>
 
-  <!-- 右：标签面板 -->
-  <div>
-    <div class="card">
-      <div class="tabs">
-        <button data-tab="run" class="on">① 推演</button>
-        <button data-tab="gate">② 验模三门</button>
-        <button data-tab="mc">③ 蒙特卡洛</button>
-        <button data-tab="sens">④ 敏感性</button>
-        <button data-tab="iv">⑤ 访谈</button>
-        <button data-tab="ledger">⑥ 决策档案</button>
-        <button data-tab="data">⑦ 数据血统</button>
-        <button data-tab="upload">⑧ 导入世界</button>
-      </div>
-
-      <!-- 推演 -->
-      <div class="pane on" id="pane-run">
-        <div class="tl">
-          <button class="btn" id="btn-play">▶ 播放</button>
-          <button class="btn" id="btn-step">单步</button>
-          <button class="btn" id="btn-reset">重置</button>
-          <input type="range" id="track" min="0" max="20" value="0">
-          <span class="mono">t=<b id="tick-lbl">0</b>/20</span>
+      <div class="run-grid">
+        <div class="card">
+          <h2>🕸 产业协同活网络 <span class="tag">点节点 = 查看主体档案</span><span id="world-lbl" style="float:right;font-size:12px;font-weight:400;color:#64748b"></span></h2>
+          <div class="net-tools">
+            <input type="text" id="net-search" placeholder="🔍 搜索主体…">
+            <select id="net-type">
+              <option value="">全部类型</option>
+              <option value="anchor">链主</option><option value="oem">整机</option><option value="supplier">配套</option>
+              <option value="service">服务</option><option value="talent">人才</option><option value="capital">资本</option>
+              <option value="land">载体</option><option value="infra">设施</option>
+            </select>
+            <select id="net-layer">
+              <option value="">全部关系</option>
+              <option value="hist">产业链关系</option>
+              <option value="affinity">同类亲和</option>
+              <option value="contact">同域接触</option>
+            </select>
+            <button class="btn sm" id="net-reset">重置视图</button>
+            <button class="btn sm" id="net-full">⛶ 全屏</button>
+          </div>
+          <svg id="netsvg" viewBox="0 0 760 560" preserveAspectRatio="xMidYMid meet"></svg>
+          <div class="legend">
+            <span><i style="border-color:#2563eb"></i>供给/协作层(产业链关系)</span>
+            <span><i class="dash" style="border-color:#b7c0cd"></i>同类亲和</span>
+            <span><i class="dash" style="border-color:#d8b487"></i>同园/同域接触</span>
+            <span><span class="dotq" style="background:#16a34a"></span>景气/信心</span>
+            <span><span class="dotq" style="background:#dc2626"></span>风险/恐慌</span>
+            <span><span class="dotq" style="background:#94a3b8"></span>外迁/消亡</span>
+          </div>
         </div>
 
-        <h2 style="margin-top:14px">🎛 上帝视角（排进下一时刻，时间轴打金标）</h2>
-        <div class="row">
-          <select id="shock-sel">
-            <option value="链主外迁">链主外迁</option><option value="芯片断供">芯片断供</option>
-            <option value="订单外流">订单外流</option><option value="产能过剩">产能过剩</option>
-            <option value="政策收紧">政策收紧</option><option value="用地收紧">用地收紧</option>
-            <option value="限电">限电</option><option value="融资难">融资难</option>
-            <option value="关税摩擦">关税摩擦</option><option value="供应链中断">供应链中断</option>
-            <option value="人才流失">人才流失</option><option value="订单爆发">订单爆发</option>
-            <option value="政策利好">政策利好</option><option value="技术突破">技术突破</option>
-          </select>
-          <button class="btn gold" id="btn-shock">注入冲击</button>
-        </div>
-        <div class="row">
-          <select id="remove-sel"></select>
-          <button class="btn" id="btn-remove">移除主体</button>
-        </div>
-        <div class="row">
-          <select id="pert-metric">
-            <option value="abundance">景气</option><option value="order">协同</option>
-            <option value="disaster">风险</option><option value="mood">信心</option>
-          </select>
-          <input type="number" id="pert-delta" value="-0.2" step="0.05" width="80">
-          <button class="btn" id="btn-pert">干扰参数</button>
-        </div>
+        <div class="card">
+          <h2>🎛 实验控制</h2>
+          <div class="tl">
+            <button class="btn" id="btn-play">▶ 播放</button>
+            <button class="btn" id="btn-step">单步</button>
+            <button class="btn" id="btn-reset">重置</button>
+            <input type="range" id="track" min="0" max="20" value="0">
+            <span class="mono">t=<b id="tick-lbl">0</b>/20</span>
+          </div>
 
-        <h2 style="margin-top:12px">🗣 自然语言注入（解析 · 零API · 离线）</h2>
-        <div class="row">
-          <input type="text" id="nl-input" style="flex:1;min-width:200px" placeholder='例：TCL华星外迁｜芯片断供｜链主外迁｜增长动能 -0.2｜移除亿纬锂能'>
-          <button class="btn primary" id="btn-nl">解析并执行</button>
-        </div>
-        <div id="nl-result" class="muted"></div>
-        <div class="muted" style="margin-top:4px">
-          <button class="hintbtn" id="nl-hint">需要示例？</button>
-          &nbsp;|&nbsp; 区分：解析（规则，离线）≠ 生成（需模型，可选）
-        </div>
+          <div class="sub-block">
+            <h3>🧪 实验干预 <span class="tag" style="font-weight:400">旧称「上帝视角」</span></h3>
+            <div class="row">
+              <select id="shock-sel">
+                <option value="链主外迁">链主外迁</option><option value="芯片断供">芯片断供</option>
+                <option value="订单外流">订单外流</option><option value="产能过剩">产能过剩</option>
+                <option value="政策收紧">政策收紧</option><option value="用地收紧">用地收紧</option>
+                <option value="限电">限电</option><option value="融资难">融资难</option>
+                <option value="关税摩擦">关税摩擦</option><option value="供应链中断">供应链中断</option>
+                <option value="人才流失">人才流失</option><option value="订单爆发">订单爆发</option>
+                <option value="政策利好">政策利好</option><option value="技术突破">技术突破</option>
+              </select>
+              <button class="btn gold" id="btn-shock">注入冲击</button>
+            </div>
+            <div class="row">
+              <select id="remove-sel"></select>
+              <button class="btn" id="btn-remove">移除主体</button>
+            </div>
+            <div class="row">
+              <select id="pert-metric">
+                <option value="abundance">景气</option><option value="order">协同</option>
+                <option value="disaster">风险</option><option value="mood">信心</option>
+              </select>
+              <input type="number" id="pert-delta" value="-0.2" step="0.05" style="width:80px">
+              <button class="btn" id="btn-pert">指标扰动</button>
+            </div>
+          </div>
 
-        <h2 style="margin-top:14px">🕰 时间线（史料事件优先于随机决策）</h2>
-        <div class="timeline-log" id="tl-log"></div>
-      </div>
+          <div class="sub-block">
+            <h3>🗣 自然语言注入 <span class="tag" style="font-weight:400">解析 · 零API · 离线</span></h3>
+            <div class="row">
+              <input type="text" id="nl-input" style="flex:1;min-width:180px" placeholder='例：TCL华星外迁｜芯片断供｜链主外迁｜增长动能 -0.2｜移除亿纬锂能'>
+              <button class="btn primary" id="btn-nl">解析并执行</button>
+            </div>
+            <div id="nl-result" class="muted"></div>
+            <div class="muted" style="margin-top:4px">
+              <button class="hintbtn" id="nl-hint">需要示例？</button>
+              &nbsp;|&nbsp; 区分：解析（规则，离线）≠ 生成（需模型，可选）
+            </div>
+          </div>
 
-      <!-- 验模三门 -->
-      <div class="pane" id="pane-gate">
-        <div class="muted" style="margin-bottom:8px">不验模，报告锁定。把“预测万物”收敛成“这局值不值得跑”。</div>
-
-        <div class="gate locked" id="gate1">
-          <h3>门① 输入门 · Eigen 三问 <span class="status-pill no" id="g1st">未过</span></h3>
-          <div class="muted">把预测问题改写成你真能证伪的一问，三问全勾才过。</div>
-          <label class="ck"><input type="checkbox" class="g1"><span>这局推演的问题是具体且可证伪的，而非“预测万物”。</span></label>
-          <label class="ck"><input type="checkbox" class="g1"><span>我接受它只给叙事分布、不给可信概率与确定结局。</span></label>
-          <label class="ck"><input type="checkbox" class="g1"><span>我判断这局值得跑（成本/收获相称）。</span></label>
-        </div>
-
-        <div class="gate locked" id="gate2">
-          <h3>门② 审图门 · 图谱漏了谁 <span class="status-pill no" id="g2st">未过</span></h3>
-          <div class="muted">勾选漏项会<b>真补进图谱、连 3 条边、重建世界</b>。硬门槛：至少检出一个漏项。</div>
-          <div id="missroles"></div>
-          <button class="btn primary" id="btn-apply-miss" style="margin-top:6px">补入选中角色并重建</button>
-        </div>
-
-        <div class="gate locked" id="gate3">
-          <h3>门③ 参数门 · 血统与检验日 <span class="status-pill no" id="g3st">未过</span></h3>
-          <div class="muted">C/D 级参数（外部依赖、传播率等无法直接验证项）必须填写“检验日月数”，到期对照公报，不填报告锁死。</div>
-          <table id="param-table"><thead><tr><th style="text-align:left">参数</th><th>值</th><th>血统</th><th>检验日(月)</th></tr></thead><tbody></tbody></table>
-        </div>
-
-        <div class="gate" id="anchor-gate" style="display:none">
-          <h3>🖋 落笔闸门 · 锁定你的知情判断</h3>
-          <textarea id="anchor-text" rows="2" placeholder="看懂局之后，写下你对这局结局的预判…"></textarea>
-          <button class="btn primary" id="btn-anchor" style="margin-top:6px">锁定落笔，写入决策档案</button>
+          <div class="sub-block">
+            <h3>🕰 时间线与事件记录</h3>
+            <div class="timeline-log" id="tl-log"></div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <!-- 导入世界 -->
-      <div class="pane" id="pane-upload">
-        <h2>📥 导入世界 <span class="tag">把模拟器从「仲恺基准」变成你的区域</span></h2>
+    <!-- ============ ③ 蒙特卡洛 ============ -->
+    <section id="view-mc" class="view">
+      <div class="card">
+        <h2>🎲 批量重跑 <span class="tag">跑1次看故事，跑1000次看结构</span></h2>
+        <div class="row">
+          <label class="muted">局数</label>
+          <select id="mc-n"><option value="200">200</option><option value="400" selected>400</option><option value="1000">1000</option></select>
+          <label class="muted">世界种子</label>
+          <input type="number" id="mc-seed" value="7" style="width:80px">
+          <button class="btn primary" id="btn-mc">运行</button>
+        </div>
+        <div id="mc-progress" class="muted"></div>
+        <div id="mc-results"></div>
+      </div>
+      <div class="card">
+        <h2>📐 仲恺基准参考结果 <span class="tag">400 局 · 本页面同源内核重算</span></h2>
+        <table id="baseline-table">
+          <thead><tr><th>指标</th><th>mean</th><th>sd</th><th>P10</th><th>P50</th><th>P90</th></tr></thead>
+          <tbody>
+            <tr><td>景气</td><td>0.5367</td><td>0.2288</td><td>0.1920</td><td>0.5760</td><td>0.8647</td></tr>
+            <tr><td>协同</td><td>0.7824</td><td>0.0882</td><td>0.6305</td><td>0.8253</td><td>0.8474</td></tr>
+            <tr><td>风险</td><td>0.1087</td><td>0.1361</td><td>0.0180</td><td>0.0320</td><td>0.3562</td></tr>
+            <tr><td>信心</td><td>0.2774</td><td>0.2957</td><td>−0.2310</td><td>0.4085</td><td>0.5642</td></tr>
+            <tr><td>存续</td><td>0.8853</td><td>0.1737</td><td>0.5833</td><td>1.0000</td><td>1.0000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ ④ 敏感性 ============ -->
+    <section id="view-sens" class="view">
+      <div class="card">
+        <h2>🌪 敏感性排序 <span class="tag">哪个变量一动，结论就翻</span></h2>
+        <div class="muted">对每个关键变量做 ±扰动，用同源内核重跑多局，比较「景气/存续」的变化幅度，按敏感度从大到小排序（龙卷风图）。</div>
+        <div class="row">
+          <label class="muted">每档局数</label>
+          <input type="number" id="sens-n" value="40" min="10" style="width:80px">
+          <label class="muted">扰动幅度</label>
+          <input type="number" id="sens-delta" value="0.15" step="0.05" style="width:80px">
+          <button class="btn primary" id="btn-sens">运行敏感性分析</button>
+        </div>
+        <div id="sens-progress" class="muted"></div>
+        <div id="sens-results"></div>
+      </div>
+    </section>
+
+    <!-- ============ ⑤ 主体档案 ============ -->
+    <section id="view-iv" class="view">
+      <div class="card">
+        <h2>👤 主体档案与访谈 <span class="tag">单主体 · 经营状态 · 目标 · 记忆</span></h2>
+        <div class="row">
+          <select id="iv-sel"></select>
+          <button class="btn" id="btn-iv">访谈</button>
+          <span class="muted">也可在动态推演的网络图中点任意节点查看。</span>
+        </div>
+        <div id="iv-box"><div class="muted">尚未选择主体。</div></div>
+        <div id="iv-neighbors" class="muted" style="margin-top:8px"></div>
+      </div>
+    </section>
+
+    <!-- ============ ⑥ 决策档案 ============ -->
+    <section id="view-ledger" class="view">
+      <div class="card">
+        <h2>📒 决策档案 <span class="tag">可审计</span><span id="ledger-mode-tag" class="tag" style="margin-left:6px"></span></h2>
+        <div class="row">
+          <button class="btn" id="btn-export-ledger">导出档案 JSON</button>
+          <button class="btn" id="btn-export-state">导出本局快照</button>
+          <button class="btn" id="btn-export-manifest" style="display:none">导出实验清单</button>
+        </div>
+        <div id="manifest-box" class="muted" style="margin:8px 0"></div>
+        <div class="timeline-log" id="ledger-log" style="max-height:340px"></div>
+        <div style="margin-top:12px">
+          <div id="report-locknote" class="locknote"></div>
+          <div id="report-box"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ⑦ 数据与证据 ============ -->
+    <section id="view-data" class="view">
+      <div class="card">
+        <h2>🧬 数据与证据 <span class="tag">参数血统 · 指标来源 · 边界声明</span></h2>
+        <div id="data-lineage" class="muted"></div>
+      </div>
+      <div class="card">
+        <h2>📋 参数血统与检验状态 <span class="tag">A=公报直接核对 · B=可由公报推算 · C=需持续检验 · D=无法验证</span></h2>
+        <table id="param-table"><thead><tr><th style="text-align:left">参数</th><th>值</th><th>血统</th><th>检验计划(月)</th></tr></thead><tbody></tbody></table>
+        <div class="muted" style="margin-top:8px">「检验计划」仅作后续复核登记，不代替参数是否已验证的判断；未填不阻断探索，但正式研究要求给出复核安排。</div>
+      </div>
+      <div class="card">
+        <h2>📖 术语对照 <span class="tag">旧称保留在帮助说明</span></h2>
+        <table>
+          <thead><tr><th style="text-align:left">本版名称</th><th style="text-align:left">旧称（历史版本 / 口播材料）</th></tr></thead>
+          <tbody>
+            <tr><td style="text-align:left">产业协同仿真实验室</td><td style="text-align:left">命运重跑机器</td></tr>
+            <tr><td style="text-align:left">实验准备与确认</td><td style="text-align:left">验模三门</td></tr>
+            <tr><td style="text-align:left">研究问题</td><td style="text-align:left">输入门 · Eigen 三问</td></tr>
+            <tr><td style="text-align:left">网络结构审查</td><td style="text-align:left">审图门</td></tr>
+            <tr><td style="text-align:left">参数与证据</td><td style="text-align:left">参数门</td></tr>
+            <tr><td style="text-align:left">研究预判锁定</td><td style="text-align:left">落笔闸门</td></tr>
+            <tr><td style="text-align:left">实验干预</td><td style="text-align:left">上帝视角</td></tr>
+            <tr><td style="text-align:left">指标扰动</td><td style="text-align:left">干扰参数</td></tr>
+            <tr><td style="text-align:left">主体档案与访谈</td><td style="text-align:left">访谈</td></tr>
+            <tr><td style="text-align:left">数据与证据</td><td style="text-align:left">数据血统</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ ⑧ 世界管理 ============ -->
+    <section id="view-world" class="view">
+      <div class="card">
+        <h2>🌍 世界管理 <span class="tag">把模拟器从「仲恺基准」变成你的区域</span></h2>
         <div class="muted" style="margin-bottom:6px">
           支持三种输入：<b>① CSV</b>（<span class="mono">[entities]</span> 主体表 + <span class="mono">[relations]</span> 关系表）·
           <b>② JSON</b>（<span class="mono">{candidates,relations,params}</span>）· <b>③ TXT 报告</b>（内置词表抽取主体，按类型自动连边）。
@@ -243,86 +450,45 @@
         </div>
         <div class="muted" id="up-note" style="margin-top:6px"></div>
       </div>
+    </section>
+  </main>
+</div>
 
-      <!-- 蒙特卡洛 -->
-      <div class="pane" id="pane-mc">
-        <h2>🎲 批量重跑 <span class="tag">跑1次看故事，跑1000次看结构</span></h2>
-        <div class="row">
-          <label class="muted">局数</label>
-          <select id="mc-n"><option value="200">200</option><option value="400" selected>400</option><option value="1000">1000</option></select>
-          <label class="muted">世界种子</label>
-          <input type="number" id="mc-seed" value="7" style="width:80px">
-          <button class="btn primary" id="btn-mc">运行</button>
-        </div>
-        <div id="mc-progress" class="muted"></div>
-        <div id="mc-results"></div>
+<!-- 主体抽屉 -->
+<div class="drawer" id="drawer">
+  <button class="close" id="drawer-close">✕</button>
+  <div id="drawer-body"></div>
+</div>
 
-        <h2 style="margin-top:14px">📐 预置基线（用本页面同源内核重算）</h2>
-        <table id="baseline-table">
-          <thead><tr><th>指标</th><th>mean</th><th>sd</th><th>P10</th><th>P50</th><th>P90</th></tr></thead>
-          <tbody>
-            <tr><td>景气</td><td>0.5367</td><td>0.2288</td><td>0.1920</td><td>0.5760</td><td>0.8647</td></tr>
-            <tr><td>协同</td><td>0.7824</td><td>0.0882</td><td>0.6305</td><td>0.8253</td><td>0.8474</td></tr>
-            <tr><td>风险</td><td>0.1087</td><td>0.1361</td><td>0.0180</td><td>0.0320</td><td>0.3562</td></tr>
-            <tr><td>信心</td><td>0.2774</td><td>0.2957</td><td>−0.2310</td><td>0.4085</td><td>0.5642</td></tr>
-            <tr><td>存续</td><td>0.8853</td><td>0.1737</td><td>0.5833</td><td>1.0000</td><td>1.0000</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- 敏感性 -->
-      <div class="pane" id="pane-sens">
-        <h2>🌪 敏感性排序 <span class="tag">哪个变量一动，结论就翻</span></h2>
-        <div class="muted">对每个关键变量做 ±扰动，用同源内核重跑多局，比较“景气/存续”的变化幅度，按敏感度从大到小排序（龙卷风图）。</div>
-        <div class="row">
-          <label class="muted">每档局数</label>
-          <input type="number" id="sens-n" value="40" min="10" style="width:80px">
-          <label class="muted">扰动幅度</label>
-          <input type="number" id="sens-delta" value="0.15" step="0.05" style="width:80px">
-          <button class="btn primary" id="btn-sens">运行敏感性分析</button>
-        </div>
-        <div id="sens-progress" class="muted"></div>
-        <div id="sens-results"></div>
-      </div>
-
-      <!-- Interview -->
-      <div class="pane" id="pane-iv">
-        <div class="muted" style="margin-bottom:8px">在左侧网络点任意节点，或在此选择。</div>
-        <div class="row">
-          <select id="iv-sel"></select>
-          <button class="btn" id="btn-iv">访谈</button>
-        </div>
-        <div id="iv-box"><div class="muted">尚未选择主体。</div></div>
-      </div>
-
-      <!-- Ledger -->
-      <div class="pane" id="pane-ledger">
-        <h2>📒 Decision Ledger <span class="tag">可审计</span></h2>
-        <div class="row">
-          <button class="btn" id="btn-export-ledger">导出 JSON</button>
-          <button class="btn" id="btn-export-state">导出本局快照</button>
-        </div>
-        <div class="timeline-log" id="ledger-log" style="max-height:360px"></div>
-      </div>
-
-      <!-- 数据血统 -->
-      <div class="pane" id="pane-data">
-        <h2>🧬 数据血统与边界</h2>
-        <div id="data-lineage" class="muted"></div>
-        <h2 style="margin-top:12px">📄 本局报告</h2>
-        <div id="report-locknote" class="locknote">🔒 未过验模三门，报告锁定。</div>
-        <div id="report-box" class="locked-report"></div>
-      </div>
+<!-- 正式研究 · 实验准备向导 -->
+<div class="modal-mask" id="prep-modal">
+  <div class="modal">
+    <h2>实验准备与确认 <span class="tag">正式研究 · 四步</span></h2>
+    <div class="muted">旧称「验模三门」：保留研究问题、网络审查、参数证据、事前预判四种严谨性要求；不再强制查漏、不再要求无意义勾选。</div>
+    <div class="steps">
+      <div class="st" id="step-dot-1">① 研究问题</div>
+      <div class="st" id="step-dot-2">② 网络结构</div>
+      <div class="st" id="step-dot-3">③ 参数证据</div>
+      <div class="st" id="step-dot-4">④ 预判锁定</div>
+    </div>
+    <div id="prep-body"></div>
+    <div class="actions">
+      <button class="btn" id="prep-cancel">取消</button>
+      <button class="btn" id="prep-prev" style="display:none">上一步</button>
+      <button class="btn primary" id="prep-next">下一步</button>
+      <button class="btn gold" id="prep-lock" style="display:none">锁定实验并进入推演</button>
     </div>
   </div>
 </div>
 
 <footer>
-  仲恺版是一台区域经济“风洞”：承载力模型出真分布 · 产业链时序自己演 · 三层网络让景气传播 · 验模门真查漏项 · 敏感性排序找关键变量。
+  仲恺版是一台区域经济“风洞”：承载力模型出真分布 · 产业链时序自己演 · 三层网络让景气传播 · 网络审查真查漏项 · 敏感性排序找关键变量。
   参数可回统计公报核对，反事实不可验证。数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）。License: MIT。
 </footer>
 
 <script>
+"use strict";
+
 /*KERNEL-BEGIN*/
 "use strict";
 /* ---------- 可复现 PRNG ---------- */
@@ -1070,12 +1236,11 @@ function applyWorld(ents,rels,seed,params){
   return {ok:true,sim,cand:cand.length,rel:relation.length,bad:bad.slice(0,6)};
 }
 /*KERNEL-END*/
-
 /* ================= UI 层（依赖DOM） ================= */
 const $=s=>document.querySelector(s);
 const $$=s=>Array.from(document.querySelectorAll(s));
 const MET_CN={abundance:"景气",order:"协同",disaster:"风险",mood:"信心",survivors:"存续"};
-const MET_COLOR={abundance:"#16a34a",order:"#2563eb",disaster:"#dc2626",mood:"#d97706",survivors:"#0891b2"};
+const MET_COLOR={abundance:"#168568",order:"#2458c6",disaster:"#c24141",mood:"#b7791f",survivors:"#0891b2"};
 /* 17 项公开指标（2025）：[名称, 数值, 映射状态, 血统] */
 const INDICATOR_TABLE=[
   ["地区生产总值 GDP","1160.39 亿，+7.1%","景气","A"],
@@ -1098,19 +1263,91 @@ const INDICATOR_TABLE=[
 ];
 
 let sim=new Sim(7);
-let gatesPassed={g1:false,g2:false,g3:false};
-let anchored=false;
+let worldSource="仲恺基准（内置 41 主体 / 71 关系 / 15 因果链）";
+let pendingWorld=null;
+let currentIv=null;
 let playing=false, playTimer=null;
 let posCache=null;
+let netType="", netLayer="", netSearch="";
 
+/* ================= 实验状态控制器（V1.0） ================= */
+const experimentState={
+  mode:"explore",            // explore | formal
+  phase:"idle",              // idle | preparing | locked | running | completed
+  runId:null,
+  worldVersion:"zhongkai-baseline",
+  preparation:{experiment:"",question:"",metrics:[],prediction:"",networkReview:"",networkNote:"",missIdxs:[],paramsReviewed:false,reviewPlan:""},
+  plannedEvents:[],          // [{tick,event}]
+  manifest:null,
+  revisions:[]
+};
+function setPhase(p){
+  experimentState.phase=p;
+  if(p==="completed"&&experimentState.mode==="formal"){/* 档案已含终态，保持 */ }
+  updateStatusBar();
+}
+function setMode(m){
+  if(m===experimentState.mode)return;
+  experimentState.mode=m;
+  if(m==="explore")setPhase("idle");
+  updateStatusBar();
+  render();
+}
+function updateStatusBar(){
+  $("#st-mode").textContent=experimentState.mode==="explore"?"探索模拟":"正式研究";
+  $("#st-world").textContent="世界："+worldSource.split("（")[0];
+  $("#st-seed").textContent=sim.seed;
+  $("#st-tick").textContent=sim.tick;
+  const phName={idle:"空闲",preparing:"准备中",locked:"已锁定",running:"运行中",completed:"已完成"}[experimentState.phase]||experimentState.phase;
+  const el=$("#st-phase");
+  el.textContent="状态："+phName;
+  el.className="pill"+(experimentState.phase==="locked"||experimentState.phase==="running"||experimentState.phase==="completed"?" phase-locked":"");
+  const rid=$("#st-runid");
+  rid.style.display=experimentState.runId?"":"none";
+  rid.textContent=experimentState.runId||"";
+  $("#btn-exit-formal").style.display=experimentState.mode==="formal"?"":"none";
+  $("#btn-prepare").textContent=experimentState.mode==="formal"?"继续正式研究":"正式研究";
+}
+function canExecute(action){
+  const st=experimentState;
+  if(st.mode==="explore")return {ok:true};
+  if(st.phase==="preparing")return action==="editPreparation"?{ok:true}:{ok:false,msg:"请先完成「实验准备」再执行该操作。"};
+  if(st.phase==="locked"||st.phase==="running"||st.phase==="completed"){
+    if(["play","pause","step","viewHistory","reset","inspect","plannedEvent"].includes(action))return {ok:true};
+    if(action==="unplannedEvent")return {ok:false,msg:"该操作不在本次实验计划内，已锁定实验不直接执行。可转探索分支运行，或另开新实验（原档案保留）。"};
+    if(action==="editWorld")return {ok:false,msg:"已锁定实验不能修改世界结构；如需改动请另开新实验（原档案保留）。"};
+    if(action==="editParams")return {ok:false,msg:"已锁定实验不能修改关键参数；如需改动请另开新实验或修订（原档案保留）。"};
+  }
+  return {ok:true};
+}
+function gate(action){
+  const r=canExecute(action);
+  if(!r.ok)$("#nl-result").innerHTML=`<span style="color:#c24141">✗ ${r.msg}</span>`;
+  return r;
+}
+
+/* ================= 视图切换（分组导航） ================= */
+function switchView(v){
+  $$(".nav").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
+  $$(".view").forEach(p=>p.classList.toggle("on",p.id==="view-"+v));
+}
+$$(".nav").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.v)));
+$("#entry-explore").onclick=()=>{
+  if(experimentState.mode==="formal"&&!confirm("当前为正式研究。进入探索后，新操作将不再记录到实验 "+experimentState.runId+"（原档案保留）。继续？"))return;
+  setMode("explore");
+  switchView("run");
+};
+$("#entry-formal").onclick=()=>{openPrep();};
+
+/* ================= 基础渲染 ================= */
 function refreshSelectors(){
-  const names=sim.agents.map(a=>`${a.name}${a.alive?"":"（已亡）"}`);
   const raw=sim.agents.map(a=>a.name);
   fill("#remove-sel",raw.map(n=>[n,n]));
   fill("#iv-sel",raw.map(n=>[n,n]));
 }
 function fill(sel,opts){const el=$(sel);const cur=el.value;
-  el.innerHTML=opts.map(o=>`<option value="${o[1]}">${o[0]}</option>`).join("");if(cur)el.value=cur;}
+  el.innerHTML=opts.map(o=>`<option value="${escapeHtml(o[1])}">${escapeHtml(o[0])}</option>`).join("");if(cur)el.value=cur;}
+function escapeHtml(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
 function render(){
   const st=sim.state;
@@ -1118,44 +1355,50 @@ function render(){
   $("#track").value=sim.tick;
   $("#world-lbl").textContent=worldSource;
   setKpi("ab",st.abundance);setKpi("or",st.order);setKpi("di",st.disaster);
-  const moodShow=(st.mood+1)/2;
   setKpi("mo",st.mood,true);setKpi("su",sim.survivors());
   renderNetwork();
   renderTimeline();
   renderLedger();
   if(currentIv)renderInterview(currentIv);
   renderReport();
+  updateStatusBar();
 }
 function setKpi(k,v,isMood){
   const pct=isMood?(v+1)/2:v;
-  $(`#k-${k}`).textContent=isMood?v.toFixed(2):v.toFixed(2);
+  $(`#k-${k}`).textContent=v.toFixed(2);
   const bar=$(`#b-${k}`);bar.style.width=(pct*100).toFixed(0)+"%";
-  bar.style.background=k==="di"?"#dc2626":k==="mo"?(v<0?"#dc2626":"#16a34a"):(k==="su"?"#0891b2":"#16a34a");
+  bar.style.background=k==="di"?"#c24141":k==="mo"?(v<0?"#c24141":"#168568"):(k==="su"?"#0891b2":"#168568");
 }
 
+/* ---- 网络图（仅推演工作台；过滤只影响显示，不影响仿真计算） ---- */
 function renderNetwork(){
   const svg=$("#netsvg");
   const W=760,H=560;
   if(!posCache||posCache.__seed!==sim.seed||posCache.__n!==sim.agents.length){
     posCache=layoutForce(sim.agents,sim.edges,W,H);posCache.__seed=sim.seed;posCache.__n=sim.agents.length;
   }
+  const agentFilter=a=>(!netType||a.type===netType)&&(!netSearch||a.name.includes(netSearch));
+  const edgeFilter=e=>!netLayer||e.layer===netLayer;
   const eCol=e=>e.layer==="hist"?"#818cf8":(e.layer==="affinity"?"#cbd5e1":"#c9b8a3");
   let html="";
-  sim.edges.forEach(e=>{
+  sim.edges.filter(edgeFilter).forEach(e=>{
     const p=posCache[e.a],q=posCache[e.b];if(!p||!q)return;
     const pa=sim._byName(e.a),pb=sim._byName(e.b);
     const op=((pa&&pa.alive?1:.25)*(pb&&pb.alive?1:.25)*.85).toFixed(2);
     const dash=e.layer==="hist"?"":"stroke-dasharray:4 4;";
     html+=`<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${q.x.toFixed(1)}" y2="${q.y.toFixed(1)}"
-      style="stroke:${eCol(e)};stroke-width:${e.layer==="hist"?1.8:1};${dash}opacity:${op}"><title>${e.rel}（${e.a}→${e.b}）</title></line>`;
+      style="stroke:${eCol(e)};stroke-width:${e.layer==="hist"?1.8:1};${dash}opacity:${op}"><title>${escapeHtml(e.rel)}（${escapeHtml(e.a)}→${escapeHtml(e.b)}）</title></line>`;
   });
-  sim.agents.forEach(a=>{
+  const searchHit=netSearch?new Set(sim.agents.filter(a=>a.name.includes(netSearch)).map(a=>a.name)):null;
+  sim.agents.filter(agentFilter).forEach(a=>{
     const p=posCache[a.name];if(!p)return;
     const cfg=TYPE_CFG[a.type];
+    const hl=searchHit&&searchHit.has(a.name);
     if(a.alive){
       const r=(11+a.energy*11).toFixed(1);
-      const ring=a.sentiment>.12?"#16a34a":a.sentiment<-.12?"#dc2626":"#94a3b8";
-      html+=`<g class="node" data-name="${a.name}" style="cursor:pointer">
+      const ring=a.sentiment>.12?"#168568":a.sentiment<-.12?"#c24141":"#94a3b8";
+      html+=`<g class="node" data-name="${a.name}" style="cursor:pointer"${hl?' opacity="1"':""}>
+        ${hl?`<circle cx="${p.x}" cy="${p.y}" r="${(+r+6).toFixed(1)}" fill="none" stroke="#2458c6" stroke-width="2" stroke-dasharray="3 3"></circle>`:""}
         <circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${typeColor(a.type)}" stroke="${ring}" stroke-width="3.5"></circle>
         <text x="${p.x}" y="${p.y+4}" text-anchor="middle" font-size="12" font-weight="600" fill="#fff" paint-order="stroke" stroke="rgba(0,0,0,.28)" stroke-width="1.5">${cfg.cn}</text>
         <text x="${p.x}" y="${(p.y+Number(r)+14).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="#475569" paint-order="stroke" stroke="#fcfdff" stroke-width="3">${a.name}</text>
@@ -1177,45 +1420,86 @@ function renderNetwork(){
   });
   html+=`</g>`;
   svg.innerHTML=html;
-  svg.querySelectorAll(".node").forEach(n=>n.addEventListener("click",()=>{
-    currentIv=n.dataset.name; switchTab("iv"); renderInterview(currentIv);
-  }));
+  svg.querySelectorAll(".node").forEach(n=>n.addEventListener("click",()=>openDrawer(n.dataset.name)));
 }
 function typeColor(t){return {anchor:"#312e81",oem:"#4f46e5",supplier:"#0e7490",service:"#b45309",
   talent:"#ca8a04",capital:"#065f46",land:"#4d7c0f",infra:"#64748b"}[t];}
+
+/* 网络工具 */
+$("#net-type").onchange=e=>{netType=e.target.value;renderNetwork();};
+$("#net-layer").onchange=e=>{netLayer=e.target.value;renderNetwork();};
+$("#net-search").oninput=e=>{netSearch=e.target.value.trim();renderNetwork();};
+$("#net-reset").onclick=()=>{$("#net-type").value="";$("#net-layer").value="";$("#net-search").value="";netType="";netLayer="";netSearch="";renderNetwork();};
+$("#net-full").onclick=()=>{
+  const card=$("#netsvg").closest(".card");
+  const isFs=card.classList.toggle("fullscreen");
+  if(isFs){
+    card.style.cssText="position:fixed;inset:0;z-index:80;background:#fff;border-radius:0;padding:34px 26px;overflow:auto;margin:0";
+    $("#netsvg").style.height="calc(100vh - 150px)";
+    $("#net-full").textContent="✕ 退出全屏";
+  }else{
+    card.style.cssText="";$("#netsvg").style.height="520px";$("#net-full").textContent="⛶ 全屏";
+  }
+  renderNetwork();
+};
+
+/* ---- 主体抽屉（节点点击） ---- */
+function openDrawer(name){
+  const d=sim.interview(name); if(!d)return;
+  gate("inspect");
+  const rels=sim.edges.filter(e=>e.a===name||e.b===name);
+  $("#drawer-body").innerHTML=`
+    <h3>${escapeHtml(d.name)} <span class="chip">${d.typeCn}</span> ${d.alive?"":'<span class="chip" style="background:#fdeeec;color:#c24141">已退场</span>'}</h3>
+    <div class="ivgrid">
+      <div class="cell">实力 power：<b>${d.power}</b></div>
+      <div class="cell">行业地位 renown：<b>${d.renown}</b></div>
+      <div class="cell">经营 energy：<b>${(d.energy*100|0)}</b></div>
+      <div class="cell">预期 sentiment：<b style="color:${d.sentiment>0?"#168568":"#c24141"}">${d.sentiment.toFixed(2)}</b></div>
+    </div>
+    <div class="muted">目标：${escapeHtml(d.goal)}</div>
+    <div class="askbox"><b>"你现在最在意什么？"</b><br>"${escapeHtml(d.care)}"</div>
+    <div class="askbox" style="margin-top:8px"><b>最近 5 条记忆</b><br>${d.memory.map(m=>"· "+escapeHtml(m)).join("<br>")}</div>
+    <div class="muted" style="margin-top:8px"><b>局部关系（${rels.length}）</b><br>${rels.slice(0,14).map(e=>{const other=e.a===name?e.b:e.a;return `<span class="chip">${escapeHtml(e.rel)} → ${escapeHtml(other)}</span>`;}).join("")||"—"}</div>
+    <div class="row" style="margin-top:10px"><button class="btn sm" id="drawer-go-iv">在主体档案中查看 →</button></div>`;
+  $("#drawer").classList.add("on");
+  $("#drawer-go-iv").onclick=()=>{currentIv=name;$("#iv-sel").value=name;switchView("iv");renderInterview(name);};
+}
+$("#drawer-close").onclick=()=>$("#drawer").classList.remove("on");
 
 function renderTimeline(){
   const box=$("#tl-log");
   const evs=[...sim.timeline].sort((a,b)=>a.tick-b.tick);
   box.innerHTML=evs.map(e=>{
     const gold=e.kind==="gold";
-    const col=e.kind==="death"?"#dc2626":gold?"#ca8a04":e.kind==="hist"?"#2563eb":"#334155";
-    return `<div class="ev ${gold?"gold":""}" style="color:${col}"><span class="tk">t${e.tick}</span>${e.text}</div>`;
+    const col=e.kind==="death"?"#c24141":gold?"#ca8a04":e.kind==="hist"?"#2458c6":"#334155";
+    return `<div class="ev ${gold?"gold":""}" style="color:${col}"><span class="tk">t${e.tick}</span>${escapeHtml(e.text)}</div>`;
   }).join("")||'<div class="muted">尚未推演。</div>';
   box.scrollTop=box.scrollHeight;
 }
 
-/* ---- Interview ---- */
-let currentIv=null;
+/* ---- 主体档案与访谈 ---- */
 function renderInterview(name){
   const d=sim.interview(name);
   $("#iv-sel").value=name;
-  if(!d){$("#iv-box").innerHTML='<div class="muted">无此主体</div>';return;}
-  const sentCol=d.sentiment>0?"#16a34a":"#dc2626";
+  if(!d){$("#iv-box").innerHTML='<div class="muted">无此主体</div>';$("#iv-neighbors").innerHTML="";return;}
+  const sentCol=d.sentiment>0?"#168568":"#c24141";
   $("#iv-box").innerHTML=`
     <div class="ivw">
-      <h3>${d.name} <span class="chip">${d.typeCn}</span> ${d.alive?"":'<span class="chip" style="background:#fdeaea;color:#dc2626">已退场</span>'}</h3>
+      <h3>${escapeHtml(d.name)} <span class="chip">${d.typeCn}</span> ${d.alive?"":'<span class="chip" style="background:#fdeeec;color:#c24141">已退场</span>'}</h3>
       <div class="ivgrid">
         <div class="cell">实力 power：<b>${d.power}</b></div>
         <div class="cell">行业地位 renown：<b>${d.renown}</b></div>
         <div class="cell">经营 energy：<b>${(d.energy*100|0)}</b></div>
         <div class="cell">预期 sentiment：<b style="color:${sentCol}">${d.sentiment.toFixed(2)}</b></div>
       </div>
-      <div class="muted">目标：${d.goal}</div>
-      <div class="askbox"><b>“你现在最在意什么？”</b><br>“${d.care}”</div>
-      <div class="askbox" style="margin-top:8px"><b>最近 5 条记忆</b><br>${d.memory.map(m=>`· ${m}`).join("<br>")}</div>
+      <div class="muted">目标：${escapeHtml(d.goal)}</div>
+      <div class="askbox"><b>"你现在最在意什么？"</b><br>"${escapeHtml(d.care)}"</div>
+      <div class="askbox" style="margin-top:8px"><b>最近 5 条记忆</b><br>${d.memory.map(m=>"· "+escapeHtml(m)).join("<br>")}</div>
     </div>`;
+  const rels=sim.edges.filter(e=>e.a===name||e.b===name);
+  $("#iv-neighbors").innerHTML=`<b>局部关系（${rels.length}）：</b>${rels.slice(0,14).map(e=>{const other=e.a===name?e.b:e.a;return `<span class="chip">${escapeHtml(e.rel)} → ${escapeHtml(other)}</span>`;}).join("")||"—"}`;
 }
+$("#btn-iv").onclick=()=>{currentIv=$("#iv-sel").value;renderInterview(currentIv);};
 
 /* ---- Ledger ---- */
 function renderLedger(){
@@ -1223,72 +1507,321 @@ function renderLedger(){
   box.innerHTML=sim.ledger.map(l=>{
     let d="";
     try{d=typeof l.payload==="object"?JSON.stringify(l.payload):l.payload;}catch(e){}
-    return `<div class="ev"><span class="tk">t${l.t}</span><b>[${l.type}]</b> <span class="mono">${escapeHtml(d)}</span></div>`;
-  }).join("");
+    return `<div class="ev"><span class="tk">t${l.t}</span><b>[${escapeHtml(l.type)}]</b> <span class="mono">${escapeHtml(d)}</span></div>`;
+  }).join("")||'<div class="muted">尚无记录。</div>';
   box.scrollTop=box.scrollHeight;
 }
-function escapeHtml(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
 
-/* ---- 验模三门 ---- */
-function buildMissRoles(){
-  $("#missroles").innerHTML=MISS_ROLES.map((r,i)=>
-    `<div class="missrole"><label class="ck"><input type="checkbox" class="miss" value="${i}">
-      <span><b>${r[0]}</b> — ${r[1]} <span class="chip">${TYPE_CFG[r[2]].cn}</span></span></label></div>`).join("");
-}
-function buildParamTable(){
-  $("#param-table tbody").innerHTML=PARAM_LINEAGE.map((p,i)=>
-    `<tr><td style="text-align:left">${p[0]}<span class="grade ${p[2]}">${p[2]}</span>
-      <div class="muted" style="font-size:10px">${p[3]}</div></td>
-      <td>${p[1]}</td><td>${p[2]}</td>
-      <td>${p[4]?`<input type="number" class="pcheck" data-i="${i}" min="1" style="width:70px" placeholder="月">`:"—"}</td></tr>`).join("");
-}
-function checkG1(){
-  const cks=$$(".g1");
-  gatesPassed.g1=cks.every(c=>c.checked);
-  markGate("gate1","g1st",gatesPassed.g1);
-  afterGates();
-}
-function markGate(id,stId,ok){
-  const el=$("#"+id);el.classList.toggle("locked",!ok);el.classList.toggle("done",ok);
-  const st=$("#"+stId);st.className="status-pill "+(ok?"yes":"no");st.textContent=ok?"已过":"未过";
-}
-function applyMiss(){
-  const idxs=$$(".miss").filter(c=>c.checked).map(c=>parseInt(c.value));
-  if(!idxs.length){alert("硬门槛：至少检出一个漏项，请勾选。");return;}
-  const r=sim.addMissing(idxs);
-  gatesPassed.g2=true;markGate("gate2","g2st",true);
-  posCache=null;refreshSelectors();render();afterGates();
-}
-function checkG3(){
-  const need=PARAM_LINEAGE.map((p,i)=>({p,i})).filter(x=>x.p[4]);
-  const vals=$$(".pcheck");
-  let ok=true;
-  vals.forEach(v=>{if(!v.value||parseFloat(v.value)<=0)ok=false;});
-  gatesPassed.g3=ok;markGate("gate3","g3st",ok);afterGates();
-}
-function afterGates(){
-  if(gatesPassed.g1&&gatesPassed.g2&&gatesPassed.g3){
-    $("#anchor-gate").style.display="block";
+/* ================= 实验准备与确认（正式研究四步） ================= */
+let prepStep=1;
+const prepDraft={
+  experiment:"",question:"",metrics:[],prediction:"",
+  networkReview:"",networkNote:"",missIdxs:[],paramsReviewed:false,reviewPlan:""
+};
+function openPrep(){
+  if(experimentState.mode==="formal"&&experimentState.phase==="locked"){
+    alert("当前已有锁定实验 "+experimentState.runId+"。如需新实验请先「退回探索」再开始，或查看决策档案。" );
+    return;
   }
+  prepStep=1;
+  Object.assign(prepDraft,{experiment:"",question:"",metrics:["survivors","order","disaster"],prediction:"",
+    networkReview:"",networkNote:"",missIdxs:[],paramsReviewed:false,reviewPlan:""});
+  $("#prep-modal").classList.add("on");
+  renderPrep();
 }
-function doAnchor(){
-  const txt=$("#anchor-text").value.trim();
-  if(!txt){alert("请先写下你的预判再落笔。");return;}
-  anchored=true;
-  sim._log("anchor",{prediction:txt});
-  const b=$("#btn-anchor");b.textContent="已锁定 ✓";b.disabled=true;
-  $("#anchor-text").disabled=true;
+function renderPrep(){
+  for(let i=1;i<=4;i++){
+    const el=$("#step-dot-"+i);
+    el.className="st"+(i<prepStep?" done":i===prepStep?" on":"");
+  }
+  $("#prep-prev").style.display=prepStep>1?"":"none";
+  $("#prep-next").style.display=prepStep<4?"":"none";
+  $("#prep-lock").style.display=prepStep===4?"":"none";
+  const body=$("#prep-body");
+  if(prepStep===1)body.innerHTML=prepStep1HTML();
+  else if(prepStep===2){body.innerHTML=prepStep2HTML();buildMissRoles();}
+  else if(prepStep===3)body.innerHTML=prepStep3HTML();
+  else body.innerHTML=prepStep4HTML();
+}
+function prepStep1HTML(){
+  return `
+  <div class="muted" style="margin-bottom:8px">从现有实验选取研究方向，或使用自定义问题。选择已有实验会自动生成<b>可编辑</b>的问题草稿，不预设肯定性结论。</div>
+  <label class="muted">实验类型</label>
+  <select id="prep-exp" style="width:100%;margin-bottom:10px" onchange="onPrepExp()">
+    <option value="自定义">自定义研究问题</option>
+    <option value="链主外迁">链主外迁</option>
+    <option value="芯片断供">芯片断供</option>
+    <option value="订单外流">订单外流</option>
+    <option value="产能过剩">产能过剩</option>
+    <option value="双冲击（链主外迁+芯片断供）">双冲击（链主外迁+芯片断供）</option>
+  </select>
+  <label class="muted">研究问题（具体且可证伪）</label>
+  <textarea id="prep-question" rows="3" placeholder="例：在仲恺基准世界中，链主外迁是否改变系统存续率？"></textarea>
+  <div class="row"><label class="muted">主要观测指标</label>
+    ${["survivors","order","disaster","abundance","mood"].map(m=>`<label class="chip" style="cursor:pointer"><input type="checkbox" class="prep-met" value="${m}" ${["survivors","order","disaster"].includes(m)?"checked":""} style="margin-right:4px">${MET_CN[m]}</label>`).join("")}
+  </div>
+  <label class="muted">本次研究预判（可选，锁定前可改；正式报告将预判与结果分开展示）</label>
+  <input type="text" id="prep-pred" style="width:100%" placeholder="例：预判双冲击会降低配套企业存续率、风险尾部上升。">`;
+}
+function onPrepExp(){
+  const v=$("#prep-exp").value;
+  const drafts={
+    "链主外迁":"在仲恺基准世界中，链主外迁是否改变系统存续率与协同水平？",
+    "芯片断供":"在仲恺基准世界中，芯片断供对配套企业存续与产业协同的影响是否显著？",
+    "订单外流":"在仲恺基准世界中，订单外流是否导致系统性退链与景气下行？",
+    "产能过剩":"在仲恺基准世界中，产能过剩对整机与配套环节的挤出效应有多大？",
+    "双冲击（链主外迁+芯片断供）":"在仲恺基准世界中，链主外迁与芯片断供的双重冲击是否显著降低系统存续率、推高风险尾部？",
+    "自定义":""
+  };
+  $("#prep-question").value=drafts[v]||"";
+}
+function prepStep2HTML(){
+  return `
+  <div class="muted" style="margin-bottom:8px">检查本次研究使用的产业网络。检查与修改分离：勾选「补充主体」只产生<b>建议与预览</b>，确认后才生成世界副本；原始仲恺基准始终不变。</div>
+  <div class="opt" data-r="unchanged" onclick="pickReview(this)"><b>保留原始仲恺基准世界</b><span class="muted">检查后认为适用于本次研究，不做结构修改。适合标准对照实验。</span></div>
+  <div class="opt" data-r="add" onclick="pickReview(this)"><b>发现需要补充的主体</b><span class="muted">先查看补充内容与连边变化，确认后生成世界副本（Draft-01，不覆盖原始基准）。</span></div>
+  <div class="opt" data-r="uncertain" onclick="pickReview(this)"><b>对部分网络完整性尚不确定</b><span class="muted">保留原始网络，将不确定性写入实验说明。</span></div>
+  <div id="miss-area" style="display:none">
+    <div id="missroles"></div>
+    <div class="row"><button class="btn" id="btn-preview-miss" onclick="previewMiss()">查看改动预览</button></div>
+    <div id="miss-preview"></div>
+  </div>
+  <div class="row" style="margin-top:8px"><label class="muted">网络说明（可选）</label><input type="text" id="net-note" style="flex:1" placeholder="例：未含物流通道，可能低估流通约束"></div>`;
+}
+function pickReview(el){
+  $$("#prep-body .opt").forEach(o=>o.classList.remove("sel"));
+  el.classList.add("sel");
+  prepDraft.networkReview=el.dataset.r;
+  $("#miss-area").style.display=el.dataset.r==="add"?"block":"none";
+  $("#miss-preview").innerHTML="";
+}
+function previewMiss(){
+  const idxs=$$(".miss").filter(c=>c.checked).map(c=>parseInt(c.value));
+  if(!idxs.length){$("#miss-preview").innerHTML='<div class="diffbox">未勾选补充项。若确认保留基准，请选「保留原始仲恺基准世界」。</div>';return;}
+  const names=idxs.map(i=>MISS_ROLES[i][0]);
+  $("#miss-preview").innerHTML=`<div class="diffbox">
+    <div>· 本局活跃主体 <b>${sim.agents.length}</b> → <b>${sim.agents.length+names.length}</b>（新增 ${names.length}：${names.map(escapeHtml).join("、")}）</div>
+    <div>· 新增关系：每个补充主体自动连 3 条（约 <b>${names.length*3}</b> 条，连到权重最高的在场主体；<b>预览连边为建议项，确认前请人工核对</b>）</div>
+    <div>· 世界版本：<b>Baseline</b> → <b>Draft-01</b>（不覆盖原始基准）</div></div>`;
+}
+function prepStep3HTML(){
+  return `
+  <div class="muted" style="margin-bottom:8px">逐项确认参数证据状态。允许带着<b>明确披露的假设</b>开展实验，但不能把它们标记为已经实证验证。血统 C/D 级参数若尚未标定，请标记「未验证假设」。</div>
+  <table><thead><tr><th style="text-align:left">参数</th><th>值</th><th>血统</th><th>证据状态</th></tr></thead><tbody>
+  ${PARAM_LINEAGE.map((p,i)=>`<tr><td style="text-align:left">${p[0]}<div class="muted" style="font-size:10px">${escapeHtml(p[3])}</div></td><td>${p[1]}</td><td>${p[2]}</td>
+    <td><select class="pstate" data-i="${i}"><option value="">未标记</option><option value="ok">来源已核对</option><option value="assume">未验证假设</option><option value="issue">存在待处理问题</option></select></td></tr>`).join("")}
+  </tbody></table>
+  <div class="row" style="margin-top:8px"><label class="muted">后续复核安排（正式研究要求填写）</label><input type="text" id="review-plan" style="flex:1" placeholder="例：下季度对照统计公报复核 spread_rate 等 C 级参数"></div>`;
+}
+function prepStep4HTML(){
+  const rv={unchanged:"保留原始基准",add:"补充主体（生成副本）",uncertain:"保留 + 不确定性说明"}[prepDraft.networkReview]||"—";
+  return `
+  <table><tbody>
+    <tr><td style="text-align:left">研究对象</td><td>仲恺高新区基准世界</td></tr>
+    <tr><td style="text-align:left">实验类型</td><td>${escapeHtml(prepDraft.experiment||"自定义")}</td></tr>
+    <tr><td style="text-align:left">研究问题</td><td style="text-align:left">${escapeHtml(prepDraft.question)}</td></tr>
+    <tr><td style="text-align:left">主要指标</td><td>${prepDraft.metrics.map(m=>MET_CN[m]||m).join("、")}</td></tr>
+    <tr><td style="text-align:left">网络处理</td><td>${rv}${prepDraft.networkNote?"（"+escapeHtml(prepDraft.networkNote)+"）":""}</td></tr>
+    <tr><td style="text-align:left">参数证据</td><td>已逐项标记；复核安排：${escapeHtml(prepDraft.reviewPlan)||"—"}</td></tr>
+    <tr><td style="text-align:left">研究预判</td><td style="text-align:left">${escapeHtml(prepDraft.prediction)||"—（未填写，仍可锁定，报告将标注无预判）"}</td></tr>
+  </tbody></table>
+  <div class="muted" style="margin-top:10px">确认后：生成实验编号，冻结世界、种子、研究问题与预判，进入正式推演。锁定后预判不能原地覆盖；如需修改将生成修订记录或新实验。</div>`;
+}
+$("#prep-cancel").onclick=()=>{
+  if(prepStep>1&&experimentState.phase==="preparing"&&!confirm("放弃当前实验准备？"))return;
+  $("#prep-modal").classList.remove("on");
+  if(experimentState.phase==="preparing")setPhase("idle");
+};
+$("#prep-prev").onclick=()=>{if(prepStep>1){prepStep--;renderPrep();}};
+$("#prep-next").onclick=()=>{
+  if(prepStep===1){
+    prepDraft.experiment=$("#prep-exp").value;
+    prepDraft.question=$("#prep-question").value.trim();
+    prepDraft.prediction=$("#prep-pred").value.trim();
+    prepDraft.metrics=$$(".prep-met").filter(c=>c.checked).map(c=>c.value);
+    if(!prepDraft.question){alert("请先填写研究问题（具体且可证伪的一问）。");return;}
+    if(!prepDraft.metrics.length){alert("至少选择一个主要观测指标。");return;}
+  }
+  if(prepStep===2){
+    prepDraft.networkNote=$("#net-note").value.trim();
+    if(!prepDraft.networkReview){alert("请选择网络处理方式。");return;}
+    if(prepDraft.networkReview==="add"){
+      const idxs=$$(".miss").filter(c=>c.checked).map(c=>parseInt(c.value));
+      if(!idxs.length){alert("选择「发现需要补充的主体」后至少勾选一项，或改选保留基准。");return;}
+      prepDraft.missIdxs=idxs;
+    }else prepDraft.missIdxs=[];
+  }
+  if(prepStep===3){
+    const states=$$(".pstate").map(s=>s.value);
+    if(states.some(v=>!v)){alert("请为每个参数标记证据状态（来源已核对 / 未验证假设 / 待处理问题）。");return;}
+    prepDraft.reviewPlan=$("#review-plan").value.trim();
+    if(!prepDraft.reviewPlan){alert("正式研究要求填写后续复核安排。");return;}
+    prepDraft.paramsReviewed=true;
+  }
+  prepStep++;renderPrep();
+};
+$("#prep-lock").onclick=()=>{
+  if(!prepDraft.question.trim()){alert("请先填写研究问题。");return;}
+  if(prepDraft.networkReview==="add"){
+    if(!prepDraft.missIdxs.length){alert("请先选择要补充的主体并确认预览。");return;}
+    const r=sim.addMissing(prepDraft.missIdxs);
+    posCache=null;
+    worldSource=`世界副本 Draft-01（仲恺基准 + ${r.added} 个补充主体 / +${r.edgesAdded} 条建议边）`;
+    refreshSelectors();
+  }else if(prepDraft.networkReview==="uncertain"){
+    prepDraft.networkNote=(prepDraft.networkNote||"对部分网络完整性不确定，保留原始网络")+"（不确定性已记录）";
+  }
+  const now=new Date();
+  const ymd=now.toISOString().slice(0,10).replace(/-/g,"");
+  experimentState.runId="ZK-"+ymd+"-"+(experimentState.revisions.length+1).toString().padStart(3,"0");
+  experimentState.mode="formal";
+  experimentState.preparation=Object.assign({},prepDraft);
+  experimentState.plannedEvents=plannedEventsFrom(prepDraft.experiment);
+  experimentState.manifest={
+    schema_version:"1.0",
+    run_id:experimentState.runId,
+    region:"仲恺高新区",
+    mode:"formal",
+    world_version:"zhongkai-baseline",
+    engine_version:"1.0.0",
+    seed:sim.seed,
+    ticks:sim.params.ticks,
+    world:worldSource,
+    research:{question:prepDraft.question,prediction:prepDraft.prediction,primary_metrics:prepDraft.metrics},
+    network_review:prepDraft.networkReview,
+    parameter_review:{status:prepDraft.paramsReviewed?"reviewed_with_assumptions":"pending",review_plan:prepDraft.reviewPlan},
+    planned_events:experimentState.plannedEvents,
+    status:"locked",
+    created_at:now.toISOString()
+  };
+  setPhase("locked");
+  $("#prep-modal").classList.remove("on");
+  sim._log("experiment_lock",{run_id:experimentState.runId,question:prepDraft.question});
+  switchView("run");
   render();
+  alert("已锁定正式实验 "+experimentState.runId+"：\n研究问题、世界、种子与预判已冻结。\n播放/单步/时间轴可自由回放；未计划的干预会先询问是否转探索分支。");
+};
+function plannedEventsFrom(exp){
+  const map={
+    "链主外迁":[{tick:5,event:"链主外迁"}],
+    "芯片断供":[{tick:5,event:"芯片断供"}],
+    "订单外流":[{tick:5,event:"订单外流"}],
+    "产能过剩":[{tick:5,event:"产能过剩"}],
+    "双冲击（链主外迁+芯片断供）":[{tick:5,event:"链主外迁"},{tick:6,event:"芯片断供"}],
+    "自定义":[]
+  };
+  return map[exp]||[];
 }
 
-/* ---- 蒙特卡洛 UI ---- */
+/* ================= 实验控制（时间轴） ================= */
+$("#btn-step").onclick=()=>{
+  if(!gate("step").ok)return;
+  sim.step();posCache=null;render();
+};
+$("#btn-reset").onclick=()=>{
+  if(!gate("reset").ok)return;
+  if(experimentState.mode==="formal"&&experimentState.phase==="locked"){
+    experimentState.revisions.push({at:new Date().toISOString(),action:"reset",note:"重置世界为初始状态重新运行（原实验档案与预判保留）"});
+  }
+  sim=new Sim(sim.seed);posCache=null;refreshSelectors();render();
+};
+$("#btn-play").onclick=function(){
+  if(playing){clearInterval(playTimer);playing=false;this.textContent="▶ 播放";return;}
+  if(!gate("play").ok)return;
+  playing=true;this.textContent="⏸ 暂停";
+  playTimer=setInterval(()=>{
+    if(sim.tick>=sim.params.ticks){
+      clearInterval(playTimer);playing=false;$("#btn-play").textContent="▶ 播放";
+      if(experimentState.mode==="formal"&&experimentState.phase==="locked")setPhase("completed");
+      return;
+    }
+    sim.step();posCache=null;render();
+  },650);
+};
+$("#track").oninput=e=>{
+  if(!gate("viewHistory").ok)return;
+  sim.seek(parseInt(e.target.value));posCache=null;render();
+};
+
+/* ================= 实验干预（冲击/移除/扰动） ================= */
+function logFormalEvent(kind,detail){
+  if(experimentState.mode!=="formal"||experimentState.phase==="preparing")return;
+  experimentState.revisions.push({at:new Date().toISOString(),tick:sim.tick,action:kind,detail});
+}
+$("#btn-shock").onclick=()=>{
+  const type=$("#shock-sel").value;
+  if(experimentState.mode==="formal"&&experimentState.phase!=="preparing"){
+    const planned=experimentState.plannedEvents.some(e=>e.event===type);
+    if(!planned){
+      if(!confirm("「"+type+"」不在本次实验计划内。转为探索分支运行（原档案保留）？"))return;
+      setMode("explore");
+    }else{
+      logFormalEvent("shock",{type,tick:sim.tick+1});
+    }
+  }
+  const r=sim.shock(type);
+  $("#nl-result").innerHTML=r.ok?`已注入「${escapeHtml(type)}」${r.killed?`，连带退链/流失 ${r.killed} 家`:""}`:`<span style="color:#c24141">${escapeHtml(r.msg)}</span>`;
+  posCache=null;render();
+};
+$("#btn-remove").onclick=()=>{
+  const name=$("#remove-sel").value;
+  if(experimentState.mode==="formal"&&experimentState.phase!=="preparing"){
+    if(!gate("editWorld").ok)return;
+  }
+  const r=sim.removeAgent(name);
+  if(r.ok)logFormalEvent("remove",{name});
+  $("#nl-result").innerHTML=r.ok?`已移除「${escapeHtml(name)}」`:`<span style="color:#c24141">${escapeHtml(r.msg)}</span>`;
+  posCache=null;render();
+};
+$("#btn-pert").onclick=()=>{
+  const metric=$("#pert-metric").value,delta=parseFloat($("#pert-delta").value)||0;
+  if(experimentState.mode==="formal"&&experimentState.phase!=="preparing"){
+    if(!gate("editParams").ok)return;
+  }
+  sim.perturb(metric,delta);
+  logFormalEvent("perturb",{metric,delta});
+  posCache=null;render();
+};
+
+/* ---- 自然语言注入 ---- */
+$("#btn-nl").onclick=()=>{
+  const txt=$("#nl-input").value;if(!txt)return;
+  const r=sim.parseNL(txt);
+  const out=$("#nl-result");
+  if(r.error){out.innerHTML=`<span style="color:#c24141">✗ ${escapeHtml(r.error)}</span>`;return;}
+  if(experimentState.mode==="formal"&&experimentState.phase!=="preparing"){
+    if(r.kind==="shock"){
+      const planned=experimentState.plannedEvents.some(e=>e.event===r.type);
+      if(!planned){
+        if(!confirm("「"+r.type+"」不在本次实验计划内。转为探索分支运行（原档案保留）？"))return;
+        setMode("explore");
+      }else logFormalEvent("shock",{type:r.type});
+    }else if(r.kind==="remove"){
+      if(!gate("editWorld").ok)return;
+      logFormalEvent("remove",{name:r.name});
+    }else if(r.kind==="perturb"){
+      if(!gate("editParams").ok)return;
+      logFormalEvent("perturb",{metric:r.metric,delta:r.delta});
+    }
+  }
+  const ex=sim.execNL(txt);
+  if(ex.error){out.innerHTML=`<span style="color:#c24141">✗ ${escapeHtml(ex.error)}</span>`;return;}
+  let msg="";
+  if(ex.kind==="shock")msg=`✓ shock:${escapeHtml(ex.type)}${ex.exec.killed?`（连带${ex.exec.killed}）`:""}`;
+  if(ex.kind==="remove")msg=ex.exec.ok?`✓ remove:${escapeHtml(ex.name)}`:`<span style="color:#c24141">✗ ${escapeHtml(ex.exec.msg)}</span>`;
+  if(ex.kind==="perturb")msg=`✓ perturb:${escapeHtml(ex.metric)} ${ex.delta>=0?"+":""}${ex.delta}`;
+  out.innerHTML=msg;posCache=null;render();
+};
+$("#nl-hint").onclick=()=>{$("#nl-input").value="TCL华星外迁";};
+
+/* ================= 蒙特卡洛 ================= */
 function doMC(){
   const n=parseInt($("#mc-n").value),seed=parseInt($("#mc-seed").value)||7;
   const res=$("#mc-results");res.innerHTML="";
   $("#mc-progress").textContent="运行中…";
   setTimeout(()=>{
     const stats=runMonteCarlo(seed,n,sim.params,(i,t)=>{$("#mc-progress").textContent=`进度 ${i}/${t}`;});
-    $("#mc-progress").textContent=`完成 ${n} 局（种子 ${seed}）`;
+    $("#mc-progress").textContent=`完成 ${n} 局（种子 ${seed}）${experimentState.mode==="formal"?" · 已记入实验 "+experimentState.runId:""}`;
     let html="";
     ["abundance","order","disaster","mood","survivors"].forEach(k=>{
       const s=stats[k];
@@ -1319,8 +1852,9 @@ function histSVG(values,p50,p10,p90,color){
     <text x="${pad}" y="${H-4}" font-size="9" fill="#64748b">${lo.toFixed(2)}</text>
     <text x="${W-pad-20}" y="${H-4}" font-size="9" fill="#64748b">${hi.toFixed(2)}</text></svg>`;
 }
+$("#btn-mc").onclick=doMC;
 
-/* ---- 敏感性 UI（龙卷风图） ---- */
+/* ================= 敏感性 ================= */
 function doSens(){
   const n=parseInt($("#sens-n").value)||40;
   const delta=parseFloat($("#sens-delta").value)||.15;
@@ -1342,7 +1876,7 @@ function tornadoSVG(rows){
   rows.forEach((r,i)=>{
     const y=top+i*rowH+8,h=18;
     const x1=x(Math.min(r.abLo,r.abHi)),x2=x(Math.max(r.abLo,r.abHi)),xc=x(r.center);
-    const col={invest:"#2563eb",external:"#dc2626",service:"#ca8a04",land:"#65a30d"}[r.key];
+    const col={invest:"#2458c6",external:"#c24141",service:"#ca8a04",land:"#65a30d"}[r.key];
     bars+=`<text x="${pad-8}" y="${y+13}" text-anchor="end" font-size="11" fill="#1f2733">${r.cn}</text>
       <rect x="${x1}" y="${y}" width="${Math.max(x2-x1,2)}" height="${h}" fill="${col}" opacity=".78" rx="3"></rect>
       <line x1="${xc}" y1="${y-3}" x2="${xc}" y2="${y+h+3}" stroke="#1f2733" stroke-width="1.2"></line>
@@ -1355,8 +1889,21 @@ function tornadoSVG(rows){
   const rank=`<div class="muted" style="margin-top:6px">敏感度排序（景气）：<b>${rows.map(r=>r.cn).join(" &gt; ")}</b>。<br>越靠前，越该优先盯紧、或作为政策抓手；外部依赖条向左伸表示依赖越高、景气越低。</div>`;
   return `<svg viewBox="0 0 ${W} ${H}" style="width:100%">${head}${axis}${bars}</svg>${rank}`;
 }
+$("#btn-sens").onclick=doSens;
 
-/* ---- 报告 ---- */
+/* ================= 数据与证据 + 报告 ================= */
+function buildParamTable(){
+  $("#param-table tbody").innerHTML=PARAM_LINEAGE.map((p,i)=>
+    `<tr><td style="text-align:left">${p[0]}<span class="grade ${p[2]}">${p[2]}</span>
+      <div class="muted" style="font-size:10px">${escapeHtml(p[3])}</div></td>
+      <td>${p[1]}</td><td>${p[2]}</td>
+      <td>${p[4]?`<input type="number" class="pcheck" data-i="${i}" min="1" style="width:70px" placeholder="月">`:"—"}</td></tr>`).join("");
+}
+function buildMissRoles(){
+  $("#missroles").innerHTML=MISS_ROLES.map((r,i)=>
+    `<div class="missrole"><label class="checkrow"><input type="checkbox" class="miss" value="${i}">
+      <span><b>${r[0]}</b> — ${escapeHtml(r[1])} <span class="chip">${TYPE_CFG[r[2]].cn}</span></span></label></div>`).join("");
+}
 function renderReport(){
   $("#data-lineage").innerHTML=`
     · 数据来源（2025，公开）：仲恺高新区<b>统计公报</b>、管委会工作报告、计划执行草案、经济运行简析及权威媒体报道。<br>
@@ -1366,13 +1913,25 @@ function renderReport(){
     <table style="margin-top:6px"><thead><tr><th style="text-align:left">公开指标</th><th>数值</th><th>映射</th></tr></thead><tbody>
     ${INDICATOR_TABLE.map(r=>`<tr><td style="text-align:left">${r[0]}<span class="grade ${r[3]}">${r[3]}</span></td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}
     </tbody></table>
-    · <span style="color:#16a34a">参数可回公报核对；</span><span style="color:#dc2626">但反事实（当年不引进某链主会怎样）不可验证，只给叙事分布。</span>`;
-  const passed=gatesPassed.g1&&gatesPassed.g2&&gatesPassed.g3&&anchored;
+    · <span style="color:#168568">参数可回公报核对；</span><span style="color:#c24141">但反事实（当年不引进某链主会怎样）不可验证，只给叙事分布。</span>`;
+
+  const st=experimentState;
   const box=$("#report-box"),note=$("#report-locknote");
-  if(!passed){box.classList.add("locked-report");
-    note.textContent=`🔒 ${!anchored?"过三门后还需落笔锁定":"未过验模三门"}，报告锁定。`;
-    box.innerHTML=reportHTML();return;}
-  note.textContent="";box.classList.remove("locked-report");box.innerHTML=reportHTML();
+  $("#ledger-mode-tag").textContent=st.mode==="formal"?"正式研究"+(st.runId?" · "+st.runId:""):"探索性模拟";
+  $("#btn-export-manifest").style.display=(st.mode==="formal"&&st.manifest)?"":"none";
+  if(st.mode==="explore"){
+    note.innerHTML=`当前为<b>探索性模拟</b>：结果可查看、可复现（同种子可重跑），但未登记研究问题与预判，不能生成正式研究档案。`;
+    box.classList.remove("locked-report");
+    box.innerHTML=reportHTML()+'<div class="row" style="margin-top:10px"><button class="btn primary sm" id="btn-to-formal">以此为基础开始正式研究 →</button></div>';
+    const b=$("#btn-to-formal");if(b)b.onclick=()=>openPrep();
+    return;
+  }
+  if(st.phase==="preparing"||!st.manifest){
+    note.innerHTML="🔒 实验准备尚未完成：当前可查看探索结果，但不能生成正式研究档案。";
+    box.classList.add("locked-report");box.innerHTML=reportHTML();return;
+  }
+  note.innerHTML="";box.classList.remove("locked-report");
+  box.innerHTML=reportHTML()+formalReportBlock();
 }
 function reportHTML(){
   const r=sim.report();const f=r.final;
@@ -1384,14 +1943,27 @@ function reportHTML(){
       <div class="cell">信心：<b>${f.mood.toFixed(3)}</b></div>
     </div>
     <div class="cell" style="margin:6px 0">存续率：<b>${(r.survivors*100).toFixed(0)}%</b>（在场 ${r.alive.length}）</div>
-    <b>产业事件（${r.histEvents.length}）</b><div class="muted">${r.histEvents.map(e=>"· "+e).join("<br>")||"—"}</div>
-    <b style="display:block;margin-top:6px">退场（${r.deaths.length}）</b><div class="muted" style="color:#dc2626">${r.deaths.map(e=>"· "+e).join("<br>")||"—"}</div>
+    <b>产业事件（${r.histEvents.length}）</b><div class="muted">${r.histEvents.map(e=>"· "+escapeHtml(e)).join("<br>")||"—"}</div>
+    <b style="display:block;margin-top:6px">退场（${r.deaths.length}）</b><div class="muted" style="color:#c24141">${r.deaths.map(e=>"· "+escapeHtml(e)).join("<br>")||"—"}</div>
     </div>`;
 }
+function formalReportBlock(){
+  const m=experimentState.manifest; if(!m)return "";
+  const f=sim.report().final;
+  return `<div class="ivw" style="margin-top:10px;border-color:#cdd9f2;background:#f8fafc">
+    <h3>📋 正式研究记录 · ${escapeHtml(m.run_id)}</h3>
+    <div class="ivgrid">
+      <div class="cell">研究问题</div><div class="cell" style="text-align:left">${escapeHtml(m.research.question)}</div>
+      <div class="cell">研究预判</div><div class="cell" style="text-align:left">${escapeHtml(m.research.prediction)||"—（未填写）"}</div>
+      <div class="cell">主要指标</div><div class="cell" style="text-align:left">${m.research.primary_metrics.map(x=>MET_CN[x]||x).join("、")}</div>
+      <div class="cell">网络处理</div><div class="cell" style="text-align:left">${({unchanged:"保留原始基准",add:"补充主体（生成副本）",uncertain:"保留 + 不确定性说明"}[m.network_review]||m.network_review)}</div>
+      <div class="cell">世界 / 种子</div><div class="cell" style="text-align:left">${escapeHtml(m.world)} · Seed ${m.seed} / ${m.ticks} 步</div>
+      <div class="cell">当前终态</div><div class="cell" style="text-align:left">景气 ${f.abundance.toFixed(3)} · 协同 ${f.order.toFixed(3)} · 风险 ${f.disaster.toFixed(3)} · 信心 ${f.mood.toFixed(3)} · 存续 ${(sim.survivors()*100).toFixed(0)}%</div>
+    </div>
+    <div class="muted" style="margin-top:6px">预判与实际结果分开展示，不自动解释为预测成功与否。同种子、同配置可复现本局。</div></div>`;
+}
 
-/* ================= 导入世界 UI ================= */
-let worldSource="仲恺基准（内置 41 主体 / 71 关系 / 15 因果链）";
-let pendingWorld=null;
+/* ================= 世界管理（导入/导出） ================= */
 const SAMPLE_WORLD=`[entities]
 # 名称,类型(anchor/oem/supplier/service/talent/capital/land/infra),权重1-3,说明
 中科智城,anchor,3,智慧城市总集成商
@@ -1408,26 +1980,26 @@ const SAMPLE_WORLD=`[entities]
 技能大学,中科智城,受雇,0.4
 园区建设集团,精密光学,承载,0.7`;
 function renderUploadPreview(p){
-  if(!p||!p.ok){$("#up-preview").innerHTML=`<div class="muted" style="color:#b91c1c">${p?p.msg:"—"}</div>`;$("#up-status").textContent="";return;}
+  if(!p||!p.ok){$("#up-preview").innerHTML=`<div class="muted" style="color:#b91c1c">${p?escapeHtml(p.msg):"—"}</div>`;$("#up-status").textContent="";return;}
   pendingWorld=p;
   $("#up-status").textContent=p.note||"";
   const typeSel=Object.keys(TYPE_CFG).map(t=>`<option value="${t}">${TYPE_CFG[t].cn}</option>`).join("");
   let h=`<table style="table-layout:fixed"><colgroup><col style="width:34%"><col style="width:20%"><col style="width:10%"><col style="width:30%"><col style="width:6%"></colgroup>
   <thead><tr><th>主体名</th><th>类型</th><th>权重</th><th>说明</th><th></th></tr></thead><tbody>`;
   p.entities.forEach((e,i)=>{
-    h+=`<tr data-e="${i}"><td><input value="${e.name}" class="up-e-n" style="width:100%"></td>
+    h+=`<tr data-e="${i}"><td><input value="${escapeHtml(e.name)}" class="up-e-n" style="width:100%"></td>
     <td><select class="up-e-t">${typeSel.replace(`value="${e.type}"`,`value="${e.type}" selected`)}</select></td>
     <td><input type="number" min="1" max="3" value="${e.w}" class="up-e-w" style="width:100%"></td>
-    <td><input value="${(e.desc||"").replace(/"/g,"&quot;")}" class="up-e-d" style="width:100%"></td>
+    <td><input value="${escapeHtml(e.desc||"")}" class="up-e-d" style="width:100%"></td>
     <td><button class="btn up-del" data-i="${i}">✕</button></td></tr>`;
   });
   h+=`</tbody></table>`;
   if(p.relations.length){
     h+=`<div class="muted" style="margin:6px 0">关系（${p.relations.length} 条，a → 关系 → b）</div><table style="table-layout:fixed"><colgroup><col style="width:30%"><col style="width:20%"><col style="width:30%"><col style="width:14%"><col style="width:6%"></colgroup><tbody>`;
     p.relations.forEach((r,i)=>{
-      h+=`<tr data-r="${i}"><td><input value="${r.a}" class="up-r-a" style="width:100%"></td>
-      <td><input value="${r.rel}" class="up-r-l" style="width:100%"></td>
-      <td><input value="${r.b}" class="up-r-b" style="width:100%"></td>
+      h+=`<tr data-r="${i}"><td><input value="${escapeHtml(r.a)}" class="up-r-a" style="width:100%"></td>
+      <td><input value="${escapeHtml(r.rel)}" class="up-r-l" style="width:100%"></td>
+      <td><input value="${escapeHtml(r.b)}" class="up-r-b" style="width:100%"></td>
       <td><input type="number" step=".1" min="0" max="1" value="${r.str}" class="up-r-s" style="width:100%"></td>
       <td><button class="btn up-delr" data-i="${i}">✕</button></td></tr>`;
     });
@@ -1453,10 +2025,9 @@ function buildWorldFromUpload(){
   const r=applyWorld(ents,rels,seed,pendingWorld.params);
   if(!r.ok)return alert(r.msg);
   worldSource=`自定义世界（${r.cand} 主体 / ${r.rel} 关系，种子 ${seed}）`;
-  sim=r.sim;posCache=null;anchored=false;gatesPassed={g1:false,g2:false,g3:false};
-  const ab=$("#btn-anchor");ab.textContent="锁定落笔，写入决策档案";ab.disabled=false;
-  const at=$("#anchor-text");at.disabled=false;at.value="";
-  refreshSelectors();switchTab("run");render();
+  sim=r.sim;posCache=null;
+  experimentState.mode="explore";experimentState.phase="idle";experimentState.runId=null;experimentState.manifest=null;experimentState.plannedEvents=[];
+  refreshSelectors();switchView("run");render();
   $("#up-note").innerHTML=`<b>已生成</b>：${worldSource}。播放、蒙特卡洛、敏感性、访谈均已切到新世界；预置基线表仍是仲恺 400 局基准，可用于对比。`;
 }
 $("#btn-restore").onclick=()=>{
@@ -1466,8 +2037,9 @@ $("#btn-restore").onclick=()=>{
   const r=applyWorld(ents,rels,7);
   if(!r.ok)return alert(r.msg);
   worldSource=`仲恺基准（内置 ${r.cand} 主体 / ${r.rel} 关系 / ${CAUSAL.length} 因果链）`;
-  sim=r.sim;posCache=null;anchored=false;gatesPassed={g1:false,g2:false,g3:false};
-  refreshSelectors();switchTab("run");render();
+  sim=r.sim;posCache=null;
+  experimentState.mode="explore";experimentState.phase="idle";experimentState.runId=null;experimentState.manifest=null;experimentState.plannedEvents=[];
+  refreshSelectors();switchView("run");render();
   $("#up-note").innerHTML=`<b>已恢复</b>：${worldSource}。`;
 };
 function exportSeed(){
@@ -1483,69 +2055,28 @@ $("#btn-sample").onclick=()=>{$("#up-text").value=SAMPLE_WORLD;renderUploadPrevi
 $("#btn-build").onclick=buildWorldFromUpload;
 $("#btn-export-seed").onclick=exportSeed;
 
-/* ---- Tab 切换 ---- */
-function switchTab(t){
-  $$(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===t));
-  $$(".pane").forEach(p=>p.classList.toggle("on",p.id==="pane-"+t));
-}
-$$(".tabs button").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
-
-/* ---- 时间轴控制 ---- */
-$("#btn-step").onclick=()=>{sim.step();posCache=null;render();};
-$("#btn-reset").onclick=()=>{sim=new Sim(sim.seed);posCache=null;refreshSelectors();render();};
-$("#btn-play").onclick=function(){
-  if(playing){clearInterval(playTimer);playing=false;this.textContent="▶ 播放";return;}
-  playing=true;this.textContent="⏸ 暂停";
-  playTimer=setInterval(()=>{if(sim.tick>=sim.params.ticks||!anchored){
-      if(!anchored)alert("请先在「验模三门」过三门并落笔锁定，再播放。");
-      clearInterval(playTimer);playing=false;$("#btn-play").textContent="▶ 播放";return;}
-    sim.step();posCache=null;render();},650);
+/* ---- 模式与导出 ---- */
+$("#btn-prepare").onclick=()=>openPrep();
+$("#btn-exit-formal").onclick=()=>{
+  if(confirm("退回探索模式：不删除已锁定档案，后续操作不再记录到实验 "+experimentState.runId+"。继续？")){
+    setMode("explore");
+  }
 };
-$("#track").oninput=e=>{sim.seek(parseInt(e.target.value));posCache=null;render();};
-
-/* ---- 上帝视角 ---- */
-$("#btn-shock").onclick=()=>{const r=sim.shock($("#shock-sel").value);
-  $("#nl-result").innerHTML=r.ok?`已注入「${$("#shock-sel").value}」${r.killed?`，亡 ${r.killed}：`:""}`:"";posCache=null;render();};
-$("#btn-remove").onclick=()=>{const r=sim.removeAgent($("#remove-sel").value);
-  $("#nl-result").innerHTML=r.ok?`已移除「${$("#remove-sel").value}」`:`<span style="color:#dc2626">${r.msg}</span>`;posCache=null;render();};
-$("#btn-pert").onclick=()=>{sim.perturb($("#pert-metric").value,parseFloat($("#pert-delta").value)||0);
-  posCache=null;render();};
-
-/* ---- NL 注入 ---- */
-$("#btn-nl").onclick=()=>{
-  const txt=$("#nl-input").value;if(!txt)return;
-  const r=sim.execNL(txt);
-  const out=$("#nl-result");
-  if(r.error){out.innerHTML=`<span style="color:#dc2626">✗ ${r.error}</span>`;return;}
-  let msg="";
-  if(r.kind==="shock")msg=`✓ shock:${r.type}${r.exec.killed?`（亡${r.exec.killed}）`:""}`;
-  if(r.kind==="remove")msg=r.exec.ok?`✓ remove:${r.name}`:`<span style="color:#dc2626">✗ ${r.exec.msg}</span>`;
-  if(r.kind==="perturb")msg=`✓ perturb:${r.metric} ${r.delta>=0?"+":""}${r.delta}`;
-  out.innerHTML=msg;posCache=null;render();
-};
-$("#nl-hint").onclick=()=>{$("#nl-input").value="TCL华星外迁";};
-
-/* ---- 三门事件 ---- */
-$$(".g1").forEach(c=>c.onchange=checkG1);
-$("#btn-apply-miss").onclick=applyMiss;
-buildMissRoles();buildParamTable();
-$("#param-table").addEventListener("input",checkG3);
-$("#btn-anchor").onclick=doAnchor;
-
-/* ---- 蒙特卡洛 / 敏感性 / 导出 ---- */
-$("#btn-mc").onclick=doMC;
-$("#btn-sens").onclick=doSens;
 $("#btn-export-ledger").onclick=()=>download("zhongkai_decision_ledger.json",
-  JSON.stringify({meta:{case:"仲恺高新区",year:2025,seed:sim.seed},ledger:sim.ledger},null,2));
+  JSON.stringify({meta:{case:"仲恺高新区",year:2025,seed:sim.seed,mode:experimentState.mode,run_id:experimentState.runId},ledger:sim.ledger},null,2));
 $("#btn-export-state").onclick=()=>download("zhongkai_snapshot.json",JSON.stringify(sim._snap(),null,2));
+$("#btn-export-manifest").onclick=()=>{if(experimentState.manifest)download(experimentState.manifest.run_id+"_manifest.json",JSON.stringify(experimentState.manifest,null,2));};
 function download(name,text){
   const blob=new Blob([text],{type:"application/json"});const url=URL.createObjectURL(blob);
   const a=document.createElement("a");a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);
 }
-$("#btn-iv").onclick=()=>{currentIv=$("#iv-sel").value;renderInterview(currentIv);};
 
 /* ---- 初始化 ---- */
-refreshSelectors();render();
+buildParamTable();
+refreshSelectors();
+updateStatusBar();
+render();
+
 </script>
 </body>
 </html>

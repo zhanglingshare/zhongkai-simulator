@@ -1,6 +1,6 @@
 /* 仲恺版内核验证：提取 KERNEL，做功能断言 */
 const fs=require('fs');
-const HTML='/Users/pro/Doubao/chats/2026-10-01/new-chat-1/zhongkai_sim_v0.8.html';
+const HTML=require('path').join(__dirname,'..','zhongkai_simulator.html');
 const html=fs.readFileSync(HTML,'utf8');
 const m=html.match(/\/\*KERNEL-BEGIN\*\/([\s\S]*?)\/\*KERNEL-END\*\//);
 if(!m)throw new Error('KERNEL not found');
