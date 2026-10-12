@@ -258,6 +258,18 @@
   .fate-card::after{content:"";position:absolute;right:-24px;top:-24px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.10),transparent 70%)}
   @media (max-width:1100px){.fate-grid{grid-template-columns:repeat(2,1fr)}}
   @media (max-width:640px){.fate-grid{grid-template-columns:1fr}}
+  /* 十五五目标缺口（2025 基线 → 2030 目标） */
+  .goal-card{position:relative;overflow:hidden;margin:16px 0}
+  .goal-card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#38bdf8,#a78bfa,#fbbf24)}
+  .goal-rows{display:flex;flex-direction:column;gap:15px;margin:16px 0 6px}
+  .gr-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+  .gr-top b{font-size:14px;color:var(--ink)}
+  .gr-top .gr-vals{font-size:12px;color:var(--sub)}
+  .gr-top .gap-n{color:#fbbf24;font-weight:800;font-size:13.5px}
+  .gr-track{position:relative;height:13px;border-radius:999px;background:rgba(148,163,184,.13)}
+  .gr-fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,#0284c7,#38bdf8);box-shadow:0 0 12px rgba(56,189,248,.35)}
+  .gr-dot{position:absolute;top:50%;width:15px;height:15px;border-radius:50%;background:#fbbf24;transform:translate(-50%,-50%);box-shadow:0 0 0 3px rgba(251,191,36,.18),0 0 12px rgba(251,191,36,.8)}
+  .gr-pct{position:absolute;right:6px;top:-21px;font-size:11px;color:#94a3b8;font-weight:700}
   .fate-step h3{margin:0 0 8px;font-size:15.5px;color:var(--ink)}
   .fate-net{width:100%;height:300px;display:block;background:radial-gradient(700px 320px at 60% -80px, rgba(56,189,248,.10), transparent 60%), #0a1120;border-radius:12px;margin:8px 0;border:1px solid var(--line)}
   .fate-meta{font-size:12px;color:var(--sub);margin:6px 0}
@@ -500,7 +512,14 @@
   .in-phone footer{flex:none;padding:12px 14px 22px}
   .in-phone .kpis{grid-template-columns:repeat(3,1fr)}
   .in-phone #netsvg{height:320px}
-  .in-phone .drawer{width:100%;max-width:100%}
+  /* 浮层（弹窗/抽屉）收进手机屏，不跳出手机框 */
+  .in-phone .modal-mask{position:absolute;inset:0;padding:0;background:rgba(3,6,12,.62);
+    align-items:stretch;z-index:80;overflow:hidden;backdrop-filter:blur(3px)}
+  .in-phone .modal-mask.on{display:flex}
+  .in-phone .modal-mask .modal{max-width:none;width:100%;height:100%;border-radius:0;
+    border:none;box-shadow:none;overflow-y:auto;padding:56px 15px 26px}
+  .in-phone .drawer{position:absolute;top:0;right:0;bottom:0;width:100%;max-width:100%;
+    border-left:none;box-shadow:none;z-index:75}
   .in-phone .run-grid{grid-template-columns:1fr}
   .in-phone table{display:block;width:100%;max-width:100%;overflow-x:auto}
   .in-phone .story{flex-direction:column}
@@ -559,8 +578,8 @@
         </div>
         <div class="ls-locks">
           <div class="ls-notify" id="ls-notify">
-            <div class="n-ico">📰</div>
-            <div><b id="ls-notify-title">今日仲恺</b><span id="ls-notify-sub">正在接收今日消息…</span></div>
+            <div class="n-ico">🏔️</div>
+            <div><b id="ls-notify-title">2030 · 再翻一座山</b><span id="ls-notify-sub">正在接收今日消息…</span></div>
           </div>
           <div class="ls-bottom">
             <button class="ls-round" type="button">🔦</button>
@@ -635,6 +654,25 @@
           <button class="btn sm" onclick="switchView('hot');renderHot()">📰 今日仲恺 · 打工人每日情报站</button>
           <button class="btn sm" onclick="switchView('town');renderTown()">🏘 仲恺生活地图 · 下班周末去哪</button>
         </div>
+      </div>
+      <div class="card goal-card">
+        <h2>🏔️ 2030，仲恺要再翻一座山 <span class="tag">2025 基线 → 十五五公开目标</span></h2>
+        <div class="goal-rows">
+          <div class="goal-row">
+            <div class="gr-top"><b>GDP</b><span class="gr-vals">1160.39 亿 → 2000 亿 · 缺口 <span class="gap-n">839.61 亿</span> · 已到 58%</span></div>
+            <div class="gr-track"><div class="gr-fill" style="width:58.0%"></div><div class="gr-dot" style="left:58.0%"></div></div>
+          </div>
+          <div class="goal-row">
+            <div class="gr-top"><b>规上工业总产值</b><span class="gr-vals">4037.12 亿 → 6500 亿 · 缺口 <span class="gap-n">2462.88 亿</span> · 已到 62%</span></div>
+            <div class="gr-track"><div class="gr-fill" style="width:62.1%"></div><div class="gr-dot" style="left:62.1%"></div></div>
+          </div>
+          <div class="goal-row">
+            <div class="gr-top"><b>生产性服务业</b><span class="gr-vals">330.70 亿 → 400 亿 · 缺口 <span class="gap-n">69.30 亿</span> · 已到 83%</span></div>
+            <div class="gr-track"><div class="gr-fill" style="width:82.7%"></div><div class="gr-dot" style="left:82.7%"></div></div>
+          </div>
+        </div>
+        <div class="muted" style="margin-top:12px;font-size:11.5px;line-height:1.6">这是 2025 年已实现的基线与 2030 年公开目标的比较，不是 2026 年实时完成率；金色标记是今天的位置，标记右侧的长度，就是还要走的路。目标来源：仲恺高新区“十五五”公开部署。</div>
+        <div style="margin-top:10px;font-size:13px;font-weight:700;color:#7dd3fc">如果这座山由你来翻，你会先迈出哪一步？挑一个最像你的身份，开一局 ↓</div>
       </div>
       <div class="fate-grid">
         <div class="fate-card" data-ident="work">
@@ -2130,7 +2168,7 @@ function tickClock(){
 function refreshLockNotify(){
   fetch("hot.json?_="+Date.now()).then(r=>r.json()).then(d=>{
     const n=d.count||0;
-    $("#ls-notify-sub").textContent=n+" 条新消息 · 每日更新";
+    $("#ls-notify-sub").textContent="缺口 839 亿，跟你有关 · 今日 "+n+" 条新消息";
     const b=$("#hs-badge-hot");
     if(b){b.textContent=n;b.style.display=n?"flex":"none";}
   }).catch(()=>{});
@@ -2169,7 +2207,7 @@ function goHome(){setPhoneState("home");islandLive("",false);}
 (function(){
   const ls=$("#lockscreen");let sy=0;
   ls.addEventListener("click",function(e){
-    if(e.target.closest("#ls-notify")){e.preventDefault();unlockPhone("hot");return;}
+    if(e.target.closest("#ls-notify")){e.preventDefault();unlockPhone("home");return;}
     if(e.target.closest(".ls-round"))return;
     unlockPhone();
   });
@@ -2189,6 +2227,12 @@ $("#tb-go").addEventListener("click",function(){
 /* 初始化 */
 renderHomeScreen();tickClock();setInterval(tickClock,10000);
 refreshLockNotify();setPhoneState("locked");
+/* 弹窗/抽屉移入手机屏，确保不跳出手机框 */
+(function(){
+  const ps=document.querySelector(".phone-screen");
+  if(!ps)return;
+  document.querySelectorAll(".modal-mask,.drawer").forEach(el=>ps.appendChild(el));
+})();
 /* 手机汉堡菜单：按需展开/收起状态条与导航，首屏只留项目名 */
 function closeMobMenu(){document.body.classList.remove("nav-open");const m=$("#mob-menu");if(m){m.textContent="☰ 菜单";m.setAttribute("aria-expanded","false");}}
 $("#mob-menu").onclick=function(){
@@ -2207,7 +2251,7 @@ $("#entry-formal").onclick=()=>{openPrep();};
 const FATE_IDENTS={
   work:{emoji:"👷",label:"我在仲恺上班",q:"大企业订单波动，会不会影响我的工作机会？",
     shocks:["链主外迁","芯片断供"],
-    data:"2025 公开：规上工业企业 1144 家 · 高新技术企业 1053 家 · 工业总产值 4164 亿（A 级）",
+    data:"2025 公开：规上工业企业 1144 家 · 高新技术企业 1053 家 · 规上工业总产值 4037.12 亿（A 级）",
     mech:"模型内可观察：链主订单冲击 → 配套企业存续与产业协同；个人就业结果未建模，以下为可能传导机制，不是预测。"},
   shop:{emoji:"🏪",label:"我在仲恺开店",q:"大企业订单减少，会不会影响周边消费？",
     shocks:["订单外流","供应链中断"],
@@ -2379,7 +2423,11 @@ function skipFatePlay(){
   $("#fate-next").onclick=()=>{fateState.step=2;renderFate();};
 }
 function newFateSim(){ return new Sim(7,{dynamicNetwork:1}); }
-function injectShocks(s){ (fateState.newsShocks||FATE_IDENTS[fateState.ident]||FATE_IDENTS.work).shocks.forEach(k=>s.shock(k)); }
+function injectShocks(s){
+  /* newsShocks 已是冲击数组；FATE_IDENTS 项是对象、需取 .shocks */
+  const arr=fateState.newsShocks||(FATE_IDENTS[fateState.ident]||FATE_IDENTS.work).shocks;
+  arr.forEach(k=>s.shock(k));
+}
 function stepFateSim(s){
   s.step();
   if(s.tick===5)injectShocks(s);   /* 统一口径：第 5 步注入本身份冲击 */
@@ -2468,7 +2516,7 @@ function drawFateCard(r){
   g.fillStyle="#94a3b8";g.font="26px system-ui";g.fillText("五年后的仲恺，你还会选择留在这里吗？",60,250);
   g.fillStyle="#ffffff";g.font="700 44px system-ui";g.fillText(`我选择了「${ch.short}」`,60,350);
   g.fillStyle="#cbd5e1";g.font="24px system-ui";wrapText(g,`${ch.note}`,60,400,960,34,2);
-  const cy0=560,cw=280,gap=30;
+  const cy0=560,cw=225,gap=20;
   const cells=[
     {v:(r.pick.survivors*100).toFixed(0)+"%",l:"存续（选了之后）",d:(r.delta.su>=0?"+":"−")+Math.abs(r.delta.su*100).toFixed(1)+"pp"},
     {v:r.pick.f.abundance.toFixed(2),l:"景气",d:(r.delta.ab>=0?"+":"")+r.delta.ab.toFixed(2)},
@@ -2478,8 +2526,8 @@ function drawFateCard(r){
   cells.forEach((c,i)=>{
     const x=60+i*(cw+gap);
     g.fillStyle="rgba(255,255,255,.06)";roundRect(g,x,cy0,cw,180,16);g.fill();
-    g.save();g.shadowColor="rgba(251,191,36,.5)";g.shadowBlur=20;g.fillStyle="#fbbf24";g.font="800 56px system-ui";g.fillText(c.v,x+18,cy0+70);g.restore();
-    g.fillStyle="#94a3b8";g.font="24px system-ui";g.fillText(c.l,x+18,cy0+112);
+    g.save();g.shadowColor="rgba(251,191,36,.5)";g.shadowBlur=20;g.fillStyle="#fbbf24";g.font="800 48px system-ui";g.fillText(c.v,x+18,cy0+68);g.restore();
+    g.fillStyle="#94a3b8";g.font="22px system-ui";g.fillText(c.l,x+18,cy0+110);
     g.save();g.shadowColor=c.d.startsWith("+")?"rgba(52,211,153,.6)":"rgba(248,113,113,.6)";g.shadowBlur=16;g.fillStyle=c.d.startsWith("+")?"#34d399":"#f87171";g.font="22px system-ui";g.fillText(c.d,x+18,cy0+148);g.restore();
   });
   /* 迷你网络示意（真实仿真布局：失效红虚线 / 模拟新合作绿 / 事实关系灰） */
@@ -3393,15 +3441,15 @@ function tornadoSVG(rows){
     const y=top+i*rowH+8,h=18;
     const x1=x(Math.min(r.abLo,r.abHi)),x2=x(Math.max(r.abLo,r.abHi)),xc=x(r.center);
     const col={invest:"#2458c6",external:"#c24141",service:"#ca8a04",land:"#65a30d"}[r.key];
-    bars+=`<text x="${pad-8}" y="${y+13}" text-anchor="end" font-size="11" fill="#1f2733">${r.cn}</text>
-      <rect x="${x1}" y="${y}" width="${Math.max(x2-x1,2)}" height="${h}" fill="${col}" opacity=".78" rx="3"></rect>
-      <line x1="${xc}" y1="${y-3}" x2="${xc}" y2="${y+h+3}" stroke="#1f2733" stroke-width="1.2"></line>
-      <text x="${x2+5}" y="${y+13}" font-size="10" fill="#5b6675">Δ${r.abSwing.toFixed(3)}</text>`;
+    bars+=`<text x="${pad-8}" y="${y+13}" text-anchor="end" font-size="11" fill="#e2e8f0">${r.cn}</text>
+      <rect x="${x1}" y="${y}" width="${Math.max(x2-x1,2)}" height="${h}" fill="${col}" opacity=".82" rx="3"></rect>
+      <line x1="${xc}" y1="${y-3}" x2="${xc}" y2="${y+h+3}" stroke="#fbbf24" stroke-width="1.4"></line>
+      <text x="${x2+5}" y="${y+13}" font-size="10" fill="#94a3b8">Δ${r.abSwing.toFixed(3)}</text>`;
   });
   let axis="";
-  [lo,(lo+hi)/2,hi].forEach(v=>{axis+=`<line x1="${x(v)}" y1="${top-6}" x2="${x(v)}" y2="${H-30}" stroke="#e8edf3"></line>
+  [lo,(lo+hi)/2,hi].forEach(v=>{axis+=`<line x1="${x(v)}" y1="${top-6}" x2="${x(v)}" y2="${H-30}" stroke="rgba(148,163,184,.22)"></line>
     <text x="${x(v)}" y="${H-16}" text-anchor="middle" font-size="9" fill="#94a3b8">${v.toFixed(2)}</text>`;});
-  const head=`<text x="${pad}" y="16" font-size="11" fill="#1f2733">景气（增长动能）对各个变量的响应 · 黑线=基准 · 条越长影响越大</text>`;
+  const head=`<text x="${pad}" y="16" font-size="11" fill="#e2e8f0">景气（增长动能）对各个变量的响应 · 金线=基准 · 条越长影响越大</text>`;
   const rank=`<div class="muted" style="margin-top:6px">影响排序（景气）：<b>${rows.map(r=>r.cn).join(" &gt; ")}</b>。<br>越靠前，越该优先盯紧、或作为政策抓手；外部依赖条向左伸表示依赖越高、景气越低。</div>`;
   return `<svg viewBox="0 0 ${W} ${H}" style="width:100%">${head}${axis}${bars}</svg>${rank}`;
 }
