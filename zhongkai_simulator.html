@@ -167,6 +167,62 @@
   .relate{margin-top:8px;padding:7px 10px;border-radius:9px;font-size:12px;line-height:1.65;
     background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.22);color:#fde68a}
   .relate b{color:#fcd34d}
+  /* ===== 今日仲恺 · 手机消息推送通知中心（折叠极简，点开才看详情） ===== */
+  .phone-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    background:linear-gradient(90deg,rgba(56,189,248,.10),rgba(125,211,252,.03));
+    border:1px solid var(--line);border-radius:12px;padding:9px 12px;margin-bottom:12px}
+  .phone-bar .pb-left{display:flex;align-items:center;gap:8px;flex:1;min-width:190px}
+  .phone-bar .pb-title{font-size:13px;font-weight:800;color:var(--ink)}
+  .phone-bar .pb-status{font-size:11.5px;color:var(--sub)}
+  .phone-bar .pb-right{display:flex;align-items:center;gap:7px}
+  .pb-badge{min-width:19px;height:19px;line-height:19px;text-align:center;padding:0 6px;
+    background:#ef4444;color:#fff;font-size:11px;font-weight:700;border-radius:10px;display:none}
+  .pb-badge.show{display:inline-block}
+  .btn.xs{padding:3px 9px;font-size:11.5px;border-radius:8px}
+  .pb-dots{display:inline-block}
+  .pb-dots i{display:inline-block;width:12px;text-align:left;animation:pbDots 1.1s steps(4) infinite}
+  @keyframes pbDots{0%{width:0}25%{width:4px}50%{width:8px}75%{width:12px}}
+  .msg{background:linear-gradient(180deg,rgba(140,170,225,.07),rgba(140,170,225,.02));
+    border:1px solid var(--line);border-radius:14px;margin-bottom:9px;overflow:hidden;position:relative}
+  .msg.cat-industry{border-left:3px solid #38bdf8}
+  .msg.cat-livelihood{border-left:3px solid #34d399}
+  .msg.cat-city{border-left:3px solid #a78bfa}
+  .msg.cat-food{border-left:3px solid #fb923c}
+  .msg.cat-fun{border-left:3px solid #f472b6}
+  .msg.cat-gossip{border-left:3px solid #fbbf24}
+  .msg.cat-agriculture{border-left:3px solid #84cc16}
+  .msg.cat-tourism{border-left:3px solid #22d3ee}
+  .msg.mine{border-color:#fbbf24;box-shadow:0 0 0 1px rgba(251,191,36,.35) inset}
+  .msg-head{display:flex;gap:10px;padding:10px 12px;cursor:pointer;align-items:flex-start}
+  .msg-app{width:34px;height:34px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;
+    font-size:18px;background:rgba(125,211,252,.12)}
+  .msg-main{flex:1;min-width:0}
+  .msg-row1{display:flex;justify-content:space-between;gap:8px;align-items:center}
+  .msg-src{font-size:11px;color:var(--mut);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .msg-time{font-size:11px;color:var(--mut);flex:none}
+  .msg-title{font-size:13.5px;font-weight:700;color:var(--ink);margin-top:1px;line-height:1.4;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .msg-prev{font-size:12px;color:var(--sub);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .msg-dot{width:9px;height:9px;border-radius:50%;background:#38bdf8;flex:none;margin-top:5px;
+    box-shadow:0 0 8px rgba(56,189,248,.8)}
+  .msg.read .msg-dot{display:none}
+  .msg-body{display:none;padding:0 12px 12px 56px}
+  .msg.open .msg-body{display:block;animation:msgBody .2s ease}
+  @keyframes msgBody{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  .msg-sm{font-size:12.5px;color:var(--sub);line-height:1.65}
+  .msg-body .relate{margin-top:8px;font-size:11.5px;padding:6px 9px}
+  .msg-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .msg-badges .b-src,.msg-badges .b-tier{font-size:10.5px}
+  .msg-act{margin-top:9px;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+  .msg.enter{animation:msgIn .5s cubic-bezier(.2,.8,.25,1)}
+  @keyframes msgIn{from{opacity:0;transform:translateY(-16px) scale(.98)}to{opacity:1;transform:none}}
+  .msg.flash{box-shadow:0 0 0 2px rgba(56,189,248,.45),0 8px 26px rgba(56,189,248,.18)}
+  /* 各镇卡片：长句折叠，默认只露短标签 */
+  .town-more{display:none;margin-top:7px}
+  .town-card.open .town-more{display:block;animation:msgBody .2s ease}
+  .town-more-btn{margin-top:8px;font-size:11px;color:#7dd3fc;background:none;border:0;cursor:pointer;padding:0}
+  .town-more-btn:hover{text-decoration:underline}
+  @media(prefers-reduced-motion:reduce){.msg.enter,.msg.open .msg-body,.town-card.open .town-more{animation:none}}
   .life-sec-title{font-size:13.5px;font-weight:800;margin:18px 0 9px;display:flex;align-items:center;gap:8px;color:var(--ink)}
   .life-sec-title .cnt{font-size:11px;color:var(--mut);font-weight:500}
   .life-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:6px}
@@ -670,6 +726,17 @@
         </div>
         <div class="muted" style="margin-bottom:8px" id="hot-scan">正在读取今日话题…</div>
         <div class="chip-row" id="hot-tabs" style="margin-bottom:10px"></div>
+        <div class="phone-bar" id="hot-phone">
+          <div class="pb-left">
+            <span class="pb-title">📡 仲恺情报站</span>
+            <span class="pb-status" id="hot-phone-status">正在接收今日消息…</span>
+          </div>
+          <div class="pb-right">
+            <span class="pb-badge" id="hot-phone-badge">0</span>
+            <button class="btn xs" id="hot-replay">🔔 重放</button>
+            <button class="btn xs" id="hot-expand-all">🔕 全部展开</button>
+          </div>
+        </div>
         <div id="hot-list"></div>
         <div class="muted" style="margin-top:12px;font-size:12px" id="hot-note"></div>
       </div>
@@ -2214,6 +2281,7 @@ function placeHit(text){return !!myPlace&&text.indexOf(myPlace)>=0;}
 function renderHot(){
   const scan=$("#hot-scan"),list=$("#hot-list"),tabs=$("#hot-tabs"),note=$("#hot-note");
   if(!scan)return;
+  bindHotPhone();
   if(!hotData){scan.innerHTML=`今日话题暂时读不到（可能没联网，本机也没有历史快照）。<button class="btn sm" onclick="retryHot()">↻ 重新尝试</button>`;return;}
   scan.innerHTML=`今日仲恺 · ${hotData._offline?'离线显示 · 更新于 '+(hotData.fetched_at||hotData.updated):'最近抓取 '+(hotData.fetched_at||hotData.updated)} · ${hotData.count} 条话题 · ${hotData.frequency||"每日更新一次"}`;
   note.innerHTML=hotData.note||"";
@@ -2224,45 +2292,131 @@ function renderHot(){
   tabs.innerHTML=HOT_CATS.map(([k,n])=>`<button class="chip ${k===hotTab?"on":""}" data-c="${k}">${n}</button>`).join("");
   $$("#hot-tabs .chip").forEach(b=>b.addEventListener("click",()=>{hotTab=b.dataset.c;renderHot();}));
   const items=hotData.items.filter(i=>hotTab==="all"||i.cat===hotTab);
-  list.innerHTML=items.map((i,idx)=>{
-    const gi=hotData.items.indexOf(i);
-    const text=i.title+" "+(i.summary||"");
-    const mine=placeHit(text);
-    const f=i.fate||{};
-    let act;
-    if(f.kind==="sim")act=`<button class="btn sm gold" onclick="openNewsFate(${gi})">🔬 情景预览</button>`;
-    else if(f.kind==="info")act=`<span class="no-sim">模型暂不模拟 · 仅提供报道</span>${i.url?`<a class="btn sm" href="${i.url}" target="_blank" rel="noopener">📰 查看报道</a>`:""}`;
-    else if(f.kind==="life")act=i.url?`<a class="btn sm" href="${i.url}" target="_blank" rel="noopener">📍 生活资讯</a>`:"";
-    else act=i.url?`<a class="btn sm" href="${i.url}" target="_blank" rel="noopener">查看报道 ↗</a>`:"";
-    const meta=`<span class="b-src" title="原报道发布时间">🕐 报道 ${i.published_at||"待核实"}</span><span class="b-src" title="雷达抓取时间">📡 抓取 ${(i.fetched_at||"").slice(0,10)||"待核实"}</span><span class="b-src" title="核验状态：官方原文或≥2独立来源=已核验，单源媒体/本地=待核实">核验 ${i.verified_status||"待核实"}</span>`;
-    return `<div class="hot-item cat-${i.cat||'city'} ${mine?'mine-card':''}">
-      <div class="em">${i.emoji||"📌"}</div>
-      <div style="flex:1;min-width:0">
-        <div class="tt">${escapeHtml(i.title)}${mine?'<span class="mine-flag">你那边</span>':''}</div>
-        <div class="sm">${escapeHtml(i.summary||"")}</div>
-        <div class="relate">${RELATE[i.cat]||RELATE.city}</div>
-        <div class="badges"><span class="b-tier ${tierCls(i.tier)}">热度${i.tier}</span><span class="b-src">${escapeHtml(i.srcLevel||"公开来源")}</span>${meta}
-          ${i.url?`<a class="b-src" href="${i.url}" target="_blank" rel="noopener">原文 ↗</a>`:""}</div>
-      </div>
-      <div class="act">${act}</div>
-    </div>`;
-  }).join("")||'<div class="muted">该分类暂无话题。</div>';
+  const htmls=items.map(i=>hotMsgHtml(i,hotData.items.indexOf(i)));
+  if(!htmls.length){list.innerHTML='<div class="muted">该分类暂无话题。</div>';hotPhoneIdle(0);}
+  else if(hotMsgState.jumpAll){
+    list.innerHTML=htmls.join("");
+    list.querySelectorAll(".msg").forEach(m=>m.classList.add("read","open"));
+    hotMsgState.jumpAll=false;
+    hotPhoneIdle(htmls.length,true);
+  } else playHotMsgs(htmls);
 }
+
+/* ===== 今日仲恺 · 消息推送（逐条"叮"进来，默认折叠，点开看详情） ===== */
+const hotMsgState={unread:0,timer:null,jumpAll:false};
+function hotMsgHtml(i,gi){
+  const text=i.title+" "+(i.summary||"");
+  const mine=placeHit(text);
+  const f=i.fate||{};
+  let act;
+  if(f.kind==="sim")act=`<button class="btn sm gold" onclick="event.stopPropagation();openNewsFate(${gi})">🔬 情景预览</button>`;
+  else if(f.kind==="info")act=`<span class="no-sim">仅提供报道</span>${i.url?`<a class="btn sm" href="${i.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📰 看报道</a>`:""}`;
+  else if(f.kind==="life")act=i.url?`<a class="btn sm" href="${i.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 生活资讯</a>`:"";
+  else act=i.url?`<a class="btn sm" href="${i.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">看原文 ↗</a>`:"";
+  const pa=i.published_at||"";
+  const tm=(pa.slice(11,16)||pa.slice(5,10)||(i.fetched_at||"").slice(5,10)||"近日");
+  const verified=i.verified_status==="已核验";
+  const badges=`<span class="b-tier ${tierCls(i.tier)}">热度${i.tier}</span>
+    <span class="b-src">${escapeHtml(i.srcLevel||"公开来源")}</span>
+    <span class="b-src">${verified?'✅ 已核验':'◻ 单源待核'}</span>
+    ${i.published_at?`<span class="b-src">🕐 ${i.published_at.slice(0,10)}</span>`:""}
+    ${i.url?`<a class="b-src" href="${i.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">原文 ↗</a>`:""}`;
+  return `<div class="msg cat-${i.cat||'city'} ${mine?'mine':''}">
+    <div class="msg-head">
+      <div class="msg-app">${i.emoji||"📌"}</div>
+      <div class="msg-main">
+        <div class="msg-row1">
+          <span class="msg-src">${escapeHtml(i.source||i.srcLevel||"公开渠道")}</span>
+          <span class="msg-time">${tm}</span>
+        </div>
+        <div class="msg-title">${escapeHtml(i.title)}${mine?'<span class="mine-flag">你那边</span>':''}</div>
+        <div class="msg-prev">${escapeHtml(i.summary||"")}</div>
+      </div>
+      <div class="msg-dot"></div>
+    </div>
+    <div class="msg-body">
+      <div class="msg-sm">${escapeHtml(i.summary||"")}</div>
+      <div class="relate">${RELATE[i.cat]||RELATE.city}</div>
+      <div class="msg-badges">${badges}</div>
+      <div class="msg-act">${act}</div>
+    </div>
+  </div>`;
+}
+function hotPhoneIdle(total,opened){
+  const status=$("#hot-phone-status"),badge=$("#hot-phone-badge");
+  if(status)status.textContent=total?`今日 ${total} 条已接收${opened?' · 已全部展开':' · 点消息看详情'}`:"今日暂无新消息";
+  const listEl=$("#hot-list");
+  const unread=listEl?listEl.querySelectorAll(".msg:not(.read)").length:0;
+  hotMsgState.unread=unread;
+  if(badge){badge.textContent=unread;badge.classList.toggle("show",unread>0);}
+}
+function playHotMsgs(htmls){
+  const list=$("#hot-list"),status=$("#hot-phone-status"),badge=$("#hot-phone-badge");
+  clearTimeout(hotMsgState.timer);
+  list.innerHTML="";
+  hotMsgState.unread=0;badge.textContent=0;badge.classList.remove("show");
+  const reduce=window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+  if(reduce||htmls.length>12){
+    list.innerHTML=htmls.join("");
+    list.querySelectorAll(".msg").forEach(m=>m.classList.add("read"));
+    hotPhoneIdle(htmls.length);
+    return;
+  }
+  status.innerHTML='正在接收今日消息 <span class="pb-dots"><i></i></span>';
+  let n=0;const total=htmls.length;
+  const step=()=>{
+    if(n>=total){hotPhoneIdle(total);return;}
+    const wrap=document.createElement("div");
+    wrap.innerHTML=htmls[total-1-n].trim();
+    const el=wrap.firstChild;
+    el.classList.add("enter","flash");
+    list.insertBefore(el,list.firstChild);
+    if(navigator.vibrate){try{navigator.vibrate(10);}catch(e){}}
+    n++;
+    hotMsgState.unread=n;badge.textContent=n;badge.classList.add("show");
+    setTimeout(()=>el.classList.remove("flash"),900);
+    if(n<total)hotMsgState.timer=setTimeout(step,520);
+    else hotMsgState.timer=setTimeout(()=>hotPhoneIdle(total),650);
+  };
+  step();
+}
+/* 点击消息：展开/折叠 + 已读（角标-1）；事件委托，兼容动态插入 */
+document.addEventListener("click",function(e){
+  const head=e.target.closest("#hot-list .msg-head");
+  if(!head)return;
+  const msg=head.closest(".msg");
+  msg.classList.toggle("open");
+  if(!msg.classList.contains("read")){
+    msg.classList.add("read");
+    hotMsgState.unread=Math.max(0,hotMsgState.unread-1);
+    const badge=$("#hot-phone-badge");
+    if(badge){badge.textContent=hotMsgState.unread;if(hotMsgState.unread<=0)badge.classList.remove("show");}
+  }
+});
+function bindHotPhone(){
+  const rp=$("#hot-replay"),ea=$("#hot-expand-all");
+  if(rp&&!rp._bound){rp._bound=true;rp.addEventListener("click",()=>{hotMsgState.jumpAll=false;ensureHot();});}
+  if(ea&&!ea._bound){ea._bound=true;ea.addEventListener("click",()=>{hotMsgState.jumpAll=true;ensureHot();});}
+}
+
 function townCard(t,kind){
   const lv=t.level==="高"?"high":(t.level==="较高"?"mid":"low");
   const mine=(t.n===myPlace)?' mine':'';
+  const tog="event.stopPropagation();var c=this.closest('.town-card');c.classList.toggle('open');this.textContent=(c.classList.contains('open')?this.dataset.less:this.dataset.more);";
   if(kind==="work"){
     return `<div class="town-card work${mine}" data-n="${escapeHtml(t.n)}">
       <div class="hd"><span class="n">${escapeHtml(t.n)}</span><span class="tag">${escapeHtml(t.tag||"")}</span><span class="b-tier ${lv}" style="margin-left:auto">人气${t.level||"中"}</span></div>
       <div class="row"><span class="k2">🧃 园区周边</span>${escapeHtml((t.plays||[]).join(" · "))||"配套完善中"}</div>
-      <div class="why">💼 <b>在这上班：</b>${escapeHtml(t.why||"")}</div>
+      <button class="town-more-btn" data-more="💼 在这上班 ▾" data-less="💼 收起 ▴" onclick="${tog}">💼 在这上班 ▾</button>
+      <div class="town-more"><div class="why">${escapeHtml(t.why||"暂无更多说明。")}</div></div>
     </div>`;
   }
   return `<div class="town-card life${mine}" data-n="${escapeHtml(t.n)}">
     <div class="hd"><span class="n">${escapeHtml(t.n)}</span><span class="tag">${escapeHtml(t.tag||"")}</span><span class="b-tier ${lv}" style="margin-left:auto">人气${t.level||"中"}</span></div>
-    <div class="row"><span class="k2">🍜 下班打牙祭</span>${escapeHtml((t.foods||[]).join(" · "))||"—"}</div>
-    <div class="row"><span class="k2">🚶 周末去哪晃</span>${escapeHtml((t.plays||[]).join(" · "))||"—"}</div>
-    <div class="why">🔥 <b>为啥这儿热闹：</b>${escapeHtml(t.why||"")}</div>
+    <div class="row"><span class="k2">🍜 打牙祭</span>${escapeHtml((t.foods||[]).join(" · "))||"—"}</div>
+    <div class="row"><span class="k2">🚶 去哪晃</span>${escapeHtml((t.plays||[]).join(" · "))||"—"}</div>
+    <button class="town-more-btn" data-more="🔥 为啥热闹 ▾" data-less="🔥 收起 ▴" onclick="${tog}">🔥 为啥热闹 ▾</button>
+    <div class="town-more"><div class="why">${escapeHtml(t.why||"暂无更多说明。")}</div></div>
   </div>`;
 }
 function renderTown(){
