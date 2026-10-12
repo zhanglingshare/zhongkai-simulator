@@ -235,6 +235,24 @@
   .zk-pulse{background:linear-gradient(90deg,rgba(244,114,182,.12),rgba(251,191,36,.05));border:1px solid rgba(244,114,182,.30);
     border-radius:12px;padding:10px 14px;margin-bottom:6px;font-size:12.5px;color:#fbcfe8;line-height:1.85}
   .zk-pulse b{color:#f9a8d4}
+  .pulse-chip{display:inline-block;background:rgba(244,114,182,.18);border:1px solid rgba(244,114,182,.35);
+    color:#fbcfe8;border-radius:20px;padding:3px 10px;font-size:11.5px;margin:4px 6px 0 0;font-weight:600}
+  .tc-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .tc-emoji{font-size:26px;line-height:1}
+  .tc-mid{flex:1;min-width:0}
+  .tc-mid .n{font-size:15px;font-weight:700;color:#fff}
+  .tc-mid .tag{display:inline-block;margin-top:3px;font-size:10px;color:#fdba74;background:rgba(251,146,60,.15);
+    border-radius:6px;padding:1px 7px}
+  .tc-dots{font-size:13px;color:#fbbf24;letter-spacing:2px}
+  .tc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+  .tc-tag{font-size:10.5px;color:var(--mut);background:rgba(255,255,255,.06);
+    border-radius:8px;padding:3px 8px}
+  .tc-acts{display:flex;gap:8px}
+  .tc-check{flex:1;background:rgba(74,222,128,.14);border:1px solid rgba(74,222,128,.4);
+    color:#86efac;border-radius:10px;padding:7px;font-size:11.5px;font-weight:700;cursor:pointer}
+  .tc-check.on{background:rgba(74,222,128,.3);color:#bbf7d0}
+  .tc-more{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--line);
+    color:var(--mut);border-radius:10px;padding:7px;font-size:11.5px;cursor:pointer}
   @media (max-width:1100px){.life-grid{grid-template-columns:1fr}}
   .entry-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
   .entry{background:linear-gradient(180deg,rgba(140,170,225,.07),rgba(140,170,225,.03));border:1px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;transition:box-shadow .15s,border-color .15s,transform .12s}
@@ -1201,9 +1219,7 @@
       <div class="card">
         <h2>🏘 仲恺生活地图 <span class="tag">你在哪个园区上班，下班、周末去哪</span></h2>
         <div class="zk-hero">
-          <span class="kicker">ZHONGKAI LIFE · 5 镇街 + 4 园区的活法</span>
-          <div class="lead">仲恺不大，可你在哪栋厂房、哪个园区上班，下班那口<em>热乎气</em>、周末能带娃、能约会、能发呆的地方，就完全不一样。</div>
-          <div class="sub2">五个镇街管<b>烟火</b>，四个园区管<b>上班</b>。点下面你待的地方，直接定位你的生活圈。</div>
+          <div class="lead">五个镇街管<b>烟火</b>，四个园区管<b>上班</b>。下班吃啥、周末去哪——点你待的地方。</div>
         </div>
         <div class="zk-pulse" id="town-pulse"></div>
         <div class="zk-you" id="town-you">
@@ -3187,32 +3203,35 @@ function bindHotPhone(){
   if(ea&&!ea._bound){ea._bound=true;ea.addEventListener("click",()=>{hotMsgState.jumpAll=true;ensureHot();});}
 }
 
+const TOWN_EMOJI={"陈江":"🛍","惠环":"🏙","沥林":"🍗","潼侨":"🥟","潼湖":"🌊","东江科技园":"🏭","惠南科技园":"🔬","潼湖生态智慧区":"💡","人工智能产业园":"🤖"};
+function lvDots(level){const n=level==="高"?3:level==="较高"?2:1;return "●".repeat(n)+"<span style='opacity:.28'>"+"○".repeat(3-n)+"</span>";}
 function townCard(t,kind){
-  const lv=t.level==="高"?"high":(t.level==="较高"?"mid":"low");
   const mine=(t.n===myPlace)?' mine':'';
-  const tog="event.stopPropagation();var c=this.closest('.town-card');c.classList.toggle('open');this.textContent=(c.classList.contains('open')?this.dataset.less:this.dataset.more);";
-  if(kind==="work"){
-    return `<div class="town-card work${mine}" data-n="${escapeHtml(t.n)}">
-      <div class="hd"><span class="n">${escapeHtml(t.n)}</span><span class="tag">${escapeHtml(t.tag||"")}</span><span class="b-tier ${lv}" style="margin-left:auto">人气${t.level||"中"}</span></div>
-      <div class="row"><span class="k2">🧃 园区周边</span>${escapeHtml((t.plays||[]).join(" · "))||"配套完善中"}</div>
-      <button class="town-more-btn" data-more="💼 在这上班 ▾" data-less="💼 收起 ▴" onclick="${tog}">💼 在这上班 ▾</button>
-      <div class="town-more"><div class="why">${escapeHtml(t.why||"暂无更多说明。")}</div></div>
-    </div>`;
-  }
+  const tog="event.stopPropagation();var c=this.closest('.town-card');c.classList.toggle('open');var b=c.querySelector('.tc-more');b.textContent=(c.classList.contains('open')?'收起 ▴':'为啥热闹 ▾');var m=c.querySelector('.town-more');if(m)m.style.display=c.classList.contains('open')?'block':'none';";
+  const em=TOWN_EMOJI[t.n]||"📍";
+  const tags=[...(t.foods||[]).slice(0,2),...(t.plays||[]).slice(0,1)];
   return `<div class="town-card life${mine}" data-n="${escapeHtml(t.n)}">
-    <div class="hd"><span class="n">${escapeHtml(t.n)}</span><span class="tag">${escapeHtml(t.tag||"")}</span><span class="b-tier ${lv}" style="margin-left:auto">人气${t.level||"中"}</span></div>
-    <div class="row"><span class="k2">🍜 打牙祭</span>${escapeHtml((t.foods||[]).join(" · "))||"—"}</div>
-    <div class="row"><span class="k2">🚶 去哪晃</span>${escapeHtml((t.plays||[]).join(" · "))||"—"}</div>
-    <button class="town-more-btn" data-more="🔥 为啥热闹 ▾" data-less="🔥 收起 ▴" onclick="${tog}">🔥 为啥热闹 ▾</button>
+    <div class="tc-top">
+      <span class="tc-emoji">${em}</span>
+      <div class="tc-mid"><div class="n">${escapeHtml(t.n)}</div><div class="tag">${escapeHtml(t.tag||"")}</div></div>
+      <span class="tc-dots" title="人气">${lvDots(t.level)}</span>
+    </div>
+    <div class="tc-tags">${tags.map(x=>`<span class="tc-tag">${escapeHtml(x)}</span>`).join("")||"<span class='tc-tag'>配套完善中</span>"}</div>
+    <div class="tc-acts">
+      <button class="tc-check" onclick="event.stopPropagation();var o=this.classList.toggle('on');this.textContent=o?'✓已打卡':'打卡'">打卡</button>
+      <button class="tc-more" onclick="${tog}">为啥热闹 ▾</button>
+    </div>
     <div class="town-more"><div class="why">${escapeHtml(t.why||"暂无更多说明。")}</div></div>
   </div>`;
 }
+function shortTag(s){let t=String(s).split(/[：:，,「]/)[0];t=t.replace(/^(这两天|今日|国庆假期|仲恺)/,"");return t.length>7?t.slice(0,7)+"…":t;}
 function renderTown(){
   const scan=$("#town-scan"),pulse=$("#town-pulse"),grid=$("#town-grid"),note=$("#town-note");
   if(!scan)return;
   if(!lifeData){scan.innerHTML=`各镇数据暂时读不到（可能没联网，本机也没有历史快照）。<button class="btn sm" onclick="retryTown()">↻ 重新尝试</button>`;return;}
   scan.innerHTML=`仲恺生活地图 · ${lifeData._offline?'离线显示 · 更新于 '+lifeData.updated:lifeData.updated} · 5 镇街 + 4 园区 · ${lifeData.freq||"每日更新一次"}`;
-  pulse.innerHTML="📡 <b>这两天，仲恺人的朋友圈在刷：</b><br>"+(lifeData.pulse||[]).map(escapeHtml).join("<br>");
+  const pl=(lifeData.pulse||[]).slice(0,4).map(p=>`<span class="pulse-chip">${escapeHtml(shortTag(p))}</span>`).join("");
+  pulse.innerHTML="🔥 <b>这两天在刷</b>"+pl;
   note.innerHTML=(lifeData.note||"")+"　"+(lifeData.sourceLabel||"");
   renderPlaceChips("town-places",(lifeData.towns||[]).map(t=>t.n),()=>renderTown());
   const towns=lifeData.towns||[];
