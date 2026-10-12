@@ -4,7 +4,7 @@
   "updated": "2026-10-13 00:32",
   "fetched_at": "2026-10-13 00:32",
   "frequency": "每日更新一次",
-  "count": 10,
+  "count": 13,
   "stats": [
     {
       "n": "5.8%",
@@ -217,6 +217,60 @@
       "verified_status": "待核实",
       "fate": {
         "kind": "life"
+      }
+    },
+    {
+      "title": "外卖小哥的暖心瞬间：仲恺骑手路遇车祸挺身施救、暂停配送守护生命",
+      "cat": "gossip",
+      "emoji": "🤝",
+      "tier": "较高",
+      "srcLevel": "媒体报道",
+      "live": false,
+      "source": "中工网",
+      "url": "https://www.workercn.cn/c/2026-09-15/8894458.shtml",
+      "summary": "党员骑手袁星四天两次伸援手，美团骑手汪茂春路遇车祸打双闪、拨120守护伤者，凡人善举温暖街头。",
+      "published_at": "2026-09-15",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "direction": "暖闻",
+        "note": "新业态劳动者参与基层治理的暖心故事"
+      }
+    },
+    {
+      "title": "台风红霞里，60名外卖骑手、快递员、网约车司机变身应急志愿者清障",
+      "cat": "gossip",
+      "emoji": "💪",
+      "tier": "较高",
+      "srcLevel": "媒体报道",
+      "live": false,
+      "source": "南方工报",
+      "url": "https://epaper.nfgb.cn/h5/html5/2026-09/03/content_13_44185.htm",
+      "summary": "他们合力搬开倒伏树木、清掏排水沟、扶正隔离设施，让七条街道雨停后重现干净。",
+      "published_at": "2026-09-03",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "direction": "暖闻",
+        "note": "新就业群体迎战台风、参与防汛"
+      }
+    },
+    {
+      "title": "潼侨河边，3人合力救起跳河轻生的年轻生命",
+      "cat": "gossip",
+      "emoji": "🏊",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区官网",
+      "url": "https://www.hzzk.gov.cn/hzzkgaj/gkmlpt/content/5/5855/post_5855444.html",
+      "summary": "郭发显、郭孟、吕安倍3人在潼侨镇莲塘大道河边发现险情，合力将轻生人员救上岸，见义勇为正在公示。",
+      "published_at": "2026-09-20",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "direction": "暖闻",
+        "note": "见义勇为、弘扬社会正气"
       }
     }
   ]

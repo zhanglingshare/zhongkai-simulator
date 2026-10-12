@@ -2501,8 +2501,18 @@ function refreshLockNotify(){
     const b=$("#hs-badge-hot");
     if(b){b.textContent=n;b.style.display=n?"flex":"none";}
     const CATS={livelihood:"🏥",city:"🚇",fun:"🎉",food:"🍜",gossip:"😊",tourism:"🏞️",agriculture:"🌾",industry:"🏭"};
-    const items=(d.items||[]).filter(x=>x.cat!=="industry").slice(0,6)
-      .map(x=>({ico:x.emoji||CATS[x.cat]||"📌",t:x.title}));
+    const byCat={};
+    (d.items||[]).forEach(x=>{
+      if(x.cat==="industry")return;
+      (byCat[x.cat]=byCat[x.cat]||[]).push(x);
+    });
+    const cats=Object.keys(byCat);
+    const maxn=Math.max.apply(null,cats.map(c=>byCat[c].length));
+    const mixed=[];
+    for(let i=0;i<maxn;i++){
+      cats.forEach(c=>{ if(byCat[c][i])mixed.push(byCat[c][i]); });
+    }
+    const items=mixed.map(x=>({ico:x.emoji||CATS[x.cat]||"📌",t:x.title}));
     startLockFeed(items);
   }).catch(()=>{});
 }
