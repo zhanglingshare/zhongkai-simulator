@@ -319,6 +319,14 @@
     font-size:12.5px;font-weight:700;color:#fde68a;animation:hookpulse 2.2s ease-in-out infinite}
   @keyframes hookpulse{0%,100%{box-shadow:0 0 0 rgba(245,158,11,0)}50%{box-shadow:0 0 18px rgba(245,158,11,.25)}}
   .fmech{margin-top:8px;font-size:10.5px;line-height:1.6}
+  .qbig{font-size:19px;font-weight:800;color:var(--ink);text-align:center;margin:6px 2px 14px;line-height:1.35}
+  .note-card{background:linear-gradient(160deg,rgba(56,189,248,.14),rgba(139,92,246,.10));border:1px solid rgba(125,211,252,.35);border-radius:16px;padding:16px 16px 13px;margin-bottom:14px}
+  .note-card .nc-tag{font-size:11px;color:#7dd3fc;letter-spacing:.05em;margin-bottom:8px}
+  .note-card .nc-title{font-size:17px;font-weight:800;color:var(--ink);line-height:1.4;margin-bottom:8px}
+  .note-card .nc-chain{font-size:12.5px;color:var(--sub);line-height:1.6;margin-bottom:11px}
+  .note-card .nc-quote{font-size:14.5px;font-weight:600;color:#fde68a;line-height:1.6;margin-bottom:11px}
+  .note-card .nc-src{font-size:10px;color:var(--mut);border-top:1px dashed rgba(125,211,252,.25);padding-top:8px}
+  .detail-head{font-size:12px;color:var(--sub);margin:14px 0 8px}
   .fate-result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
   .fate-result-grid .cell{background:linear-gradient(180deg,rgba(140,170,225,.06),rgba(140,170,225,.02));border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
   .fate-result-grid .v{font-size:22px;font-weight:800;font-family:var(--font-num);color:var(--ink);text-shadow:0 0 16px rgba(125,211,252,.25)}
@@ -1267,15 +1275,15 @@
   <div id="drawer-body"></div>
 </div>
 
-<!-- 仲恺 2030 · 一分钟命运实验 -->
+<!-- 仲恺 · 这件事和我有关 -->
 <div class="modal-mask" id="fate-modal">
   <div class="modal" style="max-width:860px">
-    <h2 id="fate-h2">仲恺 2030 · 一分钟命运实验 <span class="tag" id="fate-ident-tag"></span></h2>
+    <h2 id="fate-h2">这件事，和我有关 <span class="tag" id="fate-ident-tag"></span></h2>
     <div class="steps">
-      <div class="st on" id="fst-1">① 你的问题</div>
-      <div class="st" id="fst-2">② 冲击发生</div>
-      <div class="st" id="fst-3">③ 你的选择</div>
-      <div class="st" id="fst-4">④ 结果与分享</div>
+      <div class="st on" id="fst-1">① 你站在哪看</div>
+      <div class="st" id="fst-2">② 发生了什么事</div>
+      <div class="st" id="fst-3">③ 轮到你怎么选</div>
+      <div class="st" id="fst-4">④ 现场笔记</div>
     </div>
     <div id="fate-body"></div>
     <div class="actions">
@@ -2344,7 +2352,7 @@ $$(".nav").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.v)));
 const PHONE_APPS=[
   {v:"hot",   e:"📰",n:"今日仲恺",g:"linear-gradient(135deg,#0ea5e9,#2563eb)",dock:true,badge:true},
   {v:"town",  e:"🏘",n:"仲恺各镇",g:"linear-gradient(135deg,#f59e0b,#ef4444)",dock:true},
-  {v:"home",  e:"🎯",n:"命运实验",g:"linear-gradient(135deg,#8b5cf6,#6366f1)",dock:true},
+  {v:"home",  e:"🎯",n:"现场体验",g:"linear-gradient(135deg,#8b5cf6,#6366f1)",dock:true},
   {v:"run",   e:"▶", n:"动态推演",g:"linear-gradient(135deg,#10b981,#059669)",dock:true},
   {v:"mc",    e:"🎲",n:"批量重跑",g:"linear-gradient(135deg,#06b6d4,#0e7490)"},
   {v:"sens",  e:"🌪",n:"变量影响",g:"linear-gradient(135deg,#ec4899,#be185d)"},
@@ -2356,7 +2364,7 @@ const PHONE_APPS=[
 const APP_TITLE={
   hot:{t:"今日仲恺",s:"打工人每日情报站 · 每日更新"},
   town:{t:"仲恺生活地图",s:"下班周末去哪 · 5镇街+4园区"},
-  home:{t:"命运实验",s:"选身份，体验一座城市的选择"},
+  home:{t:"现场体验",s:"选身份，看一件事怎么传到你身上"},
   run:{t:"动态推演",s:"看产业网络如何一步步演化"},
   mc:{t:"批量重跑",s:"同规则反复跑，看结局稳不稳"},
   sens:{t:"变量影响",s:"哪个旋钮一动，结局变化最大"},
@@ -2699,6 +2707,13 @@ const FATE_CHOICES={
     note:"模型内以「人才主体韧性 +0.1」近似（talent 主体经营能量上调）；人才政策效果尚未实证标定，仅作情景对比。",
     params:{talentBoost:1}}
 };
+/* 现场笔记金句：来自普通人的真实处境，不编鸡汤 */
+const NOTE_QUOTES={
+  work:"厂稳了、路通了，打工人最盼的，是下班有地方去、孩子有地方上学。",
+  shop:"人潮没来的时候，先把自己这店的味道守住——产业的钱，最后要流到街上才算数。",
+  live:"产业往前跑，日子要跟得上：看病、上学、买菜，这些才是人愿意留下来的理由。",
+  grad:"要不要留，不看厂多不多，看这座城愿不愿意把刚毕业的人，当自己人。"
+};
 const fateState={ident:null,step:0,choice:null,base:null,picked:null,playIv:null,newsShocks:null,newsNote:null};
 function openFate(ident,keepNews){
   fateState.ident=ident;fateState.step=0;fateState.choice=null;fateState.base=null;fateState.picked=null;
@@ -2739,13 +2754,14 @@ function renderFate(){
     <div class="nf-row"><b>影响对象/方向</b>${escapeHtml(fateState.newsNote.objects)} · ${escapeHtml(fateState.newsNote.direction)}</div>
     <div class="nf-row"><b>实验假设（不是新闻数值）</b>${escapeHtml(fateState.newsNote.assumption)}</div>
   </div>`:"";
-  $("#fate-h2").innerHTML=`仲恺 2030 · 一分钟命运实验 <span class="tag">${it.emoji} ${it.label}</span>`;
+  $("#fate-h2").innerHTML=`这件事，和我有关 <span class="tag">${it.emoji} ${it.label}</span>`;
   [1,2,3,4].forEach(i=>{$("#fst-"+i).classList.toggle("on",fateState.step===i-1);
     $("#fst-"+i).classList.toggle("done",fateState.step>i-1);});
   $("#fate-prev").style.display=(fateState.step===1||fateState.step===3)?"":"none";
   const body=$("#fate-body");
-  if(fateState.step===0){ /* ① 你的问题 */
+  if(fateState.step===0){ /* ① 你站在哪看 */
     body.innerHTML=`<div class="fate-step">
+      <div class="qbig">这件事，你站在哪个位置看？</div>
       <div class="fate-switch">
         ${["work","shop","live","grad"].map(k=>`<button type="button" class="fs-btn ${k===fateState.ident?"on":""}" onclick="switchFateIdent('${k}')">${FATE_IDENTS[k].emoji} ${FATE_IDENTS[k].label}</button>`).join("")}
       </div>
@@ -2754,12 +2770,10 @@ function renderFate(){
       <div class="fate-stats">
         ${it.stats.map(s=>`<div class="fstat"><b>${s.v}</b><span>${s.l}</span></div>`).join("")}
       </div>
-      <div class="fate-hook">⚡ ${it.hook}</div>
-      <div class="muted fmech">${it.mech}</div>
     </div>`;
-    $("#fate-next").textContent="看这场冲击 →";
+    $("#fate-next").textContent="看看这件事怎么传 →";
     $("#fate-next").onclick=()=>{fateState.step=1;renderFate();};
-  }else if(fateState.step===1){ /* ② 冲击发生：播放（tick 0→20，第 5 步注入本身份冲击） */
+  }else if(fateState.step===1){ /* ② 发生了什么事：网络演化 */
     if(!fateState.base){fateState.base=newFateSim();}
     const s=fateState.base;
     const it=FATE_IDENTS[fateState.ident];
@@ -2771,17 +2785,17 @@ function renderFate(){
       return `<span class="shock-tag lv-${b.lv}">${n} · ${SHOCK_LV[b.lv][0]}</span>`;
     }).join("");
     body.innerHTML=`<div class="fate-step">
-      <h3>⚡ 模拟冲击情景：${curShocks().join(" + ")}</h3>
+      <h3>🔗 这件事，怎么一步步传过来</h3>
       <div class="shock-tags">${tagLine}</div>
-      <div class="fate-meta">这是<b>模拟情景</b>，不是正在发生的真实事件：上面每个冲击都标了依据等级（官方统计 / 合理估计 / 纯假设），完整依据与出处见「数据与证据」。模型在第 5 步注入冲击，动画播放的每一步都是模型真实计算。</div>
+      <div class="fate-meta">下面这张网是仲恺的企业、人才与配套关系。一件事发生后，看它怎么在网里传——哪条链先紧、哪条链松。每个事件都标了依据等级（官方统计 / 合理估计 / 待核实），完整出处见「数据与证据」。这是<b>推演演示</b>，不是正在发生的事。</div>
       <svg id="fate-svg" class="fate-net" viewBox="0 0 340 260" preserveAspectRatio="xMidYMid meet"></svg>
       <div class="muted" id="fate-play-note" style="text-align:center">正在推进第 0 / 20 步…（可跳过）</div>
     </div>`;
     let t=0;
     fateState.playIv=setInterval(()=>{
       if(t>=20){clearInterval(fateState.playIv);fateState.playIv=null;
-        $("#fate-play-note").innerHTML="冲击演化了 20 步：有的关系断裂，有的主体退出，有的合作重新建立。";
-        $("#fate-next").style.display="";$("#fate-next").textContent="轮到我的选择 →";
+        $("#fate-play-note").innerHTML="这件事在网里传了 20 步：有的链先紧了，有的合作断了又接上。";
+        $("#fate-next").style.display="";$("#fate-next").textContent="你觉得钱该先花哪 →";
         $("#fate-next").onclick=()=>{fateState.step=2;renderFate();};
         return;
       }
@@ -2789,14 +2803,14 @@ function renderFate(){
       $("#fate-play-note").innerHTML=`正在推进第 ${t} / 20 步…<button class="btn sm" onclick="skipFatePlay()">跳过 →</button>`;
     },130);
     fateNetRender(s,$("#fate-svg"));
-  }else if(fateState.step===2){ /* ③ 你的选择 */
+  }else if(fateState.step===2){ /* ③ 轮到你怎么选 */
     $("#fate-prev").style.display="";
     body.innerHTML=`<div class="fate-step">
-      <h3>现在，轮到你作决定</h3>
-      <div class="fate-meta">在这个<b>模拟情景</b>里，2030 年之前你所在的仲恺遇到了${curShocks().join("、")}，配套承压、部分合作中断。你只有有限的政策资源，先处理什么？（这是假设的推演，不是现实预告。）</div>
+      <h3>💰 钱不多，你觉得先花在哪？</h3>
+      <div class="fate-meta">这件事传过来，仲恺有些链紧了、有些合作断了。可手里的钱就这么多——你觉得先投哪边？（这是公开数据下的推演对比，不是现实预告。）</div>
       ${Object.keys(FATE_CHOICES).map(k=>{const c=FATE_CHOICES[k];
         return `<button class="fate-choice" data-c="${k}"><b>${c.label}</b><span class="muted">${c.note}</span></button>`;}).join("")}
-      <div class="muted" style="margin-top:8px">三个选项对应模型内不同的干预力度；<b>尚未实证标定的部分已注明，不宣称三者现实等价或可直接比较</b>。</div>
+      <div class="muted" style="margin-top:8px">三个方向对应模型内不同的投入侧重；<b>尚未实证标定的部分已注明，不宣称三者现实等价或可直接比较</b>。</div>
     </div>`;
     $$(".fate-choice").forEach(b=>b.addEventListener("click",()=>{
       $$(".fate-choice").forEach(x=>x.style.borderColor="var(--line)");
@@ -2815,19 +2829,25 @@ function renderFate(){
     const suTxt=Math.abs(d.su*100)<0.05?"0.0个百分点":(d.su>=0?'+':'−')+Math.abs(d.su*100).toFixed(1)+"个百分点";
     const suCls=Math.abs(d.su*100)<0.05?"flat":(d.su>=0?'up':'down');
     body.innerHTML=`<div class="fate-step">
-      <h3>📊 结果：你选择了「${FATE_CHOICES[fateState.choice].short}」</h3>
-      <div class="fate-meta">同一起点（${r.seed}）· 冲击「${curShocks().join(" + ")}」· 模型内计算 20 步（第 5 步注入冲击）；与「什么都不做」对照相比：</div>
+      <div class="note-card">
+        <div class="nc-tag">📒 现场笔记</div>
+        <div class="nc-title">${it.emoji} ${it.label}，这件事我看明白了</div>
+        <div class="nc-chain">这件事在网里传了 20 步，我投的方向是「${FATE_CHOICES[fateState.choice].label}」</div>
+        <div class="nc-quote">💬 ${NOTE_QUOTES[fateState.ident]}</div>
+        <div class="nc-src">公开报道 + 公开数据下的推演，不是预测 · 来源：仲恺管委会公开信息</div>
+      </div>
+      <div class="ivw"><b>${it.emoji} 这跟你有什么关系</b>
+        <div class="muted" style="margin-top:4px">${fateMechanism(fateState.ident,r)}</div></div>
+      <div class="detail-head">想看细节？同一起点（${r.seed}）下，与「什么都不做」对照：</div>
       <div class="fate-result-grid">
         <div class="cell"><div class="v">${(r.pick.survivors*100).toFixed(0)}%</div><div class="l">存续（选了之后）</div><div class="fate-delta ${suCls}">${suTxt}</div></div>
         <div class="cell"><div class="v">${r.pick.f.abundance.toFixed(2)}</div><div class="l">景气</div><div class="fate-delta ${Math.abs(d.ab)<0.005?'flat':(d.ab>=0?'up':'down')}">${zs(d.ab)}</div></div>
         <div class="cell"><div class="v">${r.pick.f.disaster.toFixed(2)}</div><div class="l">风险</div><div class="fate-delta ${Math.abs(d.di)<0.005?'flat':(d.di<=0?'up':'down')}">${d.di<=0?'−':'+'}${Math.abs(d.di).toFixed(2)}</div></div>
         <div class="cell"><div class="v">${r.pick.net.newE} / ${r.pick.net.broken}</div><div class="l">新合作 / 断裂</div></div>
       </div>
-      <div class="ivw"><b>${it.emoji} 这跟你有什么关系</b>
-        <div class="muted" style="margin-top:4px">${fateMechanism(fateState.ident,r)}</div></div>
-      <div class="share-note">模拟结果不是现实预测：同一起点、同配置，任何人都能复跑出这组数字。已标注的近似/未建模部分不构成政策建议。</div>
+      <div class="share-note">这是公开数据下的推演，不是现实预测：同一起点、同配置，任何人都能复跑出这组数字。已标注的近似/未建模部分不构成政策建议。</div>
       <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-        <button class="btn gold" id="fate-share-dl">⬇ 下载我的未来实验卡</button>
+        <button class="btn gold" id="fate-share-dl">⬇ 下载我的现场笔记</button>
         <button class="btn" id="fate-share-link">🔗 复制可复现链接</button>
         <button class="btn" id="fate-retry">↻ 换一种选择再试</button>
       </div>
@@ -2849,8 +2869,8 @@ function skipFatePlay(){
   const s=fateState.base;
   while(s.tick<20)stepFateSim(s);
   fateNetRender(s,$("#fate-svg"));
-  $("#fate-play-note").innerHTML="冲击演化了 20 步：有的关系断裂，有的主体退出，有的合作重新建立。";
-  $("#fate-next").style.display="";$("#fate-next").textContent="轮到我的选择 →";
+  $("#fate-play-note").innerHTML="这件事在网里传了 20 步：有的链先紧了，有的合作断了又接上。";
+  $("#fate-next").style.display="";$("#fate-next").textContent="你觉得钱该先花哪 →";
   $("#fate-next").onclick=()=>{fateState.step=2;renderFate();};
 }
 function newFateSim(){ return new Sim(7,{dynamicNetwork:1}); }
@@ -2989,7 +3009,7 @@ function drawFateCard(r){
   g.fillStyle="#334155";g.font="20px system-ui";g.fillText("zhongkai-simulator · 开源可复现",60,1270);
   cv.toBlob(b=>{
     const a=document.createElement("a");a.href=URL.createObjectURL(b);
-    a.download="仲恺未来实验卡.png";a.click();
+    a.download="仲恺现场笔记.png";a.click();
   },"image/png");
 }
 function wrapText(g,txt,x,y,maxW,lh,maxLines){
