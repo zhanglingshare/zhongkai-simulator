@@ -443,29 +443,8 @@
     transition:transform .62s cubic-bezier(.32,.72,0,1),opacity .5s}
   .phone-frame.state-home .lockscreen,
   .phone-frame.state-app .lockscreen{transform:translateY(-103%);opacity:.85}
-  .ls-wall{position:absolute;inset:0;z-index:0;overflow:hidden;background:#050810}
-  .lsw-slide{display:block;position:absolute;inset:0;background-size:cover;background-position:center;
-    opacity:0;will-change:transform,opacity}
-  .lsw-slide:nth-child(1){animation:sw1 36s ease-in-out infinite,kb1 36s ease-in-out infinite}
-  .lsw-slide:nth-child(2){animation:sw2 36s ease-in-out infinite,kb2 36s ease-in-out infinite}
-  .lsw-slide:nth-child(3){animation:sw3 36s ease-in-out infinite,kb3 36s ease-in-out infinite}
-  @keyframes sw1{0%,27%{opacity:1}33%{opacity:0}95%{opacity:0}100%{opacity:1}}
-  @keyframes sw2{0%,27%{opacity:0}33%{opacity:1}62%{opacity:1}67%{opacity:0}100%{opacity:0}}
-  @keyframes sw3{0%,62%{opacity:0}67%{opacity:1}95%{opacity:1}100%{opacity:0}}
-  @keyframes kb1{0%{transform:scale(1.12) translate(0,0)}27%{transform:scale(1.22) translate(-2%,-1.5%)}33%,100%{transform:scale(1.12)}}
-  @keyframes kb2{0%,33%{transform:scale(1.2) translate(-2%,1.5%)}62%{transform:scale(1.1) translate(0,0)}67%,100%{transform:scale(1.2)}}
-  @keyframes kb3{0%,67%{transform:scale(1.1) translate(1%,0)}95%{transform:scale(1.22) translate(-1.5%,-1.5%)}100%{transform:scale(1.1)}}
-  .lsw-glow{display:block;position:absolute;inset:-30%;pointer-events:none;
-    background:
-      radial-gradient(40% 25% at 20% 15%,rgba(125,211,252,.20),transparent 70%),
-      linear-gradient(115deg,transparent 40%,rgba(255,255,255,.10) 50%,transparent 60%);
-    animation:glowSweep 10s ease-in-out infinite alternate}
-  @keyframes glowSweep{0%{transform:translate(-12%,8%)}100%{transform:translate(12%,-8%)}}
-  .lsw-veil{display:block;position:absolute;inset:0;pointer-events:none;
-    background:
-      linear-gradient(180deg,rgba(3,6,16,.40),transparent 20%),
-      linear-gradient(0deg,rgba(3,6,16,.62),transparent 28%),
-      linear-gradient(180deg,transparent 55%,rgba(3,6,16,.25))}
+  .ls-wall{position:absolute;inset:0;z-index:0;overflow:hidden;
+    background:radial-gradient(120% 55% at 50% 0%,#1b2742 0%,#0e1424 46%,#070b14 100%)}
   .ls-top{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;
     padding:15px 22px 0;color:#fff}
   .lst-time{display:flex;flex-direction:column;gap:3px}
@@ -475,9 +454,10 @@
   .ls-cards{position:relative;z-index:2;flex:1;min-height:0;padding:4px 16px;
     display:flex;flex-direction:column;justify-content:center;gap:11px;overflow:hidden}
   .lc-card{flex:none;position:relative;display:flex;gap:11px;align-items:flex-start;
-    background:rgba(255,255,255,.17);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-    border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:12px 13px;color:#fff;
-    text-align:left;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.28);
+    background:linear-gradient(160deg,rgba(255,255,255,.13),rgba(255,255,255,.05));
+    backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:12px 13px;color:#fff;
+    text-align:left;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.22);
     animation:lcfly .62s cubic-bezier(.34,1.56,.64,1)}
   .lc-card:active{transform:scale(.98)}
   @keyframes lcfly{0%{opacity:0;transform:translateY(-150%) scale(.9) rotate(-1.4deg)}100%{opacity:1;transform:none}}
@@ -488,7 +468,7 @@
   .lc-lv{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;
     background:rgba(255,255,255,.18);margin-bottom:6px}
   .lc-t{font-size:13.5px;font-weight:700;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;
-    -webkit-box-orient:vertical;overflow:hidden}
+    -webkit-box-orient:vertical;overflow:hidden;text-shadow:0 1px 6px rgba(0,0,0,.7)}
   .lc-meta{display:flex;justify-content:space-between;align-items:center;margin-top:7px;
     font-size:11px;color:rgba(255,255,255,.72)}
   .lc-link{color:#93c5fd;font-weight:700;display:flex;align-items:center;gap:3px}
@@ -714,7 +694,7 @@
     .home-bar{bottom:9px}
   }
   @media (prefers-reduced-motion:reduce){
-    .lsw-slide,.lsw-glow,.ls-swipe{animation:none}.lsw-slide{opacity:1}
+    .lc-card{animation:none}
     .lockscreen,.homescreen,.app-layer,.island{transition-duration:.01ms}
   }
 </style>
@@ -729,13 +709,7 @@
 
       <!-- 锁屏 -->
       <div class="lockscreen" id="lockscreen">
-        <div class="ls-wall">
-          <i class="lsw-slide" style="background-image:url('images/wallpaper-mountain.jpg')"></i>
-          <i class="lsw-slide" style="background-image:url('images/wallpaper-city.jpg')"></i>
-          <i class="lsw-slide" style="background-image:url('images/wallpaper-night.jpg')"></i>
-          <i class="lsw-glow"></i>
-          <i class="lsw-veil"></i>
-        </div>
+        <div class="ls-wall"></div>
         <div class="ls-top">
           <div class="lst-time"><div class="ls-date" id="ls-date">—</div></div>
           <div class="lst-ic"><span>📶</span><span>📡</span><span>🔋</span></div>
