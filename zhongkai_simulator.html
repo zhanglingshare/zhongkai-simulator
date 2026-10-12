@@ -2757,9 +2757,8 @@ function phoneIco(a){
 function renderHomeScreen(){
   const all=PHONE_APPS;
   const groups=[
-    {h:"家底与推演",vs:["fund","signal","mc","sens"]},
-    {h:"研究资料",vs:["iv","ledger","data"]},
-    {h:"系统",vs:["world"]}
+    {h:"决策主线",vs:["fund","signal"]},
+    {h:"研究工作台",vs:["mc","sens","iv","ledger","data","world"]}
   ];
   const byV=v=>all.find(a=>a.v===v);
   const row=a=>`<button class="ap-row" type="button" onclick="openApp('${a.v}')">
