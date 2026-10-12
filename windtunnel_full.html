@@ -3152,10 +3152,14 @@ $("#island").addEventListener("click",function(){
 $("#tb-go").addEventListener("click",function(){
   if(typeof openPrep==="function")openPrep();
 });
-/* 初始化：直接进入全要素推演工作台 */
+/* 初始化：直接进入全要素推演工作台；支持 ?view=xxx 进入指定视图 */
 renderHomeScreen();tickClock();setInterval(tickClock,10000);
-switchView("run");
-setTimeout(function(){refreshSelectors();render();},300);
+(function(){
+  const m=new URLSearchParams(location.search).get("view");
+  const view=m||"run";
+  switchView(view);
+  if(view==="run")setTimeout(function(){refreshSelectors();render();},300);
+})();
 /* 群聊事件绑定：应用抽屉、开一局、返回、播放中点击跳过 */
 (function(){
   const on=(id,ev,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};

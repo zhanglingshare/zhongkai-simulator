@@ -295,7 +295,36 @@ p{font-size:14px;line-height:1.7;color:var(--sub)}
   </div>
 </div>
 
-<!-- ============ 第12页 结语 ============ -->
+<!-- ============ 第12页 建构世界 ============ -->
+<div class="page" id="p-worldbuilder">
+  <div class="card">
+    <h2>🧱 建构世界 <span class="tag">综合输入 · 自建区域</span></h2>
+    <p>把模拟器从「仲恺基准」变成任何一个区域。支持三种输入方式：</p>
+    <div class="chart-grid" style="margin-top:12px">
+      <div style="padding:14px;background:rgba(148,163,184,.06);border-radius:10px">
+        <b style="color:var(--blue)">① CSV</b>
+        <div style="margin-top:6px;font-size:13px;color:var(--sub)">主体表（[entities]）+ 关系表（[relations]），按类型列出</div>
+      </div>
+      <div style="padding:14px;background:rgba(148,163,184,.06);border-radius:10px">
+        <b style="color:var(--purple)">② JSON</b>
+        <div style="margin-top:6px;font-size:13px;color:var(--sub)">{candidates, relations, params}，完整结构</div>
+      </div>
+      <div style="padding:14px;background:rgba(148,163,184,.06);border-radius:10px">
+        <b style="color:var(--green)">③ TXT 报告</b>
+        <div style="margin-top:6px;font-size:13px;color:var(--sub)">粘贴统计公报/工作报告原文，自动抽取主体、按类型连边</div>
+      </div>
+    </div>
+  </div>
+  <div style="background:#0b1220;border:1px solid var(--line);border-radius:12px;overflow:hidden">
+    <iframe src="windtunnel_full.html?view=world" style="width:100%;height:calc(100vh - 280px);min-height:560px;border:0;display:block"
+      title="建构世界工作台" loading="lazy"></iframe>
+  </div>
+  <div style="margin-top:10px;text-align:right">
+    <a href="windtunnel_full.html?view=world" target="_blank" style="color:var(--blue);font-size:13px">⤢ 全屏打开建构世界</a>
+  </div>
+</div>
+
+<!-- ============ 第13页 结语 ============ -->
 <div class="page" id="p-ending">
   <div class="card" style="text-align:center;padding:40px 24px">
     <div style="font-size:44px;margin-bottom:16px">🏔️</div>
@@ -331,7 +360,8 @@ const PAGES=[
   {id:"blindspot",n:"⑨可能忽略"},
   {id:"report",n:"⑩推演报告"},
   {id:"windtunnel",n:"⑪全要素推演"},
-  {id:"ending",n:"⑫结语"}
+  {id:"worldbuilder",n:"⑫建构世界"},
+  {id:"ending",n:"⑬结语"}
 ];
 document.getElementById("nav-scroll").innerHTML=PAGES.map(p=>
   `<button class="nav-btn" data-id="${p.id}" onclick="goPage('${p.id}')">${p.n}</button>`).join("");
