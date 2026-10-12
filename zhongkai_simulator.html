@@ -513,6 +513,9 @@
   .zp-inner{min-height:100%;display:flex;flex-direction:column;justify-content:center;
     align-items:center;padding:40px 26px;text-align:center}
   .zp-tag{font-size:11px;color:#7dd3fc;letter-spacing:.15em;margin-bottom:18px}
+  .zp-steps{display:flex;justify-content:center;gap:6px;margin-bottom:14px}
+  .zps{font-size:10px;color:#64748b;padding:4px 10px;border-radius:10px;background:rgba(148,163,184,.08);border:1px solid rgba(148,163,184,.15)}
+  .zps.on{color:#fbbf24;background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.3)}
   .zp-title{font-size:26px;font-weight:900;color:#f1f5f9;line-height:1.35;margin-bottom:14px}
   /* 真实产业网络（零号页完整渲染） */
   .zp-net{width:100%;height:auto;margin-bottom:22px;border-radius:10px;background:rgba(13,23,48,.5)}
@@ -836,6 +839,11 @@
       <!-- 零号页：先立柱——这张网怎么长出来·你就在网里·2030要再翻一倍 -->
       <div class="zeropage" id="zeropage">
         <div class="zp-inner">
+          <div class="zp-steps">
+            <div class="zps on">① 网怎么长出来</div>
+            <div class="zps">② 压力与机遇</div>
+            <div class="zps">③ 放进网里</div>
+          </div>
           <div class="zp-tag">仲恺高新区 · 产业风洞</div>
           <h1 class="zp-title">这张网，<br>是怎么长出来的？</h1>
 
@@ -892,6 +900,11 @@
       <!-- 压力与机遇页（零号页之后，现场体验之前） -->
       <div class="zeropage" id="presspage" style="display:none">
         <div class="zp-inner">
+          <div class="zp-steps">
+            <div class="zps" onclick="backToZp()">① 网怎么长出来</div>
+            <div class="zps on">② 压力与机遇</div>
+            <div class="zps">③ 放进网里</div>
+          </div>
           <div class="zp-tag">压力 · 机遇</div>
           <h1 class="zp-title" style="font-size:24px">这张网，现在顶着什么压力？</h1>
 
@@ -2714,6 +2727,19 @@ $("#pr-go").onclick=()=>{
   pp.style.opacity="0";
   setTimeout(()=>{pp.style.display="none";openFate();},460);
 };
+/* 压力页：点第①步返回零号页 */
+function backToZp(){
+  const pp=$("#presspage");
+  pp.style.transition="opacity .3s";
+  pp.style.opacity="0";
+  setTimeout(()=>{
+    pp.style.display="none";
+    const zp=$("#zeropage");
+    zp.style.display="block";
+    zp.style.opacity="0";
+    requestAnimationFrame(()=>{zp.style.transition="opacity .3s";zp.style.opacity="1";});
+  },310);
+}
 /* 零号页：完整产业网络 + 自动播放生长动画 */
 function drawZpNet(){
   var svg=document.getElementById('zp-net-full');
