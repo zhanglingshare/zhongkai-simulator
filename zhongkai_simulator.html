@@ -513,7 +513,12 @@
   .zp-inner{min-height:100%;display:flex;flex-direction:column;justify-content:center;
     align-items:center;padding:40px 26px;text-align:center}
   .zp-tag{font-size:11px;color:#7dd3fc;letter-spacing:.15em;margin-bottom:18px}
-  .zp-title{font-size:26px;font-weight:900;color:#f1f5f9;line-height:1.35;margin-bottom:24px}
+  .zp-title{font-size:26px;font-weight:900;color:#f1f5f9;line-height:1.35;margin-bottom:14px}
+  /* 真实产业网络（零号页背景） */
+  .zp-net{width:100%;height:auto;margin-bottom:22px}
+  .zp-net .zpl{stroke:#38bdf8;stroke-width:.8;opacity:0;transition:opacity .8s}
+  .zp-net .zpn{opacity:0;transition:opacity .8s}
+  .zp-net .on{opacity:1}
   /* 网络生长时间线 */
   .zp-grow{width:100%;margin-bottom:24px;text-align:left}
   .grow-step{display:flex;gap:11px;align-items:flex-start;padding:7px 0}
@@ -800,6 +805,8 @@
         <div class="zp-inner">
           <div class="zp-tag">仲恺高新区 · 产业风洞</div>
           <h1 class="zp-title">这张网，<br>是怎么长出来的？</h1>
+
+          <svg class="zp-net" viewBox="0 0 340 200" id="zp-net-real"></svg>
 
           <div class="zp-grow">
             <div class="grow-step">
@@ -2603,6 +2610,45 @@ $("#zp-go").onclick=()=>{
   zp.style.opacity="0";
   setTimeout(()=>{zp.style.display="none";},460);
 };
+/* 零号页：真实产业网络 + 生长动画 */
+function drawZpNet(){
+  var svg=document.getElementById('zp-net-real');
+  if(!svg||typeof sim==='undefined') return;
+  var W=340, H=200;
+  var pos=layoutForce(sim.agents, sim.edges, W, H);
+  var colorMap={anchor:"#a78bfa",oem:"#818cf8",supplier:"#22d3ee",service:"#fb923c",
+    talent:"#fbbf24",capital:"#34d399",land:"#a3e635",infra:"#93a4c4"};
+  var sizeMap={anchor:8.5,oem:6};
+  var html='';
+  sim.edges.forEach(function(e){
+    var p=pos[e.a], q=pos[e.b];
+    if(!p||!q) return;
+    html+='<line class="zpl" x1="'+p.x.toFixed(1)+'" y1="'+p.y.toFixed(1)+'" x2="'+q.x.toFixed(1)+'" y2="'+q.y.toFixed(1)+'"/>';
+  });
+  sim.agents.forEach(function(a){
+    var p=pos[a.name]; if(!p) return;
+    var r=sizeMap[a.type]||4;
+    var c=colorMap[a.type]||"#38bdf8";
+    var glow=a.type==='anchor'?' filter:drop-shadow(0 0 7px rgba(167,139,250,.9))':'';
+    html+='<circle class="zpn" cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="'+r+'" fill="'+c+'" style="'+glow+'"/>';
+  });
+  svg.innerHTML=html;
+  var nodes=svg.querySelectorAll('.zpn'), lines=svg.querySelectorAll('.zpl');
+  var aIdx=[], cIdx=[], oIdx=[];
+  sim.agents.forEach(function(a,i){
+    if(a.type==='anchor'||a.type==='oem') aIdx.push(i);
+    else if(a.type==='supplier') cIdx.push(i);
+    else oIdx.push(i);
+  });
+  aIdx.forEach(function(i,k){setTimeout(function(){nodes[i].classList.add('on');},300+k*180);});
+  var t1=300+aIdx.length*180;
+  cIdx.forEach(function(i,k){setTimeout(function(){nodes[i].classList.add('on');},t1+k*100);});
+  var t2=t1+cIdx.length*100;
+  oIdx.forEach(function(i,k){setTimeout(function(){nodes[i].classList.add('on');},t2+k*80);});
+  var t3=t2+oIdx.length*80;
+  lines.forEach(function(l,k){setTimeout(function(){l.classList.add('on');},t3+k*40);});
+}
+drawZpNet();
 let lockCardIv=null;
 /* 按类别均衡交错，接地气的（好玩/美食/暖心）优先飞入，避免前几张全是官方 */
 function interleaveCards(items){
