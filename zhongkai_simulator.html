@@ -2600,12 +2600,12 @@ function tickClock(){
   const wk=["周日","周一","周二","周三","周四","周五","周六"][d.getDay()];
   $("#ls-date").textContent=(d.getMonth()+1)+"月"+d.getDate()+"日 "+wk;
 }
-/* 零号页：立柱看完，进锁屏 */
+/* 零号页：立柱看完，直接进命运实验（现场体验） */
 $("#zp-go").onclick=()=>{
   const zp=$("#zeropage");
   zp.style.transition="opacity .45s";
   zp.style.opacity="0";
-  setTimeout(()=>{zp.style.display="none";},460);
+  setTimeout(()=>{zp.style.display="none";openFate();},460);
 };
 /* 零号页：完整产业网络 + 自动播放生长动画 */
 function drawZpNet(){
@@ -2851,7 +2851,7 @@ const NOTE_QUOTES={
 };
 const fateState={ident:null,step:0,choice:null,base:null,picked:null,playIv:null,newsShocks:null,newsNote:null};
 function openFate(ident,keepNews){
-  fateState.ident=ident;fateState.step=0;fateState.choice=null;fateState.base=null;fateState.picked=null;
+  fateState.ident=ident||"work";fateState.step=0;fateState.choice=null;fateState.base=null;fateState.picked=null;
   if(!keepNews){fateState.newsShocks=null;fateState.newsNote=null;}
   $("#fate-modal").classList.add("on");
   renderFate();
