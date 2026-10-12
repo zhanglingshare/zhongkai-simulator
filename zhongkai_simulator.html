@@ -534,6 +534,27 @@
   .zb-cell i{display:block;font-style:normal;font-size:10px;color:#94a3b8;margin-top:3px}
   .zb-opp{padding:8px 12px;border-radius:8px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.25);font-size:12px;color:#6ee7b7;margin-bottom:6px;line-height:1.5}
   .zb-chal{padding:8px 12px;border-radius:8px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25);font-size:12px;color:#fcd34d;line-height:1.5}
+  /* 压力页 */
+  .pr-charts{margin-bottom:22px;display:flex;flex-direction:column;gap:10px}
+  .pr-chart-row{display:flex;align-items:center;gap:8px}
+  .pr-label{font-size:11px;color:#94a3b8;width:72px;flex-shrink:0;text-align:right}
+  .pr-bar-wrap{flex:1;display:flex;flex-direction:column;gap:2px;height:36px;justify-content:center}
+  .pr-bar{height:14px;border-radius:4px;font-size:9px;line-height:14px;padding:0 6px;color:#fff;white-space:nowrap;overflow:hidden}
+  .pr-bar.now{background:linear-gradient(90deg,#818cf8,#6366f1)}
+  .pr-bar.warn{background:linear-gradient(90deg,#fbbf24,#f59e0b)}
+  .pr-bar.target{background:rgba(148,163,184,.25);border:1px dashed rgba(148,163,184,.4);color:#94a3b8}
+  .pr-level{border-radius:12px;padding:12px;margin-bottom:10px}
+  .pr-level-tag{font-size:12px;font-weight:700;margin-bottom:8px}
+  .pr-item{font-size:12.5px;line-height:1.6;margin-bottom:6px}
+  .pr-item:last-child{margin-bottom:0}
+  .pr-item b{display:block;color:#e2e8f0;margin-bottom:2px}
+  .pr-item i{display:block;font-style:normal;color:#94a3b8;font-size:11.5px;line-height:1.5}
+  .pr-red{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.25)}
+  .pr-red .pr-level-tag{color:#fca5a5}
+  .pr-yellow{background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.25)}
+  .pr-yellow .pr-level-tag{color:#fcd34d}
+  .pr-green{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.25)}
+  .pr-green .pr-level-tag{color:#6ee7b7}
   /* 你在网里 */
   .zp-you{width:100%;margin-bottom:22px}
   .zp-you-title{font-size:15px;font-weight:800;color:#fde68a;text-align:center;margin-bottom:11px}
@@ -860,6 +881,63 @@
           <div class="zp-hook">这张网是我们一起织的。下一段，你想让它往哪长？</div>
 
           <button class="zp-go" id="zp-go">看看三条路，哪条更靠谱 →</button>
+          <div class="zp-src">公开数据：仲恺高新区统计公报 / 管委会工作报告（2025）</div>
+        </div>
+      </div>
+
+      <!-- 压力与机遇页（零号页之后，现场体验之前） -->
+      <div class="zeropage" id="presspage" style="display:none">
+        <div class="zp-inner">
+          <div class="zp-tag">压力 · 机遇</div>
+          <h1 class="zp-title" style="font-size:24px">这张网，现在顶着什么压力？</h1>
+
+          <!-- 基本盘：2025 vs 2030 目标对比 -->
+          <div class="pr-charts">
+            <div class="pr-chart-row">
+              <div class="pr-label">GDP</div>
+              <div class="pr-bar-wrap">
+                <div class="pr-bar now" style="width:58%">1160亿</div>
+                <div class="pr-bar target" style="width:100%">2000亿目标</div>
+              </div>
+            </div>
+            <div class="pr-chart-row">
+              <div class="pr-label">规上工业</div>
+              <div class="pr-bar-wrap">
+                <div class="pr-bar now" style="width:62%">4037亿</div>
+                <div class="pr-bar target" style="width:100%">6500亿目标</div>
+              </div>
+            </div>
+            <div class="pr-chart-row">
+              <div class="pr-label">生产性服务业</div>
+              <div class="pr-bar-wrap">
+                <div class="pr-bar warn" style="width:82%">330亿</div>
+                <div class="pr-bar target" style="width:100%">400亿目标</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 🔴 已显现的压力 -->
+          <div class="pr-level pr-red">
+            <div class="pr-level-tag">🔴 已经显现</div>
+            <div class="pr-item"><b>三产偏弱</b><i>三产增加值 330.7 亿，仅占 GDP 约 28%——工业很强，但服务业还没跟上</i></div>
+            <div class="pr-item"><b>生产性服务业差一截</b><i>目标 400 亿，现在 330 亿，还差 70 亿——检测认证、软件信息、供应链服务还不够厚</i></div>
+          </div>
+
+          <!-- 🟡 有苗头的压力 -->
+          <div class="pr-level pr-yellow">
+            <div class="pr-level-tag">🟡 有苗头</div>
+            <div class="pr-item"><b>消费偏弱</b><i>社零 173.4 亿，增速 5.3%——工业涨得快，但本地人花的钱、本地商圈的人气还没跟上</i></div>
+            <div class="pr-item"><b>链主依赖</b><i>网里的链主就那么几家——它们扩产，网就长；它们订单少了，配套厂也跟着晃</i></div>
+          </div>
+
+          <!-- 🌊 机遇 -->
+          <div class="pr-level pr-green">
+            <div class="pr-level-tag">🌊 机遇</div>
+            <div class="pr-item"><b>融深融湾</b><i>紧挨着深圳，深圳的产业外溢、人才、资本都在往这边流</i></div>
+            <div class="pr-item"><b>三大链主在扩产</b><i>智能终端、新能源、半导体显示——德赛西威、亿纬锂能、TCL华星都在加码</i></div>
+          </div>
+
+          <button class="zp-go" id="pr-go">压力看完了，把我放进这张网里 →</button>
           <div class="zp-src">公开数据：仲恺高新区统计公报 / 管委会工作报告（2025）</div>
         </div>
       </div>
@@ -2618,12 +2696,25 @@ function tickClock(){
   const wk=["周日","周一","周二","周三","周四","周五","周六"][d.getDay()];
   $("#ls-date").textContent=(d.getMonth()+1)+"月"+d.getDate()+"日 "+wk;
 }
-/* 零号页：立柱看完，直接进命运实验（现场体验） */
+/* 零号页：立柱看完，进压力与机遇页 */
 $("#zp-go").onclick=()=>{
   const zp=$("#zeropage");
   zp.style.transition="opacity .45s";
   zp.style.opacity="0";
-  setTimeout(()=>{zp.style.display="none";openFate();},460);
+  setTimeout(()=>{
+    zp.style.display="none";
+    const pp=$("#presspage");
+    pp.style.display="block";
+    pp.style.opacity="0";
+    requestAnimationFrame(()=>{pp.style.transition="opacity .45s";pp.style.opacity="1";});
+  },460);
+};
+/* 压力页：看完，进现场体验 */
+$("#pr-go").onclick=()=>{
+  const pp=$("#presspage");
+  pp.style.transition="opacity .45s";
+  pp.style.opacity="0";
+  setTimeout(()=>{pp.style.display="none";openFate();},460);
 };
 /* 零号页：完整产业网络 + 自动播放生长动画 */
 function drawZpNet(){
