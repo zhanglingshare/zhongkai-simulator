@@ -3168,28 +3168,26 @@ function renderFate(){
     const suCls=Math.abs(d.su*100)<0.05?"flat":(d.su>=0?'up':'down');
     body.innerHTML=`<div class="fate-step">
       <div class="note-card">
-        <div class="nc-tag">📒 现场笔记</div>
-        <div class="nc-title">${it.emoji} ${it.label}，这件事我看明白了</div>
-        <div class="nc-chain">这件事在网里传了 20 步，我投的方向是「${FATE_CHOICES[fateState.choice].label}」</div>
-        <div class="nc-quote">💬 ${NOTE_QUOTES[fateState.ident]}</div>
-        <div class="nc-src">公开报道 + 公开数据下的推演，不是预测 · 来源：仲恺管委会公开信息</div>
+        <div class="nc-tag">📒 现场记录</div>
+        <div class="nc-title">${it.emoji} ${it.label}，你选的是「${it.picks[fateState.pickedPick].label}」</div>
+        <div class="nc-chain">这件事在网里传了 20 步，按公开数据设定参数，跑了一遍</div>
+        <div class="nc-src">依据：仲恺高新区2025统计公报 · 规上工业企业1144家 · 三产增加值330.7亿 · 社零173.4亿</div>
       </div>
-      <div class="ivw"><b>${it.emoji} 这跟你有什么关系</b>
-        <div class="muted" style="margin-top:4px">${fateMechanism(fateState.ident,r)}</div></div>
-      <div class="detail-head">想看细节？同一起点（${r.seed}）下，与「什么都不做」对照：</div>
+      <div class="detail-head">同一起点（${r.seed}）下，与「什么都不做」对照，结果区间：</div>
       <div class="fate-result-grid">
-        <div class="cell"><div class="v">${(r.pick.survivors*100).toFixed(0)}%</div><div class="l">存续（选了之后）</div><div class="fate-delta ${suCls}">${suTxt}</div></div>
-        <div class="cell"><div class="v">${r.pick.f.abundance.toFixed(2)}</div><div class="l">景气</div><div class="fate-delta ${Math.abs(d.ab)<0.005?'flat':(d.ab>=0?'up':'down')}">${zs(d.ab)}</div></div>
-        <div class="cell"><div class="v">${r.pick.f.disaster.toFixed(2)}</div><div class="l">风险</div><div class="fate-delta ${Math.abs(d.di)<0.005?'flat':(d.di<=0?'up':'down')}">${d.di<=0?'−':'+'}${Math.abs(d.di).toFixed(2)}</div></div>
+        <div class="cell"><div class="v">${(r.pick.survivors*100).toFixed(0)}%</div><div class="l">存续企业占比</div><div class="fate-delta ${suCls}">${suTxt}</div></div>
+        <div class="cell"><div class="v">${r.pick.f.abundance.toFixed(2)}</div><div class="l">景气指数</div><div class="fate-delta ${Math.abs(d.ab)<0.005?'flat':(d.ab>=0?'up':'down')}">${zs(d.ab)}</div></div>
+        <div class="cell"><div class="v">${r.pick.f.disaster.toFixed(2)}</div><div class="l">风险指数</div><div class="fate-delta ${Math.abs(d.di)<0.005?'flat':(d.di<=0?'up':'down')}">${d.di<=0?'−':'+'}${Math.abs(d.di).toFixed(2)}</div></div>
         <div class="cell"><div class="v">${r.pick.net.newE} / ${r.pick.net.broken}</div><div class="l">新合作 / 断裂</div></div>
       </div>
-      <div class="share-note">这是公开数据下的推演，不是现实预测：同一起点、同配置，任何人都能复跑出这组数字。已标注的近似/未建模部分不构成政策建议。</div>
+      <div class="muted" style="margin-top:10px;font-size:11px;line-height:1.5">↑ 以上为同一起点下的单次推演结果。模型参数基于公开数据设定，未做历史校准；存续比例、景气/风险指数为模型内计算值，不代表现实概率。</div>
+      <div class="share-note">这是公开数据下的推演记录，不是预测：同一起点、同配置，任何人都能复跑出这组数字。</div>
       <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-        <button class="btn gold" id="fate-share-dl">⬇ 下载我的现场笔记</button>
+        <button class="btn gold" id="fate-share-dl">⬇ 下载现场记录</button>
         <button class="btn" id="fate-share-link">🔗 复制可复现链接</button>
-        <button class="btn" id="fate-retry">↻ 换一种选择再试</button>
+        <button class="btn" id="fate-retry">↻ 换一个关注点再试</button>
       </div>
-      <button class="btn primary ramp-btn" id="fate-to-run">你担心的事，有没有办法让它不发生？<b>→ 进动态推演，看看怎么让这张网更好</b></button>
+      <button class="btn primary ramp-btn" id="fate-to-run">想看看怎么让这张网更好？<b>→ 进动态推演，对比不同情景</b></button>
     </div>`;
     $("#fate-share-dl").onclick=()=>drawFateCard(r);
     $("#fate-share-link").onclick=async function(){
