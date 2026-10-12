@@ -66,6 +66,29 @@
   .snap{background:#fff;border-radius:8px}
   .snap-t{font-size:11px;color:var(--mut);text-align:center;padding:3px 0}
   @media (max-width:720px){.net-snaps{grid-template-columns:repeat(2,1fr)}}
+  .chip-row{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:16px;padding:5px 13px;font-size:12.5px;cursor:pointer;color:var(--sub)}
+  .chip.on{background:var(--blue-soft);border-color:var(--blue);color:var(--blue);font-weight:600}
+  .hot-item{background:#fff;border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start}
+  .hot-item .em{font-size:19px;flex:none;margin-top:1px}
+  .hot-item .tt{font-weight:600;font-size:14px}
+  .hot-item .sm{font-size:12.5px;color:var(--sub);margin-top:3px;line-height:1.55}
+  .hot-item .badges{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+  .b-tier{font-size:10.5px;font-weight:700;padding:1px 8px;border-radius:9px}
+  .b-tier.high{background:#fef2f2;color:#c24141}.b-tier.mid{background:#fffbeb;color:#b7791f}.b-tier.low{background:#f1f5f9;color:#64748b}
+  .b-src{font-size:10.5px;color:var(--mut);background:#f1f5f9;padding:1px 8px;border-radius:9px}
+  .hot-item .act{margin-left:auto;flex:none;display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+  .livebar{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12.5px;color:#92400e;line-height:1.7}
+  .livebar b{color:#c24141}
+  .town-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  @media (max-width:720px){.town-grid{grid-template-columns:1fr}}
+  .town-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .town-card .hd{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+  .town-card .n{font-size:16px;font-weight:800}
+  .town-card .tag{font-size:10.5px;color:var(--blue);background:var(--blue-soft);padding:1px 8px;border-radius:9px}
+  .town-card .row{font-size:12.5px;color:var(--sub);margin-top:4px;line-height:1.65}
+  .town-card .row .k{display:inline-block;width:40px;color:var(--mut)}
+  .town-card .why{margin-top:7px;padding-top:6px;border-top:1px dashed var(--line);font-size:12px;color:var(--sub)}
   .entry-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
   .entry{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;cursor:pointer;transition:box-shadow .15s,border-color .15s}
   .entry:hover{border-color:var(--blue);box-shadow:0 6px 20px rgba(36,88,198,.08)}
@@ -191,7 +214,7 @@
 </head>
 <body>
 <header class="top">
-  <div class="brand">🏭 仲恺 2030 · 未来实验 <span class="ver">V1.2b</span></div>
+  <div class="brand">🏭 仲恺 2030 · 未来实验 <span class="ver">V1.2c</span></div>
   <div class="statusbar">
     <span class="pill mode" id="st-mode">探索模拟</span>
     <span class="pill" id="st-world">世界：仲恺基准</span>
@@ -206,6 +229,9 @@
 
 <div class="app">
   <aside class="side">
+    <div class="grp">今日仲恺</div>
+    <button class="nav" data-v="hot">📰 今日仲恺</button>
+    <button class="nav" data-v="town">🏘 仲恺各镇</button>
     <div class="grp">实验</div>
     <button class="nav on" data-v="home">◎ 概览</button>
     <button class="nav" data-v="run">▶ 动态推演</button>
@@ -229,6 +255,10 @@
         <p class="sub">一座工业强区的未来，不只有产值，还有工作、家庭、小店和每个人的选择。</p>
         <div class="metas">
           <span>2025 真实数据：GDP <b>1160.39 亿</b></span><span>规上工业 <b>1144 家</b></span><span>高新技术企业 <b>1053 家</b></span>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn sm" onclick="switchView('hot');renderHot()">📰 今日仲恺 · 每天更新的真实话题</button>
+          <button class="btn sm" onclick="switchView('town');renderTown()">🏘 仲恺各镇 · 5镇街+4园区生活</button>
         </div>
       </div>
       <div class="fate-grid">
@@ -516,6 +546,28 @@
             <tr><td style="text-align:left">冲击依据卡</td><td style="text-align:left">（新增：每个冲击标注现实苗头或纯假设）</td></tr>
           </tbody>
         </table>
+      </div>
+    </section>
+
+    <!-- ============ 今日仲恺（每日情报，hot.json） ============ -->
+    <section id="view-hot" class="view">
+      <div class="card">
+        <h2>📰 今日仲恺 <span class="tag">每天更新的真实话题 · 每条可溯源</span></h2>
+        <div class="muted" style="margin-bottom:8px" id="hot-scan">正在读取今日话题…</div>
+        <div class="chip-row" id="hot-tabs" style="margin-bottom:10px"></div>
+        <div id="hot-list"></div>
+        <div class="muted" style="margin-top:12px;font-size:12px" id="hot-note"></div>
+      </div>
+    </section>
+
+    <!-- ============ 仲恺各镇（生活风向标，life.json） ============ -->
+    <section id="view-town" class="view">
+      <div class="card">
+        <h2>🏘 仲恺各镇 <span class="tag">5 镇街 + 4 园区 · 产业与生活的一张图</span></h2>
+        <div class="muted" style="margin-bottom:8px" id="town-scan">正在读取各镇生活数据…</div>
+        <div class="livebar" id="town-pulse"></div>
+        <div id="town-grid"></div>
+        <div class="muted" style="margin-top:12px;font-size:12px" id="town-note"></div>
       </div>
     </section>
 
@@ -1617,6 +1669,8 @@ function gate(action){
 function switchView(v){
   $$(".nav").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
   $$(".view").forEach(p=>p.classList.toggle("on",p.id==="view-"+v));
+  if(v==="hot")ensureHot();
+  if(v==="town")ensureTown();
 }
 $$(".nav").forEach(b=>b.addEventListener("click",()=>switchView(b.dataset.v)));
 $("#entry-explore").onclick=()=>{
@@ -1924,6 +1978,62 @@ $("#fate-cancel").onclick=closeFate;
 $("#fate-prev").onclick=()=>{if(fateState.step===1){if(fateState.playIv){clearInterval(fateState.playIv);fateState.playIv=null;}fateState.step=0;renderFate();}
   else if(fateState.step===3){fateState.step=2;renderFate();}};
 /* hash 路由：打开 #fate=ident&choice=X&seed=N 自动重跑同情景 */
+/* ================= 今日仲恺 + 仲恺各镇（数据页面，V1.2c） ================= */
+let hotData=null,lifeData=null,hotTab="all";
+const HOT_CATS=[["all","全部"],["industry","产业"],["livelihood","民生"],["city","城市"],["food","好吃"],["fun","好玩"]];
+const HOT_FATE={industry:"work",food:"shop",city:"live",livelihood:"grad",fun:"live"};
+async function loadHot(){
+  try{const r=await fetch("hot.json?ts="+Date.now());if(!r.ok)throw 0;hotData=await r.json();}
+  catch(e){hotData=null;}
+}
+async function loadLife(){
+  try{const r=await fetch("life.json?ts="+Date.now());if(!r.ok)throw 0;lifeData=await r.json();}
+  catch(e){lifeData=null;}
+}
+function tierCls(t){return t==="高"?"high":(t==="较高"?"mid":"low");}
+function renderHot(){
+  const scan=$("#hot-scan"),list=$("#hot-list"),tabs=$("#hot-tabs"),note=$("#hot-note");
+  if(!scan)return;
+  if(!hotData){scan.innerHTML="今日话题读取失败：可能处于断网离线状态（联网后自动重试，历史话题不丢失）。";return;}
+  scan.innerHTML=`今日仲恺 · ${hotData.updated} · ${hotData.count} 条话题 · ${hotData.frequency||"每日更新一次"}`;
+  note.innerHTML=hotData.note||"";
+  tabs.innerHTML=HOT_CATS.map(([k,n])=>`<button class="chip ${k===hotTab?"on":""}" data-c="${k}">${n}</button>`).join("");
+  $$("#hot-tabs .chip").forEach(b=>b.addEventListener("click",()=>{hotTab=b.dataset.c;renderHot();}));
+  const items=hotData.items.filter(i=>hotTab==="all"||i.cat===hotTab);
+  list.innerHTML=items.map(i=>{
+    const fid=HOT_FATE[i.cat]||"work";
+    return `<div class="hot-item">
+      <div class="em">${i.emoji||"📌"}</div>
+      <div style="flex:1;min-width:0">
+        <div class="tt">${escapeHtml(i.title)}</div>
+        <div class="sm">${escapeHtml(i.summary||"")}</div>
+        <div class="badges"><span class="b-tier ${tierCls(i.tier)}">热度${i.tier}</span><span class="b-src">${escapeHtml(i.srcLevel||"公开来源")}</span>
+          ${i.url?`<a class="b-src" href="${i.url}" target="_blank" rel="noopener">查看原始报道 ↗</a>`:""}</div>
+      </div>
+      <div class="act"><button class="btn sm" onclick="openFate('${fid}')">${FATE_IDENTS[fid].emoji} 模拟这个情景</button></div>
+    </div>`;
+  }).join("")||'<div class="muted">该分类暂无话题。</div>';
+}
+function renderTown(){
+  const scan=$("#town-scan"),pulse=$("#town-pulse"),grid=$("#town-grid"),note=$("#town-note");
+  if(!scan)return;
+  if(!lifeData){scan.innerHTML="各镇数据读取失败：可能处于断网离线状态（联网后自动重试）。";return;}
+  scan.innerHTML=`仲恺各镇 · ${lifeData.updated} · 5 镇街 + 4 园区 · ${lifeData.freq||"每日更新一次"}`;
+  pulse.innerHTML="📡 <b>最近大家在聊：</b>"+(lifeData.pulse||[]).map(escapeHtml).join("　｜　");
+  note.innerHTML=(lifeData.note||"")+"　"+(lifeData.sourceLabel||"");
+  grid.innerHTML=(lifeData.towns||[]).map(t=>{
+    const lv=t.level==="高"?"high":(t.level==="较高"?"mid":"low");
+    return `<div class="town-card">
+      <div class="hd"><span class="n">${escapeHtml(t.n)}</span><span class="tag">${escapeHtml(t.tag||"")}</span><span class="b-tier ${lv}" style="margin-left:auto">人气${t.level||"中"}</span></div>
+      <div class="row"><span class="k">去哪玩</span>${escapeHtml((t.plays||[]).join(" · "))||"—"}</div>
+      <div class="row"><span class="k">吃什么</span>${escapeHtml((t.foods||[]).join(" · "))||"—"}</div>
+      <div class="why">${escapeHtml(t.why||"")}</div>
+    </div>`;
+  }).join("")||'<div class="muted">暂无镇街数据。</div>';
+}
+async function ensureHot(){if(!hotData)await loadHot();renderHot();}
+async function ensureTown(){if(!lifeData)await loadLife();renderTown();}
+
 function routeHash(){
   const h=location.hash;
   if(!h||!h.includes("fate="))return;
@@ -1936,6 +2046,7 @@ function routeHash(){
 }
 addEventListener("hashchange",routeHash);
 routeHash();
+loadHot();loadLife(); /* 预加载今日话题与各镇数据（失败不阻塞，页面内提示重试） */
 
 /* ================= 基础渲染 ================= */
 function refreshSelectors(){

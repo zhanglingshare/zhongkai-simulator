@@ -275,7 +275,23 @@ ok(!html.includes('startFatePlay'), '未定义引用 startFatePlay 已清理');
 ok(html.includes('fatePosCache') && html.includes('fatePosCacheSeed'), 'fateNetRender 布局缓存（节点不跳动）');
 ok(html.includes('stepFateSim') && html.includes('if(s.tick===5)injectShocks') && html.includes('while(baseSim.tick<5)') && html.includes('injectShocks(baseSim)') && html.includes('while(pickSim.tick<5)') && html.includes('injectShocks(pickSim)') && html.includes('Object.assign(pickSim.params'),
   '时间口径统一：动画与基准同一轨迹（前5步→第5步冲击→到20）；政策组前5步同起点、冲击后才生效');
-ok(html.includes('仲恺 2030 · 未来实验') && html.includes('V1.2b'), '品牌与版本号统一（V1.2b）');
+ok(html.includes('仲恺 2030 · 未来实验') && html.includes('V1.2c'), '品牌与版本号统一（V1.2c）');
+
+/* ---------- 11. 今日仲恺 + 仲恺各镇（V1.2c 数据页面） ---------- */
+console.log('· 今日仲恺 + 仲恺各镇（每日情报 / 镇街园区生活）');
+ok(html.includes('data-v="hot"') && html.includes('data-v="town"'), '导航新增「今日仲恺」「仲恺各镇」');
+ok(html.includes('id="view-hot"') && html.includes('id="view-town"') && html.includes('hot-scan') && html.includes('town-pulse'),
+  '两个数据页面结构完整（扫描信息/话题卡/风向标/镇街网格）');
+ok(html.includes('HOT_CATS') && html.includes('HOT_FATE') && html.includes('industry:"work"') && html.includes('food:"shop"') && html.includes('livelihood:"grad"') && html.includes('city:"live"'),
+  '话题→身份实验映射（产业→上班/民生→毕业/城市→生活/好吃→开店）');
+ok(html.includes('function renderHot') && html.includes('function renderTown') && html.includes('function ensureHot') && html.includes('function ensureTown'),
+  '加载与渲染函数完整');
+ok(html.includes('模拟这个情景') && html.includes('查看原始报道'), '话题卡片可溯源 + 一键进入命运实验');
+ok(html.includes('5 镇街 + 4 园区'), '仲恺各镇按 5 镇街 + 4 园区设计（非照搬博罗 17 镇）');
+const hd=JSON.parse(fs.readFileSync(path.join(__dirname,'..','hot.json'),'utf8'));
+ok(hd.region==='zhongkai'&&hd.count>=8&&hd.count<=14&&hd.items.every(i=>i.title&&i.url&&i.cat), `hot.json 合法（${hd.count} 条，全部可溯源）`);
+const ld=JSON.parse(fs.readFileSync(path.join(__dirname,'..','life.json'),'utf8'));
+ok(ld.region==='zhongkai'&&ld.towns.length===9&&ld.pulse.length>=3&&ld.towns.every(t=>t.n&&t.why), `life.json 合法（5 镇街 + 4 园区 = ${ld.towns.length} 个主体）`);
 
 /* ---------- 汇总 ---------- */
 console.log(failed === 0
