@@ -1264,7 +1264,7 @@
         <table>
           <thead><tr><th style="text-align:left">本版名称</th><th style="text-align:left">旧称（历史版本 / 口播材料）</th></tr></thead>
           <tbody>
-            <tr><td style="text-align:left">产业协同仿真实验室</td><td style="text-align:left">命运重跑机器</td></tr>
+            <tr><td style="text-align:left">产业协同仿真实验室</td><td style="text-align:left">现场传导实验</td></tr>
             <tr><td style="text-align:left">实验准备与确认</td><td style="text-align:left">验模三门</td></tr>
             <tr><td style="text-align:left">研究问题</td><td style="text-align:left">输入门 · Eigen 三问</td></tr>
             <tr><td style="text-align:left">网络结构审查</td><td style="text-align:left">审图门</td></tr>
@@ -1371,7 +1371,7 @@
     <div class="steps">
       <div class="st on" id="fst-1">① 你站在哪看</div>
       <div class="st" id="fst-2">② 发生了什么事</div>
-      <div class="st" id="fst-3">③ 轮到你怎么选</div>
+      <div class="st" id="fst-3">③ 你会怎么接</div>
       <div class="st" id="fst-4">④ 现场笔记</div>
     </div>
     <div id="fate-body"></div>
@@ -2889,7 +2889,7 @@ function renderFate(){
     <div class="nf-row"><b>影响对象/方向</b>${escapeHtml(fateState.newsNote.objects)} · ${escapeHtml(fateState.newsNote.direction)}</div>
     <div class="nf-row"><b>实验假设（不是新闻数值）</b>${escapeHtml(fateState.newsNote.assumption)}</div>
   </div>`:"";
-  $("#fate-h2").innerHTML=`这件事，和我有关 <span class="tag">${it.emoji} ${it.label}</span>`;
+  $("#fate-h2").innerHTML=`把你放进这张网里 <span class="tag">${it.emoji} ${it.label}</span>`;
   [1,2,3,4].forEach(i=>{$("#fst-"+i).classList.toggle("on",fateState.step===i-1);
     $("#fst-"+i).classList.toggle("done",fateState.step>i-1);});
   $("#fate-prev").style.display=(fateState.step===1||fateState.step===3)?"":"none";
