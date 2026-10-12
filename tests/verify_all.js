@@ -275,7 +275,7 @@ ok(!html.includes('startFatePlay'), '未定义引用 startFatePlay 已清理');
 ok(html.includes('fatePosCache') && html.includes('fatePosCacheSeed'), 'fateNetRender 布局缓存（节点不跳动）');
 ok(html.includes('stepFateSim') && html.includes('if(s.tick===5)injectShocks') && html.includes('while(baseSim.tick<5)') && html.includes('injectShocks(baseSim)') && html.includes('while(pickSim.tick<5)') && html.includes('injectShocks(pickSim)') && html.includes('Object.assign(pickSim.params'),
   '时间口径统一：动画与基准同一轨迹（前5步→第5步冲击→到20）；政策组前5步同起点、冲击后才生效');
-ok(html.includes('仲恺 2030 · 未来实验') && html.includes('V1.2c'), '品牌与版本号统一（V1.2c）');
+ok(html.includes('仲恺 2030 · 未来实验') && html.includes('V1.2d'), '品牌与版本号统一（V1.2d）');
 
 /* ---------- 11. 今日仲恺 + 仲恺各镇（V1.2c 数据页面） ---------- */
 console.log('· 今日仲恺 + 仲恺各镇（每日情报 / 镇街园区生活）');

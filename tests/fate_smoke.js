@@ -15,6 +15,7 @@ function makeEl(id) {
 }
 const ctxStub = {
   createLinearGradient: () => ({ addColorStop() {} }),
+  createRadialGradient: () => ({ addColorStop() {} }),
   fillRect() {}, fillText() {}, measureText: t => ({ width: String(t).length * 10 }),
   beginPath() {}, moveTo() {}, lineTo() {}, stroke() {}, arc() {}, fill() {},
   arcTo() {}, closePath() {}, save() {}, restore() {}, translate() {}, setLineDash() {},
@@ -117,7 +118,7 @@ t('身份差异化冲击(grad=人才流失+订单外流)', JSON.stringify(F.FATE
 t('startFatePlay 未被引用', !html.includes('startFatePlay'));
 t('fateNetRender 布局缓存', html.includes('fatePosCache') && html.includes('fatePosCacheSeed'));
 t('报告四时点网络图 + 指标改名', html.includes('netSnapSVG') && html.includes('冲击传播时长') && !html.includes('网络稳定用时'));
-t('版本号统一 V1.2c', html.includes('V1.2c') && !html.includes('<span class="ver">V1.0'));
+t('版本号统一 V1.2d', html.includes('V1.2d') && !html.includes('<span class="ver">V1.0'));
 
 console.log(`FATE SMOKE: ${ok} PASS / ${fail} FAIL`);
 process.exit(fail ? 1 : 0);
