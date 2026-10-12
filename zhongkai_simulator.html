@@ -237,22 +237,27 @@
   .zk-pulse b{color:#f9a8d4}
   .pulse-chip{display:inline-block;background:rgba(244,114,182,.18);border:1px solid rgba(244,114,182,.35);
     color:#fbcfe8;border-radius:20px;padding:3px 10px;font-size:11.5px;margin:4px 6px 0 0;font-weight:600}
-  .tc-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-  .tc-emoji{font-size:26px;line-height:1}
-  .tc-mid{flex:1;min-width:0}
-  .tc-mid .n{font-size:15px;font-weight:700;color:#fff}
-  .tc-mid .tag{display:inline-block;margin-top:3px;font-size:10px;color:#fdba74;background:rgba(251,146,60,.15);
-    border-radius:6px;padding:1px 7px}
-  .tc-dots{font-size:13px;color:#fbbf24;letter-spacing:2px}
-  .tc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
-  .tc-tag{font-size:10.5px;color:var(--mut);background:rgba(255,255,255,.06);
-    border-radius:8px;padding:3px 8px}
-  .tc-acts{display:flex;gap:8px}
-  .tc-check{flex:1;background:rgba(74,222,128,.14);border:1px solid rgba(74,222,128,.4);
-    color:#86efac;border-radius:10px;padding:7px;font-size:11.5px;font-weight:700;cursor:pointer}
+  .town-list{margin-bottom:8px}
+  .town-item{border:1px solid var(--line);border-radius:12px;margin-bottom:7px;overflow:hidden;background:rgba(140,170,225,.04)}
+  .town-item.mine{border-color:#fbbf24}
+  .town-row{display:flex;align-items:center;gap:11px;padding:11px 13px;cursor:pointer}
+  .town-row:active{background:rgba(255,255,255,.06)}
+  .tr-emoji{font-size:24px;line-height:1}
+  .tr-mid{flex:1;min-width:0}
+  .tr-name{font-size:14.5px;font-weight:700;color:#fff}
+  .tr-tag{display:inline-block;margin-top:2px;font-size:10px;color:#fdba74;background:rgba(251,146,60,.14);border-radius:6px;padding:1px 7px}
+  .tr-dots{font-size:12px;color:#fbbf24;letter-spacing:2px}
+  .tr-arrow{font-size:15px;color:var(--mut);transition:transform .15s}
+  .town-item.open .tr-arrow{transform:rotate(90deg)}
+  .tr-detail{display:none;padding:0 13px 12px}
+  .town-item.open .tr-detail{display:block;animation:msgBody .2s ease}
+  .tr-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+  .tr-tag2{font-size:10.5px;color:var(--mut);background:rgba(255,255,255,.06);border-radius:8px;padding:3px 8px}
+  .tr-acts{margin-bottom:8px}
+  .tc-check{background:rgba(74,222,128,.14);border:1px solid rgba(74,222,128,.4);
+    color:#86efac;border-radius:10px;padding:7px 16px;font-size:11.5px;font-weight:700;cursor:pointer}
   .tc-check.on{background:rgba(74,222,128,.3);color:#bbf7d0}
-  .tc-more{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--line);
-    color:var(--mut);border-radius:10px;padding:7px;font-size:11.5px;cursor:pointer}
+  .tr-why{font-size:11.5px;line-height:1.65;color:var(--mut)}
   @media (max-width:1100px){.life-grid{grid-template-columns:1fr}}
   .entry-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
   .entry{background:linear-gradient(180deg,rgba(140,170,225,.07),rgba(140,170,225,.03));border:1px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;transition:box-shadow .15s,border-color .15s,transform .12s}
@@ -1217,15 +1222,8 @@
     <!-- ============ 仲恺各镇（生活风向标，life.json） ============ -->
     <section id="view-town" class="view">
       <div class="card">
-        <h2>🏘 仲恺生活地图 <span class="tag">你在哪个园区上班，下班、周末去哪</span></h2>
-        <div class="zk-hero">
-          <div class="lead">五个镇街管<b>烟火</b>，四个园区管<b>上班</b>。下班吃啥、周末去哪——点你待的地方。</div>
-        </div>
+        <h2>🏘 仲恺生活地图 <span class="tag">下班周末去哪 · 点一个镇展开</span></h2>
         <div class="zk-pulse" id="town-pulse"></div>
-        <div class="zk-you" id="town-you">
-          <div class="q">🏭 你在哪个镇街 / 园区？点一下，定位你的生活圈（只存在你自己手机上，不上传）</div>
-          <div class="chip-row" id="town-places"></div>
-        </div>
         <div class="muted" style="margin-bottom:8px" id="town-scan">正在读取各镇生活数据…</div>
         <div id="town-grid"></div>
         <div class="muted" style="margin-top:12px;font-size:12px" id="town-note"></div>
@@ -3207,21 +3205,20 @@ const TOWN_EMOJI={"陈江":"🛍","惠环":"🏙","沥林":"🍗","潼侨":"🥟
 function lvDots(level){const n=level==="高"?3:level==="较高"?2:1;return "●".repeat(n)+"<span style='opacity:.28'>"+"○".repeat(3-n)+"</span>";}
 function townCard(t,kind){
   const mine=(t.n===myPlace)?' mine':'';
-  const tog="event.stopPropagation();var c=this.closest('.town-card');c.classList.toggle('open');var b=c.querySelector('.tc-more');b.textContent=(c.classList.contains('open')?'收起 ▴':'为啥热闹 ▾');var m=c.querySelector('.town-more');if(m)m.style.display=c.classList.contains('open')?'block':'none';";
   const em=TOWN_EMOJI[t.n]||"📍";
   const tags=[...(t.foods||[]).slice(0,2),...(t.plays||[]).slice(0,1)];
-  return `<div class="town-card life${mine}" data-n="${escapeHtml(t.n)}">
-    <div class="tc-top">
-      <span class="tc-emoji">${em}</span>
-      <div class="tc-mid"><div class="n">${escapeHtml(t.n)}</div><div class="tag">${escapeHtml(t.tag||"")}</div></div>
-      <span class="tc-dots" title="人气">${lvDots(t.level)}</span>
+  return `<div class="town-item${mine}" data-n="${escapeHtml(t.n)}">
+    <div class="town-row" onclick="this.parentElement.classList.toggle('open')">
+      <span class="tr-emoji">${em}</span>
+      <div class="tr-mid"><div class="tr-name">${escapeHtml(t.n)}</div><div class="tr-tag">${escapeHtml(t.tag||"")}</div></div>
+      <span class="tr-dots" title="人气">${lvDots(t.level)}</span>
+      <span class="tr-arrow">▸</span>
     </div>
-    <div class="tc-tags">${tags.map(x=>`<span class="tc-tag">${escapeHtml(x)}</span>`).join("")||"<span class='tc-tag'>配套完善中</span>"}</div>
-    <div class="tc-acts">
-      <button class="tc-check" onclick="event.stopPropagation();var o=this.classList.toggle('on');this.textContent=o?'✓已打卡':'打卡'">打卡</button>
-      <button class="tc-more" onclick="${tog}">为啥热闹 ▾</button>
+    <div class="tr-detail">
+      <div class="tr-tags">${tags.map(x=>`<span class="tr-tag2">${escapeHtml(x)}</span>`).join("")||"<span class='tr-tag2'>配套完善中</span>"}</div>
+      <div class="tr-acts"><button class="tc-check" onclick="event.stopPropagation();var o=this.classList.toggle('on');this.textContent=o?'✓已打卡':'打卡'">打卡</button></div>
+      <div class="tr-why">${escapeHtml(t.why||"暂无更多说明。")}</div>
     </div>
-    <div class="town-more"><div class="why">${escapeHtml(t.why||"暂无更多说明。")}</div></div>
   </div>`;
 }
 function shortTag(s){let t=String(s).split(/[：:，,「]/)[0];t=t.replace(/^(这两天|今日|国庆假期|仲恺)/,"");return t.length>7?t.slice(0,7)+"…":t;}
@@ -3229,16 +3226,15 @@ function renderTown(){
   const scan=$("#town-scan"),pulse=$("#town-pulse"),grid=$("#town-grid"),note=$("#town-note");
   if(!scan)return;
   if(!lifeData){scan.innerHTML=`各镇数据暂时读不到（可能没联网，本机也没有历史快照）。<button class="btn sm" onclick="retryTown()">↻ 重新尝试</button>`;return;}
-  scan.innerHTML=`仲恺生活地图 · ${lifeData._offline?'离线显示 · 更新于 '+lifeData.updated:lifeData.updated} · 5 镇街 + 4 园区 · ${lifeData.freq||"每日更新一次"}`;
+  scan.innerHTML=`更新于 ${lifeData._offline?'离线 · '+lifeData.updated:lifeData.updated} · ${lifeData.freq||"每日更新"}`;
   const pl=(lifeData.pulse||[]).slice(0,4).map(p=>`<span class="pulse-chip">${escapeHtml(shortTag(p))}</span>`).join("");
   pulse.innerHTML="🔥 <b>这两天在刷</b>"+pl;
   note.innerHTML=(lifeData.note||"")+"　"+(lifeData.sourceLabel||"");
-  renderPlaceChips("town-places",(lifeData.towns||[]).map(t=>t.n),()=>renderTown());
   const towns=lifeData.towns||[];
   const life=towns.filter(t=>!isWorkPark(t.n)), work=towns.filter(t=>isWorkPark(t.n));
   let html="";
-  if(life.length)html+=`<div class="life-sec-title">🏘 五个镇街 · 烟火生活 <span class="cnt">下班吃啥、周末去哪，都在这儿</span></div><div class="life-grid">${life.map(t=>townCard(t,"life")).join("")}</div>`;
-  if(work.length)html+=`<div class="life-sec-title">🏭 四个园区 · 上班那点事 <span class="cnt">在这上班，配套和最近的烟火气</span></div><div class="life-grid">${work.map(t=>townCard(t,"work")).join("")}</div>`;
+  if(life.length)html+=`<div class="life-sec-title">🏘 五个镇街</div><div class="town-list">${life.map(t=>townCard(t,"life")).join("")}</div>`;
+  if(work.length)html+=`<div class="life-sec-title">🏭 四个园区</div><div class="town-list">${work.map(t=>townCard(t,"work")).join("")}</div>`;
   grid.innerHTML=html||'<div class="muted">暂无镇街数据。</div>';
   if(myPlace){const card=grid.querySelector('[data-n="'+myPlace+'"]');if(card)card.scrollIntoView({behavior:"smooth",block:"center"});}
 }
