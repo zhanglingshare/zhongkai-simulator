@@ -138,6 +138,8 @@
     background:linear-gradient(180deg,#7dd3fc,#38bdf8);-webkit-background-clip:text;background-clip:text;color:transparent}
   .zk-stat .num.warm{background:linear-gradient(180deg,#fcd34d,#fb923c);-webkit-background-clip:text;background-clip:text;color:transparent}
   .zk-stat .cap{font-size:11px;color:var(--sub);margin-top:5px;line-height:1.5}
+  .zk-stat .cap .scope{display:block;font-size:10px;color:var(--muted);margin-top:2px}
+  .no-sim{display:block;font-size:10.5px;color:var(--muted);margin-bottom:4px}
   .zk-you{background:linear-gradient(90deg,rgba(56,189,248,.10),rgba(56,189,248,.02));border:1px solid rgba(56,189,248,.30);
     border-radius:12px;padding:11px 14px;margin:12px 0;font-size:13px}
   .zk-you .q{color:#bae6fd;font-weight:700;margin-bottom:8px;line-height:1.6}
@@ -200,7 +202,10 @@
   .fate-result-grid .v{font-size:22px;font-weight:800;font-family:var(--font-num);color:var(--ink);text-shadow:0 0 16px rgba(125,211,252,.25)}
   .fate-result-grid .l{font-size:11px;color:var(--sub)}
   .fate-delta{font-size:11.5px;font-weight:600}
-  .fate-delta.up{color:#34d399;text-shadow:0 0 10px rgba(52,211,153,.35)}.fate-delta.down{color:#f87171;text-shadow:0 0 10px rgba(248,113,113,.3)}
+  .fate-delta.up{color:#34d399;text-shadow:0 0 10px rgba(52,211,153,.35)}.fate-delta.down{color:#f87171;text-shadow:0 0 10px rgba(248,113,113,.3)}.fate-delta.flat{color:#94a3b8}
+  .news-fate-card{border:1px solid rgba(56,189,248,.35);border-radius:12px;background:linear-gradient(180deg,rgba(56,189,248,.07),rgba(56,189,248,.02));padding:10px 12px;margin:10px 0;font-size:12px}
+  .news-fate-card .nf-head{font-weight:700;color:var(--blue);margin-bottom:6px}
+  .news-fate-card .nf-row{margin:3px 0;color:var(--ink)}
   .fate-choice{display:block;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0;cursor:pointer;background:linear-gradient(180deg,rgba(140,170,225,.05),rgba(140,170,225,.02));text-align:left;width:100%;color:var(--ink);transition:border-color .12s,box-shadow .12s}
   .fate-choice:hover{border-color:var(--blue);box-shadow:0 0 14px rgba(56,189,248,.12)}
   .fate-choice b{font-size:13.5px;display:block}
@@ -295,7 +300,7 @@
 </head>
 <body>
 <header class="top">
-  <div class="brand">🏭 仲恺 2030 · 未来实验 <span class="ver">V1.2d</span></div>
+  <div class="brand">🏭 仲恺 2030 · 未来实验 <span class="ver">V1.2e</span></div>
   <div class="statusbar">
     <span class="pill mode" id="st-mode">探索模拟</span>
     <span class="pill" id="st-world">世界：仲恺基准</span>
@@ -1811,11 +1816,25 @@ const FATE_CHOICES={
     note:"模型内以「人才主体韧性 +0.1」近似（talent 主体经营能量上调）；人才政策效果尚未实证标定，仅作情景对比。",
     params:{talentBoost:1}}
 };
-const fateState={ident:null,step:0,choice:null,base:null,picked:null,playIv:null};
-function openFate(ident){
+const fateState={ident:null,step:0,choice:null,base:null,picked:null,playIv:null,newsShocks:null,newsNote:null};
+function openFate(ident,keepNews){
   fateState.ident=ident;fateState.step=0;fateState.choice=null;fateState.base=null;fateState.picked=null;
+  if(!keepNews){fateState.newsShocks=null;fateState.newsNote=null;}
   $("#fate-modal").classList.add("on");
   renderFate();
+}
+/* 由「今日仲恺」单条新闻进入的情景预览：先展示新闻事实+影响对象/方向+实验假设，再启动实验 */
+function openNewsFate(gi){
+  const i=hotData&&hotData.items&&hotData.items[gi];if(!i)return;
+  const f=i.fate||{};
+  fateState.newsShocks=(f.shocks&&f.shocks.length)?f.shocks:null;
+  fateState.newsNote={
+    facts:(i.title||"")+(i.summary?" · "+i.summary:""),
+    objects:f.objects||"相关产业主体",
+    direction:f.direction||"中性",
+    assumption:f.assumption||"模型近似情景（反事实假设），新闻数值不直接作为模型参数。"
+  };
+  openFate(f.ident||"work",true);
 }
 function closeFate(){
   $("#fate-modal").classList.remove("on");
@@ -1823,6 +1842,13 @@ function closeFate(){
 }
 function renderFate(){
   const it=FATE_IDENTS[fateState.ident];if(!it)return;
+  const curShocks=()=>fateState.newsShocks||it.shocks;
+  const newsCard=fateState.newsNote?`<div class="news-fate-card">
+    <div class="nf-head">📰 由这条新闻进入的情景</div>
+    <div class="nf-row"><b>新闻事实</b>${escapeHtml(fateState.newsNote.facts)}</div>
+    <div class="nf-row"><b>影响对象/方向</b>${escapeHtml(fateState.newsNote.objects)} · ${escapeHtml(fateState.newsNote.direction)}</div>
+    <div class="nf-row"><b>实验假设（不是新闻数值）</b>${escapeHtml(fateState.newsNote.assumption)}</div>
+  </div>`:"";
   $("#fate-h2").innerHTML=`仲恺 2030 · 一分钟命运实验 <span class="tag">${it.emoji} ${it.label}</span>`;
   [1,2,3,4].forEach(i=>{$("#fst-"+i).classList.toggle("on",fateState.step===i-1);
     $("#fst-"+i).classList.toggle("done",fateState.step>i-1);});
@@ -1831,6 +1857,7 @@ function renderFate(){
   if(fateState.step===0){ /* ① 你的问题 */
     body.innerHTML=`<div class="fate-step">
       <h3>${it.emoji} ${it.q}</h3>
+      ${newsCard}
       <div class="fate-meta">${it.data}</div>
       <div class="ivw"><b>这个模拟器能算什么</b>
         <div class="muted" style="margin-top:4px">产业网络演化、企业存续、景气/风险/协同、冲击传播——都是模型内可复现计算。</div></div>
@@ -1847,7 +1874,7 @@ function renderFate(){
     $("#fate-next").style.display="none";
     $("#fate-prev").style.display="";
     body.innerHTML=`<div class="fate-step">
-      <h3>⚡ 一场冲击正在发生：${it.shocks.join(" + ")}</h3>
+      <h3>⚡ 一场冲击正在发生：${curShocks().join(" + ")}</h3>
       <div class="fate-meta">冲击均有现实苗头（依据标注见「数据与证据」）；模型内在第 5 步注入。动画播放的每一步，都是模型真实计算。</div>
       <svg id="fate-svg" class="fate-net" viewBox="0 0 340 260" preserveAspectRatio="xMidYMid meet"></svg>
       <div class="muted" id="fate-play-note" style="text-align:center">正在推进第 0 / 20 步…（可跳过）</div>
@@ -1868,7 +1895,7 @@ function renderFate(){
     $("#fate-prev").style.display="";
     body.innerHTML=`<div class="fate-step">
       <h3>现在，轮到你作决定</h3>
-      <div class="fate-meta">2030 年之前，你所在的仲恺正经历${FATE_IDENTS[fateState.ident].shocks.join("、")}，配套承压、部分合作中断。你只有有限的政策资源，先处理什么？</div>
+      <div class="fate-meta">2030 年之前，你所在的仲恺正经历${curShocks().join("、")}，配套承压、部分合作中断。你只有有限的政策资源，先处理什么？</div>
       ${Object.keys(FATE_CHOICES).map(k=>{const c=FATE_CHOICES[k];
         return `<button class="fate-choice" data-c="${k}"><b>${c.label}</b><span class="muted">${c.note}</span></button>`;}).join("")}
       <div class="muted" style="margin-top:8px">三个选项对应模型内不同的干预力度；<b>尚未实证标定的部分已注明，不宣称三者现实等价或可直接比较</b>。</div>
@@ -1886,13 +1913,16 @@ function renderFate(){
     const r=runFateChoice(fateState.choice);
     fateState.picked=r;
     const d=r.delta;
+    const zs=x=>Math.abs(x)<0.005?"≈0":(x>=0?'+':'−')+Math.abs(x).toFixed(2);
+    const suTxt=Math.abs(d.su*100)<0.05?"0.0pp":(d.su>=0?'+':'−')+Math.abs(d.su*100).toFixed(1)+"pp";
+    const suCls=Math.abs(d.su*100)<0.05?"flat":(d.su>=0?'up':'down');
     body.innerHTML=`<div class="fate-step">
       <h3>📊 结果：你选择了「${FATE_CHOICES[fateState.choice].short}」</h3>
-      <div class="fate-meta">同一起点（${r.seed}）· 冲击「${FATE_IDENTS[fateState.ident].shocks.join(" + ")}」· 模型内计算 20 步（第 5 步注入冲击）；与「什么都不做」对照相比：</div>
+      <div class="fate-meta">同一起点（${r.seed}）· 冲击「${curShocks().join(" + ")}」· 模型内计算 20 步（第 5 步注入冲击）；与「什么都不做」对照相比：</div>
       <div class="fate-result-grid">
-        <div class="cell"><div class="v">${(r.pick.survivors*100).toFixed(0)}%</div><div class="l">存续（选了之后）</div><div class="fate-delta ${d.su>=0?'up':'down'}">${d.su>=0?'+':'−'}${Math.abs(d.su*100).toFixed(1)}pp</div></div>
-        <div class="cell"><div class="v">${r.pick.f.abundance.toFixed(2)}</div><div class="l">景气</div><div class="fate-delta ${d.ab>=0?'up':'down'}">${d.ab>=0?'+':''}${d.ab.toFixed(2)}</div></div>
-        <div class="cell"><div class="v">${r.pick.f.disaster.toFixed(2)}</div><div class="l">风险</div><div class="fate-delta ${d.di<=0?'up':'down'}">${d.di<=0?'−':'+'}${Math.abs(d.di).toFixed(2)}</div></div>
+        <div class="cell"><div class="v">${(r.pick.survivors*100).toFixed(0)}%</div><div class="l">存续（选了之后）</div><div class="fate-delta ${suCls}">${suTxt}</div></div>
+        <div class="cell"><div class="v">${r.pick.f.abundance.toFixed(2)}</div><div class="l">景气</div><div class="fate-delta ${Math.abs(d.ab)<0.005?'flat':(d.ab>=0?'up':'down')}">${zs(d.ab)}</div></div>
+        <div class="cell"><div class="v">${r.pick.f.disaster.toFixed(2)}</div><div class="l">风险</div><div class="fate-delta ${Math.abs(d.di)<0.005?'flat':(d.di<=0?'up':'down')}">${d.di<=0?'−':'+'}${Math.abs(d.di).toFixed(2)}</div></div>
         <div class="cell"><div class="v">${r.pick.net.newE} / ${r.pick.net.broken}</div><div class="l">新合作 / 断裂</div></div>
       </div>
       <div class="ivw"><b>${it.emoji} 这跟你有什么关系</b>
@@ -1924,7 +1954,7 @@ function skipFatePlay(){
   $("#fate-next").onclick=()=>{fateState.step=2;renderFate();};
 }
 function newFateSim(){ return new Sim(7,{dynamicNetwork:1}); }
-function injectShocks(s){ (FATE_IDENTS[fateState.ident]||FATE_IDENTS.work).shocks.forEach(k=>s.shock(k)); }
+function injectShocks(s){ (fateState.newsShocks||FATE_IDENTS[fateState.ident]||FATE_IDENTS.work).shocks.forEach(k=>s.shock(k)); }
 function stepFateSim(s){
   s.step();
   if(s.tick===5)injectShocks(s);   /* 统一口径：第 5 步注入本身份冲击 */
@@ -1956,24 +1986,25 @@ function runFateChoice(choice){
 }
 function fateMechanism(ident,r){
   const d=r.delta;
-  let head;
-  if(Math.abs(d.su)<0.005&&r.choice==="C"){
-    head=`模型内：这一选择在 20 步冲击窗口里几乎没改变结果（存续 ${(d.su*100).toFixed(1)}pp）——人才是慢变量，短期冲击期不显效。这不是选项无效，而是模型边界：长期政策需要更长窗口与实证标定才能评估。`;
-  }else if(d.su>=0){
-    head=`模型内：你的选择把存续率抬高了 ${(d.su*100).toFixed(1)} 个百分点，配套企业少退了一排。`;
-  }else if(d.di<0){
-    head=`模型内：存续率略降 ${(d.su*100).toFixed(1)}pp，但风险端降了 ${Math.abs(d.di).toFixed(2)}、景气${d.ab>=0?"升了":"降了"} ${Math.abs(d.ab).toFixed(2)}——冲击传染被压住，部分主体在调整期出清（单局对参数敏感，看趋势请用「批量重跑」）。`;
-  }else{
-    head=`模型内：这一选择没有明显托住存续率（${(d.su*100).toFixed(1)}pp）。`;
-  }
-  const risk=d.di<=0?`风险端降了 ${Math.abs(d.di).toFixed(2)}，链条没有再传染。`:`风险端仍上行 ${d.di.toFixed(2)}。`;
+  const nAgents=24; /* 每局活跃主体数，用于把存续率差值换算成主体个数 */
+  const dn=Math.round(d.su*nAgents);
+  let surv;
+  if(dn>=1) surv=`比不干预多保留 ${dn} 个主体`;
+  else if(dn<=-1) surv=`存续主体少了 ${Math.abs(dn)} 个`;
+  else surv=`存续率没有变化`;
+  const ab=Math.abs(d.ab)<0.005?`景气基本持平`:(d.ab>=0?`景气提高约 ${d.ab.toFixed(2)}`:`景气下降约 ${Math.abs(d.ab).toFixed(2)}`);
+  const di=Math.abs(d.di)<0.005?`风险基本持平`:(d.di<=0?`风险降低约 ${Math.abs(d.di).toFixed(2)}`:`风险上升约 ${d.di.toFixed(2)}`);
+  const newE=r.pick.net.newE, br=r.pick.net.broken;
+  const net=newE===0?`本轮未形成新合作`:`本轮形成 ${newE} 次新合作`;
+  let head=`与不干预相比，${surv}，${ab}，${di}。${net}，累计发生 ${br} 次关系断裂。`;
+  if(r.choice==="C"&&Math.abs(d.su)<0.005)head+=`（人才是慢变量，短期冲击期不显效；长期政策需要更长窗口与实证标定才能评估。）`;
   const map={
-    work:`${head}${risk} 对「上班」的可能传导：配套企业留存 → 用工需求相对稳定；链条断裂会先体现在招聘减少与上下游观望（机制说明，非个人就业预测）。`,
-    shop:`${head}${risk} 对「开店」的可能传导：配套企业存活 → 园区周边消费人群与生产性服务需求相对稳定；周边小店营业额未建模。`,
-    live:`${head}${risk} 对「生活」的可能传导：服务网络覆盖变化 → 城市公共服务的产业侧支撑；房价 / 学位 / 医院未建模。`,
-    grad:`${head}${risk} 对「毕业选择」的可能传导：景气与企业存续 → 岗位供给与留人意愿；个人求职结果未建模。`
+    work:`${head} 对「上班」的机制参考（模型外，非预测）：配套企业留存 → 用工需求相对稳定；链条断裂会先体现为招聘放缓与上下游观望。`,
+    shop:`${head} 对「开店」的机制参考（模型外，非预测）：配套企业存活 → 园区周边消费人群与生产性服务需求相对稳定；周边小店营业额未建模。`,
+    live:`${head} 对「生活」的机制参考（模型外，非预测）：服务网络覆盖变化影响城市公共服务的产业侧支撑；房价 / 学位 / 医院未建模。`,
+    grad:`${head} 对「毕业选择」的机制参考（模型外，非预测）：景气与企业存续 → 岗位供给与留人意愿；个人求职结果未建模。`
   };
-  return map[ident]||head+risk;
+  return map[ident]||head;
 }
 let fatePosCache=null,fatePosCacheSeed=null;
 function fateNetRender(s,el){
@@ -2047,7 +2078,7 @@ function drawFateCard(r){
   g.globalAlpha=1;
   g.restore();
   g.fillStyle="#cbd5e1";g.font="22px system-ui";
-  g.fillText(`起点 ${r.seed} · 冲击「${FATE_IDENTS[fateState.ident].shocks.join(" + ")}」· 模型内 20 步（第 5 步注入）`,60,1140);
+  g.fillText(`起点 ${r.seed} · 冲击「${(fateState.newsShocks||FATE_IDENTS[fateState.ident].shocks).join(" + ")}」· 模型内 20 步（第 5 步注入）`,60,1140);
   g.fillStyle="#64748b";g.font="20px system-ui";
   g.fillText("模拟结果不是现实预测；同一起点、同配置可复跑。",60,1190);
   g.fillText("部分指标（人才近似等）尚未实证标定，不构成政策建议。",60,1224);
@@ -2086,7 +2117,9 @@ $("#fate-prev").onclick=()=>{if(fateState.step===1){if(fateState.playIv){clearIn
 const zkStore={get(){try{return (typeof localStorage!=="undefined"&&localStorage.getItem("zk_myplace"))||"";}catch(e){return "";}},set(v){try{if(typeof localStorage!=="undefined")localStorage.setItem("zk_myplace",v);}catch(e){}}};
 let hotData=null,lifeData=null,hotTab="all",myPlace=zkStore.get();
 const HOT_CATS=[["all","全部"],["industry","招工·岗位"],["livelihood","学位·就医"],["city","通勤·城建"],["food","打牙祭"],["fun","周末去哪"]];
-const HOT_FATE={industry:"work",food:"shop",city:"live",livelihood:"grad",fun:"live"};
+/* 新闻→实验：不再按分类直映射固定冲击；每条新闻由数据端逐条判断（item.fate），
+   kind=sim 才可进入情景预览（先展示事实/影响对象/方向/假设），info=仅查看报道（模型未覆盖），life=生活资讯入口 */
+const HOT_FATE=null;
 const ZK_PLACES=["陈江","惠环","沥林","潼侨","潼湖","东江科技园","惠南科技园","潼湖生态智慧区","人工智能产业园"];
 const RELATE={
   industry:"🏭 <b>和你有啥关系：</b>新厂房、新项目投产，后面往往跟着招工和配套订单——找工作、想换厂、在厂边做小生意的，都值得盯紧。",
@@ -2105,16 +2138,9 @@ async function loadLife(){
   catch(e){lifeData=null;}
 }
 function tierCls(t){return t==="高"?"high":(t==="较高"?"mid":"low");}
-/* 从今日话题文本里动态抠硬数字，抠不到就不显示，绝不杜撰 */
+/* 顶部统计只读结构化指标（d.stats，由雷达端输出并注明统计期/口径），不再从摘要正则抽数冠"今年" */
 function hotStats(d){
-  const txt=(d.items||[]).map(i=>i.title+" "+(i.summary||"")).join("　");
-  const out=[];
-  const kg=txt.match(/(\d+)\s*宗[^，。、]*?开工/), jg=txt.match(/(\d+)\s*宗[^，。、]*?竣工/);
-  if(kg&&jg) out.push({n:kg[1]+"·"+jg[1],warm:false,cap:"今年产业项目<br>开工 · 竣工投产（宗）"});
-  else if(kg) out.push({n:kg[1],warm:false,cap:"今年新开工<br>产业项目（宗）"});
-  const xw=txt.match(/公办学位\s*(\d+)\s*个/)||txt.match(/新增[^，。、]*?(\d+)\s*个?\s*公办学位/)||txt.match(/(\d+)\s*个?\s*公办学位/);
-  if(xw) out.push({n:xw[1],warm:true,cap:"今年新增<br>公办学位（个）"});
-  out.push({n:"9",warm:false,cap:"5 镇街 + 4 园区<br>各有各的活法"});
+  const out=(d.stats||[]).map(s=>({n:s.n,warm:!!s.warm,cap:s.cap+(s.scope?`<span class="scope">${s.scope}</span>`:"")}));
   out.push({n:String(d.count||(d.items||[]).length),warm:true,cap:"今天为你扒到<br>的话题（条）"});
   return out;
 }
@@ -2137,7 +2163,7 @@ function renderHot(){
   const scan=$("#hot-scan"),list=$("#hot-list"),tabs=$("#hot-tabs"),note=$("#hot-note");
   if(!scan)return;
   if(!hotData){scan.innerHTML="今日话题读取失败：可能处于断网离线状态（联网后自动重试，历史话题不丢失）。";return;}
-  scan.innerHTML=`今日仲恺 · ${hotData.updated} · ${hotData.count} 条话题 · ${hotData.frequency||"每日更新一次"}`;
+  scan.innerHTML=`今日仲恺 · 最近抓取 ${hotData.fetched_at||hotData.updated} · ${hotData.count} 条话题 · ${hotData.frequency||"每日更新一次"}`;
   note.innerHTML=hotData.note||"";
   renderHotStats(hotData);
   renderPlaceChips("hot-places",ZK_PLACES,()=>renderHot());
@@ -2146,20 +2172,27 @@ function renderHot(){
   tabs.innerHTML=HOT_CATS.map(([k,n])=>`<button class="chip ${k===hotTab?"on":""}" data-c="${k}">${n}</button>`).join("");
   $$("#hot-tabs .chip").forEach(b=>b.addEventListener("click",()=>{hotTab=b.dataset.c;renderHot();}));
   const items=hotData.items.filter(i=>hotTab==="all"||i.cat===hotTab);
-  list.innerHTML=items.map(i=>{
-    const fid=HOT_FATE[i.cat]||"work";
+  list.innerHTML=items.map((i,idx)=>{
+    const gi=hotData.items.indexOf(i);
     const text=i.title+" "+(i.summary||"");
     const mine=placeHit(text);
+    const f=i.fate||{};
+    let act;
+    if(f.kind==="sim")act=`<button class="btn sm gold" onclick="openNewsFate(${gi})">🔬 情景预览</button>`;
+    else if(f.kind==="info")act=`<span class="no-sim">模型暂不模拟 · 仅提供报道</span>${i.url?`<a class="btn sm" href="${i.url}" target="_blank" rel="noopener">📰 查看报道</a>`:""}`;
+    else if(f.kind==="life")act=i.url?`<a class="btn sm" href="${i.url}" target="_blank" rel="noopener">📍 生活资讯</a>`:"";
+    else act=i.url?`<a class="btn sm" href="${i.url}" target="_blank" rel="noopener">查看报道 ↗</a>`:"";
+    const meta=`<span class="b-src" title="原报道发布时间">🕐 报道 ${i.published_at||"待核实"}</span><span class="b-src" title="雷达抓取时间">📡 抓取 ${(i.fetched_at||"").slice(0,10)||"待核实"}</span><span class="b-src" title="核验状态：官方原文或≥2独立来源=已核验，单源媒体/本地=待核实">核验 ${i.verified_status||"待核实"}</span>`;
     return `<div class="hot-item cat-${i.cat||'city'} ${mine?'mine-card':''}">
       <div class="em">${i.emoji||"📌"}</div>
       <div style="flex:1;min-width:0">
         <div class="tt">${escapeHtml(i.title)}${mine?'<span class="mine-flag">你那边</span>':''}</div>
         <div class="sm">${escapeHtml(i.summary||"")}</div>
         <div class="relate">${RELATE[i.cat]||RELATE.city}</div>
-        <div class="badges"><span class="b-tier ${tierCls(i.tier)}">热度${i.tier}</span><span class="b-src">${escapeHtml(i.srcLevel||"公开来源")}</span>
-          ${i.url?`<a class="b-src" href="${i.url}" target="_blank" rel="noopener">查看原始报道 ↗</a>`:""}</div>
+        <div class="badges"><span class="b-tier ${tierCls(i.tier)}">热度${i.tier}</span><span class="b-src">${escapeHtml(i.srcLevel||"公开来源")}</span>${meta}
+          ${i.url?`<a class="b-src" href="${i.url}" target="_blank" rel="noopener">原文 ↗</a>`:""}</div>
       </div>
-      <div class="act"><button class="btn sm" onclick="openFate('${fid}')">${FATE_IDENTS[fid].emoji} 要是变了，跑一遍</button></div>
+      <div class="act">${act}</div>
     </div>`;
   }).join("")||'<div class="muted">该分类暂无话题。</div>';
 }

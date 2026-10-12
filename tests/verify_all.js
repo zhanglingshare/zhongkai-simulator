@@ -275,25 +275,33 @@ ok(!html.includes('startFatePlay'), '未定义引用 startFatePlay 已清理');
 ok(html.includes('fatePosCache') && html.includes('fatePosCacheSeed'), 'fateNetRender 布局缓存（节点不跳动）');
 ok(html.includes('stepFateSim') && html.includes('if(s.tick===5)injectShocks') && html.includes('while(baseSim.tick<5)') && html.includes('injectShocks(baseSim)') && html.includes('while(pickSim.tick<5)') && html.includes('injectShocks(pickSim)') && html.includes('Object.assign(pickSim.params'),
   '时间口径统一：动画与基准同一轨迹（前5步→第5步冲击→到20）；政策组前5步同起点、冲击后才生效');
-ok(html.includes('仲恺 2030 · 未来实验') && html.includes('V1.2d'), '品牌与版本号统一（V1.2d）');
+ok(html.includes('仲恺 2030 · 未来实验') && html.includes('V1.2e'), '品牌与版本号统一（V1.2e）');
 
 /* ---------- 11. 今日仲恺 + 仲恺各镇（V1.2c 数据页面） ---------- */
 console.log('· 今日仲恺 + 仲恺各镇（每日情报 / 镇街园区生活）');
 ok(html.includes('data-v="hot"') && html.includes('data-v="town"'), '导航新增「今日仲恺」「仲恺各镇」');
 ok(html.includes('id="view-hot"') && html.includes('id="view-town"') && html.includes('hot-scan') && html.includes('town-pulse'),
   '两个数据页面结构完整（扫描信息/话题卡/风向标/镇街网格）');
-ok(html.includes('HOT_CATS') && html.includes('HOT_FATE') && html.includes('industry:"work"') && html.includes('food:"shop"') && html.includes('livelihood:"grad"') && html.includes('city:"live"'),
-  '话题→身份实验映射（产业→上班/民生→毕业/城市→生活/好吃→开店）');
+ok(html.includes('HOT_CATS') && html.includes('openNewsFate') && html.includes('kind==="sim"') && html.includes('kind==="info"') && html.includes('kind==="life"'),
+  '新闻逐条事件判断：sim=情景预览（事实/对象/方向/假设）/ info=仅查看报道 / life=生活资讯，不再按分类直映射固定冲击');
 ok(html.includes('function renderHot') && html.includes('function renderTown') && html.includes('function ensureHot') && html.includes('function ensureTown'),
   '加载与渲染函数完整');
-ok(html.includes('openFate(') && html.includes('查看原始报道'), '话题卡片可溯源 + 一键进入命运实验');
+ok(html.includes('openNewsFate(') && html.includes('原文 ↗') && html.includes('openFate(f.ident') && html.includes('fateState.newsShocks'),
+  '话题卡片可溯源 + 新闻情景经确认后进入命运实验（利好不自动变负面冲击）');
+ok(html.includes('published_at') && html.includes('fetched_at') && html.includes('verified_status') && html.includes('待核实'),
+  '报道时间 / 最近抓取 / 核验状态 随卡片展示，缺失标「待核实」');
+ok(html.includes('d.stats') && html.includes('不再从摘要正则抽数'), '顶部统计读结构化 stats（雷达端输出口径），不从摘要抽数冠「今年」');
+ok(html.includes('比不干预多保留') && html.includes('存续率没有变化') && html.includes('本轮未形成新合作') && html.includes('累计发生') && !html.includes('链条没有再传染'),
+  '结果解说按实际差值生成：零改善不说成改善、无新合作明示、风险只报幅度不引申');
 ok(html.includes('5 镇街 + 4 园区'), '仲恺各镇按 5 镇街 + 4 园区设计（非照搬博罗 17 镇）');
 ok(html.includes('仲恺打工人的每日情报站') && html.includes('和你有啥关系') && html.includes('zk_myplace'),
   '今日仲恺接地气：打工人视角 + 人话翻译 + 本机「你在哪」参与');
 ok(html.includes('五个镇街 · 烟火生活') && html.includes('四个园区 · 上班那点事') && html.includes('下班打牙祭'),
   '仲恺各镇生活圈：镇街烟火 / 园区上班分组 + 生活化标签');
 const hd=JSON.parse(fs.readFileSync(path.join(__dirname,'..','hot.json'),'utf8'));
-ok(hd.region==='zhongkai'&&hd.count>=8&&hd.count<=14&&hd.items.every(i=>i.title&&i.url&&i.cat), `hot.json 合法（${hd.count} 条，全部可溯源）`);
+ok(hd.region==='zhongkai'&&hd.count>=8&&hd.count<=14&&hd.items.every(i=>i.title&&i.url&&i.cat&&('published_at' in i)&&('fetched_at' in i)&&('verified_status' in i)&&('fate' in i)), `hot.json 合法（${hd.count} 条，全部可溯源且字段规范）`);
+ok(hd.items.every(i=>!i.fate||(i.fate.kind&&['sim','info','life'].includes(i.fate.kind))), '逐条 fate 判断字段合法（sim/info/life）');
+ok(hd.items.filter(i=>i.cat==='livelihood').every(i=>!i.fate||i.fate.kind!=='sim'), '学校/学位等民生话题不进入情景模拟（只给查看报道）');
 const ld=JSON.parse(fs.readFileSync(path.join(__dirname,'..','life.json'),'utf8'));
 ok(ld.region==='zhongkai'&&ld.towns.length===9&&ld.pulse.length>=3&&ld.towns.every(t=>t.n&&t.why), `life.json 合法（5 镇街 + 4 园区 = ${ld.towns.length} 个主体）`);
 
