@@ -22,7 +22,9 @@
         "夜市小吃"
       ],
       "level": "高",
-      "verified_status": "pending"
+      "verified_status": "sourced",
+      "srcName": "仲恺管委会·陈江街道2025工作总结(消费季/汽车城)",
+      "srcUrl": "https://www.hzzk.gov.cn/bmpd/cjjdbsc/zwgk/qt/ghjh/content/post_5719094.html"
     },
     {
       "n": "惠环",
@@ -38,7 +40,9 @@
         "惠环大排档"
       ],
       "level": "较高",
-      "verified_status": "pending"
+      "verified_status": "sourced",
+      "srcName": "仲恺管委会·惠环街道在线访谈(三高速+城轨+高铁)",
+      "srcUrl": "https://www.hzzk.gov.cn/hdjlpt/live/index/index/records/m?pid=5244"
     },
     {
       "n": "沥林",
@@ -55,7 +59,9 @@
         "客家豆腐"
       ],
       "level": "高",
-      "verified_status": "pending"
+      "verified_status": "sourced",
+      "srcName": "惠州市政府·第十二届沥林碌鹅节(连续12年/39位大厨)",
+      "srcUrl": "https://www.huizhou.gov.cn/zdlyxxgk/xczx/gzdt/content/post_5617550.html"
     },
     {
       "n": "潼侨",
@@ -72,7 +78,9 @@
         "侨乡小吃"
       ],
       "level": "较高",
-      "verified_status": "pending"
+      "verified_status": "sourced",
+      "srcName": "仲恺管委会·潼侨侨文化展览馆研学",
+      "srcUrl": "https://www.hzzk.gov.cn/hzzkzqz/gkmlpt/content/5/5781/mpost_5781967.html"
     },
     {
       "n": "潼湖",
@@ -89,7 +97,9 @@
         "潼芯薯"
       ],
       "level": "高",
-      "verified_status": "pending"
+      "verified_status": "sourced",
+      "srcName": "南方+·潼心谷(约8万㎡户外亲子乐园)",
+      "srcUrl": "https://static.nfapp.southcn.com/content/202304/30/c7631726.html"
     },
     {
       "n": "东江科技园",
@@ -101,7 +111,9 @@
         "员工生活配套街区"
       ],
       "level": "较高",
-      "verified_status": "pending"
+      "verified_status": "sourced",
+      "srcName": "仲恺管委会·产业城乡齐发力",
+      "srcUrl": "https://www.hzzk.gov.cn/bmpd/djgxkjy/yqdt/content/post_5467116.html"
     },
     {
       "n": "惠南科技园",
@@ -113,7 +125,9 @@
         "商业配套"
       ],
       "level": "较高",
-      "verified_status": "pending"
+      "verified_status": "sourced",
+      "srcName": "仲恺管委会·产业城乡齐发力",
+      "srcUrl": "https://www.hzzk.gov.cn/bmpd/djgxkjy/yqdt/content/post_5467116.html"
     },
     {
       "n": "潼湖生态智慧区",
@@ -125,7 +139,9 @@
         "中韩产业园起步区"
       ],
       "level": "较高",
-      "verified_status": "pending"
+      "verified_status": "sourced",
+      "srcName": "仲恺管委会·智谷彩街(运动+美食/旧厂房)",
+      "srcUrl": "https://www.hzzk.gov.cn/bmpd/thstzhq/dtzx/content/post_5853372.html"
     },
     {
       "n": "人工智能产业园",
@@ -136,7 +152,9 @@
         "园区公园"
       ],
       "level": "较高",
-      "verified_status": "pending"
+      "verified_status": "sourced",
+      "srcName": "仲恺管委会·天虹AI数字创意项目14个月投产",
+      "srcUrl": "https://www.hzzk.gov.cn/zntj/content/post_5757223.html"
     }
   ],
   "season": "秋",
