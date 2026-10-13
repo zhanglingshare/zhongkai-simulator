@@ -7,53 +7,66 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0f1e'/%3E%3Ccircle cx='20' cy='26' r='7' fill='%23818cf8'/%3E%3Ccircle cx='44' cy='20' r='7' fill='%2322d3ee'/%3E%3Ccircle cx='44' cy='42' r='7' fill='%23fbbf24'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="model.css">
 <style>
-  body{background:#0a0f1e!important;color:#e2e8f0}
-  .zero-wrap{max-width:800px;margin:0 auto;padding:24px 20px 60px}
-  .step-tabs{display:flex;gap:8px;margin:16px 0 20px;flex-wrap:wrap}
-  .step-tab{font-size:12px;padding:6px 14px;border-radius:20px;border:1px solid #1e293b;background:#0f172a;color:#64748b}
-  .step-tab.on{border-color:#fbbf24;color:#fbbf24;background:#1e1b0e}
-  .zero-title{text-align:center;margin:20px 0 8px}
-  .zero-title .sub{font-size:14px;color:#22d3ee;letter-spacing:2px;margin-bottom:12px}
-  .zero-title h1{font-size:36px;line-height:1.2;font-weight:800;color:#f1f5f9;margin:0;letter-spacing:-1px}
-  @media(max-width:600px){.zero-title h1{font-size:26px}}
-  .net-box{background:#f8fafc;border-radius:16px;border:1px solid #1e293b;margin:20px 0;overflow:hidden}
+  *{box-sizing:border-box}
+  body{background:#0a0f1e!important;color:#e2e8f0;margin:0;display:flex;min-height:100vh}
+
+  /* 左侧边栏 */
+  .sidebar{width:240px;background:#0f172a;border-right:1px solid #1e293b;padding:20px 0;flex-shrink:0;display:flex;flex-direction:column}
+  .sidebar-logo{padding:0 20px 20px;border-bottom:1px solid #1e293b;margin-bottom:16px}
+  .sidebar-logo .title{font-size:15px;font-weight:700;color:#f1f5f9}
+  .sidebar-logo .sub{font-size:11px;color:#64748b;margin-top:4px}
+  .sidebar-nav{flex:1;padding:0 12px}
+  .nav-item{display:block;padding:10px 12px;border-radius:8px;font-size:13px;color:#94a3b8;text-decoration:none;margin-bottom:2px;cursor:pointer}
+  .nav-item:hover{background:#1e293b;color:#e2e8f0}
+  .nav-item.on{background:#1e293b;color:#fbbf24;font-weight:600}
+  .nav-section{font-size:11px;color:#475569;padding:16px 12px 6px;text-transform:uppercase;letter-spacing:1px}
+
+  /* 右侧主内容区 */
+  .main{flex:1;padding:32px 40px;max-width:1000px}
+  .main h1{font-size:28px;line-height:1.3;font-weight:800;color:#f1f5f9;margin:0 0 8px}
+  .main .sub{font-size:14px;color:#22d3ee;margin-bottom:24px}
+
+  .net-box{background:#f8fafc;border-radius:12px;border:1px solid #1e293b;margin:20px 0;overflow:hidden}
   .net-box svg{width:100%;height:auto;display:block}
   .hist-card{background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:18px 20px;margin-bottom:12px}
   .hist-card .h-label{font-size:14px;font-weight:700;margin-bottom:6px}
   .hist-card .h-label.old{color:#94a3b8}
   .hist-card .h-label.now{color:#22d3ee}
   .hist-card .h-label.future{color:#fbbf24}
-  .hist-card p{font-size:16px;color:#e2e8f0;line-height:1.6;margin:0}
+  .hist-card p{font-size:15px;color:#e2e8f0;line-height:1.6;margin:0}
   .cta-row{display:flex;gap:10px;margin:24px 0;flex-wrap:wrap}
   .cta-btn{flex:1;min-width:140px;text-align:center;padding:14px;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none}
   .cta-primary{background:#22d3ee;color:#0a0f1e}
   .cta-secondary{background:#0f172a;color:#e2e8f0;border:1px solid #1e293b}
-  .quick-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;justify-content:center}
-  .quick-links a{font-size:12px;color:#64748b;text-decoration:none;padding:4px 10px}
 </style>
 </head>
 <body>
 
-<div class="zero-wrap">
-
-  <!-- 顶部导航 -->
-  <nav style="display:flex;gap:10px;padding:12px 0;margin-bottom:8px;flex-wrap:wrap;border-bottom:1px solid #1e293b;padding-bottom:12px">
-    <a href="index.html" style="font-size:13px;color:#fbbf24;font-weight:600;text-decoration:none">概览</a>
-    <a href="run.html" style="font-size:13px;color:#64748b;text-decoration:none">动态推演</a>
-    <a href="montecarlo.html" style="font-size:13px;color:#64748b;text-decoration:none">蒙特卡洛</a>
-    <a href="data.html" style="font-size:13px;color:#64748b;text-decoration:none">数据依据</a>
-  </nav>
-
-  <div class="step-tabs">
-    <span class="step-tab on">① 网怎么长出来</span>
-    <span class="step-tab">② 压力与机遇</span>
-    <span class="step-tab">③ 放进网里</span>
+<!-- 左侧边栏 -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="title">仲恺产业风洞</div>
+    <div class="sub">区域决策模拟推演</div>
   </div>
-
-  <div class="zero-title">
-    <div class="sub">仲恺高新区 · 产业风洞</div>
-    <h1>仲恺现在，<br>正在发生什么？</h1>
+  <div class="sidebar-nav">
+    <div class="nav-section">概览</div>
+    <div class="nav-item on">📊 现在正在发生什么</div>
+    <div class="nav-item">🕸 产业网络</div>
+    <div class="nav-section">推演</div>
+    <div class="nav-item">🎛 动态推演</div>
+    <div class="nav-item">🎲 蒙特卡洛</div>
+    <div class="nav-item">📈 敏感性分析</div>
+    <div class="nav-section">数据</div>
+    <div class="nav-item">📚 数据依据</div>
+    <div class="nav-item">👥 主体档案</div>
   </div>
+</div>
+
+<!-- 右侧主内容区 -->
+<div class="main">
+
+  <h1>仲恺现在，正在发生什么？</h1>
+  <div class="sub">最近3天动态 · 机遇与风险 · 信源分级</div>
 
   <!-- 今日动态 -->
   <div style="background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:16px;margin:20px 0">
@@ -131,17 +144,11 @@
     <a class="cta-btn cta-primary" href="run.html">看看三条路，哪条更靠谱 →</a>
   </div>
 
-  <div class="quick-links">
-    <a href="towns.html">各镇生活</a>
-    <a href="gates.html">正式研究</a>
-    <a href="montecarlo.html">蒙特卡洛</a>
-    <a href="data.html">数据来源</a>
-  </div>
-</div>
+  <footer style="border-top:1px solid #1e293b;margin-top:40px;padding-top:16px;font-size:12px;color:#475569">
+    数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）· 反事实不可验证 · License: MIT
+  </footer>
 
-<footer style="border-top:1px solid #1e293b;padding:16px;text-align:center;font-size:12px;color:#475569">
-  数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）· 反事实不可验证 · License: MIT
-</footer>
+</div><!-- /main -->
 
 <script src="model.js"></script>
 <script>
