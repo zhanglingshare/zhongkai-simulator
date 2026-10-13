@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日仲恺 · 仲恺产业协同实验室</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23087f8c'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="model.css">
+<style>
+  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+  @media(max-width:600px){.stats-row{grid-template-columns:1fr}}
+  .stat-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center}
+  .stat-card .num{font-size:28px;font-weight:800;color:var(--ink)}
+  .stat-card .cap{font-size:13px;color:var(--sub);margin-top:4px}
+  .stat-card .scope{font-size:11px;color:var(--sub);margin-top:6px;opacity:.7}
+  .topic{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:12px}
+  .topic .tag-row{display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+  .topic .badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .badge.high{background:#fef2f2;color:#c24141}
+  .badge.mid{background:#fffbeb;color:#b45309}
+  .badge.src{background:#f0f9ff;color:#087f8c}
+  .topic h3{font-size:16px;margin:0 0 6px;line-height:1.4}
+  .topic .summary{font-size:13px;color:var(--sub);line-height:1.6;margin:6px 0}
+  .topic .meta{font-size:11px;color:var(--sub);display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .topic .meta a{color:var(--teal);text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+<header class="top" style="padding:16px 28px 12px">
+  <h1>📰 今日仲恺 <span class="ver">v1.0</span></h1>
+</header>
+<nav style="display:flex;gap:8px;padding:10px 28px;max-width:900px;margin:0 auto;flex-wrap:wrap">
+  <a href="index.html" style="font-size:13px;color:#64748b;text-decoration:none">← 概览</a>
+  <a href="today.html" style="font-size:13px;color:#087f8c;font-weight:600;text-decoration:none">今日仲恺</a>
+  <a href="towns.html" style="font-size:13px;color:#64748b;text-decoration:none">各镇生活</a>
+  <a href="run.html" style="font-size:13px;color:#64748b;text-decoration:none">动态推演</a>
+</nav>
+<div style="max-width:900px;margin:0 auto;padding:0 28px">
+  <div id="loading" class="muted" style="padding:40px;text-align:center">正在拉取今日话题…</div>
+  <div id="content" style="display:none">
+    <div class="muted" style="font-size:13px;margin-bottom:4px" id="updated-lbl"></div>
+    <div class="stats-row" id="stats"></div>
+    <h2 style="font-size:18px;margin:24px 0 12px">今天大家在聊什么</h2>
+    <div id="topics"></div>
+    <div class="muted" style="font-size:12px;margin:20px 0;line-height:1.6" id="note"></div>
+  </div>
+</div>
+<footer>话题均来自公开渠道，每日更新一次。数据不代表平台后台真实统计。</footer>
+<script>
+fetch('hot.json').then(r=>r.json()).then(d=>{
+  document.getElementById('loading').style.display='none';
+  document.getElementById('content').style.display='block';
+  document.getElementById('updated-lbl').textContent='更新于 '+d.updated+' · 共 '+d.count+' 条';
+  document.getElementById('note').textContent=d.note;
+  // stats
+  const s=document.getElementById('stats');
+  (d.stats||[]).forEach(st=>{
+    s.innerHTML+=`<div class="stat-card${st.warm?' warm':''}"><div class="num">${st.n}</div><div class="cap">${st.cap}</div><div class="scope">${st.scope}</div></div>`;
+  });
+  // topics
+  const t=document.getElementById('topics');
+  (d.items||[]).forEach(it=>{
+    const tierCls=it.tier==='高'?'high':'mid';
+    t.innerHTML+=`<div class="topic">
+      <div class="tag-row">
+        <span class="badge ${tierCls}">${it.tier}关注</span>
+        <span class="badge src">${it.srcLevel||''}</span>
+        <span style="font-size:12px;color:var(--sub)">${it.emoji||''} ${catName(it.cat)}</span>
+      </div>
+      <h3>${it.title}</h3>
+      <div class="summary">${it.summary||''}</div>
+      <div class="meta">
+        <span>来源：${it.source||''}</span>
+        <span>事件：${it.event_date||it.published_at||''}</span>
+        <span>${it.verified_status||'待核实'}</span>
+        ${it.url?`<a href="${it.url}" target="_blank">查看原文 →</a>`:''}
+      </div>
+    </div>`;
+  });
+}).catch(e=>{
+  document.getElementById('loading').textContent='加载失败：'+e.message;
+});
+function catName(c){
+  return {industry:'产业',livelihood:'民生',city:'城市',food:'好吃',fun:'好玩',gossip:'暖闻'}[c]||c;
+}
+</script>
+</body>
+</html>
