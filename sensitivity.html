@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>敏感性 · 仲恺产业风洞</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23312e81'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="model.css">
+</head>
+<body>
+<header class="top"><h1>🏭 仲恺产业风洞 <span class="ver">v0.9.0</span><span class="muted" style="font-weight:400">敏感性 · 哪个变量一动结论就翻</span></h1></header>
+<nav style="display:flex;gap:8px;padding:10px 28px;max-width:1600px;margin:0 auto;flex-wrap:wrap">
+  <a href="index.html" style="font-size:13px;color:#64748b;text-decoration:none">主推演</a>
+  <a href="gates.html" style="font-size:13px;color:#64748b;text-decoration:none">验模三门</a>
+  <a href="montecarlo.html" style="font-size:13px;color:#64748b;text-decoration:none">蒙特卡洛</a>
+  <a href="sensitivity.html" style="font-size:13px;color:#087f8c;font-weight:600;text-decoration:none">敏感性</a>
+  <a href="interviews.html" style="font-size:13px;color:#64748b;text-decoration:none">访谈</a>
+  <a href="reports.html" style="font-size:13px;color:#64748b;text-decoration:none">决策档案</a>
+  <a href="data.html" style="font-size:13px;color:#64748b;text-decoration:none">数据血统</a>
+</nav>
+<div class="wrap" style="grid-template-columns:1fr;max-width:900px">
+  <div class="card">
+    <h2>🌪 敏感性排序 <span class="tag">哪个变量一动，结论就翻</span></h2>
+    <div class="muted">对每个关键变量做 ±扰动，用同源内核重跑多局，比较"景气/存续"的变化幅度，按敏感度从大到小排序。</div>
+    <div class="row">
+      <label class="muted">每档局数</label>
+      <input type="number" id="sens-n" value="40" min="10" style="width:80px">
+      <label class="muted">扰动幅度</label>
+      <input type="number" id="sens-delta" value="0.15" step="0.05" style="width:80px">
+      <button class="btn primary" id="btn-sens">运行敏感性分析</button>
+    </div>
+    <div id="sens-progress" class="muted"></div>
+    <div id="sens-results"></div>
+  </div>
+</div>
+<footer>数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）。License: MIT。</footer>
+<script src="model.js"></script>
+</body>
+</html>

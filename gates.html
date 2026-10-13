@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>验模三门 · 仲恺产业风洞</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23312e81'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="model.css">
+</head>
+<body>
+<header class="top">
+  <h1>🏭 仲恺产业风洞 <span class="ver">v0.9.0</span>
+    <span class="muted" style="font-weight:400">验模三门 · 不验模不报告</span></h1>
+</header>
+<nav style="display:flex;gap:8px;padding:10px 28px;max-width:1600px;margin:0 auto;flex-wrap:wrap">
+  <a href="index.html" style="font-size:13px;color:#64748b;text-decoration:none">主推演</a>
+  <a href="gates.html" style="font-size:13px;color:#087f8c;font-weight:600;text-decoration:none">验模三门</a>
+  <a href="montecarlo.html" style="font-size:13px;color:#64748b;text-decoration:none">蒙特卡洛</a>
+  <a href="sensitivity.html" style="font-size:13px;color:#64748b;text-decoration:none">敏感性</a>
+  <a href="interviews.html" style="font-size:13px;color:#64748b;text-decoration:none">访谈</a>
+  <a href="reports.html" style="font-size:13px;color:#64748b;text-decoration:none">决策档案</a>
+  <a href="data.html" style="font-size:13px;color:#64748b;text-decoration:none">数据血统</a>
+</nav>
+<div class="wrap" style="grid-template-columns:1fr;max-width:900px">
+  <div class="card">
+    <div class="muted" style="margin-bottom:8px">不验模，报告锁定。把"预测万物"收敛成"这局值不值得跑"。</div>
+    <div class="gate locked" id="gate1">
+      <h3>门① 输入门 · Eigen 三问 <span class="status-pill no" id="g1st">未过</span></h3>
+      <div class="muted">把预测问题改写成你真能证伪的一问，三问全勾才过。</div>
+      <label class="ck"><input type="checkbox" class="g1"><span>这局推演的问题是具体且可证伪的，而非"预测万物"。</span></label>
+      <label class="ck"><input type="checkbox" class="g1"><span>我接受它只给叙事分布、不给可信概率与确定结局。</span></label>
+      <label class="ck"><input type="checkbox" class="g1"><span>我判断这局值得跑（成本/收获相称）。</span></label>
+    </div>
+    <div class="gate locked" id="gate2">
+      <h3>门② 审图门 · 图谱漏了谁 <span class="status-pill no" id="g2st">未过</span></h3>
+      <div class="muted">勾选漏项会<b>真补进图谱、连 3 条边、重建世界</b>。硬门槛：至少检出一个漏项。</div>
+      <div id="missroles"></div>
+      <button class="btn primary" id="btn-apply-miss" style="margin-top:6px">补入选中角色并重建</button>
+    </div>
+    <div class="gate locked" id="gate3">
+      <h3>门③ 参数门 · 血统与检验日 <span class="status-pill no" id="g3st">未过</span></h3>
+      <div class="muted">C/D 级参数必须填写"检验日月数"，到期对照公报，不填报告锁死。</div>
+      <table id="param-table"><thead><tr><th style="text-align:left">参数</th><th>值</th><th>血统</th><th>检验日(月)</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div class="gate" id="anchor-gate" style="display:none">
+      <h3>🖋 落笔闸门 · 锁定你的知情判断</h3>
+      <textarea id="anchor-text" rows="2" placeholder="看懂局之后，写下你对这局结局的预判…"></textarea>
+      <button class="btn primary" id="btn-anchor" style="margin-top:6px">锁定落笔，写入决策档案</button>
+    </div>
+  </div>
+</div>
+<footer>数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）。License: MIT。</footer>
+<script src="model.js"></script>
+</body>
+</html>
