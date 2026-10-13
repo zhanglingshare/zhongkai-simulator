@@ -1171,8 +1171,7 @@ $("#btn-reset").onclick=()=>{sim=new Sim(sim.seed);posCache=null;refreshSelector
 $("#btn-play").onclick=function(){
   if(playing){clearInterval(playTimer);playing=false;this.textContent="▶ 播放";return;}
   playing=true;this.textContent="⏸ 暂停";
-  playTimer=setInterval(()=>{if(sim.tick>=sim.params.ticks||!anchored){
-      if(!anchored)alert("请先在「验模三门」过三门并落笔锁定，再播放。");
+  playTimer=setInterval(()=>{if(sim.tick>=sim.params.ticks){
       clearInterval(playTimer);playing=false;$("#btn-play").textContent="▶ 播放";return;}
     sim.step();posCache=null;render();},650);
 };
