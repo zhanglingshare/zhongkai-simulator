@@ -234,3 +234,9 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:#1c96a1;box-sh
  .canvas-topline{flex-wrap:wrap}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
+
+/* Dedicated fullscreen comparison for detailed A/B study */
+.comparison.fullscreen{position:fixed;inset:12px;max-width:none;margin:0;z-index:90;overflow-y:auto;box-shadow:0 24px 90px rgba(10,27,44,.25);border:1px solid #c6d7e3}
+.comparison.fullscreen .mini-network{max-height:39vh}
+body.comparison-open{overflow:hidden}
+@media(max-width:760px){.comparison.fullscreen{inset:0;border-radius:0}.comparison.fullscreen .mini-network{max-height:27vh}}
