@@ -3,72 +3,85 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>仲恺产业协同实验室</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23087f8c'/%3E%3Ccircle cx='20' cy='26' r='7' fill='%23fff'/%3E%3Ccircle cx='44' cy='20' r='7' fill='%23a8d8dc'/%3E%3Ccircle cx='44' cy='42' r='7' fill='%23e8c66a'/%3E%3C/svg%3E">
+<title>仲恺高新区 · 产业协同风洞</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0f1e'/%3E%3Ccircle cx='20' cy='26' r='7' fill='%23818cf8'/%3E%3Ccircle cx='44' cy='20' r='7' fill='%2322d3ee'/%3E%3Ccircle cx='44' cy='42' r='7' fill='%23fbbf24'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="model.css">
 <style>
-  .hero-wrap{max-width:900px;margin:0 auto;padding:48px 28px 40px}
-  .hook-num{font-size:64px;font-weight:800;line-height:1;letter-spacing:-2px;margin:16px 0 8px}
-  .hook-num .red{color:#c24141}
-  .hook-sub{font-size:16px;color:var(--ink);line-height:1.6;margin-bottom:8px}
-  .hook-note{font-size:13px;color:var(--sub);margin-bottom:36px;line-height:1.6}
-  .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px}
-  @media(max-width:700px){.mode-grid{grid-template-columns:1fr}}
-  .mode-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);cursor:pointer;text-decoration:none;color:inherit;display:block;transition:.15s}
-  .mode-card:hover{border-color:var(--teal);transform:translateY(-2px)}
-  .mode-card .icon{font-size:28px;margin-bottom:10px}
-  .mode-card h3{font-size:18px;margin:0 0 6px}
-  .mode-card p{font-size:13px;color:var(--sub);line-height:1.6;margin:0 0 14px}
-  .mode-card .cta{font-size:13px;font-weight:600;color:var(--teal)}
-  .caps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-  @media(max-width:600px){.caps{grid-template-columns:repeat(2,1fr)}}
-  .cap{background:#f8fafc;border:1px solid #e8edf3;border-radius:10px;padding:14px;text-align:center}
-  .cap .num{font-size:22px;font-weight:700;color:var(--ink)}
-  .cap .lbl{font-size:11px;color:var(--sub);margin-top:4px}
+  body{background:#0a0f1e!important;color:#e2e8f0}
+  .zero-wrap{max-width:800px;margin:0 auto;padding:24px 20px 60px}
+  .step-tabs{display:flex;gap:8px;margin:16px 0 20px;flex-wrap:wrap}
+  .step-tab{font-size:12px;padding:6px 14px;border-radius:20px;border:1px solid #1e293b;background:#0f172a;color:#64748b}
+  .step-tab.on{border-color:#fbbf24;color:#fbbf24;background:#1e1b0e}
+  .zero-title{text-align:center;margin:20px 0 8px}
+  .zero-title .sub{font-size:14px;color:#22d3ee;letter-spacing:2px;margin-bottom:12px}
+  .zero-title h1{font-size:36px;line-height:1.2;font-weight:800;color:#f1f5f9;margin:0;letter-spacing:-1px}
+  @media(max-width:600px){.zero-title h1{font-size:26px}}
+  .net-box{background:radial-gradient(ellipse at center,#0f172a 0%,#0a0f1e 100%);border-radius:16px;border:1px solid #1e293b;margin:20px 0;overflow:hidden}
+  .net-box svg{width:100%;height:auto;display:block}
+  .hist-card{background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:18px 20px;margin-bottom:12px}
+  .hist-card .h-label{font-size:14px;font-weight:700;margin-bottom:6px}
+  .hist-card .h-label.old{color:#94a3b8}
+  .hist-card .h-label.now{color:#22d3ee}
+  .hist-card .h-label.future{color:#fbbf24}
+  .hist-card p{font-size:16px;color:#e2e8f0;line-height:1.6;margin:0}
+  .cta-row{display:flex;gap:10px;margin:24px 0;flex-wrap:wrap}
+  .cta-btn{flex:1;min-width:140px;text-align:center;padding:14px;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none}
+  .cta-primary{background:#22d3ee;color:#0a0f1e}
+  .cta-secondary{background:#0f172a;color:#e2e8f0;border:1px solid #1e293b}
+  .quick-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;justify-content:center}
+  .quick-links a{font-size:12px;color:#64748b;text-decoration:none;padding:4px 10px}
 </style>
 </head>
 <body>
-<header class="top" style="padding:16px 28px 12px">
-  <h1>🏭 仲恺产业协同实验室 <span class="ver">v1.0</span></h1>
-</header>
 
-<div class="hero-wrap">
-  <div style="font-size:14px;color:var(--sub);margin-bottom:4px">仲恺高新区 · 2025 基准</div>
-  <div class="hook-num"><span class="red">4 成</span></div>
-  <div class="hook-sub">10 次冲击里有 1 次，镇上近一半企业活不过那一轮。</div>
-  <div class="hook-note">这不是预测，是 400 次模拟跑出来的"最差情况"——P10 存续率 0.58。<br>
-  把链主外迁、芯片断供、订单减少扔进这张网，看谁先撑不住。</div>
-
-  <div class="mode-grid">
-    <a class="mode-card" href="run.html">
-      <div class="icon">⚡</div>
-      <h3>直接跑一局</h3>
-      <p>选一个冲击，20 步看完。不用填任何东西。</p>
-      <div class="cta">进风洞 →</div>
-    </a>
-    <a class="mode-card" href="gates.html">
-      <div class="icon">🔬</div>
-      <h3>正式研究</h3>
-      <p>登记问题、锁定预判，跑完拿一份可审计的研究档案。</p>
-      <div class="cta">准备研究 →</div>
-    </a>
+<div class="zero-wrap">
+  <div class="step-tabs">
+    <span class="step-tab on">① 网怎么长出来</span>
+    <span class="step-tab">② 压力与机遇</span>
+    <span class="step-tab">③ 放进网里</span>
   </div>
 
-  <div style="display:flex;gap:10px;margin-bottom:36px;flex-wrap:wrap">
-    <a href="today.html" style="font-size:13px;color:var(--teal);text-decoration:none;background:#f0f9ff;padding:8px 16px;border-radius:20px">📰 今日仲恺</a>
-    <a href="towns.html" style="font-size:13px;color:var(--teal);text-decoration:none;background:#f0f9ff;padding:8px 16px;border-radius:20px">🏘 各镇生活</a>
+  <div class="zero-title">
+    <div class="sub">仲恺高新区 · 产业风洞</div>
+    <h1>这张网，<br>是怎么长出来的？</h1>
   </div>
 
-  <div class="caps">
-    <div class="cap"><div class="num">41</div><div class="lbl">主体</div></div>
-    <div class="cap"><div class="num">71</div><div class="lbl">关系</div></div>
-    <div class="cap"><div class="num">14</div><div class="lbl">冲击场景</div></div>
-    <div class="cap"><div class="num">400</div><div class="lbl">蒙特卡洛局数</div></div>
-    <div class="cap"><div class="num">1160亿</div><div class="lbl">2025 GDP</div></div>
-    <div class="cap"><div class="num">2000亿</div><div class="lbl">2030 目标</div></div>
+  <div class="net-box">
+    <svg id="netsvg" viewBox="0 0 760 560" preserveAspectRatio="xMidYMid meet"></svg>
+  </div>
+
+  <div class="hist-card">
+    <div class="h-label old">🏚 三十年前</div>
+    <p>这里还是陈江圩的圩日、潼湖的鱼塘。</p>
+  </div>
+
+  <div class="hist-card">
+    <div class="h-label now">🏭 后来</div>
+    <p>德赛西威、亿纬锂能、TCL华星，一家家链主落下来——配套厂围着链主转，服务业围着工厂转，网就这么织成了。</p>
+  </div>
+
+  <div class="hist-card">
+    <div class="h-label future">🎯 2030</div>
+    <p>GDP 要从 1160 亿翻到 2000 亿。这张网还要再长出多少条链、多少个厂？如果链主外迁、芯片断供，谁先撑不住？</p>
+  </div>
+
+  <div class="cta-row">
+    <a class="cta-btn cta-primary" href="run.html">▶ 进风洞看看</a>
+    <a class="cta-btn cta-secondary" href="today.html">📰 今日仲恺</a>
+  </div>
+
+  <div class="quick-links">
+    <a href="towns.html">各镇生活</a>
+    <a href="gates.html">正式研究</a>
+    <a href="montecarlo.html">蒙特卡洛</a>
+    <a href="data.html">数据来源</a>
   </div>
 </div>
 
-<footer>数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）。参数可核对，反事实不可验证。License: MIT。</footer>
+<footer style="border-top:1px solid #1e293b;padding:16px;text-align:center;font-size:12px;color:#475569">
+  数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）· 反事实不可验证 · License: MIT
+</footer>
+
+<script src="model.js"></script>
 </body>
 </html>
