@@ -125,6 +125,16 @@
       paintFocus();
       if(currentView==="trends")drawTrends();
     }
+    function prepareNetworkKeyboard(){
+      el("netsvg").querySelectorAll(".node").forEach(node=>{
+        node.setAttribute("tabindex","0");
+        node.setAttribute("role","button");
+        node.setAttribute("aria-label","查看主体 "+node.dataset.name);
+        node.addEventListener("keydown",e=>{
+          if(e.key==="Enter"||e.key===" "){e.preventDefault();e.stopPropagation();selectedNode=node.dataset.name;paintFocus();if(matchMedia("(max-width:760px)").matches)switchMobile("insight");}
+        });
+      });
+    }
     function paintFocus(){
       const svg=el("netsvg");
       const box=el("focus-info");
@@ -181,9 +191,11 @@
     const originalRender=render;
     render=function(){
       originalRender();
+      prepareNetworkKeyboard();
       refreshCount();
     };
     // The original renderer has already initialized the visible network on script load.
+    prepareNetworkKeyboard();
     refreshCount();
     drawTrends();
 
@@ -199,6 +211,7 @@
     });
     el("scenario-label").textContent=el("shock-sel").value+" · 在第 0 步注入";
     el("research-question").addEventListener("change",markCompareStale);
+    el("seed-input").addEventListener("input",markCompareStale);
 
     el("load-seed").addEventListener("click",()=>{
       const seed=safeSeed();
@@ -294,6 +307,17 @@
       }
     }
     el("btn-compare").addEventListener("click",runComparison);
+    el("toggle-compare").addEventListener("click",()=>{
+      const opened=el("compare-section").classList.toggle("fullscreen");
+      document.body.classList.toggle("comparison-open",opened);
+      el("toggle-compare").setAttribute("aria-pressed",String(opened));
+      el("toggle-compare").textContent=opened?"退出专注模式 ×":"专注对比 ⛶";
+    });
+    document.addEventListener("keydown",e=>{
+      if(e.key==="Escape" && el("compare-section").classList.contains("fullscreen")){
+        el("toggle-compare").click();
+      }
+    });
     el("btn-clear-compare").addEventListener("click",()=>{
       comparison=null;
       clearMini(el("graph-a"),"等待模拟");
