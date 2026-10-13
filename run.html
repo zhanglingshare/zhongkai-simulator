@@ -72,6 +72,34 @@
         <span class="mono">t=<b id="tick-lbl">0</b>/20</span>
       </div>
 
+      <h2 style="margin-top:14px">🎛 核心参数（拖了就变）</h2>
+      <div style="background:#f8fafc;border-radius:8px;padding:12px;margin-bottom:12px">
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span>链主扩产节奏</span>
+            <span id="v-chain" style="color:#f59e0b;font-weight:700">正常</span>
+          </div>
+          <input type="range" id="s-chain" min="-40" max="40" value="0" style="width:100%;accent-color:#f59e0b">
+          <div style="font-size:10px;color:#64748b;margin-top:2px">往左=扩产推迟，往右=提前达产</div>
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span>供应链稳定性</span>
+            <span id="v-supply" style="color:#10b981;font-weight:700">正常</span>
+          </div>
+          <input type="range" id="s-supply" min="-30" max="30" value="0" style="width:100%;accent-color:#10b981">
+          <div style="font-size:10px;color:#64748b;margin-top:2px">往左=断供风险上升，往右=供应链更稳</div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span>用地紧张程度</span>
+            <span id="v-land" style="color:#ef4444;font-weight:700">正常</span>
+          </div>
+          <input type="range" id="s-land" min="-20" max="40" value="0" style="width:100%;accent-color:#ef4444">
+          <div style="font-size:10px;color:#64748b;margin-top:2px">往右=用地越来越紧张</div>
+        </div>
+      </div>
+
       <h2 style="margin-top:14px">🎛 上帝视角</h2>
       <div class="row">
         <select id="shock-sel">
@@ -113,5 +141,55 @@
 
 <footer>仲恺版是一台区域经济"风洞"：参数可回统计公报核对，反事实不可验证。数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）。License: MIT。</footer>
 <script src="model.js"></script>
+<script>
+// 核心参数滑块实时联动
+function fmtVal(v, unit='%') {
+  if (v == 0) return '正常';
+  return (v > 0 ? '+' : '') + v + unit;
+}
+
+function updateKpis() {
+  const chain = parseInt(document.getElementById('s-chain').value);
+  const supply = parseInt(document.getElementById('s-supply').value);
+  const land = parseInt(document.getElementById('s-land').value);
+
+  // 简单联动公式：基于基线值调整
+  const baseAb = 65, baseOr = 55, baseDi = 30, baseMo = 60, baseSu = 85;
+  const ab = Math.max(10, Math.min(95, baseAb + chain*0.3 + supply*0.2 - land*0.2));
+  const or_ = Math.max(10, Math.min(95, baseOr + supply*0.4 - land*0.1));
+  const di = Math.max(5, Math.min(90, baseDi - chain*0.1 + supply*0.3 + land*0.2));
+  const mo = Math.max(10, Math.min(95, baseMo + chain*0.2 + supply*0.2 - land*0.15));
+  const su = Math.max(20, Math.min(99, baseSu + chain*0.1 - land*0.1));
+
+  document.getElementById('k-ab').textContent = Math.round(ab) + '%';
+  document.getElementById('k-or').textContent = Math.round(or_) + '%';
+  document.getElementById('k-di').textContent = Math.round(di) + '%';
+  document.getElementById('k-mo').textContent = Math.round(mo) + '%';
+  document.getElementById('k-su').textContent = Math.round(su) + '%';
+
+  // 更新进度条
+  document.getElementById('b-ab').style.width = ab + '%';
+  document.getElementById('b-or').style.width = or_ + '%';
+  document.getElementById('b-di').style.width = di + '%';
+  document.getElementById('b-mo').style.width = mo + '%';
+  document.getElementById('b-su').style.width = su + '%';
+}
+
+document.getElementById('s-chain').addEventListener('input', function() {
+  document.getElementById('v-chain').textContent = fmtVal(this.value);
+  updateKpis();
+});
+document.getElementById('s-supply').addEventListener('input', function() {
+  document.getElementById('v-supply').textContent = fmtVal(this.value);
+  updateKpis();
+});
+document.getElementById('s-land').addEventListener('input', function() {
+  document.getElementById('v-land').textContent = fmtVal(this.value);
+  updateKpis();
+});
+
+// 初始化
+updateKpis();
+</script>
 </body>
 </html>
