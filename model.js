@@ -800,6 +800,23 @@ function render(){
   renderLedger();
   if(currentIv)renderInterview(currentIv);
   renderReport();
+  updatePlainSummary(st);
+}
+function updatePlainSummary(st){
+  const el=$("#plain-summary");if(!el||!el.innerHTML)return;
+  const surv=sim.survivors();
+  const dead=sim.agents.length-surv;
+  let msg;
+  if(sim.tick===0){
+    msg="刚开局。选一个冲击注入，再点播放——看这张网怎么传。";
+  }else if(dead===0){
+    msg=`跑到第 ${sim.tick} 步，还没主体退场。景气 ${(st.abundance*100).toFixed(0)}、风险 ${(st.disaster*100).toFixed(0)}——网还撑得住。`;
+  }else if(surv/sim.agents.length<0.6){
+    msg=`⚠️ 跑到第 ${sim.tick} 步，${dead} 个主体已退场，只剩 ${(surv/sim.agents.length*100).toFixed(0)}% 还在转。风险 ${(st.disaster*100).toFixed(0)} 偏高，网在散。`;
+  }else{
+    msg=`跑到第 ${sim.tick} 步，${dead} 个主体退场，${(surv/sim.agents.length*100).toFixed(0)}% 还在转。景气 ${(st.abundance*100).toFixed(0)}、风险 ${(st.disaster*100).toFixed(0)}——${st.abundance>0.5?"整体还行，局部在晃":"整体偏紧"}。`;
+  }
+  el.innerHTML=`<b style="color:#0f172a">这局现在怎么样？</b><br>${msg}`;
 }
 function setKpi(k,v,isMood){
   const pct=isMood?(v+1)/2:v;
