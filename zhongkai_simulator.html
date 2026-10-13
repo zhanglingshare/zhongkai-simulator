@@ -260,11 +260,21 @@
     footer{padding:16px;font-size:10px}
   }
   @media(prefers-reduced-motion:reduce){button,input,select,textarea{transition:none}}
+
+  /* v0.8.2 轻量美化：压顶部视觉重量 */
+  header.top{padding:16px max(28px,calc((100vw - 1544px)/2)) 12px}
+  .bounds{margin-top:12px;gap:8px}
+  .bounds .b{padding:6px 11px;font-size:11px;line-height:1.55;border-radius:8px;
+    background:#f8fafc;border-color:#e8edf3}
+  .wrap{padding:18px 28px;gap:18px}
+  .card{padding:18px;border-radius:16px}
+  .netcard h2{margin-bottom:10px}
+  #netsvg{border-radius:12px}
 </style>
 </head>
 <body>
 <header class="top">
-  <h1>🏭 县镇区域经济未来决策 <span class="ver">v0.8.1</span>
+  <h1>🏭 县镇区域经济未来决策 <span class="ver">v0.8.2</span>
     <span class="muted" style="font-weight:400">仲恺高新区 demo · 单文件 · 零依赖 · 断网可用 · 真数据校准 · 可复现弱涌现</span></h1>
   <div class="bounds">
     <div class="b"><b>① 不是预测器。</b>不预测产值、不预测招商成败，只给叙事分布与结构。</div>
