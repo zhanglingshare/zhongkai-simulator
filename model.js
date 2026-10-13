@@ -795,12 +795,44 @@ function render(){
   setKpi("ab",st.abundance);setKpi("or",st.order);setKpi("di",st.disaster);
   const moodShow=(st.mood+1)/2;
   setKpi("mo",st.mood,true);setKpi("su",sim.survivors());
+  // record history for trend chart
+  if(!window.kpiHistory)window.kpiHistory=[];
+  window.kpiHistory.push({t:sim.tick,ab:st.abundance,or:st.order,di:st.disaster,mo:st.mood,su:sim.survivors()});
+  renderTrend();
   renderNetwork();
   renderTimeline();
   renderLedger();
   if(currentIv)renderInterview(currentIv);
   renderReport();
   updatePlainSummary(st);
+}
+function renderTrend(){
+  const svg=$("#trend-chart");if(!svg||!svg.innerHTML)return;
+  const h=window.kpiHistory||[];if(h.length<2){svg.innerHTML="";return;}
+  const W=700,H=180,pad=30;
+  const maxT=h[h.length-1].t;
+  const x=t=>pad+(t/Math.max(maxT,1))*(W-2*pad);
+  const y=v=>H-pad-v*(H-2*pad);
+  const lines=[
+    {key:"ab",color:"#16a34a",label:"景气"},
+    {key:"or",color:"#0891b2",label:"协同"},
+    {key:"di",color:"#dc2626",label:"风险"},
+    {key:"su",color:"#7c3aed",label:"存续"},
+  ];
+  let s=`<line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="#e2e8f0" stroke-width="1"/>`;
+  s+=`<line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H-pad}" stroke="#e2e8f0" stroke-width="1"/>`;
+  lines.forEach(l=>{
+    let d="";
+    h.forEach((p,i)=>{d+=(i===0?"M":"L")+x(p.t)+","+y(Math.max(0,Math.min(1,p[l.key])))+" ";});
+    s+=`<path d="${d}" fill="none" stroke="${l.color}" stroke-width="2"/>`;
+  });
+  // legend
+  let lx=pad+10;
+  lines.forEach(l=>{
+    s+=`<circle cx="${lx}" cy="14" r="4" fill="${l.color}"/><text x="${lx+8}" y="18" font-size="11" fill="#64748b">${l.label}</text>`;
+    lx+=80;
+  });
+  svg.innerHTML=s;
 }
 function updatePlainSummary(st){
   const el=$("#plain-summary");if(!el||!el.innerHTML)return;
@@ -1184,7 +1216,7 @@ $$(".tabs button").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset
 
 /* ---- 时间轴控制 ---- */
 $("#btn-step").onclick=()=>{sim.step();posCache=null;render();};
-$("#btn-reset").onclick=()=>{sim=new Sim(sim.seed);posCache=null;refreshSelectors();render();};
+$("#btn-reset").onclick=()=>{sim=new Sim(sim.seed);posCache=null;if(window.kpiHistory)window.kpiHistory=[];refreshSelectors();render();};
 $("#btn-play").onclick=function(){
   if(playing){clearInterval(playTimer);playing=false;this.textContent="▶ 播放";return;}
   playing=true;this.textContent="⏸ 暂停";
