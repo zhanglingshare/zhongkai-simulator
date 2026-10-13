@@ -190,6 +190,53 @@ document.getElementById('s-land').addEventListener('input', function() {
 
 // 初始化
 updateKpis();
+
+// 节点点击详情
+function showNodeDetail(name) {
+  const existing = document.getElementById('node-detail');
+  if (existing) existing.remove();
+
+  // 从模型里找这个agent的数据
+  let agent = null;
+  if (typeof sim !== 'undefined' && sim.agents) {
+    agent = sim.agents.find(a => a.name === name);
+  }
+
+  if (!agent) return;
+
+  const cfg = TYPE_CFG[agent.type] || {cn: '未知'};
+  const sentiment = (agent.sentiment * 100).toFixed(0);
+  const energy = (agent.energy * 100).toFixed(0);
+  const status = agent.alive ? '存活' : '已外迁/消亡';
+  const statusColor = agent.alive ? '#16a34a' : '#dc2626';
+
+  const detail = document.createElement('div');
+  detail.id = 'node-detail';
+  detail.style.cssText = 'position:fixed;top:80px;right:20px;width:280px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;box-shadow:0 10px 40px rgba(0,0,0,.15);z-index:1000;font-size:13px;line-height:1.6';
+  detail.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <b style="font-size:15px;color:#0f172a">${agent.name}</b>
+      <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#94a3b8">×</button>
+    </div>
+    <div style="margin-bottom:8px">类型：<span style="color:#2563eb;font-weight:600">${cfg.cn}</span></div>
+    <div style="margin-bottom:8px">状态：<span style="color:${statusColor};font-weight:600">${status}</span></div>
+    <div style="margin-bottom:8px">景气值：<span style="font-weight:600">${sentiment > 0 ? '+' : ''}${sentiment}%</span></div>
+    <div style="margin-bottom:8px">产能利用率：<span style="font-weight:600">${energy}%</span></div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;font-size:11px;color:#64748b">
+      💡 点其他节点可以切换查看
+    </div>
+  `;
+  document.body.appendChild(detail);
+}
+
+// 监听网络图点击
+document.getElementById('netsvg').addEventListener('click', function(e) {
+  const node = e.target.closest('.node');
+  if (node) {
+    const name = node.getAttribute('data-name');
+    if (name) showNodeDetail(name);
+  }
+});
 </script>
 </body>
 </html>
