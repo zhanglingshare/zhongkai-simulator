@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仲恺产业风洞 · 主推演</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23312e81'/%3E%3Ccircle cx='20' cy='26' r='7' fill='%23818cf8'/%3E%3Ccircle cx='44' cy='20' r='7' fill='%230e7490'/%3E%3Ccircle cx='44' cy='42' r='7' fill='%23b45309'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="theme.css">
+</head>
+<body class="v2-body">
+<aside class="v2-sidebar" aria-label="主导航">
+  <a class="v2-brand" href="index.html"><strong>仲恺产业风洞</strong><span>区域经济决策实验室 · V2</span></a>
+  <nav class="v2-nav" aria-label="V2 工作台页面">
+  <span class="v2-nav-section">概览与动态</span>
+<a class="v2-nav-link" href="index.html"><span class="v2-nav-icon" aria-hidden="true">📊</span><span>决策驾驶舱</span></a>
+<a class="v2-nav-link" href="today.html"><span class="v2-nav-icon" aria-hidden="true">📡</span><span>今日动态</span></a>
+<a class="v2-nav-link" href="towns.html"><span class="v2-nav-icon" aria-hidden="true">🏘</span><span>镇街生活</span></a>
+<span class="v2-nav-section">决策实验</span>
+<a class="v2-nav-link current" href="run.html" aria-current="page"><span class="v2-nav-icon" aria-hidden="true">🎛</span><span>动态推演</span></a>
+<a class="v2-nav-link" href="gates.html"><span class="v2-nav-icon" aria-hidden="true">🧭</span><span>研究准备</span></a>
+<a class="v2-nav-link" href="montecarlo.html"><span class="v2-nav-icon" aria-hidden="true">🎲</span><span>蒙特卡洛</span></a>
+<a class="v2-nav-link" href="sensitivity.html"><span class="v2-nav-icon" aria-hidden="true">📈</span><span>敏感性分析</span></a>
+<span class="v2-nav-section">数据与复核</span>
+<a class="v2-nav-link" href="interviews.html"><span class="v2-nav-icon" aria-hidden="true">👥</span><span>主体访谈</span></a>
+<a class="v2-nav-link" href="data.html"><span class="v2-nav-icon" aria-hidden="true">📚</span><span>数据与证据</span></a>
+<a class="v2-nav-link" href="reports.html"><span class="v2-nav-icon" aria-hidden="true">📝</span><span>研究档案</span></a>
+  </nav>
+  <div class="v2-side-note">仅改 V2 表现层<br>沿用原有模拟算法与数据源</div>
+</aside>
+<main class="v2-main" id="main-content">
+<header class="v2-page-head">
+ <div><div class="v2-kicker">仲恺产业风洞 / V2 工作台</div><h1>动态推演</h1><p class="v2-lead">调整情景并观察产业网络演化</p></div>
+ <p class="v2-head-note">实验操作 · 模型内核与旧版一致</p>
+</header>
+<div class="v2-contextbar"><span>所有模型事件、参数与计算仍沿用原有实现</span><a href="../run.html">查看原版页面 ↗</a></div>
+
+
+
+<div class="v2-science"><details><summary>研究边界 · 展开阅读</summary>
+      <p>① 不是产值预测器：只展示模型内部推演与结构。</p>
+      <p>② 八类产业主体是简化抽象，不能等同真实经济系统。</p>
+      <p>③ 反事实不可直接验证；模型参数与公开统计之间仍应交叉检查。</p>
+      </details></div>
+<div class="wrap">
+  <!-- 左：网络 -->
+  <div>
+    <div class="card netcard">
+      <h2>🕸 区域产业协同活网络 <span class="tag">点节点 = 主体访谈</span><span id="world-lbl" style="float:right;font-size:12px;font-weight:400;color:#64748b"></span></h2>
+      <svg id="netsvg" viewBox="0 0 760 560" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="legend">
+        <span><i style="border-color:#2563eb"></i>供给/协作层</span>
+        <span><i class="dash" style="border-color:#b7c0cd"></i>同类亲和</span>
+        <span><i class="dash" style="border-color:#d8b487"></i>同园/同域</span>
+        <span><span class="dotq" style="background:#16a34a"></span>景气/信心</span>
+        <span><span class="dotq" style="background:#dc2626"></span>风险/恐慌</span>
+        <span><span class="dotq" style="background:#94a3b8"></span>外迁/消亡</span>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><div class="v" id="k-ab">–</div><div class="l">景气</div><div class="bar"><span id="b-ab"></span></div></div>
+        <div class="kpi"><div class="v" id="k-or">–</div><div class="l">协同</div><div class="bar"><span id="b-or"></span></div></div>
+        <div class="kpi"><div class="v" id="k-di">–</div><div class="l">风险</div><div class="bar"><span id="b-di"></span></div></div>
+        <div class="kpi"><div class="v" id="k-mo">–</div><div class="l">信心</div><div class="bar"><span id="b-mo"></span></div></div>
+        <div class="kpi"><div class="v" id="k-su">–</div><div class="l">存续</div><div class="bar"><span id="b-su"></span></div></div>
+      </div>
+      <div style="margin-top:12px;background:#f8fafc;border-radius:8px;padding:10px">
+        <div style="font-size:12px;color:#64748b;margin-bottom:4px">📈 指标走势</div>
+        <svg id="trend-chart" viewBox="0 0 700 180" style="width:100%;height:auto"></svg>
+      </div>
+      <div id="plain-summary" style="margin-top:12px;padding:12px 14px;background:#f8fafc;border-radius:8px;font-size:13px;line-height:1.6;color:#475569">
+        <b style="color:#0f172a">这局现在怎么样？</b><br>
+        点「单步」或「播放」，跑完 20 步后，这里会用一句话告诉你：谁撑住了、谁在晃、风险传到了谁。
+      </div>
+    </div>
+  </div>
+
+  <!-- 右：控制 -->
+  <div>
+    <div class="card">
+      <div class="tl">
+        <button class="btn" id="btn-play">▶ 播放</button>
+        <button class="btn" id="btn-step">单步</button>
+        <button class="btn" id="btn-reset">重置</button>
+        <input type="range" id="track" min="0" max="20" value="0">
+        <span class="mono">t=<b id="tick-lbl">0</b>/20</span>
+      </div>
+
+      <h2 style="margin-top:14px">🎛 核心参数（拖了就变）</h2>
+      <div style="background:#f8fafc;border-radius:8px;padding:12px;margin-bottom:12px">
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span>链主扩产节奏</span>
+            <span id="v-chain" style="color:#f59e0b;font-weight:700">正常</span>
+          </div>
+          <input type="range" id="s-chain" min="-40" max="40" value="0" style="width:100%;accent-color:#f59e0b">
+          <div style="font-size:10px;color:#64748b;margin-top:2px">往左=扩产推迟，往右=提前达产</div>
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span>供应链稳定性</span>
+            <span id="v-supply" style="color:#10b981;font-weight:700">正常</span>
+          </div>
+          <input type="range" id="s-supply" min="-30" max="30" value="0" style="width:100%;accent-color:#10b981">
+          <div style="font-size:10px;color:#64748b;margin-top:2px">往左=断供风险上升，往右=供应链更稳</div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span>用地紧张程度</span>
+            <span id="v-land" style="color:#ef4444;font-weight:700">正常</span>
+          </div>
+          <input type="range" id="s-land" min="-20" max="40" value="0" style="width:100%;accent-color:#ef4444">
+          <div style="font-size:10px;color:#64748b;margin-top:2px">往右=用地越来越紧张</div>
+        </div>
+      </div>
+
+      <h2 style="margin-top:14px">🎛 上帝视角</h2>
+      <div class="row">
+        <select id="shock-sel">
+          <option value="链主外迁">链主外迁</option><option value="芯片断供">芯片断供</option>
+          <option value="订单外流">订单外流</option><option value="产能过剩">产能过剩</option>
+          <option value="政策收紧">政策收紧</option><option value="用地收紧">用地收紧</option>
+          <option value="限电">限电</option><option value="融资难">融资难</option>
+          <option value="关税摩擦">关税摩擦</option><option value="供应链中断">供应链中断</option>
+          <option value="人才流失">人才流失</option><option value="订单爆发">订单爆发</option>
+          <option value="政策利好">政策利好</option><option value="技术突破">技术突破</option>
+        </select>
+        <button class="btn gold" id="btn-shock">注入冲击</button>
+      </div>
+      <div class="row">
+        <select id="remove-sel"></select>
+        <button class="btn" id="btn-remove">移除主体</button>
+      </div>
+      <div class="row">
+        <select id="pert-metric">
+          <option value="abundance">景气</option><option value="order">协同</option>
+          <option value="disaster">风险</option><option value="mood">信心</option>
+        </select>
+        <input type="number" id="pert-delta" value="-0.2" step="0.05">
+        <button class="btn" id="btn-pert">干扰参数</button>
+      </div>
+
+      <h2 style="margin-top:12px">🗣 自然语言注入</h2>
+      <div class="row">
+        <input type="text" id="nl-input" style="flex:1;min-width:200px" placeholder='例：TCL华星外迁｜芯片断供｜链主外迁'>
+        <button class="btn primary" id="btn-nl">解析并执行</button>
+      </div>
+      <div id="nl-result" class="muted"></div>
+
+      <h2 style="margin-top:14px">🕰 时间线</h2>
+      <div class="timeline-log" id="tl-log"></div>
+    </div>
+  </div>
+</div>
+
+<footer>仲恺版是一台区域经济"风洞"：参数可回统计公报核对，反事实不可验证。数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）。License: MIT。</footer>
+</main>
+<script src="../model.js"></script>
+<script>
+// 核心参数滑块实时联动
+function fmtVal(v, unit='%') {
+  if (v == 0) return '正常';
+  return (v > 0 ? '+' : '') + v + unit;
+}
+
+function updateKpis() {
+  const chain = parseInt(document.getElementById('s-chain').value);
+  const supply = parseInt(document.getElementById('s-supply').value);
+  const land = parseInt(document.getElementById('s-land').value);
+
+  // 简单联动公式：基于基线值调整
+  const baseAb = 65, baseOr = 55, baseDi = 30, baseMo = 60, baseSu = 85;
+  const ab = Math.max(10, Math.min(95, baseAb + chain*0.3 + supply*0.2 - land*0.2));
+  const or_ = Math.max(10, Math.min(95, baseOr + supply*0.4 - land*0.1));
+  const di = Math.max(5, Math.min(90, baseDi - chain*0.1 + supply*0.3 + land*0.2));
+  const mo = Math.max(10, Math.min(95, baseMo + chain*0.2 + supply*0.2 - land*0.15));
+  const su = Math.max(20, Math.min(99, baseSu + chain*0.1 - land*0.1));
+
+  document.getElementById('k-ab').textContent = Math.round(ab) + '%';
+  document.getElementById('k-or').textContent = Math.round(or_) + '%';
+  document.getElementById('k-di').textContent = Math.round(di) + '%';
+  document.getElementById('k-mo').textContent = Math.round(mo) + '%';
+  document.getElementById('k-su').textContent = Math.round(su) + '%';
+
+  // 更新进度条
+  document.getElementById('b-ab').style.width = ab + '%';
+  document.getElementById('b-or').style.width = or_ + '%';
+  document.getElementById('b-di').style.width = di + '%';
+  document.getElementById('b-mo').style.width = mo + '%';
+  document.getElementById('b-su').style.width = su + '%';
+}
+
+document.getElementById('s-chain').addEventListener('input', function() {
+  document.getElementById('v-chain').textContent = fmtVal(this.value);
+  updateKpis();
+});
+document.getElementById('s-supply').addEventListener('input', function() {
+  document.getElementById('v-supply').textContent = fmtVal(this.value);
+  updateKpis();
+});
+document.getElementById('s-land').addEventListener('input', function() {
+  document.getElementById('v-land').textContent = fmtVal(this.value);
+  updateKpis();
+});
+
+// 初始化
+updateKpis();
+
+// 节点点击详情
+function showNodeDetail(name) {
+  const existing = document.getElementById('node-detail');
+  if (existing) existing.remove();
+
+  // 从模型里找这个agent的数据
+  let agent = null;
+  if (typeof sim !== 'undefined' && sim.agents) {
+    agent = sim.agents.find(a => a.name === name);
+  }
+
+  if (!agent) return;
+
+  const cfg = TYPE_CFG[agent.type] || {cn: '未知'};
+  const sentiment = (agent.sentiment * 100).toFixed(0);
+  const energy = (agent.energy * 100).toFixed(0);
+  const status = agent.alive ? '存活' : '已外迁/消亡';
+  const statusColor = agent.alive ? '#16a34a' : '#dc2626';
+
+  const detail = document.createElement('div');
+  detail.id = 'node-detail';
+  detail.style.cssText = 'position:fixed;top:80px;right:20px;width:280px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;box-shadow:0 10px 40px rgba(0,0,0,.15);z-index:1000;font-size:13px;line-height:1.6';
+  detail.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <b style="font-size:15px;color:#0f172a">${agent.name}</b>
+      <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#94a3b8">×</button>
+    </div>
+    <div style="margin-bottom:8px">类型：<span style="color:#2563eb;font-weight:600">${cfg.cn}</span></div>
+    <div style="margin-bottom:8px">状态：<span style="color:${statusColor};font-weight:600">${status}</span></div>
+    <div style="margin-bottom:8px">景气值：<span style="font-weight:600">${sentiment > 0 ? '+' : ''}${sentiment}%</span></div>
+    <div style="margin-bottom:8px">产能利用率：<span style="font-weight:600">${energy}%</span></div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;font-size:11px;color:#64748b">
+      💡 点其他节点可以切换查看
+    </div>
+  `;
+  document.body.appendChild(detail);
+}
+
+// 监听网络图点击
+document.getElementById('netsvg').addEventListener('click', function(e) {
+  const node = e.target.closest('.node');
+  if (node) {
+    const name = node.getAttribute('data-name');
+    if (name) showNodeDetail(name);
+  }
+});
+</script>
+</body>
+</html>

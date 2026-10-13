@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>仲恺各镇生活 · 仲恺产业协同实验室</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23087f8c'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="theme.css">
+<style>
+  .pulse-box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+  .pulse-box h3{font-size:14px;margin:0 0 10px;color:var(--sub)}
+  .pulse-box li{font-size:14px;line-height:1.7;margin-bottom:6px}
+  .town{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:12px;border-left:4px solid #087f8c}
+  .town .head{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+  .town h3{font-size:18px;margin:0}
+  .town .tag{font-size:11px;padding:2px 8px;border-radius:20px;background:#f0f9ff;color:#087f8c;font-weight:600}
+  .town .level{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .level.high{background:#fef2f2;color:#c24141}
+  .level.mid{background:#fffbeb;color:#b45309}
+  .town .why{font-size:13px;color:var(--sub);line-height:1.6;margin:6px 0 10px}
+  .town .cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+  @media(max-width:600px){.town .cols{grid-template-columns:1fr}}
+  .town .col h4{font-size:12px;color:var(--sub);margin:0 0 4px}
+  .town .col li{font-size:13px;line-height:1.6}
+</style>
+</head>
+<body class="v2-body">
+<aside class="v2-sidebar" aria-label="主导航">
+  <a class="v2-brand" href="index.html"><strong>仲恺产业风洞</strong><span>区域经济决策实验室 · V2</span></a>
+  <nav class="v2-nav" aria-label="V2 工作台页面">
+  <span class="v2-nav-section">概览与动态</span>
+<a class="v2-nav-link" href="index.html"><span class="v2-nav-icon" aria-hidden="true">📊</span><span>决策驾驶舱</span></a>
+<a class="v2-nav-link" href="today.html"><span class="v2-nav-icon" aria-hidden="true">📡</span><span>今日动态</span></a>
+<a class="v2-nav-link current" href="towns.html" aria-current="page"><span class="v2-nav-icon" aria-hidden="true">🏘</span><span>镇街生活</span></a>
+<span class="v2-nav-section">决策实验</span>
+<a class="v2-nav-link" href="run.html"><span class="v2-nav-icon" aria-hidden="true">🎛</span><span>动态推演</span></a>
+<a class="v2-nav-link" href="gates.html"><span class="v2-nav-icon" aria-hidden="true">🧭</span><span>研究准备</span></a>
+<a class="v2-nav-link" href="montecarlo.html"><span class="v2-nav-icon" aria-hidden="true">🎲</span><span>蒙特卡洛</span></a>
+<a class="v2-nav-link" href="sensitivity.html"><span class="v2-nav-icon" aria-hidden="true">📈</span><span>敏感性分析</span></a>
+<span class="v2-nav-section">数据与复核</span>
+<a class="v2-nav-link" href="interviews.html"><span class="v2-nav-icon" aria-hidden="true">👥</span><span>主体访谈</span></a>
+<a class="v2-nav-link" href="data.html"><span class="v2-nav-icon" aria-hidden="true">📚</span><span>数据与证据</span></a>
+<a class="v2-nav-link" href="reports.html"><span class="v2-nav-icon" aria-hidden="true">📝</span><span>研究档案</span></a>
+  </nav>
+  <div class="v2-side-note">仅改 V2 表现层<br>沿用原有模拟算法与数据源</div>
+</aside>
+<main class="v2-main" id="main-content">
+<header class="v2-page-head">
+ <div><div class="v2-kicker">仲恺产业风洞 / V2 工作台</div><h1>各镇街生活</h1><p class="v2-lead">看见产业背后的日常与社区</p></div>
+ <p class="v2-head-note">读取现有每日更新 life.json</p>
+</header>
+<div class="v2-contextbar"><span>所有模型事件、参数与计算仍沿用原有实现</span><a href="../towns.html">查看原版页面 ↗</a></div>
+
+<div style="max-width:900px;margin:0 auto;padding:0 28px">
+  <div id="loading" class="muted" style="padding:40px;text-align:center">正在拉取各镇数据…</div>
+  <div id="content" style="display:none">
+    <div class="muted" style="font-size:13px;margin-bottom:12px" id="updated-lbl"></div>
+
+    <div class="pulse-box">
+      <h3>📡 这两天仲恺人的朋友圈在刷</h3>
+      <ul id="pulse"></ul>
+    </div>
+
+    <h2 style="font-size:18px;margin:20px 0 12px">5 镇街 · 烟火生活</h2>
+    <div id="towns"></div>
+
+    <div class="muted" style="font-size:12px;margin:20px 0;line-height:1.6" id="note"></div>
+  </div>
+</div>
+<footer>去处人气按近期公开打卡热度分档，非真实人数统计。来源：政府公开信息 · 南方+/惠州日报 · 点评/小红书/抖音公开打卡。</footer>
+</main>
+<script>
+fetch('../life.json').then(r=>{
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
+}).then(d=>{
+  document.getElementById('loading').style.display='none';
+  document.getElementById('content').style.display='block';
+  document.getElementById('updated-lbl').textContent='更新于 '+(d.updated||'')+' · 每日更新一次';
+  document.getElementById('note').textContent=d.note||'';
+  // pulse
+  const p=document.getElementById('pulse');
+  (d.pulse||[]).forEach(x=>{p.innerHTML+=`<li>${x}</li>`;});
+  // towns
+  const t=document.getElementById('towns');
+  (d.towns||[]).forEach(tn=>{
+    const lvCls=tn.level==='高'?'high':'mid';
+    let foods=tn.foods&&tn.foods.length?tn.foods.map(f=>`<li>${f}</li>`).join(''):'<li>—</li>';
+    let plays=tn.plays&&tn.plays.length?tn.plays.map(x=>`<li>${x}</li>`).join(''):'<li>—</li>';
+    t.innerHTML+=`<div class="town">
+      <div class="head">
+        <h3>${tn.n}</h3>
+        <span class="tag">${tn.tag||''}</span>
+        <span class="level ${lvCls}">人气${tn.level||'中'}</span>
+      </div>
+      <div class="why">${tn.why||''}</div>
+      <div class="cols">
+        <div class="col"><h4>🍜 吃什么</h4><ul>${foods}</ul></div>
+        <div class="col"><h4>📍 去哪玩</h4><ul>${plays}</ul></div>
+      </div>
+    </div>`;
+  });
+}).catch(e=>{
+  document.getElementById('loading').innerHTML='<b>数据加载失败</b><br><span style="font-size:13px">'+e.message+'<br>稍后刷新试试。</span>';
+});
+</script>
+</body>
+</html>

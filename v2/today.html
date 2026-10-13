@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日仲恺 · 仲恺产业协同实验室</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23087f8c'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="theme.css">
+<style>
+  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+  @media(max-width:600px){.stats-row{grid-template-columns:1fr}}
+  .stat-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center}
+  .stat-card .num{font-size:28px;font-weight:800;color:var(--ink)}
+  .stat-card .cap{font-size:13px;color:var(--sub);margin-top:4px}
+  .stat-card .scope{font-size:11px;color:var(--sub);margin-top:6px;opacity:.7}
+  .topic{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:12px}
+  .topic .tag-row{display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+  .topic .badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+  .badge.high{background:#fef2f2;color:#c24141}
+  .badge.mid{background:#fffbeb;color:#b45309}
+  .badge.src{background:#f0f9ff;color:#087f8c}
+  .topic h3{font-size:16px;margin:0 0 6px;line-height:1.4}
+  .topic .summary{font-size:13px;color:var(--sub);line-height:1.6;margin:6px 0}
+  .topic .meta{font-size:11px;color:var(--sub);display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .topic .meta a{color:var(--teal);text-decoration:none;font-weight:600}
+</style>
+</head>
+<body class="v2-body">
+<aside class="v2-sidebar" aria-label="主导航">
+  <a class="v2-brand" href="index.html"><strong>仲恺产业风洞</strong><span>区域经济决策实验室 · V2</span></a>
+  <nav class="v2-nav" aria-label="V2 工作台页面">
+  <span class="v2-nav-section">概览与动态</span>
+<a class="v2-nav-link" href="index.html"><span class="v2-nav-icon" aria-hidden="true">📊</span><span>决策驾驶舱</span></a>
+<a class="v2-nav-link current" href="today.html" aria-current="page"><span class="v2-nav-icon" aria-hidden="true">📡</span><span>今日动态</span></a>
+<a class="v2-nav-link" href="towns.html"><span class="v2-nav-icon" aria-hidden="true">🏘</span><span>镇街生活</span></a>
+<span class="v2-nav-section">决策实验</span>
+<a class="v2-nav-link" href="run.html"><span class="v2-nav-icon" aria-hidden="true">🎛</span><span>动态推演</span></a>
+<a class="v2-nav-link" href="gates.html"><span class="v2-nav-icon" aria-hidden="true">🧭</span><span>研究准备</span></a>
+<a class="v2-nav-link" href="montecarlo.html"><span class="v2-nav-icon" aria-hidden="true">🎲</span><span>蒙特卡洛</span></a>
+<a class="v2-nav-link" href="sensitivity.html"><span class="v2-nav-icon" aria-hidden="true">📈</span><span>敏感性分析</span></a>
+<span class="v2-nav-section">数据与复核</span>
+<a class="v2-nav-link" href="interviews.html"><span class="v2-nav-icon" aria-hidden="true">👥</span><span>主体访谈</span></a>
+<a class="v2-nav-link" href="data.html"><span class="v2-nav-icon" aria-hidden="true">📚</span><span>数据与证据</span></a>
+<a class="v2-nav-link" href="reports.html"><span class="v2-nav-icon" aria-hidden="true">📝</span><span>研究档案</span></a>
+  </nav>
+  <div class="v2-side-note">仅改 V2 表现层<br>沿用原有模拟算法与数据源</div>
+</aside>
+<main class="v2-main" id="main-content">
+<header class="v2-page-head">
+ <div><div class="v2-kicker">仲恺产业风洞 / V2 工作台</div><h1>今日仲恺</h1><p class="v2-lead">公开渠道动态与核验状态</p></div>
+ <p class="v2-head-note">读取现有每日更新 hot.json</p>
+</header>
+<div class="v2-contextbar"><span>所有模型事件、参数与计算仍沿用原有实现</span><a href="../today.html">查看原版页面 ↗</a></div>
+
+<div style="max-width:900px;margin:0 auto;padding:0 28px">
+  <div id="loading" class="muted" style="padding:40px;text-align:center">正在拉取今日话题…</div>
+  <div id="content" style="display:none">
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap">
+      <span class="muted" style="font-size:13px" id="updated-lbl"></span>
+      <span style="font-size:12px;padding:2px 10px;border-radius:20px;background:#dcfce7;color:#168568" id="verified-lbl"></span>
+      <span style="font-size:12px;padding:2px 10px;border-radius:20px;background:#fef9c3;color:#a16207" id="pending-lbl"></span>
+    </div>
+    <div class="stats-row" id="stats"></div>
+    <h2 style="font-size:18px;margin:24px 0 12px">今天大家在聊什么</h2>
+    <div id="topics"></div>
+    <div class="muted" style="font-size:12px;margin:20px 0;line-height:1.6" id="note"></div>
+  </div>
+</div>
+<footer>话题均来自公开渠道，每日更新一次。数据不代表平台后台真实统计。</footer>
+</main>
+<script>
+fetch('../hot.json').then(r=>{
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
+}).then(d=>{
+  document.getElementById('loading').style.display='none';
+  document.getElementById('content').style.display='block';
+  document.getElementById('updated-lbl').textContent='更新于 '+d.updated+' · 共 '+d.count+' 条';
+  document.getElementById('note').textContent=d.note;
+  const items=d.items||[];
+  const verified=items.filter(i=>i.verified_status==='已核验').length;
+  const pending=items.length-verified;
+  document.getElementById('verified-lbl').textContent='已核验 '+verified+' 条';
+  document.getElementById('pending-lbl').textContent='待核实 '+pending+' 条';
+  // stats
+  const s=document.getElementById('stats');
+  (d.stats||[]).forEach(st=>{
+    s.innerHTML+=`<div class="stat-card${st.warm?' warm':''}"><div class="num">${st.n}</div><div class="cap">${st.cap}</div><div class="scope">${st.scope}</div></div>`;
+  });
+  // topics
+  const t=document.getElementById('topics');
+  items.forEach(it=>{
+    const tierCls=it.tier==='高'?'high':'mid';
+    const vCls=it.verified_status==='已核验'?'#dcfce7;color:#168568':'#fef9c3;color:#a16207';
+    t.innerHTML+=`<div class="topic" style="${it.verified_status==='已核验'?'':'border-left:3px solid #eab308'}">
+      <div class="tag-row">
+        <span class="badge ${tierCls}">${it.tier}关注</span>
+        <span class="badge src">${it.srcLevel||''}</span>
+        <span style="font-size:11px;padding:2px 8px;border-radius:20px;background:${vCls}">${it.verified_status||'待核实'}</span>
+      </div>
+      <h3>${it.title}</h3>
+      <div class="summary">${it.summary||''}</div>
+      <div class="meta">
+        <span>来源：${it.source||''}</span>
+        <span>事件：${it.event_date||it.published_at||''}</span>
+        ${it.url?`<a href="${it.url}" target="_blank">查看原文 →</a>`:''}
+      </div>
+    </div>`;
+  });
+}).catch(e=>{
+  document.getElementById('loading').innerHTML='<b>数据加载失败</b><br><span style="font-size:13px">'+e.message+'<br>可能是网络问题，稍后刷新试试。</span>';
+});
+function catName(c){
+  return {industry:'产业',livelihood:'民生',city:'城市',food:'好吃',fun:'好玩',gossip:'暖闻'}[c]||c;
+}
+</script>
+</body>
+</html>

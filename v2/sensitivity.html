@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>敏感性 · 仲恺产业风洞</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23312e81'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="theme.css">
+</head>
+<body class="v2-body">
+<aside class="v2-sidebar" aria-label="主导航">
+  <a class="v2-brand" href="index.html"><strong>仲恺产业风洞</strong><span>区域经济决策实验室 · V2</span></a>
+  <nav class="v2-nav" aria-label="V2 工作台页面">
+  <span class="v2-nav-section">概览与动态</span>
+<a class="v2-nav-link" href="index.html"><span class="v2-nav-icon" aria-hidden="true">📊</span><span>决策驾驶舱</span></a>
+<a class="v2-nav-link" href="today.html"><span class="v2-nav-icon" aria-hidden="true">📡</span><span>今日动态</span></a>
+<a class="v2-nav-link" href="towns.html"><span class="v2-nav-icon" aria-hidden="true">🏘</span><span>镇街生活</span></a>
+<span class="v2-nav-section">决策实验</span>
+<a class="v2-nav-link" href="run.html"><span class="v2-nav-icon" aria-hidden="true">🎛</span><span>动态推演</span></a>
+<a class="v2-nav-link" href="gates.html"><span class="v2-nav-icon" aria-hidden="true">🧭</span><span>研究准备</span></a>
+<a class="v2-nav-link" href="montecarlo.html"><span class="v2-nav-icon" aria-hidden="true">🎲</span><span>蒙特卡洛</span></a>
+<a class="v2-nav-link current" href="sensitivity.html" aria-current="page"><span class="v2-nav-icon" aria-hidden="true">📈</span><span>敏感性分析</span></a>
+<span class="v2-nav-section">数据与复核</span>
+<a class="v2-nav-link" href="interviews.html"><span class="v2-nav-icon" aria-hidden="true">👥</span><span>主体访谈</span></a>
+<a class="v2-nav-link" href="data.html"><span class="v2-nav-icon" aria-hidden="true">📚</span><span>数据与证据</span></a>
+<a class="v2-nav-link" href="reports.html"><span class="v2-nav-icon" aria-hidden="true">📝</span><span>研究档案</span></a>
+  </nav>
+  <div class="v2-side-note">仅改 V2 表现层<br>沿用原有模拟算法与数据源</div>
+</aside>
+<main class="v2-main" id="main-content">
+<header class="v2-page-head">
+ <div><div class="v2-kicker">仲恺产业风洞 / V2 工作台</div><h1>敏感性分析</h1><p class="v2-lead">比较关键变量扰动对结果的影响</p></div>
+ <p class="v2-head-note">相对敏感度 · 非实际政策效果预测</p>
+</header>
+<div class="v2-contextbar"><span>所有模型事件、参数与计算仍沿用原有实现</span><a href="../sensitivity.html">查看原版页面 ↗</a></div>
+
+<div class="wrap" style="grid-template-columns:1fr;max-width:900px">
+  <div class="card">
+    <h2>🌪 敏感性排序 <span class="tag">哪个变量一动，结论就翻</span></h2>
+    <div class="muted">对每个关键变量做 ±扰动，用同源内核重跑多局，比较"景气/存续"的变化幅度，按敏感度从大到小排序。</div>
+    <div class="row">
+      <label class="muted">每档局数</label>
+      <input type="number" id="sens-n" value="40" min="10" style="width:80px">
+      <label class="muted">扰动幅度</label>
+      <input type="number" id="sens-delta" value="0.15" step="0.05" style="width:80px">
+      <button class="btn primary" id="btn-sens">运行敏感性分析</button>
+    </div>
+    <div id="sens-progress" class="muted"></div>
+    <div id="sens-results"></div>
+  </div>
+</div>
+<footer>数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）。License: MIT。</footer>
+</main>
+<script src="../model.js"></script>
+</body>
+</html>

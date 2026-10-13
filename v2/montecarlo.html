@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蒙特卡洛 · 仲恺产业风洞</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23312e81'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="theme.css">
+</head>
+<body class="v2-body">
+<aside class="v2-sidebar" aria-label="主导航">
+  <a class="v2-brand" href="index.html"><strong>仲恺产业风洞</strong><span>区域经济决策实验室 · V2</span></a>
+  <nav class="v2-nav" aria-label="V2 工作台页面">
+  <span class="v2-nav-section">概览与动态</span>
+<a class="v2-nav-link" href="index.html"><span class="v2-nav-icon" aria-hidden="true">📊</span><span>决策驾驶舱</span></a>
+<a class="v2-nav-link" href="today.html"><span class="v2-nav-icon" aria-hidden="true">📡</span><span>今日动态</span></a>
+<a class="v2-nav-link" href="towns.html"><span class="v2-nav-icon" aria-hidden="true">🏘</span><span>镇街生活</span></a>
+<span class="v2-nav-section">决策实验</span>
+<a class="v2-nav-link" href="run.html"><span class="v2-nav-icon" aria-hidden="true">🎛</span><span>动态推演</span></a>
+<a class="v2-nav-link" href="gates.html"><span class="v2-nav-icon" aria-hidden="true">🧭</span><span>研究准备</span></a>
+<a class="v2-nav-link current" href="montecarlo.html" aria-current="page"><span class="v2-nav-icon" aria-hidden="true">🎲</span><span>蒙特卡洛</span></a>
+<a class="v2-nav-link" href="sensitivity.html"><span class="v2-nav-icon" aria-hidden="true">📈</span><span>敏感性分析</span></a>
+<span class="v2-nav-section">数据与复核</span>
+<a class="v2-nav-link" href="interviews.html"><span class="v2-nav-icon" aria-hidden="true">👥</span><span>主体访谈</span></a>
+<a class="v2-nav-link" href="data.html"><span class="v2-nav-icon" aria-hidden="true">📚</span><span>数据与证据</span></a>
+<a class="v2-nav-link" href="reports.html"><span class="v2-nav-icon" aria-hidden="true">📝</span><span>研究档案</span></a>
+  </nav>
+  <div class="v2-side-note">仅改 V2 表现层<br>沿用原有模拟算法与数据源</div>
+</aside>
+<main class="v2-main" id="main-content">
+<header class="v2-page-head">
+ <div><div class="v2-kicker">仲恺产业风洞 / V2 工作台</div><h1>蒙特卡洛</h1><p class="v2-lead">在随机波动下寻找稳定结构</p></div>
+ <p class="v2-head-note">概率分布仅反映模型假设，不代表真实未来概率</p>
+</header>
+<div class="v2-contextbar"><span>所有模型事件、参数与计算仍沿用原有实现</span><a href="../montecarlo.html">查看原版页面 ↗</a></div>
+
+<div class="wrap" style="grid-template-columns:1fr;max-width:900px">
+  <div class="card">
+    <h2>🎲 批量重跑 <span class="tag">跑1次看故事，跑1000次看结构</span></h2>
+    <div class="row">
+      <label class="muted">局数</label>
+      <select id="mc-n"><option value="200">200</option><option value="400" selected>400</option><option value="1000">1000</option></select>
+      <label class="muted">世界种子</label>
+      <input type="number" id="mc-seed" value="7" style="width:80px">
+      <button class="btn primary" id="btn-mc">运行</button>
+    </div>
+    <div id="mc-progress" class="muted"></div>
+    <div id="mc-results"></div>
+    <h2 style="margin-top:14px">📐 预置基线（用本页面同源内核重算）</h2>
+    <table id="baseline-table">
+      <thead><tr><th>指标</th><th>mean</th><th>sd</th><th>P10</th><th>P50</th><th>P90</th></tr></thead>
+      <tbody>
+        <tr><td>景气</td><td>0.5367</td><td>0.2288</td><td>0.1920</td><td>0.5760</td><td>0.8647</td></tr>
+        <tr><td>协同</td><td>0.7824</td><td>0.0882</td><td>0.6305</td><td>0.8253</td><td>0.8474</td></tr>
+        <tr><td>风险</td><td>0.1087</td><td>0.1361</td><td>0.0180</td><td>0.0320</td><td>0.3562</td></tr>
+        <tr><td>信心</td><td>0.2774</td><td>0.2957</td><td>−0.2310</td><td>0.4085</td><td>0.5642</td></tr>
+        <tr><td>存续</td><td>0.8853</td><td>0.1737</td><td>0.5833</td><td>1.0000</td><td>1.0000</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<footer>数据来源：仲恺高新区统计公报 / 管委会工作报告（2025）。License: MIT。</footer>
+</main>
+<script src="../model.js"></script>
+</body>
+</html>
