@@ -52,7 +52,10 @@
 </div>
 <footer>去处人气按近期公开打卡热度分档，非真实人数统计。来源：政府公开信息 · 南方+/惠州日报 · 点评/小红书/抖音公开打卡。</footer>
 <script>
-fetch('life.json').then(r=>r.json()).then(d=>{
+fetch('life.json').then(r=>{
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
+}).then(d=>{
   document.getElementById('loading').style.display='none';
   document.getElementById('content').style.display='block';
   document.getElementById('updated-lbl').textContent='更新于 '+(d.updated||'')+' · 每日更新一次';
@@ -80,7 +83,7 @@ fetch('life.json').then(r=>r.json()).then(d=>{
     </div>`;
   });
 }).catch(e=>{
-  document.getElementById('loading').textContent='加载失败：'+e.message;
+  document.getElementById('loading').innerHTML='<b>数据加载失败</b><br><span style="font-size:13px">'+e.message+'<br>稍后刷新试试。</span>';
 });
 </script>
 </body>
