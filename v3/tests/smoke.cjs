@@ -29,6 +29,22 @@ async function inspectOverflow(page){
   }));
   assert.ok(d.scrollWidth<=d.innerWidth+4,"Page horizontal overflow: "+JSON.stringify(d));
 }
+async function assertHologramUnobstructed(page,mobile){
+ const info=await page.evaluate(()=>{
+   const names=["#holo-world",".holo-hero-copy",".holo-side-metrics",".holo-bottom",".holo-node-detail"];
+   const box=selector=>{const el=document.querySelector(selector);const r=el.getBoundingClientRect();
+     return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,
+       visible:getComputedStyle(el).display!=="none"};};
+   const rects=Object.fromEntries(names.map(n=>[n,box(n)]));
+   const world=rects["#holo-world"];
+   const overlap=(a,b)=>Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*
+      Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
+   return {rects,blocked:names.slice(1).filter(name=>rects[name].visible&&overlap(world,rects[name])>4)};
+ });
+ assert.equal(info.blocked.length,0,"3D canvas must never be covered by UI: "+JSON.stringify(info));
+ assert.ok(info.rects["#holo-world"].width>(mobile?275:400),"Dedicated canvas too narrow: "+JSON.stringify(info.rects["#holo-world"]));
+ assert.ok(info.rects["#holo-world"].height>(mobile?290:420),"Dedicated canvas too short: "+JSON.stringify(info.rects["#holo-world"]));
+}
 async function testDesktop(browser,port){
   const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1});
   const errors=[];
@@ -50,6 +66,7 @@ async function testDesktop(browser,port){
   assert.match(await page.locator("#holo-render-status").innerText(),/真实模型网络|2.5D 降级/);
   assert.match(await page.locator("#holo-active").innerText(),/\d+ \/ \d+/);
   assert.equal(await page.locator("#holo-range").isDisabled(),true,"baseline does not invent time replay");
+  await assertHologramUnobstructed(page,false);
   await page.screenshot({path:path.join(shots,"hologram-first-screen-1440.png"),fullPage:false});
   await page.locator("#holo-zoom-in").click();
   await page.locator("#holo-home").click();
@@ -297,6 +314,8 @@ async function testMobile(browser,port,width){
   await page.waitForFunction(()=>document.querySelector("#netsvg .node"));
   assert.ok(await page.locator("#holo-hero").isVisible());
   assert.match(await page.locator("#holo-render-status").innerText(),/真实模型网络|2.5D 降级/);
+  await assertHologramUnobstructed(page,true);
+  await inspectOverflow(page);
   await page.screenshot({path:path.join(shots,"hologram-first-screen-"+width+".png"),fullPage:false});
   await page.locator("#holo-growth").click();
   await page.locator("#holo-play").click();
