@@ -44,7 +44,7 @@
  function sanitize(input){
   const seed=Number(input&&input.seed),shock=input&&input.shock,intervention=input&&input.intervention;
   const validSeed=Number.isSafeInteger(seed)&&seed>=1&&seed<=2147483647;
-  const intensity=Number(input&&input.intensity);
+  const intensity=(input&&input.intensity!==null&&input.intensity!==undefined&&input.intensity!=="")?Number(input.intensity):NaN;
   return {
    seed:validSeed?seed:2026,
    shock:shocks.includes(shock)?shock:"链主外迁",
