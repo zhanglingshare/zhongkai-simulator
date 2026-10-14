@@ -186,10 +186,28 @@
           <svg id="graph-b" class="mini-network" viewBox="0 0 760 430" role="img" aria-label="B情景产业网络"></svg>
         </div>
       </div>
-      <div class="difference" id="difference">
-        <div class="difference-head"><h3>五项结果差异</h3><p>B − A，正负数仅代表模型输出方向</p></div>
-        <div id="compare-metrics" class="compare-metrics"><p class="no-result">等待执行 A/B 对比。</p></div>
+      <div class="compare-timeline">
+        <div class="compare-time-title"><div><strong>同步观察时间步</strong><span>让两张网络固定位置、一起演化</span></div><output id="compare-tick-value" for="compare-tick">t20 / 20</output></div>
+        <label class="sr-only" for="compare-tick">A/B 对比时间步</label>
+        <input type="range" id="compare-tick" min="0" max="20" value="20" disabled>
+        <div class="compare-timeline-hint" id="compare-timeline-hint">运行后可拖动到任意模型时间步，查看同一时刻的网络与指标差异。</div>
       </div>
+      <div class="difference" id="difference">
+        <div class="difference-head"><h3>五项结果差异 · B − A</h3><p>差异条以零为中心；右侧为 B 高于 A，左侧为 B 低于 A</p></div>
+        <div id="compare-metrics" class="compare-metrics" aria-live="polite"><p class="no-result">等待执行 A/B 对比。</p></div>
+      </div>
+      <div class="compare-analytics">
+        <section class="analysis-panel" aria-labelledby="compare-trends-title">
+          <div class="analysis-heading"><h3 id="compare-trends-title">同时间轴 · 指标演化</h3><span>A 基线 / B 冲击</span></div>
+          <div id="compare-trends" class="compare-trends"><p class="no-result">等待 A/B 模型运行。</p></div>
+        </section>
+        <section class="analysis-panel" aria-labelledby="compare-agents-title">
+          <div class="analysis-heading"><h3 id="compare-agents-title">主体状态差异</h3><span>点击定位两侧网络</span></div>
+          <p class="impact-caveat">按存续状态、经营能量与预期变化的观察差异排序，非因果影响贡献值。</p>
+          <div id="compare-agents" class="compare-agents"><p class="no-result">等待主体差异计算。</p></div>
+        </section>
+      </div>
+      <div class="compare-provenance" id="compare-provenance">对比尚未运行。运行后展示随机种子、实验设置与对比口径。</div>
       <div class="bottom-links"><a href="../v2/montecarlo.html">批量模拟 ↗</a><a href="../v2/sensitivity.html">参数敏感性 ↗</a><a href="../v2/data.html">数据与血统 ↗</a><a href="../v2/reports.html">原版研究档案 ↗</a></div>
     </section>
     <div class="runtime" id="runtime-alert" role="alert" hidden></div>
