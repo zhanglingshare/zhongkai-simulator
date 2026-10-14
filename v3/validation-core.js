@@ -75,8 +75,9 @@
     const regex=/\[\s*"([^"]+)"\s*,\s*(-?(?:\d+(?:\.\d*)?|\.\d+))\s*,\s*"([ABCD])"\s*,\s*"([^"]*)"\s*,\s*(true|false)\s*\]/g;
     return [...segment[1].matchAll(regex)].map(m=>({name:m[1],value:Number(m[2]),grade:m[3],note:m[4],needsReview:m[5]==="true",structural:["n_agents","ticks"].includes(m[1])}));
   }
-  function assessHoldout(input){
+  function assessHoldout(input,now=Date.now()){
     const fatal=[],cautions=[];
+    const todayChina=new Date(now+8*3600000).toISOString().slice(0,10);
     if(!isObj(input))return {eligible:false,errors:["文件必须是 JSON 对象。"],cautions:[],stats:null};
     if(input.schema!==schema)fatal.push("schema 必须为 "+schema+"。");
     if(input.scope!=="model-index")fatal.push("scope 必须是 model-index。GDP 等现实指标不可直接当作模型内部指数。");
@@ -102,6 +103,7 @@
       }else{
         obsDates.add(c.observed_at);
         if(c.predicted_at>=c.observed_at)fatal.push(prefix+"必须在观测结果出现之前归档预测。");
+        if(c.observed_at>todayChina)fatal.push(prefix+"观测日期晚于当前北京时间日期，不能提前伪装已观测事实。");
         if(day(input.calibration_cutoff)&&c.predicted_at<=input.calibration_cutoff)fatal.push(prefix+"预测日期应晚于校准截止日。");
         if(day(input.calibration_cutoff)&&c.observed_at<=input.calibration_cutoff)fatal.push(prefix+"观测结果落入校准时间窗，存在数据泄漏风险。");
       }
