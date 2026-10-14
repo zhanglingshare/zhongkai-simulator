@@ -39,6 +39,13 @@ async function testDesktop(browser,port){
   // V3.8: first viewport is an operable genuine 3D projection of the legacy Sim.
   assert.ok(await page.locator("#holo-hero").isVisible());
   assert.ok(await page.locator("#holo-canvas").isVisible());
+  assert.ok(await page.locator("#holo-labels .holo-node-label").count()>0,"Core simulated agents should be labeled");
+  const overlap=await page.evaluate(()=>{
+    const a=document.querySelector("#holo-node-detail").getBoundingClientRect();
+    const b=document.querySelector("#holo-active").closest(".holo-metric").getBoundingClientRect();
+    return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+  });
+  assert.equal(overlap,false,"Desktop inspection panel must not cover right-side telemetry");
   assert.ok(await page.locator("#holo-hero").evaluate(x=>x.getBoundingClientRect().height>=700));
   assert.match(await page.locator("#holo-render-status").innerText(),/真实模型网络|2.5D 降级/);
   assert.match(await page.locator("#holo-active").innerText(),/\d+ \/ \d+/);
@@ -260,6 +267,24 @@ async function testDesktop(browser,port){
   assert.equal(future.schema,"zk-prospective-observation-protocol-v1");
   assert.equal(future.modelCommit,"");
 
+  // No WebGL? The exact same Sim topology must remain interactive on Canvas2D.
+  const fallback=await browser.newPage({viewport:{width:900,height:700}});
+  await fallback.addInitScript(()=>{
+    const prior=HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext=function(type,...args){
+      if(type==="webgl"||type==="webgl2")return null;
+      return prior.call(this,type,...args);
+    };
+  });
+  await fallback.goto("http://127.0.0.1:"+port+"/v3/",{waitUntil:"load"});
+  await fallback.waitForFunction(()=>document.querySelector("#holo-active").textContent.includes("/"));
+  assert.match(await fallback.locator("#holo-render-status").innerText(),/2.5D 降级/);
+  await fallback.locator("#holo-risk").click();
+  await fallback.locator("#holo-play").click();
+  assert.match(await fallback.locator("#holo-scene-name").innerText(),/链主外迁/);
+  await fallback.locator("#holo-zoom-in").click();
+  await inspectOverflow(fallback);
+  await fallback.close();
   assert.deepEqual(errors,[],"JavaScript errors: "+errors.join("; "));
   await page.close();
 }
