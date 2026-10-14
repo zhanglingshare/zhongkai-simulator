@@ -80,7 +80,7 @@ void main(){
   const canvas=opts.canvas,tip=opts.tooltip,status=opts.status;
   const labels=opts.labels,labelMap=new Map();
   let renderer=null,context2d=null,mode="fallback",graph=null,meta={},selected=null,hover=null;
-  let cam={yaw:-.36,pitch:.18,distance:6.3},raf=0,lastFrame=0,visible=true,disposed=false;
+  let cam={yaw:-.36,pitch:.18,distance:5.1},raf=0,lastFrame=0,visible=true,disposed=false;
   let start={x:0,y:0},dragged=false;
   const pointers=new Map();
   let oldPinch=0;
@@ -104,7 +104,7 @@ void main(){
    let best=null,d=Infinity;
    graph.nodes.forEach(n=>{
      const p=screen(n),distance=Math.hypot(p.x-x,p.y-y);
-     if(distance<Math.max(17,24*(6.3/p.depth))&&distance<d){best=n;d=distance;}
+     if(distance<Math.max(17,24*(5.1/p.depth))&&distance<d){best=n;d=distance;}
    });
    return best;
   }
@@ -126,7 +126,7 @@ void main(){
       }
     }
     [...graph.nodes].sort((a,b)=>screen(b).depth-screen(a).depth).forEach(n=>{
-     const p=screen(n),scale=clamp(6.3/p.depth,.55,1.7);
+     const p=screen(n),scale=clamp(5.1/p.depth,.55,1.7);
      const rad=(n.w>=3?11:n.w===2?7:4.6)*scale;
      const color=Core.palette(n),rgb=color.slice(0,3).map(x=>Math.round(x*255)).join(",");
      ctx.shadowBlur=n.alive?rad*2.6:0;ctx.shadowColor="rgba("+rgb+",.7)";
@@ -233,7 +233,7 @@ void main(){
   },{passive:false});
   function orbit(dx,dy){cam.yaw+=dx;cam.pitch=clamp(cam.pitch+dy,-1.15,1.15);cameraChange();}
   function zoom(mult){cam.distance=clamp(cam.distance*mult,3.4,11);cameraChange();}
-  function resetCamera(){cam={yaw:-.36,pitch:.18,distance:6.3};cameraChange();}
+  function resetCamera(){cam={yaw:-.36,pitch:.18,distance:5.1};cameraChange();}
   const ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(schedule):null;if(ro)ro.observe(canvas);
   if(typeof IntersectionObserver!=="undefined"){
     const io=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)schedule();else if(raf){cancelAnimationFrame(raf);raf=0;}},{threshold:0});
