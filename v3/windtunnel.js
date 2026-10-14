@@ -31,7 +31,10 @@
    dirty();
  }
  function dirty(){
-   if(experiment)$("share-status").textContent="当前设置已修改；需要重新运行才会更新实验链接与数据。";
+   if(experiment){
+     $("share-status").textContent="当前设置已修改；请先重新运行，旧的分享与导出已暂时停用。";
+     ["copy-link","download-card","download-json"].forEach(id=>$(id).disabled=true);
+   }
  }
  function scenarioOptions(){
    for(const [id,group] of [["negative-options","negative"],["positive-options","positive"]]){
@@ -147,7 +150,7 @@
    const ranking=Object.entries(C.metrics).map(([key,spec])=>({
      name:spec.label,abs:Math.abs(b[key]-a[key]),difference:b[key]-a[key]
    })).sort((x,y)=>y.abs-x.abs);
-   $("event-text").textContent=(latest?latest.text+"。 ":"")+
+   $("event-text").textContent=(latest?"原模型叙事事件（不代表实时核实的官方事实）："+latest.text+"。 ":"")+
     "第 "+tick+" 步，最明显的模型状态差异为「"+ranking[0].name+"」"+
     formatter(ranking[0].difference)+"。此差异仅描述原 Sim 的条件性运行。";
  }
@@ -199,7 +202,9 @@
    $("timeline-slider").max=String(experiment.ticks);
    document.querySelector(".timeline-count span").textContent=" / "+experiment.ticks+" STEPS";
    $("run-experiment").querySelector("span").textContent="重新运行这个情景";
-   updateShare();resetAnalyses();$("share-status").textContent="新的实验已就绪，可复制链接邀请他人复现。";
+   updateShare();resetAnalyses();
+   ["copy-link","download-card","download-json"].forEach(id=>$(id).disabled=false);
+   $("share-status").textContent="新的实验已就绪，可复制链接邀请他人复现。";
    if(window.history&&window.history.replaceState)
      window.history.replaceState(null,"",new URL("windtunnel.html?"+C.serialize(config),window.location.href).href);
  }
