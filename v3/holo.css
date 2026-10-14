@@ -207,3 +207,15 @@
  .holo-node-detail.is-inspected{transform:translateY(calc(100% + 6px))}
 }
 @media(prefers-reduced-motion:reduce){.holo-world-ambient{animation:none}}
+
+/* Selected-node readout occupies its own row, rather than covering the network or controls. */
+@media(max-width:960px){
+ .holo-hero{grid-template-rows:auto auto minmax(330px,1fr) auto auto auto auto;
+  grid-template-areas:"top" "copy" "world" "metrics" "detail" "bottom" "science"}
+ .holo-node-detail.is-inspected{grid-area:detail;position:relative;transform:none;align-self:stretch;
+  display:block;max-width:none;width:auto;left:auto;right:auto;bottom:auto;margin:0}
+}
+@media(max-width:450px){
+ .holo-hero{grid-template-rows:auto auto minmax(315px,1fr) auto auto auto auto}
+ .holo-node-detail.is-inspected{transform:none}
+}
