@@ -812,7 +812,7 @@
       if(!HoloCore||!window.ZKHolo||!el("holo-canvas"))return;
       try{
         holoScene=window.ZKHolo.mount({
-          canvas:el("holo-canvas"),tooltip:el("holo-hover"),status:el("holo-render-status"),
+          canvas:el("holo-canvas"),tooltip:el("holo-hover"),labels:el("holo-labels"),status:el("holo-render-status"),
           onSelect:inspectHoloNode
         });
         paintHoloLive();
