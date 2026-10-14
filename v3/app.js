@@ -209,6 +209,7 @@
         comparison.stale=true;
         el("compare-note").textContent="实验设置已变化：下方保留上一次对比（种子 "+comparison.seed+"，冲击“"+comparison.type+"”）。点击“按当前选择运行 A/B”才能更新结果。";
         el("status-b").textContent="旧结果 · t"+comparison.tick;
+        if(typeof refreshWindResults==="function")refreshWindResults();
       }
     }
     el("shock-sel").addEventListener("change",()=>{
