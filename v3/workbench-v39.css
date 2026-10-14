@@ -154,3 +154,14 @@
 .v39-timebar input{display:block;width:100%;accent-color:#7cdfe6;cursor:pointer;margin:10px 0 3px}
 .v39-timebar input:disabled{opacity:.35;cursor:not-allowed}
 .v39-timebar p{color:#7299a9;font-size:9px;margin:0}
+
+/* P0: never repeat five-axis results in the experiment input card.
+   Impact lens below is the one place where differences are interpreted. */
+.holo-app>.wind-deck .wind-impact{display:none}
+.holo-app>.wind-deck .wind-share{gap:14px}
+.v39-study-boundary{border-top:1px solid rgba(126,165,184,.21);padding-top:12px;color:#91c0c8}
+.v39-study-boundary>summary{cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px;font-weight:720;list-style:none}
+.v39-study-boundary>summary::-webkit-details-marker{display:none}
+.v39-study-boundary>summary span{font-size:15px;color:#9de0e3;transition:transform .15s}
+.v39-study-boundary[open]>summary span{transform:rotate(180deg)}
+.v39-study-boundary .wind-disclaimer{margin-top:11px;border:0;padding:0;line-height:1.75}
