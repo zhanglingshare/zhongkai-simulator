@@ -33,7 +33,7 @@
  function dirty(){
    if(experiment){
      $("share-status").textContent="当前设置已修改；请先重新运行，旧的分享与导出已暂时停用。";
-     ["copy-link","download-card","download-json"].forEach(id=>$(id).disabled=true);
+     ["copy-link","copy-challenge","download-card","download-json"].forEach(id=>$(id).disabled=true);
    }
  }
  function scenarioOptions(){
@@ -203,7 +203,7 @@
    document.querySelector(".timeline-count span").textContent=" / "+experiment.ticks+" STEPS";
    $("run-experiment").querySelector("span").textContent="重新运行这个情景";
    updateShare();resetAnalyses();
-   ["copy-link","download-card","download-json"].forEach(id=>$(id).disabled=false);
+   ["copy-link","copy-challenge","download-card","download-json"].forEach(id=>$(id).disabled=false);
    $("share-status").textContent="新的实验已就绪，可复制链接邀请他人复现。";
    if(window.history&&window.history.replaceState)
      window.history.replaceState(null,"",new URL("windtunnel.html?"+C.serialize(config),window.location.href).href);
@@ -265,6 +265,30 @@
    }catch{
      $("share-link").focus();$("share-link").select();
      $("share-status").textContent="浏览器限制自动复制。链接已选中，请手动复制。";
+   }
+ }
+ async function copyChallenge(){
+   if(!experiment)return;
+   const x=experiment;
+   const text="【仲恺产业风洞 · 公开研究挑战】\n"+
+     "我用公开 Sim 模型研究了「"+x.config.shock+"」；追加条件：「"+
+     C.interventions[x.config.intervention].name+"」。\n"+
+     "在模型第 "+x.ticks+" 步，景气指数 B−A 为 "+formatter(x.diff.abundance)+
+     "，风险指数 B−A 为 "+formatter(x.diff.disaster)+"。\n"+
+     "这些只是模型差值，不是现实预测，更不是官方政策建议。"+
+     "你认为哪一个假设值得推翻？请打开实验、改一个条件再分享结果。\n"+
+     $("share-link").value;
+   try{
+     if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(text);
+     else{
+       const temp=mk("textarea");temp.value=text;temp.style.position="fixed";temp.style.left="-9999px";
+       document.body.append(temp);temp.select();
+       if(!document.execCommand("copy"))throw Error("复制失败");
+       temp.remove();
+     }
+     $("share-status").textContent="挑战文案已复制。欢迎别人复跑、反驳和修改假设。";
+   }catch{
+     $("share-status").textContent="浏览器未允许复制挑战文案，请先复制实验链接后自行撰写。";
    }
  }
  function download(name,blob){
@@ -342,6 +366,7 @@
    $("analyze-ensemble").addEventListener("click",ensembleScan);
    $("analyze-factors").addEventListener("click",factorScan);
    $("copy-link").addEventListener("click",copyLink);
+   $("copy-challenge").addEventListener("click",copyChallenge);
    $("download-card").addEventListener("click",drawShareCard);
    $("download-json").addEventListener("click",downloadReport);
    document.addEventListener("visibilitychange",()=>{if(document.hidden)stop();});
