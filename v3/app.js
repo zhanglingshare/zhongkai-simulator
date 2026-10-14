@@ -23,6 +23,7 @@
     ];
     const svgNS="http://www.w3.org/2000/svg";
     let selectedNode=null, comparison=null, currentView="network";
+    let robustness=null, activeRobustnessToken=0;
     function create(tag,cls,txt){
       const obj=document.createElement(tag);
       if(cls)obj.className=cls;
@@ -200,6 +201,10 @@
     drawTrends();
 
     function markCompareStale(){
+      activeRobustnessToken++;
+      el("btn-robust").disabled=false;
+      el("btn-cancel-robust").hidden=true;
+      if(robustness)el("robust-status").textContent="实验设置已改变：以下多种子结果来自上一次研究，不会自动更新。";
       if(comparison){
         comparison.stale=true;
         el("compare-note").textContent="实验设置已变化：下方保留上一次对比（种子 "+comparison.seed+"，冲击“"+comparison.type+"”）。点击“按当前选择运行 A/B”才能更新结果。";
@@ -407,7 +412,9 @@
         const ticks=params.ticks||20;
         for(let t=0;t<ticks;t++){A.step();B.step();}
         const positions=layoutForce(A.agents,A.edges,760,560);
-        comparison={seed,type,A,B,A0,B0,params,positions,ticks,tick:ticks,focus:null,stale:false};
+        comparison={seed,type,A,B,A0,B0,params,positions,ticks,tick:ticks,focus:null,stale:false,question:el("research-question").value.trim()};
+        resetRobustness("A/B 对比已更新。可对这组实验做多种子检查。");
+        el("btn-export").disabled=false;
         el("compare-tick").disabled=false;
         el("compare-tick").max=String(ticks);
         renderComparisonAt(ticks);
@@ -422,6 +429,163 @@
         btn.disabled=false;btn.textContent=originalText;
       }
     }
+
+    /* V3.2: Repeat *the same original Sim*, do not touch the simulation kernel. */
+    function resetRobustness(message){
+      activeRobustnessToken++;
+      robustness=null;
+      el("robust-results").replaceChildren(create("p","no-result","尚无重复实验结果。"));
+      el("robust-status").textContent=message;
+      el("btn-robust").disabled=false;
+      el("btn-cancel-robust").hidden=true;
+    }
+    function sampleSeed(base,index){
+      return ((base-1+index)%2147483647)+1;
+    }
+    function percentile(sorted,q){
+      if(!sorted.length)return NaN;
+      const at=(sorted.length-1)*q;
+      const lo=Math.floor(at),hi=Math.ceil(at);
+      return sorted[lo]+(sorted[hi]-sorted[lo])*(at-lo);
+    }
+    function drawRobustness(){
+      const root=el("robust-results");
+      root.replaceChildren();
+      if(!robustness)return;
+      const intro=create("p","robust-intro","每个点是一次种子下的 B−A 结果；横线为样本 P10–P90，圆点为中位数。各指标横轴有独立刻度，不能跨指标直接比长度。");
+      root.append(intro);
+      const cards=create("div","robust-grid");
+      robustness.metrics.forEach(spec=>{
+        const tile=create("article","robust-tile");
+        const head=create("div","robust-tile-head");
+        head.append(create("strong","",spec.name));
+        head.append(create("span","robust-median","中位差 "+(spec.p50>0?"+":"")+fmt(spec.p50)));
+        tile.append(head);
+        const svg=svgNode("svg",{viewBox:"0 0 480 94",role:"img","aria-label":spec.name+"：差值 P10 "+fmt(spec.p10)+"，中位数 "+fmt(spec.p50)+"，P90 "+fmt(spec.p90)});
+        const left=19,right=461,center=240,y=39;
+        const scale=Math.max(.05,Math.abs(spec.min),Math.abs(spec.max))*1.13;
+        const x=v=>Math.max(left,Math.min(right,center+v/scale*(right-center)));
+        svg.append(svgNode("line",{x1:left,y1:y,x2:right,y2:y,stroke:"#e1e9ef","stroke-width":1.5}));
+        svg.append(svgNode("line",{x1:center,y1:10,x2:center,y2:68,stroke:"#9aabb9","stroke-width":1.3,"stroke-dasharray":"3 3"}));
+        spec.values.forEach((v,i)=>{
+          svg.append(svgNode("circle",{cx:x(v),cy:y+((i*7)%11-5)*2,r:2.5,fill:"#8a9bad",opacity:.36}));
+        });
+        svg.append(svgNode("line",{x1:x(spec.p10),y1:y,x2:x(spec.p90),y2:y,stroke:"#087d8d","stroke-width":6,"stroke-linecap":"round"}));
+        svg.append(svgNode("circle",{cx:x(spec.p50),cy:y,r:6,fill:"#b6753b",stroke:"#fff","stroke-width":1.5}));
+        for(const [pos,value,anchor] of [[left,-scale,"start"],[center,0,"middle"],[right,scale,"end"]]){
+          svg.append(svgNode("text",{x:pos,y:83,"font-size":12,"text-anchor":anchor,fill:"#7c8fa0"},(value>0?"+":"")+fmt(value)));
+        }
+        tile.append(svg);
+        const bottom=create("div","robust-tile-bottom");
+        const interval=create("span","", "P10 "+fmt(spec.p10)+"  ·  P90 "+fmt(spec.p90));
+        const shares=create("span","", "B>A："+spec.positive+" / "+robustness.n+" 组");
+        bottom.append(interval,shares);tile.append(bottom);
+        cards.append(tile);
+      });
+      root.append(cards);
+      const explain=create("p","robust-explain","这里展示的是模拟输出在 "+robustness.n+" 组种子下的差异分布；“B>A”仅为样本计数，不是现实发生概率，也不代表政策优劣。");
+      root.append(explain);
+    }
+    async function runRobustness(){
+      if(!comparison || comparison.stale){
+        el("robust-status").textContent="请先运行或更新 A/B 对比，再执行多种子检查。";
+        return;
+      }
+      const n=Number(el("robust-n").value);
+      if(![24,48,96].includes(n)){
+        el("robust-status").textContent="请选择受支持的模拟组数。";
+        return;
+      }
+      const baseline={seed:comparison.seed,type:comparison.type,params:Object.assign({},comparison.params),ticks:comparison.ticks};
+      const token=++activeRobustnessToken;
+      const runBtn=el("btn-robust");
+      const cancelBtn=el("btn-cancel-robust");
+      runBtn.disabled=true;
+      cancelBtn.hidden=false;
+      const all=keys.map(k=>({key:k.key,name:k.name,values:[]}));
+      try{
+        for(let i=0;i<n;i++){
+          if(token!==activeRobustnessToken)return;
+          const seed=sampleSeed(baseline.seed,i);
+          const A=new Sim(seed,baseline.params),B=new Sim(seed,baseline.params);
+          const shock=B.shock(baseline.type);
+          if(!shock.ok)throw new Error("冲击未被原有模型接受："+baseline.type);
+          for(let t=0;t<baseline.ticks;t++){A.step();B.step();}
+          all.forEach(rec=>rec.values.push(currentMetric(B,rec.key)-currentMetric(A,rec.key)));
+          if((i+1)%8===0 || i===n-1){
+            el("robust-status").textContent="正在计算 "+(i+1)+" / "+n+" 组模型对照…";
+            await new Promise(resolve=>setTimeout(resolve,0));
+          }
+        }
+        if(token!==activeRobustnessToken)return;
+        robustness={
+          seed:baseline.seed,type:baseline.type,n,ticks:baseline.ticks,params:baseline.params,
+          metrics:all.map(rec=>{
+            const sorted=[...rec.values].sort((a,b)=>a-b);
+            return {
+              key:rec.key,name:rec.name,values:rec.values,
+              min:sorted[0],max:sorted[sorted.length-1],
+              p10:percentile(sorted,.1),p50:percentile(sorted,.5),p90:percentile(sorted,.9),
+              positive:rec.values.filter(v=>v>0).length
+            };
+          })
+        };
+        drawRobustness();
+        el("robust-status").textContent="完成 "+n+" 组种子 · 从 "+baseline.seed+" 开始连续取种子（到上限循环）· 同一组内 A/B 的模型设置相同";
+      }catch(error){
+        el("robust-status").textContent="计算中断："+(error&&error.message?error.message:String(error));
+      }finally{
+        if(token===activeRobustnessToken){
+          runBtn.disabled=false;
+          cancelBtn.hidden=true;
+        }
+      }
+    }
+    el("btn-robust").addEventListener("click",runRobustness);
+    el("btn-cancel-robust").addEventListener("click",()=>{
+      activeRobustnessToken++;
+      el("btn-robust").disabled=false;
+      el("btn-cancel-robust").hidden=true;
+      el("robust-status").textContent="已中止本次计算，未生成新的稳健性结果。";
+    });
+    el("btn-design-compare").addEventListener("click",()=>{
+      runComparison();
+      el("compare-section").scrollIntoView({block:"start",behavior:"auto"});
+    });
+    function exportResearch(){
+      if(!comparison)return;
+      const modelSummary=model=>Object.fromEntries(keys.map(k=>[k.key,currentMetric(model,k.key)]));
+      const snapshots=model=>model.snapshots.map(snap=>({
+        tick:snap.tick,
+        metrics:Object.fromEntries(keys.map(k=>[k.key,snapshotMetric(snap,k.key)]))
+      }));
+      const data={
+        schema:"zhongkai-v3-research-1",
+        exportedAt:new Date().toISOString(),
+        model:"Original model.js (unmodified)",
+        disclaimer:"模型内实验；同种子不保证严格因果配对，结果不是现实经济预测。",
+        researchQuestion:comparison.question,
+        A_B:{seed:comparison.seed,shock:comparison.type,ticks:comparison.ticks,params:comparison.params,
+          stale:!!comparison.stale,
+          baselineFinal:modelSummary(comparison.A),scenarioFinal:modelSummary(comparison.B),
+          baselineHistory:snapshots(comparison.A),scenarioHistory:snapshots(comparison.B)},
+        multiseed:robustness?{
+          seed:robustness.seed,shock:robustness.type,count:robustness.n,ticks:robustness.ticks,params:robustness.params,
+          metrics:robustness.metrics
+        }:null
+      };
+      const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+      const url=URL.createObjectURL(blob);
+      const anchor=document.createElement("a");
+      anchor.href=url;
+      anchor.download="zhongkai-v3-research-seed-"+comparison.seed+".json";
+      document.body.append(anchor);
+      anchor.click();
+      anchor.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+    }
+    el("btn-export").addEventListener("click",exportResearch);
+
     el("btn-compare").addEventListener("click",runComparison);
     el("compare-tick").addEventListener("input",()=>{
       if(comparison)renderComparisonAt(Number(el("compare-tick").value));
@@ -439,6 +603,8 @@
     });
     el("btn-clear-compare").addEventListener("click",()=>{
       comparison=null;
+      resetRobustness("请先运行 A/B 对比，再执行多种子检查。");
+      el("btn-export").disabled=true;
       el("compare-tick").disabled=true;
       el("compare-tick").value="20";
       el("compare-tick-value").textContent="t20 / 20";

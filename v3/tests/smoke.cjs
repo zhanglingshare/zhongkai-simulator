@@ -1,4 +1,4 @@
-/* V3.1 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
+/* V3.2 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
 const assert=require("node:assert/strict");
 const http=require("node:http");
 const fs=require("node:fs");
@@ -65,7 +65,30 @@ async function testDesktop(browser,port){
   assert.match(await page.locator("#status-b").innerText(),/旧结果/);
   await page.locator("#btn-compare").click();
   assert.match(await page.locator("#scenario-label").innerText(),/人才流失/);
+  await page.locator("#robust-n").selectOption("24");
+  await page.locator("#btn-robust").click();
+  await page.locator("#robust-results .robust-tile").first().waitFor({timeout:60000});
+  assert.equal(await page.locator("#robust-results .robust-tile").count(),5,"Five model-internal delta distributions");
+  assert.match(await page.locator("#robust-status").innerText(),/完成 24 组种子/);
+  assert.equal((await page.locator("#tick-lbl").innerText()).trim(),"1","Robustness must not modify the live session");
+  const downloadable=page.waitForEvent("download");
+  await page.locator("#btn-export").click();
+  const download=await downloadable;
+  assert.match(download.suggestedFilename(),/^zhongkai-v3-research-seed-7.json$/);
+  const data=JSON.parse(fs.readFileSync(await download.path(),"utf8"));
+  assert.equal(data.schema,"zhongkai-v3-research-1");
+  assert.equal(data.A_B.shock,"人才流失");
+  assert.equal(data.A_B.seed,7);
+  assert.equal(data.multiseed.count,24);
+  assert.equal(data.multiseed.metrics.length,5);
+  assert.equal(data.multiseed.metrics[0].values.length,24);
   await page.screenshot({path:path.join(shots,"desktop-1440.png"),fullPage:true});
+  await page.locator("#shock-sel").selectOption("芯片断供");
+  assert.match(await page.locator("#robust-status").innerText(),/上一次研究/);
+  assert.equal(await page.locator("#robust-results .robust-tile").count(),5,"Old result should remain visibly historical");
+  await page.locator("#btn-compare").click();
+  assert.equal(await page.locator("#robust-results .robust-tile").count(),0,"New A/B scenario invalidates old robustness");
+
   assert.deepEqual(errors,[],"JavaScript errors: "+errors.join("; "));
   await page.close();
 }
@@ -83,6 +106,9 @@ async function testMobile(browser,port,width){
   assert.ok(await page.locator("#compare-section").isVisible(),"Compare tab hidden");
   await page.locator("#btn-compare").click();
   assert.equal(await page.locator("#compare-metrics .delta-row").count(),5);
+  await page.locator('[data-mobile-to="input"]').click();
+  await page.locator("#btn-design-compare").click();
+  assert.ok(await page.locator("#compare-section").isVisible(),"Input shortcut should open comparison on mobile");
   await inspectOverflow(page);
   await page.screenshot({path:path.join(shots,"mobile-"+width+"-compare.png"),fullPage:true});
   assert.deepEqual(errors,[],"Mobile JavaScript errors: "+errors.join("; "));
@@ -96,7 +122,7 @@ async function testMobile(browser,port,width){
     browser=await chromium.launch({channel:"chrome",headless:true,args:["--no-sandbox"]});
     await testDesktop(browser,port);
     for(const width of [390,360])await testMobile(browser,port,width);
-    console.log("PASS V3.1 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
+    console.log("PASS V3.2 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
   }finally{
     if(browser)await browser.close();
     server.close();
