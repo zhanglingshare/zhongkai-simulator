@@ -1,0 +1,576 @@
+{
+  "schema": "zk-annual-observations-v1",
+  "region": "zhongkai",
+  "created_on": "2026-10-14",
+  "sampling": "calendar_year",
+  "currency": "CNY",
+  "purpose": "版本化的公开年度统计观测，不是模型校准或已留出历史预测",
+  "model_training_use": "not_used",
+  "independent_holdout": false,
+  "model_mapping": null,
+  "calibration_status": "blocked_no_frozen_mapping_or_preserved_pre_outcome_predictions",
+  "reconstruction_policy": "人工逐项摘录公开年报/公报；不得由上一年现价计算可比价 GDP 增速，不得用模型生成数据填空。来源转录稿须另行与政府原件校对。",
+  "sources": {
+    "stat2022": {
+      "title": "2022年仲恺高新区国民经济和社会发展统计公报（第三方转载）",
+      "url": "https://zgrkk.com/reports/7861.html",
+      "publisher": "仲恺高新区经济发展和统计局（转录稿）",
+      "host_type": "third_party_mirror",
+      "release_date": "",
+      "status": "转载稿待与政府原件核对"
+    },
+    "stat2023": {
+      "title": "2023年仲恺高新区国民经济和社会发展统计公报（第三方转载）",
+      "url": "https://tjgb.hongheiku.com/xjtjgb/xj2020/56784.html",
+      "publisher": "仲恺高新区统计局（转录稿）",
+      "host_type": "third_party_mirror",
+      "release_date": "",
+      "status": "转载稿待与政府原件核对"
+    },
+    "stat2023gov": {
+      "title": "仲恺推动金融与实体经济良性循环",
+      "url": "https://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/qt/zzgxqxxgzjb/content/post_5234787.html",
+      "publisher": "仲恺高新区政府门户",
+      "host_type": "government_portal",
+      "release_date": "",
+      "status": "可核对 2023 GDP、规上工业增加值增速"
+    },
+    "stat2024": {
+      "title": "2024年仲恺高新区国民经济和社会发展统计公报",
+      "url": "https://www.hzzk.gov.cn/gkmlpt/content/5/5557/post_5557124.html",
+      "publisher": "仲恺高新区党工委管委会综合办公室",
+      "host_type": "government_portal",
+      "release_date": "2025-07-02",
+      "status": "官方公报，初步核算数"
+    },
+    "stat2025": {
+      "title": "2025年仲恺高新区国民经济和社会发展统计公报（第三方转载）",
+      "url": "https://tjgb.hongheiku.com/xjtjgb/xj2020/78812.html",
+      "publisher": "仲恺高新区统计局（转录稿）",
+      "host_type": "third_party_mirror",
+      "release_date": "",
+      "status": "转载稿待与政府原件核对"
+    },
+    "stat2025gov": {
+      "title": "仲恺高新区行政区划概况（含2025 GDP数据）",
+      "url": "https://www.hzzk.gov.cn/zzgxqgwhmhwz/zzgk/xzqh/",
+      "publisher": "仲恺高新区政府门户",
+      "host_type": "government_portal",
+      "release_date": "2026-03-02",
+      "status": "仅佐证 2025 GDP 及三次产业数据"
+    }
+  },
+  "metric_definitions": {
+    "gdp_current": {
+      "label": "地区生产总值",
+      "unit": "亿元",
+      "measurement": "current_price_level",
+      "grade": "official_statement",
+      "description": "现价地区生产总值总量，不得据相邻年份现价比值推导可比价增速"
+    },
+    "gdp_real_yoy": {
+      "label": "GDP 同比增长（可比价）",
+      "unit": "%",
+      "measurement": "constant_price_growth",
+      "grade": "official_statement",
+      "description": "来源公报发布的可比价同比增速"
+    },
+    "primary_current": {
+      "label": "第一产业增加值",
+      "unit": "亿元",
+      "measurement": "current_price_level",
+      "grade": "official_statement",
+      "description": "现价增加值"
+    },
+    "secondary_current": {
+      "label": "第二产业增加值",
+      "unit": "亿元",
+      "measurement": "current_price_level",
+      "grade": "official_statement",
+      "description": "现价增加值"
+    },
+    "tertiary_current": {
+      "label": "第三产业增加值",
+      "unit": "亿元",
+      "measurement": "current_price_level",
+      "grade": "official_statement",
+      "description": "现价增加值"
+    },
+    "industry_growth": {
+      "label": "规上工业增加值同比",
+      "unit": "%",
+      "measurement": "reported_growth",
+      "grade": "official_statement",
+      "description": "同比增速，不是绝对工业产出水平"
+    },
+    "industry_invest_growth": {
+      "label": "工业固定资产投资同比",
+      "unit": "%",
+      "measurement": "reported_growth",
+      "grade": "official_statement",
+      "description": "同比增速，且不等于模拟模型投资强度系数"
+    },
+    "retail_current": {
+      "label": "社会消费品零售总额",
+      "unit": "亿元",
+      "measurement": "nominal_level",
+      "grade": "official_statement",
+      "description": "现价总量，统计口径可能因经济普查修订"
+    },
+    "budget_current": {
+      "label": "地方一般公共预算收入",
+      "unit": "亿元",
+      "measurement": "nominal_level",
+      "grade": "official_statement",
+      "description": "账面总量；2025 增速与公报同比说法需进一步复核"
+    }
+  },
+  "observations": [
+    {
+      "year": 2022,
+      "metric": "gdp_current",
+      "value": 905.98,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2022"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2022,
+      "metric": "gdp_real_yoy",
+      "value": 6.4,
+      "unit": "%",
+      "source_ids": [
+        "stat2022"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2022,
+      "metric": "primary_current",
+      "value": 9.57,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2022"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2022,
+      "metric": "secondary_current",
+      "value": 666.17,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2022"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2022,
+      "metric": "tertiary_current",
+      "value": 230.24,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2022"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2022,
+      "metric": "industry_growth",
+      "value": 3.7,
+      "unit": "%",
+      "source_ids": [
+        "stat2022"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2022,
+      "metric": "industry_invest_growth",
+      "value": 63.3,
+      "unit": "%",
+      "source_ids": [
+        "stat2022"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2022,
+      "metric": "retail_current",
+      "value": 151.92,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2022"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2022,
+      "metric": "budget_current",
+      "value": 40.55,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2022"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2023,
+      "metric": "gdp_current",
+      "value": 1007.15,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2023",
+        "stat2023gov"
+      ],
+      "review_status": "mirrored_plus_official_corroboration",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2023,
+      "metric": "gdp_real_yoy",
+      "value": 10.1,
+      "unit": "%",
+      "source_ids": [
+        "stat2023"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2023,
+      "metric": "primary_current",
+      "value": 9.95,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2023"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2023,
+      "metric": "secondary_current",
+      "value": 731.4,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2023"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2023,
+      "metric": "tertiary_current",
+      "value": 265.79,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2023"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2023,
+      "metric": "industry_growth",
+      "value": 9.5,
+      "unit": "%",
+      "source_ids": [
+        "stat2023",
+        "stat2023gov"
+      ],
+      "review_status": "mirrored_plus_official_corroboration",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2023,
+      "metric": "industry_invest_growth",
+      "value": 2.1,
+      "unit": "%",
+      "source_ids": [
+        "stat2023"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2023,
+      "metric": "retail_current",
+      "value": 162.74,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2023"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2023,
+      "metric": "budget_current",
+      "value": 43.55,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2023"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2024,
+      "metric": "gdp_current",
+      "value": 1071.75,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2024"
+      ],
+      "review_status": "official_page_checked",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2024,
+      "metric": "gdp_real_yoy",
+      "value": 4,
+      "unit": "%",
+      "source_ids": [
+        "stat2024"
+      ],
+      "review_status": "official_page_checked",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2024,
+      "metric": "primary_current",
+      "value": 10.83,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2024"
+      ],
+      "review_status": "official_page_checked",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2024,
+      "metric": "secondary_current",
+      "value": 724.1,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2024"
+      ],
+      "review_status": "official_page_checked",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2024,
+      "metric": "tertiary_current",
+      "value": 336.81,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2024"
+      ],
+      "review_status": "official_page_checked",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2024,
+      "metric": "industry_growth",
+      "value": 10.7,
+      "unit": "%",
+      "source_ids": [
+        "stat2024"
+      ],
+      "review_status": "official_page_checked",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2024,
+      "metric": "industry_invest_growth",
+      "value": -31.5,
+      "unit": "%",
+      "source_ids": [
+        "stat2024"
+      ],
+      "review_status": "official_page_checked",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2024,
+      "metric": "retail_current",
+      "value": 164.72,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2024"
+      ],
+      "review_status": "official_page_checked",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2024,
+      "metric": "budget_current",
+      "value": 44.93,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2024"
+      ],
+      "review_status": "official_page_checked",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2025,
+      "metric": "gdp_current",
+      "value": 1160.39,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2025",
+        "stat2025gov"
+      ],
+      "review_status": "mirrored_plus_official_corroboration",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2025,
+      "metric": "gdp_real_yoy",
+      "value": 7.1,
+      "unit": "%",
+      "source_ids": [
+        "stat2025",
+        "stat2025gov"
+      ],
+      "review_status": "mirrored_plus_official_corroboration",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2025,
+      "metric": "primary_current",
+      "value": 11.36,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2025",
+        "stat2025gov"
+      ],
+      "review_status": "mirrored_plus_official_corroboration",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2025,
+      "metric": "secondary_current",
+      "value": 818.33,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2025",
+        "stat2025gov"
+      ],
+      "review_status": "mirrored_plus_official_corroboration",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2025,
+      "metric": "tertiary_current",
+      "value": 330.7,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2025",
+        "stat2025gov"
+      ],
+      "review_status": "mirrored_plus_official_corroboration",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2025,
+      "metric": "industry_growth",
+      "value": 14,
+      "unit": "%",
+      "source_ids": [
+        "stat2025"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2025,
+      "metric": "industry_invest_growth",
+      "value": -23.6,
+      "unit": "%",
+      "source_ids": [
+        "stat2025"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2025,
+      "metric": "retail_current",
+      "value": 173.4,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2025"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": ""
+    },
+    {
+      "year": 2025,
+      "metric": "budget_current",
+      "value": 53.91,
+      "unit": "亿元",
+      "source_ids": [
+        "stat2025"
+      ],
+      "review_status": "mirror_needs_primary",
+      "vintage": "published_preliminary",
+      "note": "2025公报写同比增长3.7%，与2024本表现价总量相比约增长20.0%；统计口径/修订需核实，勿用作校准样本。"
+    }
+  ],
+  "known_caveats": [
+    "2022、2023及大部分2025记录来自第三方转载的公报文本，不等于源文件官方原件认证；2023 GDP/工业增速和2025 GDP/产业构成另有政府门户佐证。",
+    "2024 GDP、三次产业为初步现价核算；三项产业分项与总量因四舍五入可差0.01亿元。",
+    "2025 地方一般公共预算收入53.91亿元与2024的44.93亿元机械计算约+20.0%，而2025转载公报同时写同比+3.7%，存在待复核的口径/修订差异，绝不据此推断校准成功。",
+    "GDP与增加值年度名义总量不可直接代替以可比价计算的官方同比增长率。",
+    "本数据集没有模型时间步对应日历期的冻结映射，也没有事前归档预测；不满足 V3.3 真实留出集回测门槛。"
+  ]
+}

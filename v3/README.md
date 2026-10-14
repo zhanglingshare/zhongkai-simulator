@@ -79,3 +79,16 @@
 - **方法学规程：** [validation-protocol.md](validation-protocol.md) 明示历史数据泄漏、时间映射与未来真实外部校准的前置条件。
 
 GitHub Actions 执行 `v3/tests/validation.spec.cjs` 检查泄漏门槛，并使用 Playwright/Chrome 在桌面和手机视口对实验区、证据台和历史留出导入执行实测。**目前没有可供认证的独立留出实证数据，历史预测能力仍未验证。**
+
+
+## V3.4 · 仲恺 2022—2025 年度公开经济观测与校准准备
+
+新增 [observations.html](observations.html)，在原工作台之外提供真实年度观测浏览：
+
+- [observations/annual-2022-2025.json](observations/annual-2022-2025.json)：**4 年、9 类、36 条**公开年度统计观测，每条包含单位、原始年份、来源 ID、政府门户/第三方转载类型以及复核状态；
+- [observations-core.js](observations-core.js)：原值完整性、来源有效性、GDP 分项求和、财政披露口径差异、缺失年份与校准准备度检测；
+- [observations.css](observations.css)、[observations.js](observations.js)：可选择指标的原始数据走势图、来源明细、年度对照矩阵和校准阻断项；
+- [observations/README.md](observations/README.md)：完整资料来源和不能直接参数校准的研究边界；
+- [tests/observations.spec.cjs](tests/observations.spec.cjs)：原始值、单位、来源及校准门槛的纯 Node 回归；Chrome 也测试桌面和 360/390px 手机。
+
+**研究边界：** GDP 总量是现价数、增长率是官方可比价同比；不能跨口径计算回测分数。2025 公共预算收入“53.91 亿/同比 +3.7%”与上一年公布总量机械计算存在差异，已列为待复核。2022、2023 和部分 2025 来源为第三方转载，未伪称已独立认证。该文件仍不是已冻结预测的独立测试集，也不替代 V3.3 的历史回测门槛，更不会自动修改 `model.js`、V2 或豆包每日抓取。
