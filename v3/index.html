@@ -29,9 +29,13 @@
       <div class="holo-stars" aria-hidden="true"></div>
       <div class="holo-floor" aria-hidden="true"></div>
       <div class="holo-rings" aria-hidden="true"></div>
+      <div class="holo-world" id="holo-world" aria-label="独立三维产业网络交互区域">
+        <div class="holo-world-ambient" aria-hidden="true"></div>
       <canvas id="holo-canvas" class="holo-canvas" role="img" aria-label="由当前产业模拟器的真实主体、关系和状态驱动的可旋转三维网络。拖动可旋转，滚轮缩放，点击节点查看模型信息。"></canvas>
       <div id="holo-labels" class="holo-labels" aria-hidden="true"></div>
       <div id="holo-hover" class="holo-hover" hidden></div>
+        <div class="holo-world-caption" aria-hidden="true">◎ 产业网络三维投影 · 旋转 / 缩放 / 点击节点</div>
+      </div>
       <header class="holo-top">
         <a href="index.html" class="holo-brand" title="仲恺产业风洞首页">
           <span class="holo-brand-symbol">Z<span>.</span></span>
@@ -54,11 +58,6 @@
         <div class="holo-metric"><span>NETWORK / ORDER</span><strong id="holo-order">—</strong><small>协同指数</small></div>
         <div class="holo-metric"><span>IMPACT / DISASTER</span><strong id="holo-disaster">—</strong><small>风险指数</small></div>
         <div class="holo-metric"><span>AGENTS / ACTIVE</span><strong id="holo-active">—</strong><small>当前模型存续主体</small></div>
-      </div>
-      <div class="holo-stage-indicator">
-        <span class="holo-crosshair" aria-hidden="true">◎</span>
-        <span>SIMULATED NETWORK SPACE</span>
-        <small>空间位置非真实地理坐标 · 光粒子非真实资金/物流流量</small>
       </div>
       <div class="holo-node-detail" id="holo-node-detail" aria-live="polite">
         <span>NODE / INSPECT</span><strong id="holo-node-name">探索产业主体</strong>
