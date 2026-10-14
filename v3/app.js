@@ -747,6 +747,7 @@
       if(el("holo-play")){el("holo-play").textContent="▶";el("holo-play").setAttribute("aria-label","播放演化");}
     }
     function inspectHoloNode(n){
+      el("holo-node-detail").classList.add("is-inspected");
       el("holo-node-name").textContent=n.name;
       const nEdges=holoScene&&holoScene.graph?holoScene.graph.edges.filter(e=>e.a===n.name||e.b===n.name):[];
       const mix=Object.create(null);nEdges.forEach(e=>mix[e.layer]=(mix[e.layer]||0)+1);
