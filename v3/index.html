@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>仲恺产业风洞 V3.6 · 情景研究工作台</title>
+<title>仲恺产业风洞 V3.7 · 沉浸式情景研究工作台</title>
 <meta name="description" content="仲恺产业风洞实验工作台：网络推演、同种子情景对比和可追溯的模型观察。">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explore.css">
 </head>
 <body>
 <div class="app">
@@ -28,7 +28,7 @@
     <header class="masthead">
       <div>
         <div class="breadcrumb">ZHONGKAI / RESEARCH WORKBENCH</div>
-        <div class="head-title"><h1>产业情景实验室</h1><span class="version">V3.6 · 研究工作台</span></div>
+        <div class="head-title"><h1>产业情景实验室</h1><span class="version">V3.7 · 产业风洞</span></div>
         <p>提出一个问题，观察产业网络，比较不同情景。</p>
       </div>
       <div class="head-right">
@@ -174,6 +174,23 @@
       </aside>
     </div>
 
+    <section class="wind-deck" id="wind-deck" aria-labelledby="wind-title">
+      <div class="wind-heading"><span class="wind-kicker">V3.7 / INTERACTIVE WIND TUNNEL</span><h2 id="wind-title">改变一个条件，看见两种未来的可能</h2>
+      <p>风险与增长同等重要。选一个公开可复现的模型情景，比较、反驳、分享。以下是模型内实验，不是现实预测。</p></div>
+      <div class="wind-layout"><div class="wind-choices">
+        <h3>探索风险 <span>RISK SIGNALS</span></h3>
+        <div class="wind-preset-grid" id="wind-risk"></div>
+        <h3>探索增长 <span>OPPORTUNITY SIGNALS</span></h3>
+        <div class="wind-preset-grid" id="wind-opportunity"></div>
+      </div>
+      <div class="wind-share">
+        <div class="wind-spotlight"><span class="wind-overline">当前探索主题</span><strong id="wind-topic">尚未选择</strong><p id="wind-description">选择任一情景后，使用原始 Sim 模型进行基线和冲击对照。</p></div>
+        <div class="wind-share-actions"><button class="btn primary" type="button" id="wind-run">运行并对比 ↗</button><button class="btn outline" type="button" id="wind-copy">复制可复现实验链接 ⤴</button></div>
+        <p class="wind-share-note" id="wind-feedback" role="status" aria-live="polite">共享链接只保存公开的冲击类型和随机种子。别人可用相同输入重新运行模型，不泄漏或伪造计算结果。</p>
+        <p class="wind-disclaimer">注：同一随机种子可复现当前版本模型实验，但冲击会改变随机流消耗，不能据此声称严格因果识别。模型参数、算法和公开资料可能随版本改变；链接中不包含模型版本的永久快照。</p>
+      </div></div>
+    </section>
+
     <section class="comparison" id="compare-section" aria-labelledby="compare-title">
       <div class="compare-heading">
         <div class="panel-head clear"><span class="section-num">04</span><h2 id="compare-title">情景对比</h2><span class="head-hint">A / B COMPARISON</span></div>
@@ -233,11 +250,11 @@
       <div class="bottom-links"><a href="measurement.html">模型指标—现实观测映射 ↗</a><a href="verification.html">科学验证与留出集回测 ↗</a><a href="observations.html">七年历史观测与基线对照 ↗</a><a href="../v2/montecarlo.html">批量模拟 ↗</a><a href="../v2/sensitivity.html">参数敏感性 ↗</a><a href="../v2/data.html">数据与血统 ↗</a><a href="../v2/reports.html">原版研究档案 ↗</a></div>
     </section>
     <div class="runtime" id="runtime-alert" role="alert" hidden></div>
-    <footer class="app-footer">仲恺产业风洞 V3.6 研究工作台 · 使用根目录 <code>model.js</code> 计算内核 · 相同种子不等于因果识别 · <a href="../v2/">稳定版本 V2</a></footer>
+    <footer class="app-footer">仲恺产业风洞 V3.7 研究工作台 · 使用根目录 <code>model.js</code> 计算内核 · 相同种子不等于因果识别 · <a href="../v2/">稳定版本 V2</a></footer>
   </div>
 </div>
 <div class="compat" aria-hidden="true"><div id="data-lineage"></div><div id="report-locknote"></div><div id="report-box"></div><table id="param-table"><tbody></tbody></table><div id="missroles"></div><svg id="trend-chart"></svg></div>
 <script src="../model.js"></script>
-<script src="app.js"></script>
+<script src="explore-core.js"></script><script src="app.js"></script>
 </body>
 </html>
