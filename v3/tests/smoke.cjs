@@ -83,6 +83,11 @@ async function testDesktop(browser,port){
   assert.equal(data.multiseed.metrics.length,5);
   assert.equal(data.multiseed.metrics[0].values.length,24);
   await page.screenshot({path:path.join(shots,"desktop-1440.png"),fullPage:true});
+  await page.locator("#shock-sel").selectOption("芯片断供");
+  assert.match(await page.locator("#robust-status").innerText(),/上一次研究/);
+  assert.equal(await page.locator("#robust-results .robust-tile").count(),5,"Old result should remain visibly historical");
+  await page.locator("#btn-compare").click();
+  assert.equal(await page.locator("#robust-results .robust-tile").count(),0,"New A/B scenario invalidates old robustness");
   await page.goto("http://127.0.0.1:"+port+"/v3/verification.html",{waitUntil:"load"});
   await page.waitForFunction(()=>document.querySelector("#param-rows tr")?.children?.length===4 && document.querySelector("#data-gate").textContent!=="检查中");
   assert.equal(await page.locator("#param-rows tr").count(),11,"Parameter lineage must be read from model.js");
@@ -114,11 +119,6 @@ async function testDesktop(browser,port){
   assert.match(await page.locator("#holdout-result").innerText(),/未独立认证/);
   assert.equal(await page.locator("#holdout-scores .score-cell").count(),4);
   await page.screenshot({path:path.join(shots,"verification-1440.png"),fullPage:true});
-  await page.locator("#shock-sel").selectOption("芯片断供");
-  assert.match(await page.locator("#robust-status").innerText(),/上一次研究/);
-  assert.equal(await page.locator("#robust-results .robust-tile").count(),5,"Old result should remain visibly historical");
-  await page.locator("#btn-compare").click();
-  assert.equal(await page.locator("#robust-results .robust-tile").count(),0,"New A/B scenario invalidates old robustness");
 
   assert.deepEqual(errors,[],"JavaScript errors: "+errors.join("; "));
   await page.close();
