@@ -47,9 +47,9 @@ async function testDesktop(browser,port){
   assert.equal(await page.locator("#compare-trends .compare-trend-tile").count(),5);
   assert.ok(await page.locator("#compare-agents .impact-row").count()>0,"Missing entity comparison");
   assert.ok(await page.locator("#graph-b circle").count()>=15);
-  await page.locator("#compare-tick").fill("0");
+  await page.locator("#compare-tick").evaluate(x=>{x.value="0";x.dispatchEvent(new Event("input",{bubbles:true}));});
   assert.match(await page.locator("#compare-tick-value").innerText(),/t0/);
-  await page.locator("#compare-tick").fill("20");
+  await page.locator("#compare-tick").evaluate(x=>{x.value="20";x.dispatchEvent(new Event("input",{bubbles:true}));});
   await page.locator("#compare-agents .impact-row").first().click();
   await page.locator("#toggle-compare").click();
   assert.ok(await page.locator("#compare-section").evaluate(x=>x.classList.contains("fullscreen")));
