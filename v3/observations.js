@@ -25,9 +25,12 @@
    if(!rows.length){view.append(svg("text",{x:340,y:150,"text-anchor":"middle",fill:"#98a8b4","font-size":14},"暂无观测"));return;}
    const W=680,H=295,L=68,R=24,T=24,B=52;
    const values=rows.map(x=>x.row.value);
+   const positive=values.some(v=>v>0),negative=values.some(v=>v<0);
    let max=Math.max(0,...values),min=Math.min(0,...values);
-   if(max===min){max+=1;min-=1;}
-   const pad=(max-min)*.12;max+=pad;min=Math.min(min,0)-pad;
+   const range=Math.max(.0001,max-min);
+   if(positive)max+=range*.12;
+   if(negative)min-=range*.12;
+   if(!positive&&!negative){max=1;min=-1;}
    const x=year=>L+(year-points[0].year)/(points.length-1||1)*(W-L-R);
    const y=v=>T+(max-v)/(max-min)*(H-T-B);
    for(let i=0;i<=4;i++){
