@@ -1,4 +1,4 @@
-/* V3.4 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
+/* V3.5 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
 const assert=require("node:assert/strict");
 const http=require("node:http");
 const fs=require("node:fs");
@@ -124,14 +124,25 @@ async function testDesktop(browser,port){
   await page.goto("http://127.0.0.1:"+port+"/v3/observations.html",{waitUntil:"load"});
   await page.waitForFunction(()=>document.querySelectorAll("#obs-table-body tr").length===9);
   assert.equal(await page.locator("#obs-table-body tr").count(),9);
-  assert.match(await page.locator("#obs-stats").innerText(),/36 条/);
+  assert.match(await page.locator("#obs-stats").innerText(),/58 条/);
   assert.match(await page.locator("#obs-calibration-status").innerText(),/未满足校准前置条件/);
   assert.match(await page.locator("#obs-issues").innerText(),/财政预算收入待复核/);
-  assert.equal(await page.locator("#obs-chart circle").count(),4);
+  assert.equal(await page.locator("#obs-chart circle").count(),7);
   await page.locator("#metric-choice").selectOption("industry_invest_growth");
   assert.match(await page.locator("#obs-provenance").innerText(),/2025 年/);
   assert.match(await page.locator("#obs-provenance").innerText(),/-23.6/);
-  assert.equal(await page.locator("#obs-chart circle").count(),4);
+  assert.equal(await page.locator("#obs-chart circle").count(),7);
+  assert.match(await page.locator("#obs-issues").innerText(),/零售统计口径断点待复核/);
+  await page.locator("#metric-choice").selectOption("gdp_real_yoy");
+  assert.equal(await page.locator("#obs-chart circle").count(),6);
+  await page.locator("#metric-choice").selectOption("retail_current");
+  assert.equal(await page.locator("#obs-chart line[stroke='#0e8391']").count(),5,"2019/2020 retail scope break must not be connected");
+  await page.locator("#benchmark-metric").selectOption("gdp_real_yoy");
+  assert.equal(await page.locator("#benchmark-rows tr").count(),3);
+  assert.match(await page.locator("#benchmark-status").innerText(),/不是产业风洞模型评分/);
+  assert.match(await page.locator("#benchmark-caveat").innerText(),/事后/);
+  await page.locator("#benchmark-metric").selectOption("industry_invest_growth");
+  assert.equal(await page.locator("#benchmark-rows tr").count(),4);
   await page.locator("#metric-choice").selectOption("gdp_current");
   await inspectOverflow(page);
   await page.screenshot({path:path.join(shots,"observations-1440.png"),fullPage:true});
@@ -166,6 +177,7 @@ async function testMobile(browser,port,width){
   await page.goto("http://127.0.0.1:"+port+"/v3/observations.html",{waitUntil:"load"});
   await page.waitForFunction(()=>document.querySelectorAll("#obs-table-body tr").length===9);
   assert.match(await page.locator("#obs-calibration-status").innerText(),/未满足校准前置条件/);
+  assert.equal(await page.locator("#benchmark-rows tr").count(),3);
   await inspectOverflow(page);
   await page.screenshot({path:path.join(shots,"observations-"+width+".png"),fullPage:true});
   assert.deepEqual(errors,[],"Mobile JavaScript errors: "+errors.join("; "));
@@ -179,7 +191,7 @@ async function testMobile(browser,port,width){
     browser=await chromium.launch({channel:"chrome",headless:true,args:["--no-sandbox"]});
     await testDesktop(browser,port);
     for(const width of [390,360])await testMobile(browser,port,width);
-    console.log("PASS V3.4 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
+    console.log("PASS V3.5 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
   }finally{
     if(browser)await browser.close();
     server.close();
