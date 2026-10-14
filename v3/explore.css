@@ -41,3 +41,6 @@
 @media(max-width:1050px){.wind-layout{grid-template-columns:1fr}.wind-preset-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.wind-share{display:grid;grid-template-columns:1fr 1fr;gap:16px}.wind-disclaimer{grid-column:1 / -1}.wind-share-actions{align-self:end}}
 @media(max-width:760px){.wind-deck{margin:14px 0;border-radius:12px}.wind-heading{padding:23px 18px 11px}.wind-heading h2{font-size:24px}.wind-layout{padding:0 18px 22px;gap:15px}.wind-preset-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.wind-preset{min-height:70px;padding:11px}.wind-share{display:flex;padding:18px}.wind-impact{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.wind-deck:before{animation:none}.wind-preset{transition:none}.wind-preset:hover{transform:none}}
+
+/* V3.7 deck separates workbench and compare panel: keep original mobile tab semantics. */
+@media(max-width:760px){.workstation[data-mobile=compare] ~ .comparison{display:block}}
