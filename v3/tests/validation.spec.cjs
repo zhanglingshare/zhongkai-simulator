@@ -53,6 +53,7 @@ assert.ok(reject(x=>{x.cases.length=3},"too few cases").errors.some(x=>x.include
 assert.ok(reject(x=>{x.cases[3].id=x.cases[1].id},"duplicate").errors.some(x=>x.includes("id 重复")));
 assert.ok(reject(x=>{x.mapping_spec_url=""},"missing mapped spec").errors.some(x=>x.includes("mapping_spec_url")));
 assert.ok(reject(x=>{x.cases[0].observed_at="2026-09-01"},"pre calibration period").errors.some(x=>x.includes("校准时间窗")));
+assert.ok(reject(x=>{x.cases[0].observed_at="2030-01-01"},"future observation").errors.some(x=>x.includes("晚于当前")));
 assert.ok(reject(x=>{x.cases.forEach(c=>c.observed_at="2026-10-08")},"only one period").errors.some(x=>x.includes("3 个不同")));
 assert.ok(reject(x=>{x.cases[0].predicted=.0/0},"NaN").errors.some(x=>x.includes("有限数值")));
 const template=V.template();assert.equal(V.assessHoldout(template).eligible,false,"Template must never produce a fake score");
