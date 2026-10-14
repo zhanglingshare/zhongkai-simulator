@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>V3.4 · 仲恺官方历史观测与校准门槛</title>
+<title>V3.5 · 仲恺历史观测与基线检验</title>
 <meta name="description" content="仲恺2022–2025逐项溯源的年度经济观测，展示数据覆盖、官方与转载的区分、统计口径冲突和模型校准前置条件。">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="verification.css">
@@ -21,7 +21,7 @@
 </nav>
 <div class="app-content">
 <header class="masthead">
-  <div><div class="breadcrumb">ZHONGKAI / EVIDENCE REGISTER</div><div class="head-title"><h1>历史观测与校准门槛</h1><span class="version">V3.4 · 年度数据</span></div>
+  <div><div class="breadcrumb">ZHONGKAI / EVIDENCE REGISTER</div><div class="head-title"><h1>历史观测与校准门槛</h1><span class="version">V3.5 · 回溯诊断</span></div>
     <p>公开统计观测的真实来源、数据可比性与使用限制。</p></div>
   <div class="head-right"><span class="model-pill"><span class="status-dot"></span> 描述性统计 · 不是模型预测</span><a class="back-link" href="verification.html">科学验证台 ↗</a></div>
 </header>
@@ -58,21 +58,39 @@
  </section>
 </div>
 <section class="audit-pane obs-matrix">
- <div class="audit-pane-head"><span class="section-num">03</span><h2>四年数据矩阵</h2><span class="audit-minor">LEVELS AND GROWTH KEPT SEPARATE</span></div>
+ <div class="audit-pane-head"><span class="section-num">03</span><h2>七年数据矩阵</h2><span class="audit-minor">LEVELS AND GROWTH KEPT SEPARATE</span></div>
  <div class="audit-pane-body">
   <p class="audit-context">数据单位与统计口径随指标明确标注。空格代表没有原始观测；不允许自动补值。点选指标行可查看来源和趋势。</p>
-  <div class="obs-tablewrap"><table class="audit-table obs-table" id="obs-matrix"><thead><tr><th>统计指标 / 单位</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>来源状态</th></tr></thead><tbody id="obs-table-body"><tr><td colspan="6">读取历史数据中…</td></tr></tbody></table></div>
+  <div class="obs-tablewrap"><table class="audit-table obs-table" id="obs-matrix"><thead id="obs-matrix-head"><tr><th>统计指标 / 单位</th><th>年份</th><th>来源状态</th></tr></thead><tbody id="obs-table-body"><tr><td colspan="6">读取历史数据中…</td></tr></tbody></table></div>
  </div>
+</section>
+<section class="audit-pane backtest-panel" id="benchmark-panel" aria-labelledby="benchmark-title">
+  <div class="audit-pane-head"><span class="section-num">04</span><h2 id="benchmark-title">逐年回溯基线检验</h2><span class="audit-minor">PAST-ONLY BASELINES / NOT SIM</span></div>
+  <div class="audit-pane-body">
+    <div class="benchmark-intro">
+      <div><h3>仅比较两条无需训练的简单规则</h3>
+      <p>逐年使用此前公开年度增速计算“上一年持平”和“此前各年平均”，再与实际公布增速比较。属于<b>事后重建的滚动基线检验</b>：并无当年真实预测档案，不是产业风洞模型的独立回测或参数拟合。</p></div>
+      <label for="benchmark-metric">指标<select id="benchmark-metric">
+        <option value="gdp_real_yoy">GDP 官方可比价同比</option>
+        <option value="industry_growth">规上工业增加值同比</option>
+        <option value="industry_invest_growth">工业投资同比</option>
+      </select></label>
+    </div>
+    <div id="benchmark-status" class="benchmark-status" role="status">等待读取公开年度同比序列…</div>
+    <div id="benchmark-metrics" class="benchmark-metrics"></div>
+    <div class="obs-tablewrap"><table class="audit-table benchmark-table"><thead><tr><th>年份</th><th>实际公布增速</th><th>上年持平基线</th><th>此前均值基线</th><th>训练截止</th></tr></thead><tbody id="benchmark-rows"><tr><td colspan="5">正在核验历史序列…</td></tr></tbody></table></div>
+    <p class="benchmark-caveat">严格边界：所有数值均为真实公开增速的事后拼接；本页没有复原各年统计资料初版和后来修订的版本。不得把这里的 MAE 解释为产业风洞的预测误差、政策冲击因果效应或模型已校准。</p>
+  </div>
 </section>
 <div class="obs-duo obs-final">
  <section class="audit-pane">
-  <div class="audit-pane-head"><span class="section-num">04</span><h2>质量警示与资料缺口</h2><span class="audit-minor">RECONCILIATION</span></div>
+  <div class="audit-pane-head"><span class="section-num">05</span><h2>质量警示与资料缺口</h2><span class="audit-minor">RECONCILIATION</span></div>
   <div class="audit-pane-body"><div id="obs-issues" class="obs-issues">正在检查…</div>
     <p class="audit-context">统计公报可能出现初步核算数、经济普查修订、名义/实际增速差异、统计范围变化。发现不一致不等于已经确认哪一个数字错误。</p>
   </div>
  </section>
  <section class="audit-pane">
-  <div class="audit-pane-head"><span class="section-num">05</span><h2>参数校准准备度</h2><span class="audit-minor">CALIBRATION GATE</span></div>
+  <div class="audit-pane-head"><span class="section-num">06</span><h2>参数校准准备度</h2><span class="audit-minor">CALIBRATION GATE</span></div>
   <div class="audit-pane-body">
    <div class="obs-block" id="obs-calibration-status"><strong>校准尚未通过</strong><p>四年统计数据无法自动变成多智能体模型参数。</p></div>
    <div id="obs-calibration-reasons" class="obs-reasons"></div>
@@ -82,7 +100,7 @@
 </div>
 <div id="obs-error" class="runtime" hidden role="alert"></div>
 </main>
-<footer class="app-footer">V3.4 历史数据登记 · 年度公报摘录不等于事前预测 · 模型参数保持不变 · <a href="index.html">返回情景实验室</a></footer>
+<footer class="app-footer">V3.5 历史数据登记 · 年度公报摘录不等于事前预测 · 模型参数保持不变 · <a href="index.html">返回情景实验室</a></footer>
 </div></div>
-<script src="observations-core.js"></script><script src="observations.js"></script>
+<script src="observations-core.js"></script><script src="benchmark-core.js"></script><script src="observations.js"></script>
 </body></html>

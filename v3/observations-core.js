@@ -56,6 +56,13 @@
       if(Math.abs(mechanical-3.7)>5)
         warnings.push("财政预算收入待复核：2025 总量与 2024 总量机械计算约 "+mechanical.toFixed(1)+"%，但 2025 公报另写同比 3.7%；可能存在历史修订或口径调整，不能直接采作校准输入");
     }
+    const retail=byMetric.retail_current||[];
+    const r19=retail.find(x=>x.year===2019),r20=retail.find(x=>x.year===2020);
+    if(r19&&r20&&r19.value>0){
+      const mechanical=(r20.value/r19.value-1)*100;
+      if(Math.abs(mechanical-(-8.3))>5)
+        warnings.push("零售统计口径断点待复核：2019至2020公布总量机械变化约 "+mechanical.toFixed(1)+"%，2020公报公布同比-8.3%；不可直接连接或拟合这两年现价零售额。");
+    }
     for(const metric of Object.keys(metrics)){
       for(const year of years)if(!(byMetric[metric]||[]).some(x=>x.year===year))
         warnings.push(metric+" "+year+" 年缺值；不得内插代填");

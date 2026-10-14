@@ -1,7 +1,7 @@
-/* V3.4 display of archived statistical observations, never a model fit. */
+/* V3.5 display of archived statistical observations, never a model fit. */
 (function(){
  "use strict";
- const core=window.ZKObservations;
+ const core=window.ZKObservations,benchmark=window.ZKBenchmark;
  const el=id=>document.getElementById(id);
  const node=(tag,klass,text)=>{const n=document.createElement(tag);if(klass)n.className=klass;if(text!==undefined)n.textContent=String(text);return n;};
  const NS="http://www.w3.org/2000/svg";
@@ -41,8 +41,14 @@
    view.append(svg("line",{x1:L,y1:y(0),x2:W-R,y2:y(0),stroke:"#a3b7c3","stroke-width":1}));
    points.forEach(p=>view.append(svg("text",{x:x(p.year),y:H-20,"text-anchor":"middle","font-size":12,fill:"#6f8293"},p.year)));
    if(rows.length>=2){
-     const parts=rows.map(row=>[x(row.year),y(row.row.value)]);
-     view.append(svg("polyline",{points:parts.map(v=>v.join(",")).join(" "),fill:"none",stroke:"#0e8391","stroke-width":3.2,"stroke-linecap":"round","stroke-linejoin":"round"}));
+     // Break across missing years and known changes in statistical scope.
+     for(let i=1;i<points.length;i++){
+       const prev=points[i-1],cur=points[i];
+       if(!prev.row||!cur.row)continue;
+       if(metric==="retail_current"&&prev.year===2019&&cur.year===2020)continue;
+       view.append(svg("line",{x1:x(prev.year),y1:y(prev.row.value),x2:x(cur.year),y2:y(cur.row.value),
+         stroke:"#0e8391","stroke-width":3.2,"stroke-linecap":"round"}));
+     }
    }
    rows.forEach(p=>{
      const xx=x(p.year),yy=y(p.row.value);
@@ -74,6 +80,10 @@
  }
  function renderMatrix(){
    const tbody=el("obs-table-body");tbody.replaceChildren();
+   const head=el("obs-matrix-head");head.replaceChildren();
+   const hr=node("tr");hr.append(node("th","","统计指标 / 单位"));
+   audit.years.forEach(year=>hr.append(node("th","",year)));
+   hr.append(node("th","","来源状态"));head.append(hr);
    const current=el("metric-choice").value;
    for(const [key,def] of Object.entries(dataset.metric_definitions)){
      const tr=node("tr",key===current?"obs-selected":"");
@@ -90,6 +100,36 @@
      tbody.append(tr);
    }
  }
+
+ function renderBenchmark(){
+   const select=el("benchmark-metric");
+   if(!benchmark){el("benchmark-status").textContent="基线工具未加载，拒绝输出成绩。";return;}
+   const result=benchmark.evaluate(dataset,select.value);
+   const status=el("benchmark-status"),numbers=el("benchmark-metrics"),body=el("benchmark-rows");
+   body.replaceChildren();numbers.replaceChildren();
+   if(!result.eligible){
+     status.textContent="不能计算回溯基线："+result.reason;return;
+   }
+   status.textContent="回溯计算 "+result.folds.length+" 个年份；所有“基线”只使用目标年之前的数值。结果是事后重建，不是当年归档预测，不是产业风洞模型评分。";
+   const cards=[
+     ["上一年增速持平 · MAE",result.scores.naive.mae],
+     ["此前年度均值 · MAE",result.scores.expandingMean.mae],
+     ["上一年增速持平 · RMSE",result.scores.naive.rmse],
+     ["此前年度均值 · RMSE",result.scores.expandingMean.rmse]
+   ];
+   for(const [title,val] of cards){
+     const card=node("div","benchmark-stat");
+     card.append(node("small","",title),node("strong","",val.toFixed(2)+" 个百分点"));
+     numbers.append(card);
+   }
+   for(const fold of result.folds){
+     const row=node("tr");
+     for(const value of [fold.year,fold.actual.toFixed(1)+"%",fold.naive.toFixed(1)+"%",fold.mean.toFixed(1)+"%",fold.training_start+"–"+fold.training_end]){
+       row.append(node("td","",value));
+     }
+     body.append(row);
+   }
+ }
  function render(){
    el("obs-release").textContent="资料登记：截至 "+dataset.created_on+" · 非实时模拟数据";
    const count=audit.rows.length,years=audit.years.length,metricCount=Object.keys(dataset.metric_definitions).length;
@@ -104,20 +144,22 @@
    });
    options.value="gdp_current";
    options.addEventListener("change",()=>{plot(options.value);renderMatrix();});
+   el("benchmark-metric").addEventListener("change",renderBenchmark);
    plot("gdp_current");renderMatrix();
+   renderBenchmark();
    const issues=el("obs-issues");issues.replaceChildren();
    if(!audit.errors.length)issues.append(node("div","obs-issue ok","JSON 结构、来源引用、数据单位和唯一性检查通过。此项不证明所有转载数值都已独立核实。"));
    [...audit.errors,...audit.warnings,...(dataset.known_caveats||[])].forEach(w=>issues.append(node("div","obs-issue",w)));
    const readiness=core.readiness(audit,dataset);
    const block=el("obs-calibration-status");
-   block.replaceChildren(node("strong","",readiness.canCalibrate?"仍需人工确认":"未满足校准前置条件"),node("p","","4 年观测不足以完成当前多智能体模型的可靠参数拟合及独立留出检验。"));
+   block.replaceChildren(node("strong","",readiness.canCalibrate?"仍需人工确认":"未满足校准前置条件"),node("p","","当前有 "+audit.years.length+" 个历史年度，但指标缺失、发布版本与映射规则不足，尚不能完成多智能体模型的独立参数拟合或前瞻预测验证。"));
    const reasons=el("obs-calibration-reasons");reasons.replaceChildren();
    readiness.reasons.forEach(reason=>reasons.append(node("div","obs-reason",reason)));
  }
  async function boot(){
    try{
      if(!core)throw Error("缺少年度数据校验内核");
-     const response=await fetch("observations/annual-2022-2025.json",{cache:"no-store"});
+     const response=await fetch("observations/annual-2019-2025.json",{cache:"no-store"});
      if(!response.ok)throw Error("年度数据 HTTP "+response.status);
      dataset=await response.json();
      audit=core.validate(dataset);
