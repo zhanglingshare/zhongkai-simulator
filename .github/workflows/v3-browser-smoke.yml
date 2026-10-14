@@ -35,6 +35,8 @@ jobs:
         run: node v3/tests/measurement.spec.cjs
       - name: Risk/growth reproducible public scenario link tests
         run: node v3/tests/explore.spec.cjs
+      - name: Real Sim holographic topology and 3D projection tests
+        run: node v3/tests/holo.spec.cjs
       - name: Browser interactions and responsive overflow checks
         run: node v3/tests/smoke.cjs
       - name: Upload screenshots for visual review

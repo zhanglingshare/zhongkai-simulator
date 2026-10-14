@@ -24,6 +24,7 @@
     const svgNS="http://www.w3.org/2000/svg";
     let selectedNode=null, comparison=null, currentView="network";
     let robustness=null, activeRobustnessToken=0;
+    let holoScene=null,holoMode="live",holoTimer=null,holoLastSnapshot=null;
     function create(tag,cls,txt){
       const obj=document.createElement(tag);
       if(cls)obj.className=cls;
@@ -210,6 +211,7 @@
         el("compare-note").textContent="实验设置已变化：下方保留上一次对比（种子 "+comparison.seed+"，冲击“"+comparison.type+"”）。点击“按当前选择运行 A/B”才能更新结果。";
         el("status-b").textContent="旧结果 · t"+comparison.tick;
         if(typeof refreshWindResults==="function")refreshWindResults();
+        if(holoScene&&holoMode==="comparison"){stopHoloPlayback();holoMode="live";paintHoloLive();el("holo-message").textContent="输入已修改，原实验结果失效。点击风险或增长按钮重新推演。";}
       }
     }
     el("shock-sel").addEventListener("change",()=>{
@@ -396,8 +398,9 @@
       el("compare-timeline-hint").textContent="显示第 "+t+" 个模型时间步的状态；模型时间步不等于日历日期。";
       el("status-a").textContent="t"+t+" / "+comparison.ticks;
       el("status-b").textContent=comparison.stale?"旧结果 · t"+t:"t"+t+" / "+comparison.ticks;
+      if(holoScene&&holoMode==="comparison"&&!comparison.stale)paintHolo(data.b,comparison.B.edges,comparison.type);
     }
-    function runComparison(){
+    function runComparison(preserveHero=false){
       const seed=safeSeed();
       if(seed===null)return;
       const type=el("shock-sel").value;
@@ -425,7 +428,7 @@
         el("compare-note").textContent="已运行 · A 为基线，B 在第 0 步注入“"+type+"”冲击"+(applied.killed?" · 冲击即时使 "+applied.killed+" 个模型主体退场":"")+"。两侧按同一时间步对齐，差值均为 B − A。";
         el("compare-provenance").textContent="模型基准：仲恺演示世界 · 随机种子："+seed+" · 每局 "+ticks+" 步 · 相同模型参数："+JSON.stringify({invest:params.invest,external:params.external,service:params.service,land:params.land})+" · 研究备注："+(el("research-question").value.trim()||"未填写")+"。相同种子不代表严格因果识别；冲击可改变后续随机数消耗；排名仅表示模型状态差异。";
         alertBox.hidden=true;
-        if(matchMedia("(max-width:760px)").matches)switchMobile("compare");
+        if(!preserveHero&&matchMedia("(max-width:760px)").matches)switchMobile("compare");
       }catch(e){
         fail(e&&e.message?e.message:String(e));
       }finally{
@@ -606,6 +609,7 @@
     });
     el("btn-clear-compare").addEventListener("click",()=>{
       comparison=null;
+      if(holoScene){stopHoloPlayback();holoMode="live";paintHoloLive();}
       if(typeof refreshWindResults==="function")refreshWindResults();
       resetRobustness("请先运行 A/B 对比，再执行多种子检查。");
       el("btn-export").disabled=true;
@@ -734,6 +738,116 @@
       }
     }
     setupWindDeck();
+
+    /* V3.8: the holographic hero is a real view of Sim agents/edges/snapshots.
+       The 3D coordinates are an abstract graph layout, never real-world geography. */
+    const HoloCore=window.ZKHoloCore;
+    function stopHoloPlayback(){
+      if(holoTimer!==null){clearInterval(holoTimer);holoTimer=null;}
+      if(el("holo-play")){el("holo-play").textContent="▶";el("holo-play").setAttribute("aria-label","播放演化");}
+    }
+    function inspectHoloNode(n){
+      el("holo-node-name").textContent=n.name;
+      const nEdges=holoScene&&holoScene.graph?holoScene.graph.edges.filter(e=>e.a===n.name||e.b===n.name):[];
+      const mix=Object.create(null);nEdges.forEach(e=>mix[e.layer]=(mix[e.layer]||0)+1);
+      const types=Object.entries(mix).map(([type,count])=>({hist:"历史/预设关系",affinity:"模型同类亲和",contact:"模型同域接触"}[type]||"其他模型连接")+" "+count+" 条");
+      el("holo-node-text").textContent=n.typeName+" · "+(n.alive?"模型内存续":"模型内退出")+
+        " · 经营能量 "+n.energy.toFixed(2)+"；"+(types.join("，")||"未关联其他模型节点")+
+        "。连接并非已验证的现实贸易合同。";
+    }
+    function paintHolo(snap,edges,sceneLabel){
+      if(!holoScene||!snap||!Array.isArray(snap.agents))return;
+      const graph=holoScene.graph;
+      if(!graph||graph.total!==snap.agents.length||
+         graph.nodes.some((n,i)=>!snap.agents[i]||n.name!==snap.agents[i].name)){
+        holoScene.setGraph(snap.agents,edges||[],{tick:snap.tick});
+      }else holoScene.setFrame(snap.agents,{tick:snap.tick});
+      holoLastSnapshot=snap;
+      const title=sceneLabel?"冲击情景 · "+sceneLabel:"仲恺 · 模型基线";
+      el("holo-scene-name").textContent=title;
+      const ticks=comparison&&holoMode==="comparison"?comparison.ticks:sim.params.ticks;
+      el("holo-time-label").textContent="T "+String(snap.tick).padStart(2,"0")+" / "+ticks;
+      el("holo-range").value=String(snap.tick);
+      el("holo-range").max=String(ticks);
+      const values=[["abundance","holo-abundance"],["order","holo-order"],["disaster","holo-disaster"]];
+      values.forEach(([key,id])=>{
+        const v=HoloCore.metric(snap,key);el(id).textContent=v===null?"—":v.toFixed(3);
+      });
+      el("holo-active").textContent=snap.agents.filter(x=>x.alive).length+" / "+snap.agents.length;
+      const selected=el("holo-node-name").textContent;
+      if(selected&&selected!=="探索产业主体"){
+        const found=holoScene.graph.nodes.find(n=>n.name===selected);
+        if(found)inspectHoloNode(found);
+      }
+    }
+    function paintHoloLive(){
+      if(!holoScene)return;
+      const snap=sim._snap();paintHolo(snap,sim.edges,"");
+      el("holo-range").disabled=true;el("holo-play").disabled=true;
+    }
+    function startHoloPlayback(){
+      stopHoloPlayback();
+      if(!comparison||comparison.stale||holoMode!=="comparison")return;
+      if(comparison.tick>=comparison.ticks)renderComparisonAt(0);
+      el("holo-play").textContent="Ⅱ";el("holo-play").setAttribute("aria-label","暂停演化");
+      holoTimer=setInterval(()=>{
+        if(!comparison||comparison.stale||holoMode!=="comparison"){stopHoloPlayback();return;}
+        if(comparison.tick>=comparison.ticks){stopHoloPlayback();return;}
+        renderComparisonAt(comparison.tick+1);
+      },300);
+    }
+    function selectHoloScenario(shock){
+      stopHoloPlayback();
+      el("shock-sel").value=shock;
+      el("shock-sel").dispatchEvent(new Event("change",{bubbles:true}));
+      holoMode="comparison";
+      runComparison(true);
+      if(!comparison||comparison.stale){holoMode="live";paintHoloLive();return;}
+      el("holo-range").disabled=false;el("holo-play").disabled=false;
+      renderComparisonAt(0);
+      el("holo-message").textContent="正在观察“"+shock+"”的模型内传播路径。拖动时间轴、旋转网络，检查每一步的主体状态。";
+      startHoloPlayback();
+    }
+    function setupHoloStage(){
+      if(!HoloCore||!window.ZKHolo||!el("holo-canvas"))return;
+      try{
+        holoScene=window.ZKHolo.mount({
+          canvas:el("holo-canvas"),tooltip:el("holo-hover"),labels:el("holo-labels"),status:el("holo-render-status"),
+          onSelect:inspectHoloNode
+        });
+        paintHoloLive();
+        el("holo-risk").addEventListener("click",()=>selectHoloScenario("链主外迁"));
+        el("holo-growth").addEventListener("click",()=>selectHoloScenario("技术突破"));
+        el("holo-play").addEventListener("click",()=>{
+          if(holoTimer!==null)stopHoloPlayback();else startHoloPlayback();
+        });
+        el("holo-range").addEventListener("input",()=>{
+          if(!comparison||comparison.stale)return;
+          stopHoloPlayback();renderComparisonAt(Number(el("holo-range").value));
+        });
+        el("holo-zoom-in").addEventListener("click",()=>holoScene.zoom(.84));
+        el("holo-zoom-out").addEventListener("click",()=>holoScene.zoom(1.2));
+        el("holo-home").addEventListener("click",()=>holoScene.resetCamera());
+        el("holo-compare").addEventListener("click",()=>{
+          if(matchMedia("(max-width:760px)").matches)switchMobile("compare");
+          el("compare-section").scrollIntoView({block:"start",behavior:"smooth"});
+        });
+        // Observe existing model.js UI actions without changing its formulas or timings.
+        document.addEventListener("click",e=>{
+          if(holoMode!=="live")return;
+          if(e.target.closest("#btn-step,#btn-shock,#btn-reset,#load-seed,#btn-remove,#btn-pert,#btn-nl,#btn-anchor,#btn-play")){
+            queueMicrotask(paintHoloLive);
+          }
+        });
+        el("track").addEventListener("input",()=>{if(holoMode==="live")queueMicrotask(paintHoloLive);});
+        // The legacy simulation autoplay advances asynchronously.
+        setInterval(()=>{if(holoMode==="live"&&holoScene&&sim.tick!==Number(el("holo-range").value))paintHoloLive();},220);
+      }catch(ex){
+        el("holo-render-status").textContent="三维模块未能启动 · 使用下方研究工作台";
+        el("holo-message").textContent="三维显示异常："+ex.message+"；原有研究工作台保持可用。";
+      }
+    }
+    setupHoloStage();
 
     clearMini(el("graph-a"),"等待模拟");
     clearMini(el("graph-b"),"等待模拟");

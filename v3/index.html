@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>仲恺产业风洞 V3.7 · 沉浸式情景研究工作台</title>
+<title>仲恺产业风洞 V3.8 · 产业全息风洞 · 沉浸式三维推演</title>
 <meta name="description" content="仲恺产业风洞实验工作台：网络推演、同种子情景对比和可追溯的模型观察。">
-<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explore.css">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explore.css"><link rel="stylesheet" href="holo.css">
 </head>
 <body>
 <div class="app">
@@ -24,11 +24,70 @@
     <a class="rail-link" href="../v2/" title="返回 V2">↗<span class="sr-only">返回 V2</span></a>
   </nav>
 
-  <div class="app-content">
+  <div class="app-content holo-app">
+    <section class="holo-hero" id="holo-hero" aria-labelledby="holo-title">
+      <div class="holo-stars" aria-hidden="true"></div>
+      <div class="holo-floor" aria-hidden="true"></div>
+      <div class="holo-rings" aria-hidden="true"></div>
+      <canvas id="holo-canvas" class="holo-canvas" role="img" aria-label="由当前产业模拟器的真实主体、关系和状态驱动的可旋转三维网络。拖动可旋转，滚轮缩放，点击节点查看模型信息。"></canvas>
+      <div id="holo-labels" class="holo-labels" aria-hidden="true"></div>
+      <div id="holo-hover" class="holo-hover" hidden></div>
+      <header class="holo-top">
+        <a href="index.html" class="holo-brand" title="仲恺产业风洞首页">
+          <span class="holo-brand-symbol">Z<span>.</span></span>
+          <span>ZHONGKAI <small>INDUSTRIAL WIND TUNNEL</small></span>
+        </a>
+        <div class="holo-top-right"><span class="holo-version">V3.8 / HOLOGRAPHIC WORLD</span><span id="holo-render-status" class="holo-render-status">图形引擎检测中</span></div>
+      </header>
+      <div class="holo-hero-copy">
+        <p class="holo-eyebrow"><span class="holo-blink"></span> OPEN RESEARCH · INTERACTIVE SIMULATION</p>
+        <h1 id="holo-title">看见产业<br><em>另一种可能</em><span class="holo-title-dot">.</span></h1>
+        <p class="holo-lead">一场冲击，如何穿过产业网络？<br>一个改变，又可能在哪里打开增长空间？</p>
+        <div class="holo-copy-actions">
+          <button type="button" id="holo-risk" class="holo-cta holo-cta-risk"><span>↗</span> 注入风险冲击</button>
+          <button type="button" id="holo-growth" class="holo-cta holo-cta-growth"><span>✦</span> 探索增长机会</button>
+        </div>
+        <p id="holo-message" class="holo-message" role="status" aria-live="polite">当前展示模型基线世界。选择一种情景，观察真实模拟状态的演化。</p>
+      </div>
+      <div class="holo-side-metrics" aria-label="模型内指数观测">
+        <div class="holo-metric"><span>MODEL / ABUNDANCE</span><strong id="holo-abundance">—</strong><small>景气指数</small></div>
+        <div class="holo-metric"><span>NETWORK / ORDER</span><strong id="holo-order">—</strong><small>协同指数</small></div>
+        <div class="holo-metric"><span>IMPACT / DISASTER</span><strong id="holo-disaster">—</strong><small>风险指数</small></div>
+        <div class="holo-metric"><span>AGENTS / ACTIVE</span><strong id="holo-active">—</strong><small>当前模型存续主体</small></div>
+      </div>
+      <div class="holo-stage-indicator">
+        <span class="holo-crosshair" aria-hidden="true">◎</span>
+        <span>SIMULATED NETWORK SPACE</span>
+        <small>空间位置非真实地理坐标 · 光粒子非真实资金/物流流量</small>
+      </div>
+      <div class="holo-node-detail" id="holo-node-detail" aria-live="polite">
+        <span>NODE / INSPECT</span><strong id="holo-node-name">探索产业主体</strong>
+        <p id="holo-node-text">拖动旋转世界 · 点击发光节点查看模型中的主体状态与关系</p>
+      </div>
+      <div class="holo-bottom">
+        <div class="holo-playback">
+          <button type="button" id="holo-play" class="holo-play" aria-label="播放或暂停演化" disabled>▶</button>
+          <div class="holo-timeline">
+            <div class="holo-timeline-top"><strong id="holo-scene-name">仲恺 · 模型基线</strong><span id="holo-time-label">T 00 / 20</span></div>
+            <input type="range" id="holo-range" aria-label="全息网络模拟时间步" min="0" max="20" step="1" value="0" disabled>
+            <div class="holo-scale"><span>冲击注入 T0</span><span>模型时间步（不是日历年）</span><span>T20</span></div>
+          </div>
+        </div>
+        <div class="holo-control-group" aria-label="三维相机与实验工具">
+          <button type="button" id="holo-zoom-in" aria-label="放大三维网络" title="放大">＋</button>
+          <button type="button" id="holo-zoom-out" aria-label="缩小三维网络" title="缩小">−</button>
+          <button type="button" id="holo-home" aria-label="重置三维视角" title="重置视角">⌖</button>
+          <button type="button" id="holo-compare" class="holo-compare" title="进入完整实验工具">进入研究工作台 ↗</button>
+        </div>
+      </div>
+      <p class="holo-science">独立公开研究 · 仅呈现模型内的条件性可能 · 非经济预测、现实发生概率或官方决策意见</p>
+    </section>
+
+
     <header class="masthead">
       <div>
         <div class="breadcrumb">ZHONGKAI / RESEARCH WORKBENCH</div>
-        <div class="head-title"><h1>产业情景实验室</h1><span class="version">V3.7 · 产业风洞</span></div>
+        <div class="head-title"><h1>产业情景实验室</h1><span class="version">V3.8 · 产业风洞</span></div>
         <p>提出一个问题，观察产业网络，比较不同情景。</p>
       </div>
       <div class="head-right">
@@ -175,7 +234,7 @@
     </div>
 
     <section class="wind-deck" id="wind-deck" aria-labelledby="wind-title">
-      <div class="wind-heading"><span class="wind-kicker">V3.7 / INTERACTIVE WIND TUNNEL</span><h2 id="wind-title">改变一个条件，看见两种未来的可能</h2>
+      <div class="wind-heading"><span class="wind-kicker">V3.8 / INTERACTIVE WIND TUNNEL</span><h2 id="wind-title">改变一个条件，看见两种未来的可能</h2>
       <p>风险与增长同等重要。选一个公开可复现的模型情景，比较、反驳、分享。以下是模型内实验，不是现实预测。</p></div>
       <div class="wind-layout"><div class="wind-choices">
         <h3>探索风险 <span>RISK SIGNALS</span></h3>
@@ -250,11 +309,11 @@
       <div class="bottom-links"><a href="measurement.html">模型指标—现实观测映射 ↗</a><a href="verification.html">科学验证与留出集回测 ↗</a><a href="observations.html">七年历史观测与基线对照 ↗</a><a href="../v2/montecarlo.html">批量模拟 ↗</a><a href="../v2/sensitivity.html">参数敏感性 ↗</a><a href="../v2/data.html">数据与血统 ↗</a><a href="../v2/reports.html">原版研究档案 ↗</a></div>
     </section>
     <div class="runtime" id="runtime-alert" role="alert" hidden></div>
-    <footer class="app-footer">仲恺产业风洞 V3.7 研究工作台 · 使用根目录 <code>model.js</code> 计算内核 · 相同种子不等于因果识别 · <a href="../v2/">稳定版本 V2</a></footer>
+    <footer class="app-footer">仲恺产业风洞 V3.8 研究工作台 · 使用根目录 <code>model.js</code> 计算内核 · 相同种子不等于因果识别 · <a href="../v2/">稳定版本 V2</a></footer>
   </div>
 </div>
 <div class="compat" aria-hidden="true"><div id="data-lineage"></div><div id="report-locknote"></div><div id="report-box"></div><table id="param-table"><tbody></tbody></table><div id="missroles"></div><svg id="trend-chart"></svg></div>
 <script src="../model.js"></script>
-<script src="explore-core.js"></script><script src="app.js"></script>
+<script src="explore-core.js"></script><script src="holo-core.js"></script><script src="holo-render.js"></script><script src="app.js"></script>
 </body>
 </html>
