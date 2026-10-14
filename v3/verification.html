@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>V3.3 · 科学验证与证据台 | 仲恺产业风洞</title>
+<meta name="description" content="对仲恺产业风洞进行动态数据质量检查、参数血统审查与独立留出历史回测。没有证据时不出验证成绩。">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="verification.css">
+</head>
+<body>
+<div class="app">
+<nav class="rail" aria-label="产品导航">
+  <a class="rail-brand" href="index.html" title="研究工作台">Z<span>.</span></a>
+  <a class="rail-link" href="index.html" title="情景实验室">▦<span class="sr-only">情景实验室</span></a>
+  <a class="rail-link active" href="verification.html" aria-current="page" title="证据与历史验证">◇<span class="sr-only">证据与历史验证</span></a>
+  <a class="rail-link" href="../v2/montecarlo.html" title="蒙特卡洛">◈<span class="sr-only">蒙特卡洛</span></a>
+  <a class="rail-link" href="../v2/sensitivity.html" title="敏感性分析">▥<span class="sr-only">敏感性分析</span></a>
+  <a class="rail-link" href="../v2/data.html" title="数据与原始材料">▤<span class="sr-only">数据与原始材料</span></a>
+  <span class="rail-spacer"></span>
+  <a class="rail-link" href="../v2/" title="旧版 V2">↗<span class="sr-only">旧版 V2</span></a>
+</nav>
+<div class="app-content">
+  <header class="masthead">
+    <div>
+      <div class="breadcrumb">ZHONGKAI / SCIENTIFIC VALIDATION</div>
+      <div class="head-title"><h1>科学验证与证据台</h1><span class="version">V3.3 · 独立审查</span></div>
+      <p>区分数据更新、参数血统、历史回测与现实预测能力。</p>
+    </div>
+    <div class="head-right">
+      <span class="model-pill"><span class="status-dot"></span> 审查工作区 · 不修改模拟算法</span>
+      <a class="back-link" href="index.html">返回实验室 ↗</a>
+    </div>
+  </header>
+
+  <main class="audit-workspace" id="main-content">
+    <section class="audit-intro" aria-label="验证结论">
+      <div class="audit-intro-top">
+        <div><span class="audit-kicker">RESEARCH READINESS / 审计入口</span><h2>先检查证据，再相信结论。</h2>
+          <p>产业资讯更新不等于模型校准；同种子模拟不是历史回测。只有提供独立、可比、事前归档的观测记录，才会计算留出集误差。</p>
+        </div>
+        <button type="button" class="btn outline" id="btn-refresh">重新读取仓库数据 ↻</button>
+      </div>
+      <div class="audit-summary" id="audit-summary">
+        <div class="audit-status"><span>数据结构审查</span><strong id="data-gate">检查中</strong><small id="data-gate-note">读取 hot.json / life.json</small></div>
+        <div class="audit-status"><span>参数校准证据</span><strong class="audit-hold">尚无校准记录</strong><small>模型参数仍需独立观测映射与历史拟合</small></div>
+        <div class="audit-status"><span>历史留出集验证</span><strong id="backtest-gate" class="audit-hold">尚未验证</strong><small>不接受拿当期内置数据自证</small></div>
+        <div class="audit-status"><span>模型版本指纹</span><strong class="fingerprint" id="model-fingerprint">读取中</strong><small>对原始 model.js 计算 SHA-256</small></div>
+      </div>
+    </section>
+
+    <div class="audit-columns">
+      <section class="audit-pane" aria-labelledby="feeds-title">
+        <div class="audit-pane-head"><span class="section-num">01</span><h2 id="feeds-title">动态数据质量</h2><span class="audit-minor">PIPELINE / DATA</span></div>
+        <div class="audit-pane-body">
+          <p class="audit-context">以下是仓库 JSON 的结构和元数据检查，不是新闻内容的独立事实核查。源文件自标“已核验”不等于本工具核验。</p>
+          <div id="feed-overview" class="feed-overview"><p class="no-result">正在读取新闻与镇街数据…</p></div>
+          <h3>采集完整性及风险提示</h3>
+          <div id="feed-warnings" class="feed-warnings" role="status" aria-live="polite"></div>
+          <h3>新闻来源抽样</h3>
+          <div id="feed-source-list" class="source-list"><p class="no-result">正在读取来源…</p></div>
+          <p class="audit-context">来源链接会打开发布方网页，但本页不自动认证报道真实性、来源独立性或统计口径。</p>
+        </div>
+      </section>
+
+      <section class="audit-pane" aria-labelledby="params-title">
+        <div class="audit-pane-head"><span class="section-num">02</span><h2 id="params-title">模型参数血统</h2><span class="audit-minor">MODEL / LINEAGE</span></div>
+        <div class="audit-pane-body">
+          <p class="audit-context">直接从原始 <code>model.js</code> 的 <code>PARAM_LINEAGE</code> 声明读取参数。A / B / C 是项目自定义血统级别，<b>不是统计有效性分数，更不代表历史校准已通过。</b></p>
+          <div class="param-legend"><span><i class="quality-dot q-a"></i>A · 有原始对照或结构常量</span><span><i class="quality-dot q-b"></i>B · 间接映射</span><span><i class="quality-dot q-c"></i>C · 需补独立观测</span></div>
+          <div class="param-scroll">
+            <table class="audit-table"><thead><tr><th>模型参数</th><th>默认值</th><th>血统</th><th>审计说明</th></tr></thead><tbody id="param-rows"><tr><td colspan="4">读取参数中…</td></tr></tbody></table>
+          </div>
+          <div id="param-findings" class="model-observation">参数声明读取中…</div>
+        </div>
+      </section>
+    </div>
+
+    <section class="audit-pane backtest-panel" aria-labelledby="backtest-title">
+      <div class="audit-pane-head"><span class="section-num">03</span><h2 id="backtest-title">留出历史回测</h2><span class="audit-minor">OUT-OF-SAMPLE / BACKTEST</span></div>
+      <div class="audit-pane-body">
+        <div class="backtest-intro">
+          <div>
+            <h3>只接受可比的归档预测与独立观测</h3>
+            <p>需要使用固定版本的“现实观测 → 模型指标”映射；记录预测归档日期、实际结果日期、原始来源、独立基线。<b>不能把 GDP 数字直接当作景气指数。</b></p>
+          </div>
+          <button class="btn outline" type="button" id="download-template">下载数据模板 JSON ↓</button>
+        </div>
+        <div class="backtest-grid">
+          <div class="backtest-input">
+            <label for="holdout-file" class="field-name">导入真实留出集（JSON，不会上传服务器）</label>
+            <input type="file" id="holdout-file" accept=".json,application/json">
+            <label for="holdout-json" class="field-name">或粘贴已经归档的留出观测 JSON</label>
+            <textarea id="holdout-json" rows="9" spellcheck="false" placeholder="粘贴 zk-backtest-v1 格式的独立历史留出数据。这里没有预填虚构观测，也不提供演示成绩。"></textarea>
+            <div class="backtest-actions"><button type="button" class="btn primary" id="score-holdout">核对门槛并计算回测 →</button><button type="button" class="btn outline" id="clear-holdout">清空回测</button></div>
+          </div>
+          <div class="backtest-output">
+            <div class="audit-kicker">VALIDATION GATE</div>
+            <div id="holdout-result" class="holdout-result" aria-live="polite">
+              <strong>暂无可评分的历史留出集</strong>
+              <p>模型的内置参数、历史因果链和每日抓取新闻不能自动组成独立回测。提供真实归档数据后才计算 MAE、RMSE 与事先定义的朴素基线误差。</p>
+            </div>
+            <div id="holdout-scores" class="holdout-scores" hidden></div>
+          </div>
+        </div>
+        <details class="backtest-method">
+          <summary>为什么设置严格的防泄漏门槛？</summary>
+          <p>至少 8 个留出观测、至少 3 个不同观察日期；所有预测归档日期晚于校准截止日期且早于观察结果；需有 HTTPS 来源、预测归档链接、固定映射版本、模型提交哈希，以及未参与训练的明确声明。只核验结构，归档和来源是否真实还需要独立审计。</p>
+          <p>误差仅在相同单位和尺度下比较。导入后即使得分优于朴素基线，也只能称为“上传材料的留出集误差”，不能据此宣布模型已通过第三方验证或获得现实预测资格。</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="research-next" aria-labelledby="next-title">
+      <div><span class="audit-kicker">NEXT VERIFIABLE MILESTONE</span><h2 id="next-title">真正的模型校准需要哪些数据？</h2>
+        <p>下一步应先冻结模型版本、时间步—日历映射和指标观测规则，再收集相互独立的历史序列，严格分离校准期与留出期。没有这一层数据，调参只会产生更精致的伪确定性。</p>
+      </div>
+      <div class="research-next-links"><a href="index.html">返回情景实验室 ↗</a><a href="../v2/data.html">查看数据与原始材料 ↗</a></div>
+    </section>
+
+    <div id="audit-error" class="runtime" role="alert" hidden></div>
+  </main>
+  <footer class="app-footer">科学审查工具不会修改 <code>model.js</code> 或自动进行“参数校准”。所有通过门槛的评分仍需人工复查档案真实性、指标映射与时间顺序。 · <a href="index.html">返回 V3 工作台</a></footer>
+</div>
+</div>
+<script src="validation-core.js"></script>
+<script src="verification.js"></script>
+</body>
+</html>

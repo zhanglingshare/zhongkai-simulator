@@ -1,4 +1,4 @@
-/* V3.2 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
+/* V3.3 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
 const assert=require("node:assert/strict");
 const http=require("node:http");
 const fs=require("node:fs");
@@ -88,6 +88,39 @@ async function testDesktop(browser,port){
   assert.equal(await page.locator("#robust-results .robust-tile").count(),5,"Old result should remain visibly historical");
   await page.locator("#btn-compare").click();
   assert.equal(await page.locator("#robust-results .robust-tile").count(),0,"New A/B scenario invalidates old robustness");
+  await page.goto("http://127.0.0.1:"+port+"/v3/verification.html",{waitUntil:"load"});
+  await page.waitForFunction(()=>document.querySelector("#param-rows tr")?.children?.length===4 && document.querySelector("#data-gate").textContent!=="检查中");
+  assert.equal(await page.locator("#param-rows tr").count(),11,"Parameter lineage must be read from model.js");
+  assert.match(await page.locator("#model-fingerprint").innerText(),/[a-f0-9]{16}/);
+  assert.match(await page.locator("#feed-overview").innerText(),/镇街/);
+  await inspectOverflow(page);
+  const templateEvent=page.waitForEvent("download");
+  await page.locator("#download-template").click();
+  const templateFile=await templateEvent;
+  const template=JSON.parse(fs.readFileSync(await templateFile.path(),"utf8"));
+  assert.equal(template.schema,"zk-backtest-v1");
+  await page.locator("#holdout-json").fill(JSON.stringify(template));
+  await page.locator("#score-holdout").click();
+  assert.match(await page.locator("#holdout-result").innerText(),/不能认定为合格留出集/);
+  assert.ok(await page.locator("#holdout-scores").isHidden(),"Invalid data must not produce a score");
+  await page.locator("#clear-holdout").click();
+  await page.screenshot({path:path.join(shots,"verification-1440.png"),fullPage:true});
+  const fixture={
+    schema:"zk-backtest-v1",scope:"model-index",metric:"abundance",
+    mapping_id:"synthetic-test-fixed",mapping_spec_url:"https://example.org/mapping",
+    model_commit:"a".repeat(40),calibration_cutoff:"2026-09-30",
+    cases:Array.from({length:8},(_,i)=>({
+      id:"browser-fixture-"+i,predicted_at:"2026-10-01",
+      observed_at:["2026-10-04","2026-10-06","2026-10-08"][i%3],
+      source_url:"https://example.org/observations/"+i,forecast_archive_url:"https://example.org/archives/"+i,
+      predicted:.4+i*.01,observed:.5+i*.01,naive:.3+i*.01,used_in_calibration:false
+    }))
+  };
+  await page.locator("#holdout-json").fill(JSON.stringify(fixture));
+  await page.locator("#score-holdout").click();
+  assert.match(await page.locator("#holdout-result").innerText(),/未独立认证/);
+  assert.equal(await page.locator("#holdout-scores .score-cell").count(),4);
+  await page.screenshot({path:path.join(shots,"verification-test-only-1440.png"),fullPage:true});
 
   assert.deepEqual(errors,[],"JavaScript errors: "+errors.join("; "));
   await page.close();
@@ -111,6 +144,11 @@ async function testMobile(browser,port,width){
   assert.ok(await page.locator("#compare-section").isVisible(),"Input shortcut should open comparison on mobile");
   await inspectOverflow(page);
   await page.screenshot({path:path.join(shots,"mobile-"+width+"-compare.png"),fullPage:true});
+  await page.goto("http://127.0.0.1:"+port+"/v3/verification.html",{waitUntil:"load"});
+  await page.waitForFunction(()=>document.querySelector("#data-gate").textContent!=="检查中");
+  assert.equal(await page.locator("#param-rows tr").count(),11);
+  await inspectOverflow(page);
+  await page.screenshot({path:path.join(shots,"verification-"+width+".png"),fullPage:true});
   assert.deepEqual(errors,[],"Mobile JavaScript errors: "+errors.join("; "));
   await page.close();
 }
@@ -122,7 +160,7 @@ async function testMobile(browser,port,width){
     browser=await chromium.launch({channel:"chrome",headless:true,args:["--no-sandbox"]});
     await testDesktop(browser,port);
     for(const width of [390,360])await testMobile(browser,port,width);
-    console.log("PASS V3.2 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
+    console.log("PASS V3.3 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
   }finally{
     if(browser)await browser.close();
     server.close();
