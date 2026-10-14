@@ -202,6 +202,8 @@
 
     function markCompareStale(){
       activeRobustnessToken++;
+      el("btn-robust").disabled=false;
+      el("btn-cancel-robust").hidden=true;
       if(robustness)el("robust-status").textContent="实验设置已改变：以下多种子结果来自上一次研究，不会自动更新。";
       if(comparison){
         comparison.stale=true;
@@ -410,7 +412,7 @@
         const ticks=params.ticks||20;
         for(let t=0;t<ticks;t++){A.step();B.step();}
         const positions=layoutForce(A.agents,A.edges,760,560);
-        comparison={seed,type,A,B,A0,B0,params,positions,ticks,tick:ticks,focus:null,stale:false};
+        comparison={seed,type,A,B,A0,B0,params,positions,ticks,tick:ticks,focus:null,stale:false,question:el("research-question").value.trim()};
         resetRobustness("A/B 对比已更新。可对这组实验做多种子检查。");
         el("btn-export").disabled=false;
         el("compare-tick").disabled=false;
@@ -562,7 +564,7 @@
         exportedAt:new Date().toISOString(),
         model:"Original model.js (unmodified)",
         disclaimer:"模型内实验；同种子不保证严格因果配对，结果不是现实经济预测。",
-        researchQuestion:el("research-question").value.trim(),
+        researchQuestion:comparison.question,
         A_B:{seed:comparison.seed,shock:comparison.type,ticks:comparison.ticks,params:comparison.params,
           stale:!!comparison.stale,
           baselineFinal:modelSummary(comparison.A),scenarioFinal:modelSummary(comparison.B),
