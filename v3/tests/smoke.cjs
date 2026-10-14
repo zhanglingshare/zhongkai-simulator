@@ -103,6 +103,8 @@ async function testDesktop(browser,port){
   await page.locator("#score-holdout").click();
   assert.match(await page.locator("#holdout-result").innerText(),/不能认定为合格留出集/);
   assert.ok(await page.locator("#holdout-scores").isHidden(),"Invalid data must not produce a score");
+  await page.locator("#clear-holdout").click();
+  await page.screenshot({path:path.join(shots,"verification-1440.png"),fullPage:true});
   const fixture={
     schema:"zk-backtest-v1",scope:"model-index",metric:"abundance",
     mapping_id:"synthetic-test-fixed",mapping_spec_url:"https://example.org/mapping",
