@@ -201,12 +201,13 @@
 
     function markCompareStale(){
       if(comparison){
-        el("compare-note").textContent="设置已变化：下方保留上一轮对比，点击“按当前选择运行 A/B”更新。当前局的运行不改变上一轮 A/B 结果。";
-        el("status-b").textContent="历史对比";
+        comparison.stale=true;
+        el("compare-note").textContent="实验设置已变化：下方保留上一次对比（种子 "+comparison.seed+"，冲击“"+comparison.type+"”）。点击“按当前选择运行 A/B”才能更新结果。";
+        el("status-b").textContent="旧结果 · t"+comparison.tick;
       }
     }
     el("shock-sel").addEventListener("change",()=>{
-      el("scenario-label").textContent=el("shock-sel").value+" · 在第 0 步注入";
+      if(!comparison)el("scenario-label").textContent=el("shock-sel").value+" · 在第 0 步注入";
       markCompareStale();
     });
     el("scenario-label").textContent=el("shock-sel").value+" · 在第 0 步注入";
@@ -236,44 +237,158 @@
     function clearMini(svg,text){
       svg.replaceChildren(svgNode("text",{x:380,y:215,"text-anchor":"middle",fill:"#9aa9b5","font-size":22},text));
     }
-    function metricPairs(a,b){
+    function metricPairs(aSnap,bSnap){
       const result=el("compare-metrics");
       result.replaceChildren();
       keys.forEach(spec=>{
-        const A=currentMetric(a,spec.key),B=currentMetric(b,spec.key);
-        const difference=B-A;
-        const item=create("div","delta-card");
-        item.append(create("div","name",spec.name));
-        item.append(create("div","values","A "+fmt(A)+" / B "+fmt(B)));
-        const num=create("strong",difference>=0?"positive":"negative",(difference>0?"+":"")+fmt(difference));
-        item.append(num);
-        const bar=create("div","delta-bar");
-        const fill=create("span");
-        fill.style.width=Math.min(100,Math.abs(difference)/(spec.range[1]-spec.range[0])*100)+"%";
-        if(difference<0)fill.style.background="#087d8d";
-        bar.append(fill);item.append(bar);
-        result.append(item);
+        const A=snapshotMetric(aSnap,spec.key),B=snapshotMetric(bSnap,spec.key);
+        const difference=B-A,domain=spec.range[1]-spec.range[0];
+        const row=create("div","delta-row");
+        row.append(create("div","delta-name",spec.name));
+        const label=create("div","delta-values","A "+fmt(A)+"  /  B "+fmt(B));
+        row.append(label);
+        const chart=create("div","diverge-chart");
+        chart.setAttribute("role","img");
+        chart.setAttribute("aria-label",spec.name+"：B 减 A 等于 "+(difference>=0?"+":"")+fmt(difference));
+        const zero=create("span","zero-axis");
+        const bar=create("span","diverge-bar "+(difference>=0?"right":"left"));
+        const magnitude=Math.min(50,Math.abs(difference)/domain*50);
+        bar.style.width=magnitude.toFixed(2)+"%";
+        chart.append(zero,bar);
+        row.append(chart);
+        const text=create("strong",difference>0?"positive":difference<0?"negative":"neutral",(difference>0?"+":"")+fmt(difference));
+        row.append(text);
+        result.append(row);
       });
     }
-    function drawCompareNetwork(svg,model,positions){
+    function drawCompareNetwork(svg,model,positions,snapshot,focusedName){
       svg.replaceChildren();
-      const sx=1,sy=430/560;
-      const labelNames=new Set(model.agents.filter(a=>a.type==="anchor").map(a=>a.name));
+      const sy=430/560, agents=snapshot.agents;
+      const byName=new Map(agents.map(a=>[a.name,a]));
+      const labelNames=new Set(agents.filter(a=>a.type==="anchor").map(a=>a.name));
+      const neighbors=new Set();
+      if(focusedName){
+        neighbors.add(focusedName);
+        model.edges.forEach(edge=>{
+          if(edge.a===focusedName)neighbors.add(edge.b);
+          if(edge.b===focusedName)neighbors.add(edge.a);
+        });
+      }
       model.edges.forEach(edge=>{
         const p=positions[edge.a],q=positions[edge.b];
         if(!p||!q)return;
-        const a=model._byName(edge.a),b=model._byName(edge.b);
-        svg.append(svgNode("line",{x1:p.x*sx,y1:p.y*sy,x2:q.x*sx,y2:q.y*sy,stroke:"#b6c8d1","stroke-width":1.5,opacity:a&&b&&a.alive&&b.alive?.48:.09}));
+        const pa=byName.get(edge.a),pb=byName.get(edge.b);
+        const directlyFocused=!!focusedName&&(edge.a===focusedName||edge.b===focusedName);
+        const opacity=focusedName?(directlyFocused?.8:.05):(pa&&pb&&pa.alive&&pb.alive?.42:.085);
+        svg.append(svgNode("line",{x1:p.x,y1:p.y*sy,x2:q.x,y2:q.y*sy,stroke:directlyFocused?"#07869a":"#b6c8d1","stroke-width":directlyFocused?2.8:1.5,opacity}));
       });
-      model.agents.forEach(a=>{
+      agents.forEach(a=>{
         const p=positions[a.name];if(!p)return;
         const color=typeof typeColor==="function"?typeColor(a.type):"#087d8d";
-        const g=svgNode("g",{opacity:a.alive?1:.29});
-        g.append(svgNode("circle",{cx:p.x*sx,cy:p.y*sy,r:a.type==="anchor"?12:7.5,fill:a.alive?color:"#a8b6c2",stroke:a.sentiment<-.12?"#bd6460":"#fff","stroke-width":a.type==="anchor"?3:1.5}));
+        const isFocused=focusedName===a.name;
+        const isNeighbor=!focusedName||neighbors.has(a.name);
+        const g=svgNode("g",{opacity:isNeighbor?(a.alive?1:.33):.10});
+        g.append(svgNode("circle",{
+          cx:p.x,cy:p.y*sy,r:isFocused?15:a.type==="anchor"?12:7.5,
+          fill:a.alive?color:"#a8b6c2",stroke:isFocused?"#0491a2":a.sentiment<-.12?"#bd6460":"#fff",
+          "stroke-width":isFocused?5:a.type==="anchor"?3:1.5
+        }));
         g.append(svgNode("title",{},a.name+(a.alive?"":"（已退场）")));
-        if(labelNames.has(a.name))g.append(svgNode("text",{x:p.x*sx,y:p.y*sy-17,"text-anchor":"middle","font-size":14,fill:"#41556a"},a.name));
+        if(labelNames.has(a.name)||isFocused){
+          g.append(svgNode("text",{x:p.x,y:p.y*sy-19,"text-anchor":"middle","font-size":14,fill:"#41556a"},a.name));
+        }
         svg.append(g);
       });
+    }
+    function getComparisonSnapshots(t){
+      const x=comparison;
+      return {
+        a:t===0?x.A0:x.A.snapshots[t],
+        b:t===0?x.B0:x.B.snapshots[t]
+      };
+    }
+    function renderImpactRows(aSnap,bSnap){
+      const box=el("compare-agents");
+      box.replaceChildren();
+      const allA=new Map(aSnap.agents.map(a=>[a.name,a]));
+      const list=bSnap.agents.map(b=>{
+        const a=allA.get(b.name);
+        if(!a)return null;
+        const survivalChange=(b.alive?1:0)-(a.alive?1:0);
+        const energyChange=b.energy-a.energy;
+        const sentimentChange=b.sentiment-a.sentiment;
+        return {name:b.name,survivalChange,energyChange,sentimentChange,
+          score:Math.abs(survivalChange)*2+Math.abs(energyChange)+Math.abs(sentimentChange)*.5};
+      }).filter(Boolean).sort((x,y)=>y.score-x.score||x.name.localeCompare(y.name,"zh-CN"));
+      const significant=list.filter(item=>item.score>.0001).slice(0,8);
+      if(!significant.length){
+        box.append(create("p","no-result","在这一时间步，未观察到主体状态差异。"));
+        return;
+      }
+      significant.forEach((item,index)=>{
+        const btn=create("button","impact-row"+(comparison.focus===item.name?" selected":""));
+        btn.type="button";
+        btn.setAttribute("aria-pressed",String(comparison.focus===item.name));
+        btn.append(create("span","impact-rank",String(index+1).padStart(2,"0")));
+        const content=create("span","impact-detail");
+        content.append(create("strong","",item.name));
+        const detail=item.survivalChange!==0?(item.survivalChange<0?"B 中退场，A 仍存续":"B 中存续，A 已退场"):
+          "经营能量 Δ"+(item.energyChange>=0?"+":"")+fmt(item.energyChange)+" · 预期 Δ"+(item.sentimentChange>=0?"+":"")+fmt(item.sentimentChange);
+        content.append(create("span","",detail));
+        btn.append(content);
+        btn.addEventListener("click",()=>{
+          comparison.focus=comparison.focus===item.name?null:item.name;
+          renderComparisonAt(comparison.tick);
+        });
+        box.append(btn);
+      });
+    }
+    function drawCompareTrends(){
+      const grid=el("compare-trends");
+      grid.replaceChildren();
+      keys.forEach(spec=>{
+        const tile=create("div","compare-trend-tile");
+        const title=create("div","compare-trend-title",spec.name);
+        tile.append(title);
+        const svg=svgNode("svg",{viewBox:"0 0 340 82",role:"img","aria-label":spec.name+"在 A 与 B 情景下的模型演化曲线"});
+        const L=16,R=8,T=8,B=17,W=340,H=82;
+        svg.append(svgNode("line",{x1:L,y1:H-B,x2:W-R,y2:H-B,stroke:"#dfe7ee","stroke-width":1}));
+        [comparison.A,comparison.B].forEach((model,idx)=>{
+          const pts=[];
+          for(let t=0;t<=comparison.ticks;t++){
+            const snap=t===0?(idx===0?comparison.A0:comparison.B0):model.snapshots[t];
+            const v=snapshotMetric(snap,spec.key);
+            const x=L+t/comparison.ticks*(W-L-R);
+            const y=T+(1-(v-spec.range[0])/(spec.range[1]-spec.range[0]))*(H-T-B);
+            pts.push(x.toFixed(2)+","+Math.max(T,Math.min(H-B,y)).toFixed(2));
+          }
+          svg.append(svgNode("polyline",{points:pts.join(" "),fill:"none",
+            stroke:idx===0?"#728ca3":"#c28748","stroke-width":2.4,"stroke-linejoin":"round"}));
+        });
+        const markerX=L+comparison.tick/comparison.ticks*(W-L-R);
+        svg.append(svgNode("line",{x1:markerX,y1:T,x2:markerX,y2:H-B,stroke:"#0c5368","stroke-width":1,
+          "stroke-dasharray":"3 3",opacity:.65}));
+        svg.append(svgNode("text",{x:L,y:H-3,"font-size":10,fill:"#a2adba"},"t0"));
+        svg.append(svgNode("text",{x:W-R,y:H-3,"font-size":10,fill:"#a2adba","text-anchor":"end"},"t"+comparison.ticks));
+        tile.append(svg);
+        grid.append(tile);
+      });
+    }
+    function renderComparisonAt(t){
+      if(!comparison)return;
+      t=Math.min(comparison.ticks,Math.max(0,Math.trunc(t)));
+      comparison.tick=t;
+      const data=getComparisonSnapshots(t);
+      drawCompareNetwork(el("graph-a"),comparison.A,comparison.positions,data.a,comparison.focus);
+      drawCompareNetwork(el("graph-b"),comparison.B,comparison.positions,data.b,comparison.focus);
+      metricPairs(data.a,data.b);
+      renderImpactRows(data.a,data.b);
+      drawCompareTrends();
+      el("compare-tick").value=String(t);
+      el("compare-tick-value").textContent="t"+t+" / "+comparison.ticks;
+      el("compare-timeline-hint").textContent="显示第 "+t+" 个模型时间步的状态；模型时间步不等于日历日期。";
+      el("status-a").textContent="t"+t+" / "+comparison.ticks;
+      el("status-b").textContent=comparison.stale?"旧结果 · t"+t:"t"+t+" / "+comparison.ticks;
     }
     function runComparison(){
       const seed=safeSeed();
@@ -288,17 +403,18 @@
         const A=new Sim(seed,params),B=new Sim(seed,params);
         const applied=B.shock(type);
         if(!applied.ok)throw new Error("不支持冲击："+type);
+        const A0=A._snap(), B0=B._snap();
         const ticks=params.ticks||20;
         for(let t=0;t<ticks;t++){A.step();B.step();}
         const positions=layoutForce(A.agents,A.edges,760,560);
-        drawCompareNetwork(el("graph-a"),A,positions);
-        drawCompareNetwork(el("graph-b"),B,positions);
-        metricPairs(A,B);
-        el("status-a").textContent="已运行 t"+ticks;
-        el("status-b").textContent="已运行 t"+ticks;
+        comparison={seed,type,A,B,A0,B0,params,positions,ticks,tick:ticks,focus:null,stale:false};
+        el("compare-tick").disabled=false;
+        el("compare-tick").max=String(ticks);
+        renderComparisonAt(ticks);
         el("scenario-label").textContent=type+" · 第 0 步";
-        el("compare-note").textContent="计算完成 · 相同种子 "+seed+" · 每局 "+ticks+" 步 · B 在 t0 注入“"+type+"”冲击"+(applied.killed?" · 直接退场 "+applied.killed+" 个模型主体":"")+"。注意：冲击可能改变随机数消耗顺序，同种子不等于严格因果识别。";
-        comparison={seed,type,A,B};
+        el("compare-note").textContent="已运行 · A 为基线，B 在第 0 步注入“"+type+"”冲击"+(applied.killed?" · 冲击即时使 "+applied.killed+" 个模型主体退场":"")+"。两侧按同一时间步对齐，差值均为 B − A。";
+        el("compare-provenance").textContent="模型基准：仲恺演示世界 · 随机种子："+seed+" · 每局 "+ticks+" 步 · 相同模型参数："+JSON.stringify({invest:params.invest,external:params.external,service:params.service,land:params.land})+" · 研究备注："+(el("research-question").value.trim()||"未填写")+"。相同种子不代表严格因果识别；冲击可改变后续随机数消耗；排名仅表示模型状态差异。";
+        alertBox.hidden=true;
         if(matchMedia("(max-width:760px)").matches)switchMobile("compare");
       }catch(e){
         fail(e&&e.message?e.message:String(e));
@@ -307,6 +423,9 @@
       }
     }
     el("btn-compare").addEventListener("click",runComparison);
+    el("compare-tick").addEventListener("input",()=>{
+      if(comparison)renderComparisonAt(Number(el("compare-tick").value));
+    });
     el("toggle-compare").addEventListener("click",()=>{
       const opened=el("compare-section").classList.toggle("fullscreen");
       document.body.classList.toggle("comparison-open",opened);
@@ -320,6 +439,14 @@
     });
     el("btn-clear-compare").addEventListener("click",()=>{
       comparison=null;
+      el("compare-tick").disabled=true;
+      el("compare-tick").value="20";
+      el("compare-tick-value").textContent="t20 / 20";
+      el("compare-timeline-hint").textContent="运行后可拖动到任意模型时间步，查看同一时刻的网络与指标差异。";
+      el("compare-trends").replaceChildren(create("p","no-result","等待 A/B 模型运行。"));
+      el("compare-agents").replaceChildren(create("p","no-result","等待主体差异计算。"));
+      el("compare-provenance").textContent="对比尚未运行。运行后展示随机种子、实验设置与对比口径。";
+      el("scenario-label").textContent=el("shock-sel").value+" · 在第 0 步注入";
       clearMini(el("graph-a"),"等待模拟");
       clearMini(el("graph-b"),"等待模拟");
       el("compare-metrics").replaceChildren(create("p","no-result","等待执行 A/B 对比。"));
