@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark"><title>V3.7 · 沉浸式产业风洞 | 仲恺产业风洞</title>
+<meta name="description" content="基于真实 Sim 内核的产业网络动态情景、增长与风险双向扰动、稳健性因子扫描、可复现分享实验。">
+<link rel="stylesheet" href="windtunnel.css"></head>
+<body><div class="wind-shell">
+<header class="wind-header">
+ <a class="brand" href="index.html" aria-label="返回仲恺产业风洞研究台"><span class="brand-emblem">Z<span>.</span></span><span class="brand-title">ZHONGKAI<span>产业风洞</span></span></a>
+ <nav aria-label="风洞导航" class="wind-nav"><a href="index.html">研究工作台</a><a class="selected" aria-current="page" href="windtunnel.html">沉浸风洞</a><a href="observations.html">公开证据</a><a href="verification.html">科学验证</a></nav>
+ <div class="wind-live"><span class="live-pulse"></span><span>PUBLIC RESEARCH LAB</span><span class="version-tag">V3.7</span></div>
+</header>
+<main>
+<section class="wind-intro">
+ <div class="wind-eyebrow"><span class="gold-bar"></span> EXPLORE THE POSSIBLE <span class="intro-split">/</span> 公开研究 · 分级证据 · 可复现实验</div>
+ <div class="intro-split-layout"><div><h1>让<span class="text-ripple">产业的风</span><br>有迹可循。</h1><p>一次冲击，会怎样沿着产业关系扩散？一次改变，有没有机会打开新的路径？<br>让假设进入风洞，让风险与增长同时显形。</p></div>
+ <div class="intro-right"><span class="intro-orbit" aria-hidden="true"><span></span><i></i></span><span class="intro-status">OPEN SIMULATION SPACE</span><strong>不是预测终局<br>而是发现可能</strong></div></div>
+</section>
+<div class="simulation-grid">
+<aside class="control-panel" aria-label="情景控制台">
+ <div class="panel-title"><span class="panel-index">01</span><div><span class="overline">INPUT / SCENARIO CONTROL</span><h2>设置你的风向</h2></div></div>
+ <p class="control-description">从原版模型支持的冲击中选择一个，配合同一种子的基线世界进行对照。</p>
+ <div class="control-label"><span>负向压力</span><small>STRESS TEST</small></div><div class="scenario-options" id="negative-options"></div>
+ <div class="control-label positive-label"><span>正向机会</span><small>OPPORTUNITY</small></div><div class="scenario-options" id="positive-options"></div>
+ <div class="panel-divider"></div>
+ <label class="control-field" for="rescue-select"><span>尝试一个额外条件</span><small>探索假设，并非真实政策成效</small></label>
+ <select id="rescue-select"><option value="none">不增加额外干预</option><option value="invest">提高投资强度</option><option value="service">加强生产性服务配套</option><option value="land">改善用地支持</option><option value="bundle">投资 + 配套组合</option></select>
+ <div class="slider-label"><label for="intensity-slider">额外干预的模型增量</label><output for="intensity-slider" id="intensity-display">+0.14</output></div>
+ <input id="intensity-slider" aria-label="额外干预模型参数幅度" type="range" min="0.05" max="0.25" value="0.14" step="0.01">
+ <div class="slider-extremes"><span>+0.05</span><span>+0.25</span></div>
+ <label class="control-field seed-area" for="seed-input">实验种子 <span>可复算</span></label>
+ <input type="number" id="seed-input" value="2026" min="1" max="2147483647" step="1" inputmode="numeric">
+ <button class="run-button" id="run-experiment" type="button"><span>注入情景，启动风洞</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+ <p class="input-note">此页使用原版 Sim 的固定冲击和公开的参数假设。调整后需重新运行，结果只表示模型条件性变化。</p>
+</aside>
+<section class="stage-panel" aria-label="产业网络动态舞台">
+ <div class="stage-bar"><div><span class="stage-kicker"><span class="stage-dot"></span> DIGITAL INDUSTRIAL FIELD</span><h2>仲恺产业关系网络 <small>模型情景 · 示意结构</small></h2></div><div class="world-tabs" role="group" aria-label="切换观察世界"><button type="button" id="world-a">A · 无冲击</button><button type="button" id="world-b" class="is-current" aria-pressed="true">B · 已注入</button></div></div>
+ <div class="network-view"><div class="network-ambience" aria-hidden="true"></div><svg id="wind-network" viewBox="0 0 900 600" role="img" aria-label="根据模型真实节点、关系和存续情况绘制的情景网络"></svg>
+  <div class="network-stamp"><span>SCENARIO ENGINE / ORIGINAL SIM</span><strong id="network-stamp">链主外迁</strong><small>网络连线包含历史预设及启发式关系，不能解读为全部真实企业合同。</small></div>
+  <div class="network-legend"><span><i class="node-key-anchor"></i>链主</span><span><i class="node-key-firm"></i>企业</span><span><i class="node-key-other"></i>生态节点</span><span><i class="node-key-down"></i>退出 / 受损</span></div>
+  <div id="node-detail" class="node-detail" role="status" aria-live="polite">点击任意节点，探索其模型角色与当前状态。</div>
+ </div>
+ <div class="stage-timeline">
+  <div class="timeline-controls"><button id="play-pause" type="button" class="round-play" aria-label="播放情景演化">▶</button><button id="reset-time" type="button" class="round-reset" aria-label="回到初始时间步">↺</button><div class="timeline-text"><b>情景演化</b><small>从初始状态到第 20 步</small></div><div class="timeline-count"><strong id="current-tick">00</strong><span> / 20 STEPS</span></div></div>
+  <input type="range" min="0" max="20" value="0" step="1" id="timeline-slider" aria-label="选择模型演化时间步">
+  <div class="timeline-captions"><span>起始状态</span><span>交互演化</span><span>终点对照</span></div>
+ </div>
+</section>
+<aside class="insight-panel" aria-label="实验观察">
+ <div class="panel-title"><span class="panel-index">02</span><div><span class="overline">LIVE / OBSERVATION</span><h2>这一阵风改变了什么</h2></div></div>
+ <div class="insight-subhead">模型状态差值 <span>B − A · 当前时间步</span></div>
+ <div class="kpi-stack" id="kpi-stack"><p>初始化模型中…</p></div>
+ <div class="insight-event"><div class="insight-event-head"><span class="pulse-mark">◈</span> 此刻值得注意</div><p id="event-text">运行情景后，这里会显示模型内最新发生的事件和状态变化。</p></div>
+ <div class="insight-disclaimer">数值为无量纲模型指数变化，<b>不是</b>实际产值、GDP 增速、现实企业存亡或政策因果效应。</div>
+</aside>
+</div>
+<section class="science-row" aria-label="多情景量化研究">
+ <div class="research-panel"><div class="research-heading"><div><div class="research-kicker">03 / UNCERTAINTY WITHOUT PRETEND PRECISION</div><h2>同一阵风，不同初始世界</h2><p>用多组随机种子复算，查看模型结果可能出现的范围与符号是否稳定。</p></div><button id="analyze-ensemble" class="outline-action" type="button">运行 16 组种子 ↗</button></div>
+ <div id="ensemble-result" class="research-empty">尚未运行多种子检查。此处不会显示编造的概率或区间。</div>
+ <div class="research-foot">P10—P90 只表示指定模型与随机种子样本下的分位范围，不是现实置信区间，也不保证覆盖所有可能结果。</div></div>
+ <div class="research-panel"><div class="research-heading"><div><div class="research-kicker">04 / POSITIVE AND NEGATIVE FACTORS</div><h2>哪一个因素最可能改变方向？</h2><p>对每个模型参数分别进行 ±0.12 扫描，找出在假设范围内影响较大的因素。</p></div><button id="analyze-factors" class="outline-action" type="button">扫描六个因子 ↗</button></div>
+ <div id="factor-result" class="research-empty">尚未运行因子扫描。结果必须来自实际模型重跑。</div>
+ <div class="research-foot">该排名是模型内局部敏感性，不代表真实因果重要性；模型参数 A/B/C 血统等级不等于统计置信度。</div></div>
+</section>
+<section class="share-section"><div class="share-info"><span>05 / OPEN EXPERIMENT</span><h2>让你的假设，接受别人的挑战。</h2><p>分享的不是“标准答案”，而是可复现的种子、冲击与参数。让其他人复跑、改变一个条件，再比较不同的发现。</p><div class="share-boundary">仅分享公开的实验参数，不会上传企业材料、个人信息或原始数据。分享卡片保留研究边界声明。</div></div>
+ <div class="share-controls"><label for="share-link">可复现实验链接</label><input id="share-link" readonly aria-label="可复现实验链接"><div class="share-actions"><button id="copy-link" type="button">复制实验链接 ↗</button><button id="copy-challenge" type="button">复制公开挑战文案 ↗</button><button id="download-card" type="button">生成分享卡片 PNG ↓</button><button id="download-json" type="button">导出实验 JSON ↓</button></div><div id="share-status" role="status" aria-live="polite"></div></div></section>
+<footer class="wind-footer"><div><b>Z<span>.</span> ZHONGKAI WINDTUNNEL</b><p>看见可能 · 追问证据 · 允许质疑</p></div><div><span>PUBLIC EVIDENCE · OPEN SIMULATION · NOT OFFICIAL ADVICE</span><a href="measurement.html">测量映射与科学边界 ↗</a></div></footer>
+<div id="runtime-error" role="alert" hidden></div></main></div>
+<script src="../model.js"></script><script src="windtunnel-core.js"></script><script src="windtunnel.js"></script>
+</body></html>

@@ -1,4 +1,4 @@
-/* V3.6 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
+/* V3.7 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
 const assert=require("node:assert/strict");
 const http=require("node:http");
 const fs=require("node:fs");
@@ -168,6 +168,7 @@ async function testDesktop(browser,port){
   };
   await page.locator("#measure-archive").setInputFiles({name:"synthetic-test-archive.json",
     mimeType:"application/json",buffer:Buffer.from(JSON.stringify(fakeArchive))});
+  await page.waitForFunction(()=>document.querySelector("#archive-state").textContent.includes("已载入原模型基线"));
   assert.match(await page.locator("#archive-state").innerText(),/已载入原模型基线/);
   for(const [year,tick] of [[2020,0],[2021,4],[2022,8],[2023,12],[2024,16],[2025,20]]){
     await page.locator('input[data-year="'+year+'"]').fill(String(tick));
@@ -196,6 +197,64 @@ async function testDesktop(browser,port){
   assert.equal(future.schema,"zk-prospective-observation-protocol-v1");
   assert.equal(future.modelCommit,"");
 
+  // V3.7 full original Sim-powered interactive stage.
+  await page.goto("http://127.0.0.1:"+port+"/v3/windtunnel.html",{waitUntil:"load"});
+  await page.waitForFunction(()=>document.querySelectorAll("#wind-network .wind-node").length>=15);
+  assert.equal(await page.locator("#wind-network .wind-edge").count()>0,true,"Graph must draw actual model edges");
+  assert.match(await page.locator("#network-stamp").innerText(),/链主外迁/);
+  assert.equal(await page.locator(".scenario-chip").count(),11);
+  assert.equal(await page.locator("#kpi-stack .kpi-card").count(),5);
+  const originalShare=await page.locator("#share-link").inputValue();
+  assert.match(originalShare,/seed=2026/);
+  await page.locator(".wind-node").first().click();
+  assert.match(await page.locator("#node-detail").innerText(),/模型边/);
+  await page.locator("#world-a").click();
+  assert.match(await page.locator("#network-stamp").innerText(),/无冲击/);
+  await page.locator("#world-b").click();
+  const kpi=await page.locator("#kpi-stack").innerText();
+  await page.locator("#timeline-slider").evaluate(input=>{
+    input.value="20";input.dispatchEvent(new Event("input",{bubbles:true}));
+  });
+  assert.equal(await page.locator("#current-tick").innerText(),"20");
+  assert.notEqual(await page.locator("#kpi-stack").innerText(),kpi);
+  await page.locator("#analyze-ensemble").click();
+  assert.equal(await page.locator("#ensemble-result .research-row").count(),5);
+  assert.match(await page.locator("#ensemble-result").innerText(),/P10—P90/);
+  await page.locator("#analyze-factors").click();
+  assert.equal(await page.locator("#factor-result .factor-row").count(),6);
+  const pngDownload=page.waitForEvent("download");
+  await page.locator("#download-card").click();
+  const png=await pngDownload;assert.match(png.suggestedFilename(),/windtunnel-2026\.png$/);
+  const pngBuffer=fs.readFileSync(await png.path());
+  assert.deepEqual([...pngBuffer.subarray(0,8)],[137,80,78,71,13,10,26,10]);
+  const jsonDownload=page.waitForEvent("download");
+  await page.locator("#download-json").click();
+  const study=JSON.parse(fs.readFileSync(await (await jsonDownload).path(),"utf8"));
+  assert.equal(study.schema,"zk-windtunnel-scenario-v1");
+  assert.equal(study.snapshots.scenario.length,21);
+  assert.equal(study.ensembleModelSeeds.abundance.n,16);
+  assert.equal(study.factorScan.length,6);
+  assert.match(study.limitations.join(" "),/not real confidence/);
+  await page.screenshot({path:path.join(shots,"windtunnel-1440.png"),fullPage:true});
+  await page.locator('.scenario-chip[data-shock="技术突破"]').click();
+  assert.ok(await page.locator("#copy-link").isDisabled(),"Edited unrun scenario must not offer stale replay link");
+  assert.ok(await page.locator("#copy-challenge").isDisabled(),"Unrun edits must not create stale social challenges");
+  assert.ok(await page.locator("#download-card").isDisabled(),"Edited unrun scenario must not offer stale card");
+  await page.locator("#rescue-select").selectOption("service");
+  await page.locator("#seed-input").fill("43");
+  await page.locator("#run-experiment").click();
+  assert.ok(await page.locator("#copy-link").isEnabled(),"Run unlocks fresh sharing");
+  assert.ok(await page.locator("#copy-challenge").isEnabled(),"Run unlocks reproducible challenge");
+  assert.match(await page.locator("#network-stamp").innerText(),/技术突破/);
+  const url=await page.locator("#share-link").inputValue();
+  assert.match(url,/seed=43/);
+  assert.ok(url.includes("%E6%8A%80"),"Share URL must encode selected Chinese scenario");
+  await page.goto(url,{waitUntil:"load"});
+  await page.waitForFunction(()=>document.querySelectorAll("#wind-network .wind-node").length>=15);
+  assert.equal(await page.locator("#seed-input").inputValue(),"43");
+  assert.match(await page.locator("#network-stamp").innerText(),/技术突破/);
+  await inspectOverflow(page);
+  await page.screenshot({path:path.join(shots,"windtunnel-growth-1440.png"),fullPage:true});
   assert.deepEqual(errors,[],"JavaScript errors: "+errors.join("; "));
   await page.close();
 }
@@ -235,6 +294,17 @@ async function testMobile(browser,port,width){
   assert.ok(await page.locator("#btn-export-protocol").isDisabled());
   await inspectOverflow(page);
   await page.screenshot({path:path.join(shots,"measurement-unverified-"+width+".png"),fullPage:true});
+  await page.goto("http://127.0.0.1:"+port+"/v3/windtunnel.html",{waitUntil:"load"});
+  await page.waitForFunction(()=>document.querySelectorAll("#wind-network .wind-node").length>=15);
+  assert.equal(await page.locator("#kpi-stack .kpi-card").count(),5);
+  await inspectOverflow(page);
+  await page.screenshot({path:path.join(shots,"windtunnel-"+width+".png"),fullPage:true});
+  await page.locator('.scenario-chip[data-shock="政策利好"]').click();
+  await page.locator("#run-experiment").click();
+  assert.match(await page.locator("#network-stamp").innerText(),/政策利好/);
+  await page.locator("#analyze-ensemble").click();
+  assert.equal(await page.locator("#ensemble-result .research-row").count(),5);
+  await inspectOverflow(page);
   assert.deepEqual(errors,[],"Mobile JavaScript errors: "+errors.join("; "));
   await page.close();
 }
@@ -246,7 +316,7 @@ async function testMobile(browser,port,width){
     browser=await chromium.launch({channel:"chrome",headless:true,args:["--no-sandbox"]});
     await testDesktop(browser,port);
     for(const width of [390,360])await testMobile(browser,port,width);
-    console.log("PASS V3.6 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
+    console.log("PASS V3.7 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
   }finally{
     if(browser)await browser.close();
     server.close();

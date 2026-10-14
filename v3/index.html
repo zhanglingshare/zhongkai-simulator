@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>仲恺产业风洞 V3.6 · 情景研究工作台</title>
+<title>仲恺产业风洞 V3.7 · 情景研究工作台</title>
 <meta name="description" content="仲恺产业风洞实验工作台：网络推演、同种子情景对比和可追溯的模型观察。">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -13,6 +13,7 @@
   <nav class="rail" aria-label="产品导航">
     <a href="index.html" class="rail-brand" title="V3 工作台">Z<span>.</span></a>
     <a class="rail-link active" href="index.html" aria-current="page" title="情景实验室">▦<span class="sr-only">情景实验室</span></a>
+    <a class="rail-link" href="windtunnel.html" title="沉浸式产业风洞">✦<span class="sr-only">沉浸式产业风洞</span></a>
     <a class="rail-link" href="../v2/montecarlo.html" title="蒙特卡洛">◈<span class="sr-only">蒙特卡洛</span></a>
     <a class="rail-link" href="../v2/sensitivity.html" title="敏感性分析">▥<span class="sr-only">敏感性分析</span></a>
     <a class="rail-link" href="measurement.html" title="现实观测与模型指数映射">◉<span class="sr-only">现实观测映射</span></a>
@@ -28,7 +29,7 @@
     <header class="masthead">
       <div>
         <div class="breadcrumb">ZHONGKAI / RESEARCH WORKBENCH</div>
-        <div class="head-title"><h1>产业情景实验室</h1><span class="version">V3.6 · 研究工作台</span></div>
+        <div class="head-title"><h1>产业情景实验室</h1><span class="version">V3.7 · 研究工作台</span></div>
         <p>提出一个问题，观察产业网络，比较不同情景。</p>
       </div>
       <div class="head-right">
@@ -37,6 +38,16 @@
       </div>
     </header>
 
+    <section class="wind-entry" aria-label="进入沉浸式风洞">
+      <div class="wind-entry-sheen" aria-hidden="true"></div>
+      <div class="wind-entry-copy">
+        <span class="wind-entry-eyebrow"><span class="wind-entry-light"></span> NEW / V3.7 · OPEN SIMULATION LAB</span>
+        <h2>看见风险的传播。<em>寻找增长的方向。</em></h2>
+        <p>一键注入负向冲击或正向机会，在真正的模型网络中观察连锁反应、测试破局条件，并分享可复现的研究实验。</p>
+        <a class="wind-entry-cta" href="windtunnel.html">进入沉浸式产业风洞 <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="wind-entry-visual" aria-hidden="true"><div class="wind-entry-ring r1"></div><div class="wind-entry-ring r2"></div><div class="wind-entry-ring r3"></div><i class="wind-entry-point one"></i><i class="wind-entry-point two"></i><i class="wind-entry-point three"></i><i class="wind-entry-point four"></i><span>LIVE / MODEL-DRIVEN</span></div>
+    </section>
     <nav class="mobile-switch" aria-label="手机工作区">
       <button type="button" data-mobile-to="input" aria-pressed="true">设置情景</button>
       <button type="button" data-mobile-to="canvas" aria-pressed="false">观察演化</button>
@@ -230,10 +241,10 @@
         <p class="robust-footnote">方法边界：每一组使用相同种子构建基线 A 与冲击 B，但注入冲击可能改变随机数消耗顺序；这里的差值分布只描述当前模拟模型和抽样设定，不构成现实因果效应、经济预测概率或置信区间。</p>
       </section>
       <div class="compare-provenance" id="compare-provenance">对比尚未运行。运行后展示随机种子、实验设置与对比口径。</div>
-      <div class="bottom-links"><a href="measurement.html">模型指标—现实观测映射 ↗</a><a href="verification.html">科学验证与留出集回测 ↗</a><a href="observations.html">七年历史观测与基线对照 ↗</a><a href="../v2/montecarlo.html">批量模拟 ↗</a><a href="../v2/sensitivity.html">参数敏感性 ↗</a><a href="../v2/data.html">数据与血统 ↗</a><a href="../v2/reports.html">原版研究档案 ↗</a></div>
+      <div class="bottom-links"><a href="windtunnel.html">沉浸产业风洞 · 风险与增长 ↗</a><a href="measurement.html">模型指标—现实观测映射 ↗</a><a href="verification.html">科学验证与留出集回测 ↗</a><a href="observations.html">七年历史观测与基线对照 ↗</a><a href="../v2/montecarlo.html">批量模拟 ↗</a><a href="../v2/sensitivity.html">参数敏感性 ↗</a><a href="../v2/data.html">数据与血统 ↗</a><a href="../v2/reports.html">原版研究档案 ↗</a></div>
     </section>
     <div class="runtime" id="runtime-alert" role="alert" hidden></div>
-    <footer class="app-footer">仲恺产业风洞 V3.6 研究工作台 · 使用根目录 <code>model.js</code> 计算内核 · 相同种子不等于因果识别 · <a href="../v2/">稳定版本 V2</a></footer>
+    <footer class="app-footer">仲恺产业风洞 V3.7 研究工作台 · 使用根目录 <code>model.js</code> 计算内核 · 相同种子不等于因果识别 · <a href="../v2/">稳定版本 V2</a></footer>
   </div>
 </div>
 <div class="compat" aria-hidden="true"><div id="data-lineage"></div><div id="report-locknote"></div><div id="report-box"></div><table id="param-table"><tbody></tbody></table><div id="missroles"></div><svg id="trend-chart"></svg></div>
