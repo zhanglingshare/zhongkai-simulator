@@ -81,6 +81,7 @@
           <div class="divider"></div>
           <div class="action-note">当前局操作</div>
           <button class="btn primary fill" id="btn-shock" type="button">向当前局注入冲击 <span aria-hidden="true">↗</span></button>
+          <button class="btn outline fill compare-shortcut" id="btn-design-compare" type="button">直接对比 A / B 两种情景 <span aria-hidden="true">↘</span></button>
           <p class="field-tip">注入后可在中央画布单步推进或播放；不会自动创建 A/B 对照。</p>
           <div class="feedback" id="nl-result" role="status" aria-live="polite"></div>
 
@@ -207,6 +208,24 @@
           <div id="compare-agents" class="compare-agents"><p class="no-result">等待主体差异计算。</p></div>
         </section>
       </div>
+      <section class="robustness" aria-labelledby="robust-title" id="robust-section">
+        <div class="robust-heading">
+          <div><span class="research-kicker">05 / ROBUSTNESS STUDY</span><h3 id="robust-title">多种子稳健性检查</h3>
+            <p>将同一个 A/B 设定放进不同随机种子，观察差值分布及方向是否一致。</p></div>
+          <span class="study-tag">模型内敏感性 · 非现实发生概率</span>
+        </div>
+        <div class="robust-controls">
+          <label for="robust-n">模拟种子数
+            <select id="robust-n"><option value="24">24 组 · 快速</option><option value="48" selected>48 组 · 标准</option><option value="96">96 组 · 详细</option></select>
+          </label>
+          <button class="btn primary" type="button" id="btn-robust">运行稳健性检查 →</button>
+          <button class="btn outline" type="button" id="btn-cancel-robust" hidden>中止计算</button>
+          <button class="btn outline" type="button" id="btn-export" disabled>导出当前研究 JSON ↓</button>
+        </div>
+        <div id="robust-status" role="status" aria-live="polite" class="robust-status">请先运行 A/B 对比，再执行多种子检查。</div>
+        <div id="robust-results" class="robust-results"><p class="no-result">尚无重复实验结果。</p></div>
+        <p class="robust-footnote">方法边界：每一组使用相同种子构建基线 A 与冲击 B，但注入冲击可能改变随机数消耗顺序；这里的差值分布只描述当前模拟模型和抽样设定，不构成现实因果效应、经济预测概率或置信区间。</p>
+      </section>
       <div class="compare-provenance" id="compare-provenance">对比尚未运行。运行后展示随机种子、实验设置与对比口径。</div>
       <div class="bottom-links"><a href="../v2/montecarlo.html">批量模拟 ↗</a><a href="../v2/sensitivity.html">参数敏感性 ↗</a><a href="../v2/data.html">数据与血统 ↗</a><a href="../v2/reports.html">原版研究档案 ↗</a></div>
     </section>
