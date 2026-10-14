@@ -219,3 +219,9 @@
  .holo-hero{grid-template-rows:auto auto minmax(315px,1fr) auto auto auto auto}
  .holo-node-detail.is-inspected{transform:none}
 }
+
+/* Preserve the intended two-line brand headline at intermediate desktop widths. */
+@media(min-width:961px){
+ .holo-hero-copy h1{font-size:clamp(35px,3vw,51px);letter-spacing:-1.5px}
+ .holo-hero-copy h1 em{white-space:nowrap}
+}
