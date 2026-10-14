@@ -47,10 +47,16 @@ async function testDesktop(browser,port){
   assert.equal(await page.locator("#compare-trends .compare-trend-tile").count(),5);
   assert.ok(await page.locator("#compare-agents .impact-row").count()>0,"Missing entity comparison");
   assert.ok(await page.locator("#graph-b circle").count()>=15);
+  assert.equal((await page.locator("#tick-lbl").innerText()).trim(),"1","A/B computation must not modify the live session");
   await page.locator("#compare-tick").evaluate(x=>{x.value="0";x.dispatchEvent(new Event("input",{bubbles:true}));});
   assert.match(await page.locator("#compare-tick-value").innerText(),/t0/);
+  const shockDeltas=await page.locator("#compare-metrics .delta-row strong").allInnerTexts();
+  assert.ok(shockDeltas.some(x=>Math.abs(Number(x))>0.001),"Shock at t0 must produce a real difference");
   await page.locator("#compare-tick").evaluate(x=>{x.value="20";x.dispatchEvent(new Event("input",{bubbles:true}));});
   await page.locator("#compare-agents .impact-row").first().click();
+  assert.equal(await page.locator('#compare-agents .impact-row[aria-pressed="true"]').count(),1,"Entity focus must persist in both graphs");
+  const focusedCircles=await page.locator("#graph-a circle[stroke='#0491a2'],#graph-b circle[stroke='#0491a2']").count();
+  assert.ok(focusedCircles>=2,"A/B network focus should update both canvases");
   await page.locator("#toggle-compare").click();
   assert.ok(await page.locator("#compare-section").evaluate(x=>x.classList.contains("fullscreen")));
   await page.keyboard.press("Escape");
