@@ -202,6 +202,7 @@
     drawTrends();
 
     function markCompareStale(){
+      window.dispatchEvent(new Event("zk:compare-stale"));
       activeRobustnessToken++;
       el("btn-robust").disabled=false;
       el("btn-cancel-robust").hidden=true;
@@ -399,6 +400,13 @@
       el("status-a").textContent="t"+t+" / "+comparison.ticks;
       el("status-b").textContent=comparison.stale?"旧结果 · t"+t:"t"+t+" / "+comparison.ticks;
       if(holoScene&&holoMode==="comparison"&&!comparison.stale)paintHolo(data.b,comparison.B.edges,comparison.type);
+      // Read-only V3.9 impact display. Does not mutate the hologram or simulation kernel.
+      window.dispatchEvent(new CustomEvent("zk:comparison", {detail:{
+        tick:t,ticks:comparison.ticks,seed:comparison.seed,shock:comparison.type,
+        stale:comparison.stale,a:data.a,b:data.b,
+        base:[comparison.A0,...comparison.A.snapshots.slice(1)],
+        scenario:[comparison.B0,...comparison.B.snapshots.slice(1)]
+      }}));
     }
     function runComparison(preserveHero=false){
       const seed=safeSeed();
@@ -608,6 +616,7 @@
       }
     });
     el("btn-clear-compare").addEventListener("click",()=>{
+      window.dispatchEvent(new Event("zk:compare-clear"));
       comparison=null;
       if(holoScene){stopHoloPlayback();holoMode="live";paintHoloLive();}
       if(typeof refreshWindResults==="function")refreshWindResults();
@@ -703,7 +712,7 @@
       el("wind-run").addEventListener("click",()=>{
         runComparison();
         if(comparison&&!comparison.stale){
-          el("compare-section").scrollIntoView({block:"start",behavior:"auto"});
+          el("v39-lens").scrollIntoView({block:"start",behavior:"auto"});
         }
       });
       el("wind-copy").addEventListener("click",async()=>{
