@@ -209,9 +209,11 @@
         comparison.stale=true;
         el("compare-note").textContent="实验设置已变化：下方保留上一次对比（种子 "+comparison.seed+"，冲击“"+comparison.type+"”）。点击“按当前选择运行 A/B”才能更新结果。";
         el("status-b").textContent="旧结果 · t"+comparison.tick;
+        if(typeof refreshWindResults==="function")refreshWindResults();
       }
     }
     el("shock-sel").addEventListener("change",()=>{
+      if(typeof syncWindChoices==="function")syncWindChoices();
       if(!comparison)el("scenario-label").textContent=el("shock-sel").value+" · 在第 0 步注入";
       markCompareStale();
     });
@@ -418,6 +420,7 @@
         el("compare-tick").disabled=false;
         el("compare-tick").max=String(ticks);
         renderComparisonAt(ticks);
+        if(typeof refreshWindResults==="function")refreshWindResults();
         el("scenario-label").textContent=type+" · 第 0 步";
         el("compare-note").textContent="已运行 · A 为基线，B 在第 0 步注入“"+type+"”冲击"+(applied.killed?" · 冲击即时使 "+applied.killed+" 个模型主体退场":"")+"。两侧按同一时间步对齐，差值均为 B − A。";
         el("compare-provenance").textContent="模型基准：仲恺演示世界 · 随机种子："+seed+" · 每局 "+ticks+" 步 · 相同模型参数："+JSON.stringify({invest:params.invest,external:params.external,service:params.service,land:params.land})+" · 研究备注："+(el("research-question").value.trim()||"未填写")+"。相同种子不代表严格因果识别；冲击可改变后续随机数消耗；排名仅表示模型状态差异。";
@@ -603,6 +606,7 @@
     });
     el("btn-clear-compare").addEventListener("click",()=>{
       comparison=null;
+      if(typeof refreshWindResults==="function")refreshWindResults();
       resetRobustness("请先运行 A/B 对比，再执行多种子检查。");
       el("btn-export").disabled=true;
       el("compare-tick").disabled=true;
@@ -619,6 +623,118 @@
       el("status-a").textContent="未运行";el("status-b").textContent="未运行";
       el("compare-note").textContent="基线 A 与冲击 B 使用相同种子和模型参数，均演化 20 步。B 在第 0 步注入选定冲击；此对照不修改上方当前局。";
     });
+
+    /* V3.7: actual model-driven exploration, not a decorative fake forecast. */
+    const shareApi=window.ZKShare;
+    const windCatalog={
+      "链主外迁":"模拟链主退出后的网络连带影响和存续变化",
+      "芯片断供":"测试关键上游中断时网络如何传播压力",
+      "限电":"检验用能约束冲击在模型内的扩散",
+      "订单外流":"追踪需求下降对企业与协同的影响",
+      "融资难":"探索资金压力对景气和存续的影响",
+      "供应链中断":"观察连接失灵的连锁效应",
+      "订单爆发":"研究需求增加的机会与潜在承载约束",
+      "政策利好":"探索支持性环境改变后的动态效果",
+      "技术突破":"观察技术改善下的增长与风险变化"
+    };
+    function syncWindChoices(){
+      if(!shareApi)return;
+      const type=el("shock-sel").value;
+      document.querySelectorAll(".wind-preset").forEach(button=>{
+        button.setAttribute("aria-pressed",String(button.dataset.shock===type));
+      });
+      el("wind-topic").textContent=type;
+      el("wind-description").textContent=(windCatalog[type]||"检验此情景下模型产业主体和网络指标的变化。")+
+       " 所有结果仅适用于当前模型与参数设定。";
+      if(comparison&&comparison.type!==type){
+        el("wind-feedback").textContent="情景输入已改变。重新运行 A/B 后才会更新结果，当前旧对比不能当作新情景。";
+        el("wind-impact").replaceChildren();
+      }
+    }
+    function refreshWindResults(){
+      const tiles=el("wind-impact");
+      if(!tiles)return;
+      tiles.replaceChildren();
+      if(!comparison||comparison.stale){
+        el("wind-feedback").textContent="尚无当前有效模型对照。先选择情景，再点击“运行并对比”。";
+        return;
+      }
+      const specs=[
+        {key:"abundance",name:"景气变化 Δ"},
+        {key:"order",name:"协同变化 Δ"},
+        {key:"disaster",name:"风险变化 Δ"},
+        {key:"survivors",name:"存续率变化 Δ"}
+      ];
+      for(const spec of specs){
+        const difference=currentMetric(comparison.B,spec.key)-currentMetric(comparison.A,spec.key);
+        const item=create("div");
+        item.append(create("span","",spec.name),
+          create("b",difference>0?"up":difference<0?"down":"", (difference>0?"+":"")+difference.toFixed(3)));
+        tiles.append(item);
+      }
+      el("wind-feedback").textContent="已运行 "+comparison.type+" · 种子 "+comparison.seed+
+        " · 对照显示模型内部指数差值 B − A。可拖动下方 A/B 时间轴继续研究和质疑。";
+    }
+    function setupWindDeck(){
+      if(!shareApi)return;
+      const risk=el("wind-risk"),opportunity=el("wind-opportunity");
+      const riskList=["链主外迁","芯片断供","限电","订单外流","融资难","供应链中断"];
+      const gainList=["订单爆发","政策利好","技术突破"];
+      for(const [target,list,isGain] of [[risk,riskList,false],[opportunity,gainList,true]]){
+        for(const shock of list){
+          const button=create("button","wind-preset"+(isGain?" opportunity":""));
+          button.type="button";button.dataset.shock=shock;button.setAttribute("aria-pressed","false");
+          button.append(create("strong","",shock),create("small","",isGain?"+ 增长条件":"! 风险扰动"));
+          button.addEventListener("click",()=>{
+            el("shock-sel").value=shock;
+            el("shock-sel").dispatchEvent(new Event("change",{bubbles:true}));
+            el("wind-deck").scrollIntoView({block:"nearest",behavior:"auto"});
+          });
+          target.append(button);
+        }
+      }
+      const impact=create("div","wind-impact");impact.id="wind-impact";
+      el("wind-spotlight").append(impact);
+      syncWindChoices();
+      el("wind-run").addEventListener("click",()=>{
+        runComparison();
+        if(comparison&&!comparison.stale){
+          el("compare-section").scrollIntoView({block:"start",behavior:"auto"});
+        }
+      });
+      el("wind-copy").addEventListener("click",async()=>{
+        const seed=safeSeed(),shock=el("shock-sel").value;
+        if(seed===null||!shareApi.valid(seed,shock))return;
+        const link=new URL(window.location.href);
+        link.searchParams.set("scenario",shareApi.encode(seed,shock));
+        link.hash="";
+        try{
+          if(!navigator.clipboard||typeof navigator.clipboard.writeText!=="function")throw Error("clipboard unavailable");
+          await navigator.clipboard.writeText(link.toString());
+          el("wind-feedback").textContent="已复制可复现实验链接 · "+shock+" · 种子 "+seed+
+            "。链接只保存输入；不包含真实概率、模拟分数或不可变模型版本。";
+        }catch{
+          const old=el("wind-share-fallback");if(old)old.remove();
+          const field=create("textarea","wind-share-fallback",link.toString());
+          field.id="wind-share-fallback";field.readOnly=true;field.setAttribute("aria-label","可手动复制的情景链接");
+          el("wind-feedback").after(field);field.focus();field.select();
+          el("wind-feedback").textContent="剪贴板不可用，请复制下方链接。";
+        }
+      });
+      const params=new URLSearchParams(window.location.search);
+      const incoming=shareApi.decode(params.get("scenario"));
+      if(incoming){
+        el("seed-input").value=String(incoming.seed);
+        el("shock-sel").value=incoming.shock;
+        el("research-question").value="复现实验链接："+incoming.shock+"（种子 "+incoming.seed+"）";
+        syncWindChoices();
+        el("wind-feedback").textContent="已读取他人分享的实验条件。可点击运行并对比，复现本版本原模型结果；链接不证明现实中的效果。";
+      }else if(params.has("scenario")){
+        el("wind-feedback").textContent="分享参数格式无效或不受支持，已忽略。当前是本地默认情景。";
+      }
+    }
+    setupWindDeck();
+
     clearMini(el("graph-a"),"等待模拟");
     clearMini(el("graph-b"),"等待模拟");
   }catch(error){

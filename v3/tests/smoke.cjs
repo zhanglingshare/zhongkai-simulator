@@ -1,4 +1,4 @@
-/* V3.6 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
+/* V3.7 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
 const assert=require("node:assert/strict");
 const http=require("node:http");
 const fs=require("node:fs");
@@ -37,6 +37,42 @@ async function testDesktop(browser,port){
   await page.waitForFunction(()=>document.querySelector("#netsvg .node") && document.querySelector("#k-ab").textContent!=="—");
   assert.ok(await page.locator("#netsvg .node").count()>=15,"Missing model nodes");
   await inspectOverflow(page);
+  // V3.7 cinematic explorer has real risk/growth options, never fabricated values.
+  assert.equal(await page.locator("#wind-risk .wind-preset").count(),6);
+  assert.equal(await page.locator("#wind-opportunity .wind-preset").count(),3);
+  assert.equal(await page.locator("#wind-impact > div").count(),0,"no pseudo-calculated values before run");
+  await page.locator('#wind-opportunity button[data-shock="技术突破"]').click();
+  assert.equal(await page.locator("#shock-sel").inputValue(),"技术突破");
+  assert.equal(await page.locator('#wind-opportunity button[data-shock="技术突破"]').getAttribute("aria-pressed"),"true");
+  await page.locator("#wind-run").click();
+  assert.equal(await page.locator("#wind-impact > div").count(),4);
+  assert.match(await page.locator("#wind-feedback").innerText(),/对照显示模型内部指数差值/);
+  assert.match(await page.locator("#scenario-label").innerText(),/技术突破/);
+  await page.locator("#seed-input").fill("31");
+  assert.equal(await page.locator("#wind-impact > div").count(),0,"Stale simulation values must clear after seed changes");
+  await page.locator("#seed-input").fill("7");
+  await page.locator('#wind-risk button[data-shock="链主外迁"]').click();
+  assert.equal(await page.locator("#shock-sel").inputValue(),"链主外迁");
+  await page.locator("#wind-run").click();
+  assert.equal(await page.locator("#wind-impact > div").count(),4);
+  await page.screenshot({path:path.join(shots,"wind-deck-1440.png"),fullPage:true});
+  await page.context().grantPermissions(["clipboard-read","clipboard-write"]);
+  await page.locator("#wind-copy").click();
+  let shared=await page.evaluate(()=>navigator.clipboard.readText());
+  assert.match(shared,/scenario=/);
+  const link=new URL(shared);
+  assert.deepEqual(JSON.parse(decodeURIComponent(link.searchParams.get("scenario"))),{v:1,seed:7,shock:"链主外迁"});
+  // Opening someone's experiment link sets reproducible inputs, not a precomputed score.
+  const peer=await browser.newPage({viewport:{width:1100,height:800}});
+  await peer.goto("http://127.0.0.1:"+port+"/v3/"+link.search,{waitUntil:"load"});
+  await peer.waitForFunction(()=>document.querySelectorAll(".wind-preset").length===9);
+  assert.equal(await peer.locator("#shock-sel").inputValue(),"链主外迁");
+  assert.equal(await peer.locator("#seed-input").inputValue(),"7");
+  assert.equal(await peer.locator("#wind-impact > div").count(),0,"shared links must not invent cached output");
+  await peer.locator("#wind-run").click();
+  const first=await page.locator("#wind-impact b").allInnerTexts();
+  assert.deepEqual(await peer.locator("#wind-impact b").allInnerTexts(),first,"link replay should be deterministic");
+  await peer.close();
   await page.locator("#btn-step").click();
   assert.equal((await page.locator("#tick-lbl").innerText()).trim(),"1");
   await page.locator('[data-view="trends"]').click();
@@ -206,6 +242,12 @@ async function testMobile(browser,port,width){
   await page.goto("http://127.0.0.1:"+port+"/v3/",{waitUntil:"load"});
   await page.waitForFunction(()=>document.querySelector("#netsvg .node"));
   await inspectOverflow(page);
+  assert.equal(await page.locator("#wind-risk .wind-preset").count(),6);
+  await page.locator('#wind-opportunity button[data-shock="订单爆发"]').click();
+  await page.locator("#wind-run").click();
+  assert.equal(await page.locator("#wind-impact > div").count(),4);
+  await inspectOverflow(page);
+  await page.screenshot({path:path.join(shots,"wind-deck-"+width+".png"),fullPage:true});
   await page.locator('[data-mobile-to="canvas"]').click();
   assert.ok(await page.locator("#netsvg").isVisible(),"Canvas tab hidden");
   await page.screenshot({path:path.join(shots,"mobile-"+width+"-canvas.png"),fullPage:true});
@@ -246,7 +288,7 @@ async function testMobile(browser,port,width){
     browser=await chromium.launch({channel:"chrome",headless:true,args:["--no-sandbox"]});
     await testDesktop(browser,port);
     for(const width of [390,360])await testMobile(browser,port,width);
-    console.log("PASS V3.6 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
+    console.log("PASS V3.7 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
   }finally{
     if(browser)await browser.close();
     server.close();
