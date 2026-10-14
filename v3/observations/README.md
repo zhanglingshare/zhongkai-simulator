@@ -48,3 +48,12 @@ V3.4 页面不会将 GDP、工业增长率、工业投资等观测直接替换�
 ## 可执行质量测试
 
 `node ../tests/observations.spec.cjs` 会验证 36 条观测、单位、来源引用、年份去重、GDP 分项一致性、缺失值处理、财政数值预警及“校准阻断”门槛。GitHub Actions 使用 Chrome 在 1440px、390px、360px 实际视口测试趋势与来源浏览。
+
+
+## V3.5 2019—2021 增量归档与滚动基线（2026-10-15）
+
+在不覆盖旧版数据的前提下，新建 `annual-2019-2025.json`。2019 的来源是[政府工作报告](https://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/zfgzbg/content/post_3883587.html)（仅含四项原文明确的指标）；2020 是[2020 年公报转载](https://maptable.com/tjgb/2020/%E6%83%A0%E5%B7%9E%E5%B8%82/%E4%BB%B2%E6%81%BA%E5%8C%BA/report/hui-zhou-shi-2020-nian-zhong-kai-gao-xin-qu-guo-min-jing-ji-he-she-hui-fa-zhan-tong-ji-gong-bao)（原件仍待认证）；2021 是[官方经济运行简况](https://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/qt/tjxx/content/post_4545227.html)。7 年、58 条记录，未找到的条目仍缺失。
+
+**重大口径断点**：2019 政府报告记载零售总额 76.6 亿元，2020 公报转载记载零售总额 126.90 亿元但同比 -8.3%；在修订链核对之前不能连线、不能据此拟合。原 V3.4 对 2025 财政收入不一致的警示仍然存在。
+
+`benchmark-core.js` 的过去一年增速与历史均值比较是**事后、使用非逐期归档的历史版本回溯重建**：目标年仅使用之前年度的值，不含未来数值，但观测 vintage/统计修订未复原，不能称为真实 2019—2025 事前预测、独立外样本检验或当前 `Sim` 核心校准。新增 `v3/tests/benchmark.spec.cjs` 验证不会让目标年信息进入其基线。
