@@ -1,10 +1,10 @@
 {
   "schema_version": 2,
   "region": "zhongkai",
-  "updated": "2026-10-14 07:28",
-  "fetched_at": "2026-10-14 07:28",
+  "updated": "2026-10-15 07:51",
+  "fetched_at": "2026-10-15 07:51",
   "frequency": "每日更新一次",
-  "count": 9,
+  "count": 12,
   "stats": [
     {
       "n": "5.8%",
@@ -39,12 +39,12 @@
       "summary": "9月16日志邦智能物流系统及智能装备研发与生产项目在潼湖生态智慧区奠基，总投资2.6亿元，补齐生产性服务业短板、完善供应链配套。",
       "published_at": "2026-09-17",
       "event_date": "2026-09-16",
-      "fetched_at": "2026-10-14 07:28",
+      "fetched_at": "2026-10-15 07:51",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
         "direction": "利好",
-        "note": "生产性服务业/供应链配套补短板信号；模型暂无服务业细分机制，暂不入模"
+        "note": "生产性服务业/供应链配套补短板信号"
       }
     },
     {
@@ -59,12 +59,12 @@
       "summary": "用地单位为惠州亿纬动力电池有限公司，潼湖生态智慧区红岗片区ZKD-011-19地块约22.47万㎡一类工业用地，拟2028年2月前开工、2030年2月前竣工，现核发建设用地规划许可证批前公示。",
       "published_at": "2026-10-08",
       "event_date": "2026-10-08",
-      "fetched_at": "2026-10-14 07:28",
+      "fetched_at": "2026-10-15 07:51",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
         "direction": "利好",
-        "note": "龙头动力电池企业扩产拿地信号；规划许可公示≠投产，模型不把用地/规划公示直接当作产值参数"
+        "note": "龙头动力电池企业扩产拿地信号；规划许可公示≠投产，不把用地公示直接当作产值参数"
       }
     },
     {
@@ -79,12 +79,12 @@
       "summary": "惠州拓邦电气在东江高新科技产业园东兴区调整多栋厂房层数，推进智能控制器暨锂电池扩产增效项目，现进行工程设计方案及规划许可批前公示。",
       "published_at": "2026-09-30",
       "event_date": "2026-09-30",
-      "fetched_at": "2026-10-14 07:28",
+      "fetched_at": "2026-10-15 07:51",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
         "direction": "利好",
-        "note": "现有龙头企业扩产技改信号；规划方案公示阶段，模型不把公示当作产值参数"
+        "note": "现有龙头企业扩产技改信号；规划方案公示阶段，不把公示当作产值参数"
       }
     },
     {
@@ -95,16 +95,16 @@
       "srcLevel": "官方发布",
       "live": false,
       "source": "仲恺高新区官网（生态环境）",
-      "url": "https://www.hzzk.gov.cn/hzzksthjj/gkmlpt/content/5/5855/mpost_5855807.html",
+      "url": "https://www.hzzk.gov.cn/zzgxqzdlyxxgk/hjbhxxgk/jsxmhjyxpj/content/post_5855806.html",
       "summary": "德赛电池物联网电源高端智造项目（二期）电芯项目环评文件受理公示（公示期9月20日至10月9日），高端智造产能继续在仲恺布局。",
       "published_at": "2026-09-20",
       "event_date": "2026-09-20 至 2026-10-09",
-      "fetched_at": "2026-10-14 07:28",
+      "fetched_at": "2026-10-15 07:51",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
         "direction": "利好",
-        "note": "高端智造电芯项目扩产信号；环评受理≠投产，模型不把审批公示当作产值参数"
+        "note": "高端智造电芯项目扩产信号；环评受理≠投产，不把审批公示当作产值参数"
       }
     },
     {
@@ -116,13 +116,15 @@
       "live": false,
       "source": "仲恺高新区官网",
       "url": "https://www.hzzk.gov.cn/bmpd/thstzhq/dtzx/content/post_5853372.html",
-      "summary": "中韩（惠州）产业园起步区盘活闲置旧厂房打造特色商业街区，已签约瑞幸咖啡、蜜雪冰城、古茗及特色餐饮、便民超市等商户60余家，招商完成率约80%，力争12月整体开业。",
+      "summary": "中韩（惠州）产业园起步区盘活闲置旧厂房打造“运动+美食”特色商业街区，已签约瑞幸咖啡、蜜雪冰城、古茗及特色餐饮、便民超市等商户60余家，招商完成率约80%，力争12月整体开业。",
       "published_at": "2026-09-16",
       "event_date": "2026-09-16",
-      "fetched_at": "2026-10-14 07:28",
+      "fetched_at": "2026-10-15 07:51",
       "verified_status": "已核验",
       "fate": {
-        "kind": "life"
+        "kind": "life",
+        "direction": "利好",
+        "note": "园区商业配套与夜经济升温"
       }
     },
     {
@@ -134,13 +136,15 @@
       "live": false,
       "source": "仲恺高新区官网",
       "url": "https://www.hzzk.gov.cn/bmpd/thstzhq/dtzx/content/post_5860560.html",
-      "summary": "9月25日中秋佳节，第十四届王者荣耀全国大赛海选赛惠州仲恺站在智谷悦享汇商业街举行，现场设猜灯谜、国风冰箱贴DIY、商户双节福利等互动。",
+      "summary": "第十四届王者荣耀全国大赛海选赛惠州仲恺站在智谷悦享汇商业街举行，22支战队、近200人参与，现场设猜灯谜、国风冰箱贴DIY、商户双节福利等互动。",
       "published_at": "2026-09-28",
       "event_date": "2026-09-25",
-      "fetched_at": "2026-10-14 07:28",
+      "fetched_at": "2026-10-15 07:51",
       "verified_status": "已核验",
       "fate": {
-        "kind": "life"
+        "kind": "life",
+        "direction": "利好",
+        "note": "园区青年潮流文体活动"
       }
     },
     {
@@ -152,13 +156,35 @@
       "live": false,
       "source": "惠州市人民政府",
       "url": "https://www.huizhou.gov.cn/zwgk/hzsz/zwyw/content/post_5859954.html",
-      "summary": "惠州金秋推出200余项文旅活动点燃消费热潮，仲恺高新区以「惠州有戏·智造有声」为主题，把中国戏曲文化周引入湖山之间，打破传统戏台边界。",
+      "summary": "惠州金秋推出200余项文旅活动点燃消费热潮，仲恺高新区以「惠州有戏·智造有声」为主题，把中国戏曲文化周引入湖山之间，仲力磁场看戏曲、玩科技、逛市集，免费入园。",
       "published_at": "2026-09-25",
-      "event_date": "2026-09-25",
-      "fetched_at": "2026-10-14 07:28",
+      "event_date": "2026-10-01",
+      "fetched_at": "2026-10-15 07:51",
       "verified_status": "已核验",
       "fate": {
-        "kind": "life"
+        "kind": "life",
+        "direction": "利好",
+        "note": "金秋文旅与消费活动"
+      }
+    },
+    {
+      "title": "跟着鹅香去沥林：市级非遗“沥林碌鹅”成仲恺美食符号",
+      "cat": "food",
+      "emoji": "🦢",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "惠州市人民政府",
+      "url": "https://www.huizhou.gov.cn/zwgk/hzsz/zwyw/content/post_5863651.html",
+      "summary": "“沥林碌鹅制作技艺”为市级非遗、曾登央视《生财有道》，“无鹅不成宴”的沥林镇每年吸引大湾区食客超10万人次，鹅产业连起养殖、加工与饭店，成乡村增收招牌。",
+      "published_at": "2026-10-03",
+      "event_date": "2026-10-03",
+      "fetched_at": "2026-10-15 07:51",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "life",
+        "direction": "利好",
+        "note": "非遗美食与特色餐饮去处"
       }
     },
     {
@@ -173,12 +199,32 @@
       "summary": "红岗片区ZKD-010-14-01-02地块约12.64万㎡一类物流仓储用地拟核发建设用地规划许可证，用地单位为惠州仲恺荣城发展有限公司。",
       "published_at": "2026-10-08",
       "event_date": "2026-10-08",
-      "fetched_at": "2026-10-14 07:28",
+      "fetched_at": "2026-10-15 07:51",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
         "direction": "中性",
-        "note": "物流仓储用地供给；规划公示阶段，模型不把供地公告当作产值参数"
+        "note": "物流仓储用地供给；规划公示阶段，不把供地公告当作产值参数"
+      }
+    },
+    {
+      "title": "潼侨公园“熟人社区一家亲”文艺晚会热闹上演，居民登台当主角",
+      "cat": "fun",
+      "emoji": "🏮",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区官网",
+      "url": "https://www.hzzk.gov.cn/dwrdbm/zzgxqwzfw/zfdt/zfyw/content/post_5868392.html",
+      "summary": "仲恺高新区2026年“国庆佳节千家喜·熟人社区一家亲”文艺晚会在潼侨公园举行，社区居民自编自演、登台当主角，熟人社区氛围浓厚。",
+      "published_at": "2026-10-10",
+      "event_date": "2026-10-10",
+      "fetched_at": "2026-10-15 07:51",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "life",
+        "direction": "利好",
+        "note": "社区节日文化活动暖闻"
       }
     },
     {
@@ -193,12 +239,32 @@
       "summary": "10月9日上午，陈江街道「青春履职担重任 实干建功展风华」青年风采展示大赛在城市会客厅举办，搭建基层青年互学共进、展示交流平台。",
       "published_at": "2026-10-10",
       "event_date": "2026-10-09",
-      "fetched_at": "2026-10-14 07:28",
+      "fetched_at": "2026-10-15 07:51",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
         "direction": "中性",
-        "note": "城区文化活动报道；生活氛围类，未入模，仅提供报道"
+        "note": "基层青年文化活动报道"
+      }
+    },
+    {
+      "title": "潼湖潼心谷：8万㎡户外亲子萌宠乐园，周末微度假好去处",
+      "cat": "fun",
+      "emoji": "🦙",
+      "tier": "中",
+      "srcLevel": "市民讨论",
+      "live": false,
+      "source": "惠州本地宝",
+      "url": "https://m.huizhou.bendibao.com/xiuxian/108948.shtm",
+      "summary": "位于潼湖镇东江之畔的潼心谷占地约8万平方米，粉色网红秋千、萌宠乐园、亲子无动力乐园等设施丰富，毗邻惠州、东莞、广州三市交界，是家庭户外微度假热门地。",
+      "published_at": "2026-10-03",
+      "event_date": null,
+      "fetched_at": "2026-10-15 07:51",
+      "verified_status": "待核实",
+      "fate": {
+        "kind": "life",
+        "direction": "利好",
+        "note": "潼湖镇亲子户外休闲去处"
       }
     }
   ]
