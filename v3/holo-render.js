@@ -78,6 +78,7 @@ void main(){
  }
  function mount(opts){
   const canvas=opts.canvas,tip=opts.tooltip,status=opts.status;
+  const labels=opts.labels,labelMap=new Map();
   let renderer=null,context2d=null,mode="fallback",graph=null,meta={},selected=null,hover=null;
   let cam={yaw:-.36,pitch:.18,distance:6.3},raf=0,lastFrame=0,visible=true,disposed=false;
   let start={x:0,y:0},dragged=false;
@@ -162,12 +163,27 @@ void main(){
     renderer.draw(particles,"points",cam,w,h,ratio);
     renderer.draw(points,"points",cam,w,h,ratio);
   }
+  function syncLabels(){
+    if(!labels||!graph)return;
+    const majors=graph.nodes.filter(n=>n.w>=3&&n.alive).sort((a,b)=>b.w-a.w||Core.hash(a.name)-Core.hash(b.name)).slice(0,6);
+    const included=new Set(majors.map(n=>n.name));
+    for(const [name,element] of labelMap)if(!included.has(name)){element.remove();labelMap.delete(name);}
+    for(const n of majors){
+      let element=labelMap.get(n.name);
+      if(!element){element=document.createElement("span");element.className="holo-node-label";labels.append(element);labelMap.set(n.name,element);}
+      element.textContent=n.name;
+      const p=screen(n);element.style.left=p.x+"px";element.style.top=(p.y+Math.max(13,40/p.depth))+"px";
+      const width=canvas.clientWidth,height=canvas.clientHeight;
+      element.hidden=p.x<width*.37||p.x>width*.86||p.y<height*.19||p.y>height*.76;
+    }
+  }
   function draw(now){
    raf=0;if(disposed||!visible)return;
    if(now-lastFrame<30){raf=requestAnimationFrame(draw);return;}
    lastFrame=now;
    const [w,h,r]=resize();
    if(renderer)render3d(now,w,h,r);else render2d(now,w,h,r);
+   syncLabels();
    if(!reduced)raf=requestAnimationFrame(draw);
   }
   function schedule(){if(!raf&&!disposed&&visible)raf=requestAnimationFrame(draw);}
