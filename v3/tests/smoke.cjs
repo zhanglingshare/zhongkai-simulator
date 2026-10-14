@@ -1,4 +1,4 @@
-/* V3.7 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
+/* V3.8 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
 const assert=require("node:assert/strict");
 const http=require("node:http");
 const fs=require("node:fs");
@@ -36,6 +36,34 @@ async function testDesktop(browser,port){
   await page.goto("http://127.0.0.1:"+port+"/v3/",{waitUntil:"load"});
   await page.waitForFunction(()=>document.querySelector("#netsvg .node") && document.querySelector("#k-ab").textContent!=="—");
   assert.ok(await page.locator("#netsvg .node").count()>=15,"Missing model nodes");
+  // V3.8: first viewport is an operable genuine 3D projection of the legacy Sim.
+  assert.ok(await page.locator("#holo-hero").isVisible());
+  assert.ok(await page.locator("#holo-canvas").isVisible());
+  assert.ok(await page.locator("#holo-hero").evaluate(x=>x.getBoundingClientRect().height>=700));
+  assert.match(await page.locator("#holo-render-status").innerText(),/真实模型网络|2.5D 降级/);
+  assert.match(await page.locator("#holo-active").innerText(),/\d+ \/ \d+/);
+  assert.equal(await page.locator("#holo-range").isDisabled(),true,"baseline does not invent time replay");
+  await page.screenshot({path:path.join(shots,"hologram-first-screen-1440.png"),fullPage:false});
+  await page.locator("#holo-zoom-in").click();
+  await page.locator("#holo-home").click();
+  await page.locator("#holo-risk").click();
+  assert.match(await page.locator("#holo-scene-name").innerText(),/链主外迁/);
+  await page.locator("#holo-play").click(); // pause scene before manual rewind
+  assert.ok(await page.locator("#holo-range").isEnabled());
+  await page.locator("#holo-range").fill("8");
+  assert.match(await page.locator("#holo-time-label").innerText(),/08/);
+  assert.match(await page.locator("#holo-message").innerText(),/模型内传播路径/);
+  await page.screenshot({path:path.join(shots,"hologram-risk-step8-1440.png"),fullPage:false});
+  await page.locator("#holo-growth").click();
+  await page.locator("#holo-play").click(); // pause growth playback
+  assert.match(await page.locator("#holo-scene-name").innerText(),/技术突破/);
+  assert.equal(await page.locator("#wind-impact > div").count(),4);
+  await page.locator("#seed-input").fill("23");
+  assert.ok(await page.locator("#holo-range").isDisabled(),"stale science result must not remain playable");
+  await page.locator("#seed-input").fill("7");
+  await inspectOverflow(page);
+  // Restore original test default shock for V3.7 tests below.
+  await page.locator("#shock-sel").selectOption("芯片断供");
   await inspectOverflow(page);
   // V3.7 cinematic explorer has real risk/growth options, never fabricated values.
   assert.equal(await page.locator("#wind-risk .wind-preset").count(),6);
@@ -241,7 +269,17 @@ async function testMobile(browser,port,width){
   page.on("pageerror",e=>errors.push(e.message));
   await page.goto("http://127.0.0.1:"+port+"/v3/",{waitUntil:"load"});
   await page.waitForFunction(()=>document.querySelector("#netsvg .node"));
+  assert.ok(await page.locator("#holo-hero").isVisible());
+  assert.match(await page.locator("#holo-render-status").innerText(),/真实模型网络|2.5D 降级/);
+  await page.screenshot({path:path.join(shots,"hologram-first-screen-"+width+".png"),fullPage:false});
+  await page.locator("#holo-growth").click();
+  await page.locator("#holo-play").click();
+  assert.match(await page.locator("#holo-scene-name").innerText(),/技术突破/);
+  await page.locator("#holo-range").fill("6");
+  assert.match(await page.locator("#holo-time-label").innerText(),/06/);
   await inspectOverflow(page);
+  await page.screenshot({path:path.join(shots,"hologram-growth-"+width+".png"),fullPage:false});
+    await inspectOverflow(page);
   assert.equal(await page.locator("#wind-risk .wind-preset").count(),6);
   await page.locator('#wind-opportunity button[data-shock="订单爆发"]').click();
   await page.locator("#wind-run").click();
@@ -288,7 +326,7 @@ async function testMobile(browser,port,width){
     browser=await chromium.launch({channel:"chrome",headless:true,args:["--no-sandbox"]});
     await testDesktop(browser,port);
     for(const width of [390,360])await testMobile(browser,port,width);
-    console.log("PASS V3.7 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
+    console.log("PASS V3.8 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
   }finally{
     if(browser)await browser.close();
     server.close();
