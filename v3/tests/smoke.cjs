@@ -1,4 +1,4 @@
-/* V3.5 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
+/* V3.6 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
 const assert=require("node:assert/strict");
 const http=require("node:http");
 const fs=require("node:fs");
@@ -147,6 +147,55 @@ async function testDesktop(browser,port){
   await inspectOverflow(page);
   await page.screenshot({path:path.join(shots,"observations-1440.png"),fullPage:true});
 
+  // V3.6 evidence-to-state bridge: absent historical correspondence means no score.
+  await page.goto("http://127.0.0.1:"+port+"/v3/measurement.html",{waitUntil:"load"});
+  await page.waitForFunction(()=>document.querySelectorAll("#coverage-cards .coverage-card").length===5);
+  assert.equal(await page.locator("#measure-candidate option").count(),3);
+  assert.equal(await page.locator("#map-rows tr").count(),6,"2019 has no reported industrial growth");
+  await page.locator("#btn-measure-run").click();
+  assert.match(await page.locator("#measure-results").innerText(),/不能生成研究诊断/);
+  assert.ok(await page.locator("#btn-export-protocol").isDisabled(),"No score or protocol without real archive");
+  await inspectOverflow(page);
+  await page.screenshot({path:path.join(shots,"measurement-unverified-1440.png"),fullPage:true});
+  // Test-only synthetic Sim snapshots: checks math and leak prevention, not evidence of actual prediction.
+  const fakeArchive={
+    schema:"zhongkai-v3-research-1",model:"synthetic test-only fixture",
+    A_B:{seed:7,shock:"芯片断供",stale:false,
+      baselineHistory:Array.from({length:21},(_,tick)=>({
+        tick,metrics:{abundance:([.2,.7,.3,.55,.6,.65][[0,4,8,12,16,20].indexOf(tick)]??.4),
+          order:.5,disaster:.2,mood:0,survivors:.9}
+      }))}
+  };
+  await page.locator("#measure-archive").setInputFiles({name:"synthetic-test-archive.json",
+    mimeType:"application/json",buffer:Buffer.from(JSON.stringify(fakeArchive))});
+  assert.match(await page.locator("#archive-state").innerText(),/已载入原模型基线/);
+  for(const [year,tick] of [[2020,0],[2021,4],[2022,8],[2023,12],[2024,16],[2025,20]]){
+    await page.locator('input[data-year="'+year+'"]').fill(String(tick));
+  }
+  await page.locator("#btn-measure-run").click();
+  assert.match(await page.locator("#measure-results").innerText(),/外部预测验证仍为未通过/);
+  assert.equal(await page.locator("#measure-chart circle").count(),7,"Six observed points plus legend marker");
+  assert.equal(await page.locator("#measure-detail tbody tr").count(),6);
+  assert.ok(await page.locator("#btn-export-protocol").isEnabled());
+  const protocolDownload=page.waitForEvent("download");
+  await page.locator("#btn-export-protocol").click();
+  const downloaded=await protocolDownload;
+  const exported=JSON.parse(fs.readFileSync(await downloaded.path(),"utf8"));
+  assert.equal(exported.schema,"zk-measurement-bridge-v1");
+  assert.equal(exported.validationPassed,false);
+  assert.deepEqual(exported.fittedFromYears,[2020,2021,2022]);
+  assert.equal(exported.actualObservations.length,6);
+  await page.screenshot({path:path.join(shots,"measurement-synthetic-test-only-1440.png"),fullPage:true});
+  await page.locator('input[data-year="2021"]').fill("0");
+  await page.locator("#btn-measure-run").click();
+  assert.match(await page.locator("#measure-results").innerText(),/不能生成研究诊断/);
+  assert.ok(await page.locator("#btn-export-protocol").isDisabled(),"Duplicates invalidate export");
+  const futureDownload=page.waitForEvent("download");
+  await page.locator("#btn-future-template").click();
+  const future=JSON.parse(fs.readFileSync(await (await futureDownload).path(),"utf8"));
+  assert.equal(future.schema,"zk-prospective-observation-protocol-v1");
+  assert.equal(future.modelCommit,"");
+
   assert.deepEqual(errors,[],"JavaScript errors: "+errors.join("; "));
   await page.close();
 }
@@ -180,6 +229,12 @@ async function testMobile(browser,port,width){
   assert.equal(await page.locator("#benchmark-rows tr").count(),3);
   await inspectOverflow(page);
   await page.screenshot({path:path.join(shots,"observations-"+width+".png"),fullPage:true});
+  await page.goto("http://127.0.0.1:"+port+"/v3/measurement.html",{waitUntil:"load"});
+  await page.waitForFunction(()=>document.querySelectorAll("#coverage-cards .coverage-card").length===5);
+  assert.equal(await page.locator("#measure-candidate option").count(),3);
+  assert.ok(await page.locator("#btn-export-protocol").isDisabled());
+  await inspectOverflow(page);
+  await page.screenshot({path:path.join(shots,"measurement-unverified-"+width+".png"),fullPage:true});
   assert.deepEqual(errors,[],"Mobile JavaScript errors: "+errors.join("; "));
   await page.close();
 }
@@ -191,7 +246,7 @@ async function testMobile(browser,port,width){
     browser=await chromium.launch({channel:"chrome",headless:true,args:["--no-sandbox"]});
     await testDesktop(browser,port);
     for(const width of [390,360])await testMobile(browser,port,width);
-    console.log("PASS V3.5 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
+    console.log("PASS V3.6 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
   }finally{
     if(browser)await browser.close();
     server.close();

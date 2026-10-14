@@ -102,3 +102,17 @@ GitHub Actions 执行 `v3/tests/validation.spec.cjs` 检查泄漏门槛，并使
 - 新增 `benchmark-core.js` 事后滚动基线：仅对 GDP 官方实际增速、规上工业增加值增速、工业投资增速，在至少 3 年历史训练后按目标年份逐年比较“上一年持平”与“截至上一年平均”。MAE/RMSE 单位是百分点。
 - **强调**：这些只是在2026年用历史已发表数据重建的基线，不存在当年不可篡改的预测文件或逐年统计资料 vintage，因此**不是模型外样本验证、不是因果识别、不代表当前 Sim 内核校准成功**。GDP 现价总量、零售额跨口径断点不允许进入滚动基线。
 - 独立来源尚不到 8 年、历史指标不完整、模型时间步与现实观测的映射仍未定义；所以 V3.5 保持“Sim 参数校准未通过”。更多科学规则见 `validation-protocol.md`。
+
+  
+## V3.6 模型—现实观测映射（独立研究台）
+
+新增 [measurement.html](measurement.html)、[measurement-core.js](measurement-core.js)、[measurement.js](measurement.js)、[measurement.css](measurement.css)，以及 [详细科学协议](measurement-protocol.md)。
+
+- 逐一检查现有 **5 项模型指数**的现实可观测性，标明“弱代理”与“没有直接观测”；
+- 明确记录 3 种可反驳的间接代理候选（景气与工业增加值增速、景气与 GDP 实际增速、风险与工业投资增速），不把相关性当作已验证的转换公式；
+- 导入旧 V3 工作台真实导出的 `zhongkai-v3-research-1` JSON，要求**人工登记年度与 Sim 快照 tick**，不默认 1 tick = 1 年；
+- 对样本内训练期估计线性测量系数，后段历史回放只计算描述性残差，始终标注 **`validationPassed:false`、`calibrated:false`**；模型自身已使用 2025 事件，故 2019–2025 不能当真正未来独立留出；
+- 输出完整可复算、保留每年官方观测和原始来源的诊断协议 JSON，并可下载空白未来预测预注册模板；
+- 增加 `v3/tests/measurement.spec.cjs` 及真实 Chrome 布局/上传/下载/数据泄漏门槛测试。
+
+**本版本只完成可检验的测量研究起点，不声称 Sim 参数已校准或其现实经济预测能力得到验证。** 原始 `model.js`、V2、每日豆包数据和 7 年观测源文件没有修改。

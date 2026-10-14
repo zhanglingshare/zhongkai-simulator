@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><title>V3.6 · 模型—现实观测映射研究台</title>
+<meta name="description" content="建立模型指数与公开年度统计之间有证据约束、可复现且不冒充校准的测量协议。">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="measurement.css"></head>
+<body><div class="app">
+<nav class="rail" aria-label="工作台导航">
+<a class="rail-brand" href="index.html" title="情景工作台">Z<span>.</span></a>
+<a class="rail-link" href="index.html" title="情景实验室">▦<span class="sr-only">情景实验室</span></a>
+<a class="rail-link active" aria-current="page" href="measurement.html" title="模型与现实观测映射">◉<span class="sr-only">模型与现实观测映射</span></a>
+<a class="rail-link" href="verification.html" title="科学验证">◇<span class="sr-only">科学验证</span></a>
+<a class="rail-link" href="observations.html" title="历史观测">▤<span class="sr-only">历史观测</span></a>
+<span class="rail-spacer"></span><a class="rail-link" href="../v2/" title="V2">↗</a>
+</nav>
+<div class="app-content">
+<header class="masthead"><div><div class="breadcrumb">ZHONGKAI / OBSERVATION BRIDGE / REPRODUCIBLE RESEARCH</div>
+<div class="head-title"><h1>模型—现实观测映射</h1><span class="version">V3.6 · 科学研究</span></div>
+<p>不把宏观经济数据当成仿真指数，也不把事后拟合冒充历史预测。</p></div>
+<div class="head-right"><span class="model-pill">可证伪测量假设 · 尚未校准</span><a href="index.html" class="back-link">返回情景实验室 ↗</a></div></header>
+<main class="measure-main">
+<section class="measure-hero">
+  <span class="measure-eyebrow">MEASUREMENT IS NOT PREDICTION</span>
+  <h2>先证明现实中的什么数据，能够测量模型的什么状态。</h2>
+  <p>这不是自动转换 GDP 的工具。每个模型指数需要事先登记可观测指标、时间对应关系、数据来源和测量公式；只有独立的事前档案及未来观测才能验证预测能力。</p>
+  <div class="measure-verdicts">
+    <div><span>已有模型指数</span><strong>5</strong><small>景气、协同、风险、信心、存续率</small></div>
+    <div><span>候选间接测量关系</span><strong id="candidate-count">—</strong><small>仅是假设，不是转换公式</small></div>
+    <div><span>历史独立检验</span><strong class="gate-no">尚未通过</strong><small>当前 Sim 代码含历史事件</small></div>
+    <div><span>现实指标来源</span><strong>2019–2025</strong><small>保留公报原始单位和源头</small></div>
+  </div>
+</section>
+<section class="measure-pane" aria-labelledby="coverage-title"><div class="measure-heading"><span>01</span><h2 id="coverage-title">五项模型指数的现实可观测性</h2><small>IDENTIFIABILITY / COVERAGE</small></div>
+<div class="measure-body"><div id="coverage-cards" class="coverage-cards"><p class="measure-empty">正在检查已登记的来源和模型指标…</p></div>
+<p class="measure-note">有弱代理不意味着观测到了模型的潜变量。需要现实中定义一致、独立收集、具有时间戳的观测，才能估计真正的测量误差。</p></div></section>
+<div class="measure-columns">
+<section class="measure-pane" aria-labelledby="setup-title"><div class="measure-heading"><span>02</span><h2 id="setup-title">研究者定义映射规则</h2><small>EXPLICIT ALIGNMENT</small></div>
+<div class="measure-body">
+<label class="measure-label" for="measure-candidate">选择待证伪的测量假设</label>
+<select id="measure-candidate" class="measure-select"><option value="">读取中…</option></select>
+<div id="candidate-detail" class="measure-hypothesis"></div>
+<label class="measure-label" for="measure-archive">导入 V3.5 情景对比导出的研究 JSON</label>
+<input id="measure-archive" type="file" accept=".json,application/json">
+<p class="measure-note">请先在主情景工作台运行 A/B 对比并点击“导出当前研究 JSON”。只读使用 A 基线的模型状态序列，不修改模型。</p>
+<div id="archive-state" class="measure-mini-status">尚未导入模型状态序列。</div>
+<label class="measure-label" for="measure-cutoff">只用此年及以前的观测估计样本内测量公式</label>
+<select id="measure-cutoff" class="measure-select"><option value="2022">2022 年（默认）</option><option value="2023">2023 年</option></select>
+<p class="measure-note">后续年份只作“事后回放”展示：模型本身包含这些年份的历史信息，不能当作独立留出验证。</p>
+<h3 class="measure-subtitle">明确登记“年度 → Sim 时间步”</h3>
+<p class="measure-note">保持空白表示尚未建立时间对应。不要默认一个时间步就是一年。仅作为假设性探索，不能凭手动配对获得验证资格。</p>
+<div class="measure-table-wrap"><table class="measure-table">
+<thead><tr><th>公报年度</th><th>真实观测</th><th>来源</th><th>模型步 tick</th></tr></thead>
+<tbody id="map-rows"><tr><td colspan="4">等待年度统计资料…</td></tr></tbody>
+</table></div>
+<div class="measure-actions"><button class="btn primary" id="btn-measure-run" type="button">执行可复现测量诊断 →</button><button class="btn outline" id="btn-measure-reset" type="button">清空时间对齐</button></div>
+<div class="measure-mini-status" id="run-feedback" role="status" aria-live="polite">未执行。没有自主猜测年份—时间步关系。</div>
+</div></section>
+<section class="measure-pane" aria-labelledby="findings-title"><div class="measure-heading"><span>03</span><h2 id="findings-title">训练期测量诊断与反证</h2><small>DIAGNOSTIC ONLY</small></div>
+<div class="measure-body">
+<div id="measure-results">
+<div class="measure-unready"><strong>尚未建立可检查的映射</strong><p>请先导入真实导出的模型轨迹、选择有登记的代理假设，并手动提交年份和模型步的对应关系。没有证据时不生成成绩。</p></div>
+</div>
+<div id="measure-chart-wrap" hidden><svg id="measure-chart" role="img" aria-label="逐年实际指标与拟合值对照" viewBox="0 0 660 310"></svg></div>
+<div id="measure-detail" class="measure-detail"></div>
+<div class="measure-rule"><strong>禁止误读</strong><p>展示的训练期误差不等于经济预测能力。后段数据即使没有进入拟合方程，也可能已被原 Sim 的历史事件和参数引用，故无法作为独立外样本验证。</p></div>
+<div class="measure-actions">
+<button class="btn outline" id="btn-export-protocol" type="button" disabled>导出本次可复现映射 JSON ↓</button>
+<button class="btn outline" id="btn-future-template" type="button">下载未来预注册协议模板 ↓</button>
+</div>
+</div></section>
+</div>
+<section class="measure-pane" aria-labelledby="process-title"><div class="measure-heading"><span>04</span><h2 id="process-title">如何升级为真正可验证的映射</h2><small>SCIENTIFIC GATES</small></div>
+<div class="measure-body">
+<div class="measure-roadmap">
+<div><b>冻结测量定义</b><p>明确现实指标的统计口径、观察频率、模型时间步单位及经济机制；固定转换公式和参数。</p></div>
+<div><b>记录数据版本</b><p>保留统计公报首次发布版本、修订链、获取日期和原始来源，不能拿2026年事后数据假装2023年已经可知。</p></div>
+<div><b>锁定事前模拟</b><p>目标年份结果公布前，对模型版本、参数、随机种子、预测结果和协议进行可独立核验的不可变归档。</p></div>
+<div><b>在未来观察上检验</b><p>只在新观察公布后，根据事前协议计算误差、校准曲线和朴素基线；没有独立观察就标注“尚未通过验证”。</p></div>
+</div>
+<div class="measure-footer-links"><a href="verification.html">回看已有数据血统及留出门槛 ↗</a><a href="observations.html">查看2019—2025真实统计来源 ↗</a><a href="index.html">返回模型情景实验室 ↗</a></div>
+</div></section>
+<div id="measure-error" class="runtime" role="alert" hidden></div>
+<footer class="app-footer">V3.6 测量映射研究台 · 只读现有公开观测和用户主动导入的模型导出文件 · 模型本体不变 · 无自动参数校准</footer>
+</main>
+</div></div>
+<script src="measurement-core.js"></script><script src="measurement.js"></script>
+</body></html>
