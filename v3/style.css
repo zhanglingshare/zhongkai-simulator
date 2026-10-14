@@ -309,3 +309,45 @@ body.comparison-open{overflow:hidden}
   .compare-actions{flex-wrap:wrap}
   .compare-actions .btn{flex:1 1 115px}
 }
+
+
+/* V3.2 · Scientific robustness distribution workspace */
+.compare-shortcut{margin-top:9px}
+.robustness{margin:0 22px 20px;border:1px solid #dfe9ee;border-radius:11px;background:linear-gradient(145deg,#f8fbfd 0%,#fff 45%);padding:22px}
+.robust-heading{display:flex;justify-content:space-between;align-items:start;gap:14px;flex-wrap:wrap}
+.research-kicker{display:block;font-size:10px;font-weight:770;letter-spacing:1.3px;color:#0a8291;margin-bottom:6px}
+.robust-heading h3{font-size:17px;line-height:1.35;margin:0;color:#213c51;font-weight:750}
+.robust-heading p{color:#7f90a0;font-size:12px;max-width:680px;line-height:1.8;margin:7px 0 0}
+.study-tag{border-radius:5px;border:1px solid #dae8e9;color:#167887;background:#ecf5f5;padding:6px 9px;font-size:10px;white-space:nowrap}
+.robust-controls{display:flex;align-items:end;gap:10px;flex-wrap:wrap;margin-top:18px}
+.robust-controls label{display:flex;flex-direction:column;gap:5px;color:#6b7d8f;font-size:11px;font-weight:650}
+.robust-controls label select{width:158px;background:#fff}
+.robust-controls .btn{min-height:41px}
+.robust-controls .btn:disabled{opacity:.48;cursor:default}
+.robust-controls .btn#btn-export{margin-left:auto}
+.robust-status{font-size:11px;line-height:1.8;margin:13px 0 10px;color:#517182;min-height:18px}
+.robust-intro{font-size:11px;color:#71899a;line-height:1.8;margin:8px 0 14px}
+.robust-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.robust-tile{border:1px solid #e2eaf0;background:#fff;border-radius:9px;padding:14px 16px;min-width:0}
+.robust-tile-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:2px}
+.robust-tile-head strong{font-size:13px;color:#2f4b60}
+.robust-median{font-size:12px;font-weight:740;font-variant-numeric:tabular-nums;color:#98612f;white-space:nowrap}
+.robust-tile svg{display:block;width:100%;height:auto}
+.robust-tile-bottom{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:#8394a3;font-size:10.5px;font-variant-numeric:tabular-nums}
+.robust-explain{font-size:11px;color:#6d8293;border-left:2px solid #92b7bf;padding:8px 12px;margin:14px 0 2px;background:#f3f9fa;line-height:1.85}
+.robust-footnote{color:#90a0ad;font-size:10.5px;line-height:1.8;margin:14px 0 0}
+@media(max-width:1100px){
+ .robust-grid{grid-template-columns:1fr}
+ .robust-controls .btn#btn-export{margin-left:0}
+}
+@media(max-width:760px){
+ .robustness{margin:0 12px 14px;padding:15px;border-radius:9px}
+ .robust-heading h3{font-size:15px}
+ .study-tag{white-space:normal}
+ .robust-controls{align-items:stretch;gap:8px}
+ .robust-controls label{flex:1 1 100%}
+ .robust-controls label select{width:100%}
+ .robust-controls .btn{flex:1 1 140px}
+ .robust-tile{padding:12px}
+ .robust-tile-head{gap:4px}
+}
