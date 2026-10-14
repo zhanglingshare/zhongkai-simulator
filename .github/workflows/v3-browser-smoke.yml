@@ -29,6 +29,8 @@ jobs:
         run: node v3/tests/validation.spec.cjs
       - name: Historic observation integrity and calibration gate tests
         run: node v3/tests/observations.spec.cjs
+      - name: Past-only reconstructed baseline unit tests
+        run: node v3/tests/benchmark.spec.cjs
       - name: Browser interactions and responsive overflow checks
         run: node v3/tests/smoke.cjs
       - name: Upload screenshots for visual review
