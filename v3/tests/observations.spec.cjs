@@ -1,0 +1,44 @@
+/* V3.4 empirical source register: integrity checks. */
+const assert=require("node:assert/strict");
+const fs=require("node:fs");
+const path=require("node:path");
+const pathToData=path.resolve(__dirname,"../observations/annual-2022-2025.json");
+const data=JSON.parse(fs.readFileSync(pathToData,"utf8"));
+const V=require("../observations-core.js");
+const result=V.validate(data);
+assert.equal(result.ok,true,result.errors.join("; "));
+assert.deepEqual(result.years,[2022,2023,2024,2025]);
+assert.equal(result.rows.length,36);
+assert.equal(Object.keys(result.byMetric).length,9);
+assert.deepEqual(result.byMetric.gdp_current.map(x=>x.value),[905.98,1007.15,1071.75,1160.39]);
+assert.deepEqual(result.byMetric.gdp_real_yoy.map(x=>x.value),[6.4,10.1,4,7.1]);
+assert.deepEqual(result.byMetric.industry_invest_growth.map(x=>x.value),[63.3,2.1,-31.5,-23.6]);
+assert.ok(result.warnings.some(x=>x.includes("财政预算收入待复核")),"2025 income revision diagnostic");
+assert.ok(result.warnings.some(x=>x.includes("独立年度观察不足 8 个")));
+const statuses=new Set(result.rows.map(x=>x.review_status));
+assert.ok(statuses.has("official_page_checked"));
+assert.ok(statuses.has("mirror_needs_primary"));
+assert.ok(statuses.has("mirrored_plus_official_corroboration"));
+const readiness=V.readiness(result,data);
+assert.equal(readiness.canCalibrate,false);
+assert.ok(readiness.reasons.some(x=>x.includes("映射")));
+assert.ok(readiness.reasons.some(x=>x.includes("事前归档")));
+assert.ok(readiness.reasons.some(x=>x.includes("8")));
+function mutate(change,part){
+ const copy=structuredClone(data);change(copy);const res=V.validate(copy);
+ assert.equal(res.ok,false,"Expected invalid data "+part);assert.ok(res.errors.some(x=>x.includes(part)),res.errors.join("; "));
+}
+mutate(d=>{d.observations[1].value=Number.POSITIVE_INFINITY},"数值非有限");
+mutate(d=>{d.observations[0].source_ids=["untracked-page"]},"来源缺失");
+mutate(d=>{d.observations[0].unit="%"},"单位不符");
+mutate(d=>{d.observations.push(structuredClone(d.observations[0]))},"重复观测");
+mutate(d=>{d.sources.stat2024.url="javascript:alert(1)"},"HTTPS");
+const copy=structuredClone(data);
+copy.observations=copy.observations.filter(x=>!(x.year===2023&&x.metric==="retail_current"));
+const partial=V.validate(copy);
+assert.equal(partial.ok,true,"Missing years must be explicit, never synthesized");
+const s=V.lineSeries(partial,"retail_current");
+assert.equal(s.find(x=>x.year===2023).row,null);
+assert.equal(s.find(x=>x.year===2024).row.value,164.72);
+assert.ok(partial.warnings.some(x=>x.includes("缺值")));
+console.log("PASS V3.4 annual observations: 4 years, 36 sourced values, no invented forecasts, missing-value and calibration gates");
