@@ -90,3 +90,10 @@
 }
 @media(max-width:385px){.holo-hero-copy{top:12%}.holo-hero-copy h1{font-size:39px}.holo-cta{padding:0 9px;font-size:10px}.holo-brand{letter-spacing:.7px}.holo-render-status{font-size:7px}}
 @media(prefers-reduced-motion:reduce){.holo-blink{animation:none}.holo-cta{transition:none}.holo-cta:hover{transform:none}}
+
+/* Screen-space names only for important actual model entities, behind content chrome. */
+.holo-labels{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.holo-node-label{position:absolute;transform:translate(-50%,0);padding:4px 8px;border:1px solid rgba(95,202,222,.37);border-radius:4px;background:rgba(6,37,55,.77);box-shadow:0 6px 20px #00101c73;color:#bdeefa;font:650 10px/1.45 "PingFang SC","Microsoft YaHei",sans-serif;white-space:nowrap;text-shadow:0 0 8px rgba(71,220,247,.4)}
+.holo-node-label[hidden]{display:none}
+@media(min-width:761px){.holo-node-detail{left:clamp(25px,4.2vw,82px);right:auto;bottom:156px;width:360px;max-width:360px;text-align:left}}
+@media(max-width:760px){.holo-labels{display:none}}
