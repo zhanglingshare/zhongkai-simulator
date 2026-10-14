@@ -2,7 +2,7 @@ name: V3 Workbench Browser Smoke
 on:
   push:
     branches:
-      - "chatgpt/v3.1-compare-ui-*"
+      - "chatgpt/v3.*"
     paths:
       - "v3/**"
       - ".github/workflows/v3-browser-smoke.yml"
