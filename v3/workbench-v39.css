@@ -147,3 +147,10 @@
  .holo-app>.comparison{max-width:none;margin:14px 11px}
 }
 @media(prefers-reduced-motion:reduce){.v39-pulse{box-shadow:none}}
+
+.v39-timebar{margin:2px 0 13px;padding:12px 13px 9px;background:rgba(103,202,226,.045);border:1px solid rgba(100,173,195,.19);border-radius:7px}
+.v39-timebar label{display:flex;justify-content:space-between;align-items:center;color:#a8ced9;font-size:11px;font-weight:700}
+.v39-timebar output{font:760 12px ui-monospace,monospace;color:#8ce1e8}
+.v39-timebar input{display:block;width:100%;accent-color:#7cdfe6;cursor:pointer;margin:10px 0 3px}
+.v39-timebar input:disabled{opacity:.35;cursor:not-allowed}
+.v39-timebar p{color:#7299a9;font-size:9px;margin:0}
