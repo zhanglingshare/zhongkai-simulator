@@ -61,6 +61,8 @@
       });
       const age=ageDays(life.fetched_at||life.updated,now);
       if(age!==null&&age>2)issues.push({level:"warn",area:"life",text:"镇街数据抓取距检查时刻已超过 48 小时。"});
+      if(pending>0)issues.push({level:"warn",area:"life",text:"镇街资料中有 "+pending+" 条仍为待核查状态，不应视为独立事实证据。"});
+      if(towns.length>0&&sourceReady<towns.length)issues.push({level:"warn",area:"life",text:"镇街记录仅 "+sourceReady+" / "+towns.length+" 条具备独立 source_url，尚不足以逐条追溯。"});
       info.life={towns:towns.length,pending,sourceReady,ageDays:age,updated:life.fetched_at||life.updated||"—"};
     }
     return {info,issues,errors:issues.filter(x=>x.level==="error").length,warnings:issues.filter(x=>x.level==="warn").length,
