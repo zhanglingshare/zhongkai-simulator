@@ -140,7 +140,7 @@ async function testDesktop(browser,port){
   await page.locator("#benchmark-metric").selectOption("gdp_real_yoy");
   assert.equal(await page.locator("#benchmark-rows tr").count(),3);
   assert.match(await page.locator("#benchmark-status").innerText(),/不是产业风洞模型评分/);
-  assert.match(await page.locator("#benchmark-caveat").innerText(),/事后/);
+  assert.match(await page.locator(".benchmark-caveat").innerText(),/事后/);
   await page.locator("#benchmark-metric").selectOption("industry_invest_growth");
   assert.equal(await page.locator("#benchmark-rows tr").count(),4);
   await page.locator("#metric-choice").selectOption("gdp_current");
