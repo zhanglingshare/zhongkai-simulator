@@ -238,11 +238,13 @@ async function testDesktop(browser,port){
   await page.screenshot({path:path.join(shots,"windtunnel-1440.png"),fullPage:true});
   await page.locator('.scenario-chip[data-shock="技术突破"]').click();
   assert.ok(await page.locator("#copy-link").isDisabled(),"Edited unrun scenario must not offer stale replay link");
+  assert.ok(await page.locator("#copy-challenge").isDisabled(),"Unrun edits must not create stale social challenges");
   assert.ok(await page.locator("#download-card").isDisabled(),"Edited unrun scenario must not offer stale card");
   await page.locator("#rescue-select").selectOption("service");
   await page.locator("#seed-input").fill("43");
   await page.locator("#run-experiment").click();
   assert.ok(await page.locator("#copy-link").isEnabled(),"Run unlocks fresh sharing");
+  assert.ok(await page.locator("#copy-challenge").isEnabled(),"Run unlocks reproducible challenge");
   assert.match(await page.locator("#network-stamp").innerText(),/技术突破/);
   const url=await page.locator("#share-link").inputValue();
   assert.match(url,/seed=43/);
