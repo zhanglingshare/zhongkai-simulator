@@ -239,6 +239,7 @@ async function testDesktop(browser,port){
   };
   await page.locator("#measure-archive").setInputFiles({name:"synthetic-test-archive.json",
     mimeType:"application/json",buffer:Buffer.from(JSON.stringify(fakeArchive))});
+  await page.waitForFunction(()=>document.querySelector("#archive-state").textContent.includes("已载入原模型基线"));
   assert.match(await page.locator("#archive-state").innerText(),/已载入原模型基线/);
   for(const [year,tick] of [[2020,0],[2021,4],[2022,8],[2023,12],[2024,16],[2025,20]]){
     await page.locator('input[data-year="'+year+'"]').fill(String(tick));
