@@ -201,12 +201,13 @@
 
     function markCompareStale(){
       if(comparison){
-        el("compare-note").textContent="设置已变化：下方保留上一轮对比，点击“按当前选择运行 A/B”更新。当前局的运行不改变上一轮 A/B 结果。";
-        el("status-b").textContent="历史对比";
+        comparison.stale=true;
+        el("compare-note").textContent="实验设置已变化：下方保留上一次对比（种子 "+comparison.seed+"，冲击“"+comparison.type+"”）。点击“按当前选择运行 A/B”才能更新结果。";
+        el("status-b").textContent="旧结果 · t"+comparison.tick;
       }
     }
     el("shock-sel").addEventListener("change",()=>{
-      el("scenario-label").textContent=el("shock-sel").value+" · 在第 0 步注入";
+      if(!comparison)el("scenario-label").textContent=el("shock-sel").value+" · 在第 0 步注入";
       markCompareStale();
     });
     el("scenario-label").textContent=el("shock-sel").value+" · 在第 0 步注入";
@@ -402,17 +403,18 @@
         const A=new Sim(seed,params),B=new Sim(seed,params);
         const applied=B.shock(type);
         if(!applied.ok)throw new Error("不支持冲击："+type);
+        const A0=A._snap(), B0=B._snap();
         const ticks=params.ticks||20;
         for(let t=0;t<ticks;t++){A.step();B.step();}
         const positions=layoutForce(A.agents,A.edges,760,560);
-        drawCompareNetwork(el("graph-a"),A,positions);
-        drawCompareNetwork(el("graph-b"),B,positions);
-        metricPairs(A,B);
-        el("status-a").textContent="已运行 t"+ticks;
-        el("status-b").textContent="已运行 t"+ticks;
+        comparison={seed,type,A,B,A0,B0,params,positions,ticks,tick:ticks,focus:null,stale:false};
+        el("compare-tick").disabled=false;
+        el("compare-tick").max=String(ticks);
+        renderComparisonAt(ticks);
         el("scenario-label").textContent=type+" · 第 0 步";
-        el("compare-note").textContent="计算完成 · 相同种子 "+seed+" · 每局 "+ticks+" 步 · B 在 t0 注入“"+type+"”冲击"+(applied.killed?" · 直接退场 "+applied.killed+" 个模型主体":"")+"。注意：冲击可能改变随机数消耗顺序，同种子不等于严格因果识别。";
-        comparison={seed,type,A,B};
+        el("compare-note").textContent="已运行 · A 为基线，B 在第 0 步注入“"+type+"”冲击"+(applied.killed?" · 冲击即时使 "+applied.killed+" 个模型主体退场":"")+"。两侧按同一时间步对齐，差值均为 B − A。";
+        el("compare-provenance").textContent="模型基准：仲恺演示世界 · 随机种子："+seed+" · 每局 "+ticks+" 步 · 相同模型参数："+JSON.stringify({invest:params.invest,external:params.external,service:params.service,land:params.land})+" · 研究备注："+(el("research-question").value.trim()||"未填写")+"。相同种子不代表严格因果识别；冲击可改变后续随机数消耗；排名仅表示模型状态差异。";
+        alertBox.hidden=true;
         if(matchMedia("(max-width:760px)").matches)switchMobile("compare");
       }catch(e){
         fail(e&&e.message?e.message:String(e));
@@ -421,6 +423,9 @@
       }
     }
     el("btn-compare").addEventListener("click",runComparison);
+    el("compare-tick").addEventListener("input",()=>{
+      if(comparison)renderComparisonAt(Number(el("compare-tick").value));
+    });
     el("toggle-compare").addEventListener("click",()=>{
       const opened=el("compare-section").classList.toggle("fullscreen");
       document.body.classList.toggle("comparison-open",opened);
@@ -434,6 +439,14 @@
     });
     el("btn-clear-compare").addEventListener("click",()=>{
       comparison=null;
+      el("compare-tick").disabled=true;
+      el("compare-tick").value="20";
+      el("compare-tick-value").textContent="t20 / 20";
+      el("compare-timeline-hint").textContent="运行后可拖动到任意模型时间步，查看同一时刻的网络与指标差异。";
+      el("compare-trends").replaceChildren(create("p","no-result","等待 A/B 模型运行。"));
+      el("compare-agents").replaceChildren(create("p","no-result","等待主体差异计算。"));
+      el("compare-provenance").textContent="对比尚未运行。运行后展示随机种子、实验设置与对比口径。";
+      el("scenario-label").textContent=el("shock-sel").value+" · 在第 0 步注入";
       clearMini(el("graph-a"),"等待模拟");
       clearMini(el("graph-b"),"等待模拟");
       el("compare-metrics").replaceChildren(create("p","no-result","等待执行 A/B 对比。"));
