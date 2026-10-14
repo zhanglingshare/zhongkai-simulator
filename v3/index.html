@@ -115,7 +115,7 @@
         <div class="wind-spotlight" id="wind-spotlight"><span class="wind-overline">当前探索主题</span><strong id="wind-topic">尚未选择</strong><p id="wind-description">选择任一情景后，使用原始 Sim 模型进行基线和冲击对照。</p></div>
         <div class="wind-share-actions"><button class="btn primary" type="button" id="wind-run">运行 A/B 情景 ↗</button><button class="btn outline" type="button" id="wind-copy">复制可复现实验链接 ⤴</button></div>
         <p class="wind-share-note" id="wind-feedback" role="status" aria-live="polite">共享链接只保存公开的冲击类型和随机种子。别人可用相同输入重新运行模型，不泄漏或伪造计算结果。</p>
-        <p class="wind-disclaimer">注：同一随机种子可复现当前版本模型实验，但冲击会改变随机流消耗，不能据此声称严格因果识别。模型参数、算法和公开资料可能随版本改变；链接中不包含模型版本的永久快照。</p>
+        <details class="v39-study-boundary"><summary>实验边界与复现限制 <span aria-hidden="true">⌄</span></summary><p class="wind-disclaimer">注：同一随机种子可复现当前版本模型实验，但冲击会改变随机流消耗，不能据此声称严格因果识别。模型参数、算法和公开资料可能随版本改变；链接中不包含模型版本的永久快照。</p></details>
       </div></div>
     </section>
 
@@ -123,7 +123,7 @@
     <section class="v39-lens" id="v39-lens" aria-labelledby="v39-lens-title">
       <header class="v39-lens-head">
         <div><span class="v39-eyebrow">03 / IMPACT LENS · MODEL OBSERVATIONS</span>
-          <h2 id="v39-lens-title">影响透视 <span>IMPACT / A − B</span></h2>
+          <h2 id="v39-lens-title">影响透视 <span>IMPACT / B − A</span></h2>
           <p>对照真实模型快照，观察风险与增长的正负效应。差值统一采用 <strong>B − A</strong>，不是现实概率或因果贡献。</p></div>
         <div class="v39-lens-state" id="v39-lens-state">WAITING FOR EXPERIMENT</div>
       </header>
