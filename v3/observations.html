@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>V3.4 · 仲恺官方历史观测与校准门槛</title>
+<meta name="description" content="仲恺2022–2025逐项溯源的年度经济观测，展示数据覆盖、官方与转载的区分、统计口径冲突和模型校准前置条件。">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="verification.css">
+<link rel="stylesheet" href="observations.css">
+</head>
+<body>
+<div class="app">
+<nav class="rail" aria-label="工作台导航">
+  <a class="rail-brand" href="index.html" title="情景实验室">Z<span>.</span></a>
+  <a class="rail-link" href="index.html" title="情景实验室">▦<span class="sr-only">情景实验室</span></a>
+  <a class="rail-link" href="verification.html" title="科学验证工作台">◇<span class="sr-only">科学验证工作台</span></a>
+  <a class="rail-link active" href="observations.html" aria-current="page" title="历史观测">▤<span class="sr-only">历史观测</span></a>
+  <a class="rail-link" href="../v2/montecarlo.html" title="批量模拟">◈<span class="sr-only">批量模拟</span></a>
+  <span class="rail-spacer"></span><a class="rail-link" href="../v2/" title="原版 V2">↗<span class="sr-only">原版 V2</span></a>
+</nav>
+<div class="app-content">
+<header class="masthead">
+  <div><div class="breadcrumb">ZHONGKAI / EVIDENCE REGISTER</div><div class="head-title"><h1>历史观测与校准门槛</h1><span class="version">V3.4 · 年度数据</span></div>
+    <p>公开统计观测的真实来源、数据可比性与使用限制。</p></div>
+  <div class="head-right"><span class="model-pill"><span class="status-dot"></span> 描述性统计 · 不是模型预测</span><a class="back-link" href="verification.html">科学验证台 ↗</a></div>
+</header>
+<main class="obs-container">
+<section class="obs-intro">
+  <div><span class="audit-kicker">HISTORICAL EVIDENCE / SOURCE TRACEABILITY</span><h2>先有事实序列，再谈模型校准。</h2>
+    <p>本页展示公开年度统计资料中已逐条摘录的数值。数据会保留来源是政府原文还是第三方转载、是否有佐证、是否存在修订与口径不一致。</p>
+  </div>
+  <div class="obs-release" id="obs-release">读取年度观测集…</div>
+</section>
+<div class="obs-stats" id="obs-stats" aria-live="polite">
+ <div class="obs-stat"><span>年度覆盖</span><strong>—</strong><small>正在读取</small></div>
+ <div class="obs-stat"><span>观测条目</span><strong>—</strong><small>逐项来源</small></div>
+ <div class="obs-stat"><span>观测指标</span><strong>—</strong><small>统计单位分离</small></div>
+ <div class="obs-stat"><span>模型校准状态</span><strong>待检查</strong><small>不伪造验证</small></div>
+</div>
+<div class="obs-duo">
+ <section class="audit-pane obs-chart-panel">
+  <div class="audit-pane-head"><span class="section-num">01</span><h2>年度观测走势</h2><span class="audit-minor">ACTUAL PUBLIC STATISTICS</span></div>
+  <div class="audit-pane-body">
+   <div class="obs-choose"><label for="metric-choice">查看统计指标</label><select id="metric-choice"><option value="gdp_current">地区生产总值</option></select></div>
+   <div class="obs-chart-meta"><strong id="obs-metric-title">—</strong><span id="obs-measure">—</span></div>
+   <svg id="obs-chart" class="obs-chart" viewBox="0 0 680 295" role="img" aria-label="年度真实观测折线图"></svg>
+   <p class="obs-chart-caption" id="obs-chart-caption">只展示来源列明的观测，不内插缺失年份，不用现价 GDP 计算可比价增长率。</p>
+   <div class="obs-legend"><span><i></i>公开统计观测</span><span>不是 Sim 的演化曲线</span></div>
+  </div>
+ </section>
+ <section class="audit-pane">
+  <div class="audit-pane-head"><span class="section-num">02</span><h2>指标来源与可比性</h2><span class="audit-minor">PROVENANCE</span></div>
+  <div class="audit-pane-body">
+   <div id="obs-provenance" class="obs-provenance"><p class="no-result">等待读取来源…</p></div>
+   <div class="obs-boundary" id="obs-boundary">所有年份采用公开资料提供的原值，未经模型参数变换。</div>
+  </div>
+ </section>
+</div>
+<section class="audit-pane obs-matrix">
+ <div class="audit-pane-head"><span class="section-num">03</span><h2>四年数据矩阵</h2><span class="audit-minor">LEVELS AND GROWTH KEPT SEPARATE</span></div>
+ <div class="audit-pane-body">
+  <p class="audit-context">数据单位与统计口径随指标明确标注。空格代表没有原始观测；不允许自动补值。点选指标行可查看来源和趋势。</p>
+  <div class="obs-tablewrap"><table class="audit-table obs-table" id="obs-matrix"><thead><tr><th>统计指标 / 单位</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>来源状态</th></tr></thead><tbody id="obs-table-body"><tr><td colspan="6">读取历史数据中…</td></tr></tbody></table></div>
+ </div>
+</section>
+<div class="obs-duo obs-final">
+ <section class="audit-pane">
+  <div class="audit-pane-head"><span class="section-num">04</span><h2>质量警示与资料缺口</h2><span class="audit-minor">RECONCILIATION</span></div>
+  <div class="audit-pane-body"><div id="obs-issues" class="obs-issues">正在检查…</div>
+    <p class="audit-context">统计公报可能出现初步核算数、经济普查修订、名义/实际增速差异、统计范围变化。发现不一致不等于已经确认哪一个数字错误。</p>
+  </div>
+ </section>
+ <section class="audit-pane">
+  <div class="audit-pane-head"><span class="section-num">05</span><h2>参数校准准备度</h2><span class="audit-minor">CALIBRATION GATE</span></div>
+  <div class="audit-pane-body">
+   <div class="obs-block" id="obs-calibration-status"><strong>校准尚未通过</strong><p>四年统计数据无法自动变成多智能体模型参数。</p></div>
+   <div id="obs-calibration-reasons" class="obs-reasons"></div>
+   <p class="obs-next"><a href="verification.html">打开 V3.3 独立留出回测门槛 ↗</a></p>
+  </div>
+ </section>
+</div>
+<div id="obs-error" class="runtime" hidden role="alert"></div>
+</main>
+<footer class="app-footer">V3.4 历史数据登记 · 年度公报摘录不等于事前预测 · 模型参数保持不变 · <a href="index.html">返回情景实验室</a></footer>
+</div></div>
+<script src="observations-core.js"></script><script src="observations.js"></script>
+</body></html>
