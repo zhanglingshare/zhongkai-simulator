@@ -120,7 +120,7 @@ async function testDesktop(browser,port){
   await page.locator("#score-holdout").click();
   assert.match(await page.locator("#holdout-result").innerText(),/未独立认证/);
   assert.equal(await page.locator("#holdout-scores .score-cell").count(),4);
-  await page.screenshot({path:path.join(shots,"verification-1440.png"),fullPage:true});
+  await page.screenshot({path:path.join(shots,"verification-test-only-1440.png"),fullPage:true});
 
   assert.deepEqual(errors,[],"JavaScript errors: "+errors.join("; "));
   await page.close();
