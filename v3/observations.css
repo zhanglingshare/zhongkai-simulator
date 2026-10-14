@@ -53,3 +53,22 @@
 @media(max-width:1050px){.obs-duo{grid-template-columns:1fr}.obs-provenance{max-height:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.obs-container{padding:12px 11px}.obs-intro{padding:19px;flex-direction:column;align-items:start;gap:12px}.obs-intro h2{font-size:20px}.obs-release{width:100%}.obs-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.obs-stat{padding:14px}.obs-stat>strong{font-size:20px}.obs-provenance{grid-template-columns:1fr}.obs-choose{align-items:start;flex-direction:column}.obs-choose select{width:100%;max-width:100%}.obs-legend{flex-wrap:wrap}}
 @media(max-width:390px){.obs-stat>strong{font-size:18px}.obs-stat>strong.obs-gated{font-size:13px}}
+
+
+/* V3.5 deliberately restrained retrospective comparison; visually separate from actual simulation */
+.benchmark-intro{display:flex;align-items:start;justify-content:space-between;gap:20px}
+.benchmark-intro h3{font-size:14px;font-weight:730;color:#2c5267;margin:0 0 7px}
+.benchmark-intro p{max-width:850px;font-size:11.5px;line-height:1.9;color:#697f91;margin:0}
+.benchmark-intro p b{color:#9a683d}
+.benchmark-intro label{display:flex;flex-direction:column;gap:7px;font-size:11px;color:#7c92a3;flex-shrink:0;min-width:220px}
+.benchmark-intro select{width:100%;background:#fff;border:1px solid #dce7eb;border-radius:6px;padding:10px;color:#315168;font-size:12px}
+.benchmark-status{border-left:3px solid #c19461;background:#fcf8f1;color:#846f58;line-height:1.8;font-size:11px;padding:10px 12px;margin:15px 0}
+.benchmark-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:15px}
+.benchmark-stat{border:1px solid #e6edf0;background:#f8fbfc;border-radius:7px;padding:13px;min-width:0}
+.benchmark-stat small{font-size:10px;color:#8297a6;display:block;line-height:1.6}
+.benchmark-stat strong{font-size:16px;color:#336276;display:block;margin-top:6px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.benchmark-table{min-width:600px}
+.benchmark-table th:not(:first-child),.benchmark-table td:not(:first-child){text-align:right;font-variant-numeric:tabular-nums}
+.benchmark-caveat{font-size:11px;color:#957652;line-height:1.85;margin:15px 0 0;padding:12px 13px;background:#fffcf7;border:1px solid #f0e5d6;border-radius:6px}
+@media(max-width:1080px){.benchmark-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.benchmark-intro{flex-direction:column}.benchmark-intro label{width:100%}.benchmark-metrics{gap:7px}.benchmark-stat{padding:11px}.benchmark-stat strong{font-size:13px}}
