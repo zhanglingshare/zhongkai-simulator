@@ -1,4 +1,4 @@
-/* V3.8 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
+/* V3.9 browser smoke tests. Runs on GitHub Actions with Playwright + Chrome. */
 const assert=require("node:assert/strict");
 const http=require("node:http");
 const fs=require("node:fs");
@@ -45,6 +45,16 @@ async function assertHologramUnobstructed(page,mobile){
  assert.ok(info.rects["#holo-world"].width>(mobile?275:400),"Dedicated canvas too narrow: "+JSON.stringify(info.rects["#holo-world"]));
  assert.ok(info.rects["#holo-world"].height>(mobile?290:420),"Dedicated canvas too short: "+JSON.stringify(info.rects["#holo-world"]));
 }
+function assertFrozenHologramSource(){
+ const html=fs.readFileSync(path.join(root,"v3/index.html"),"utf8");
+ const start=html.indexOf('<section class="holo-hero"');
+ const end=html.indexOf("</section>",start);
+ assert.ok(start>=0&&end>start,"Frozen hologram lost");
+ const hero=html.slice(start,end+"</section>".length);
+ let hash=2166136261;
+ for(let i=0;i<hero.length;i++){hash^=hero.charCodeAt(i);hash=Math.imul(hash,16777619);}
+ assert.equal(hash>>>0,2260886382,"V3.8 holographic hero markup must stay byte-for-byte unchanged");
+}
 async function testDesktop(browser,port){
   const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1});
   const errors=[];
@@ -53,6 +63,10 @@ async function testDesktop(browser,port){
   await page.waitForFunction(()=>document.querySelector("#netsvg .node") && document.querySelector("#k-ab").textContent!=="—");
   assert.ok(await page.locator("#netsvg .node").count()>=15,"Missing model nodes");
   // V3.8: first viewport is an operable genuine 3D projection of the legacy Sim.
+  assert.ok(await page.locator("#v39-research").isVisible());
+  assert.ok(await page.locator("#v39-lens").isVisible());
+  assert.equal(await page.locator("#v39-deltas .v39-delta").count(),0,"No fabricated deltas before Sim runs");
+  assert.ok(await page.locator("#v39-time").isDisabled());
   assert.ok(await page.locator("#holo-hero").isVisible());
   assert.ok(await page.locator("#holo-canvas").isVisible());
   assert.ok(await page.locator("#holo-labels .holo-node-label").count()>0,"Core simulated agents should be labeled");
@@ -72,6 +86,9 @@ async function testDesktop(browser,port){
   await page.locator("#holo-home").click();
   await page.locator("#holo-risk").click();
   assert.match(await page.locator("#holo-scene-name").innerText(),/链主外迁/);
+  assert.equal(await page.locator("#v39-deltas .v39-delta").count(),5,"Hero-driven A/B must populate real lens");
+  assert.match(await page.locator("#v39-scenario").innerText(),/链主外迁/);
+  assert.ok(await page.locator("#v39-detail-button").isEnabled());
   await page.locator("#holo-play").click(); // pause scene before manual rewind
   assert.ok(await page.locator("#holo-range").isEnabled());
   await page.locator("#holo-range").fill("8");
@@ -84,6 +101,8 @@ async function testDesktop(browser,port){
   assert.equal(await page.locator("#wind-impact > div").count(),4);
   await page.locator("#seed-input").fill("23");
   assert.ok(await page.locator("#holo-range").isDisabled(),"stale science result must not remain playable");
+  assert.equal(await page.locator("#v39-deltas .v39-delta").count(),0,"stale deltas must disappear");
+  assert.ok(await page.locator("#v39-time").isDisabled());
   await page.locator("#seed-input").fill("7");
   await inspectOverflow(page);
   // Restore original test default shock for V3.7 tests below.
@@ -107,6 +126,10 @@ async function testDesktop(browser,port){
   assert.equal(await page.locator("#shock-sel").inputValue(),"链主外迁");
   await page.locator("#wind-run").click();
   assert.equal(await page.locator("#wind-impact > div").count(),4);
+  assert.equal(await page.locator("#v39-deltas .v39-delta").count(),5);
+  await page.locator("#v39-time").fill("13");
+  assert.equal(await page.locator("#compare-tick").inputValue(),"13");
+  await page.screenshot({path:path.join(shots,"impact-lens-1440.png"),fullPage:true});
   await page.screenshot({path:path.join(shots,"wind-deck-1440.png"),fullPage:true});
   await page.context().grantPermissions(["clipboard-read","clipboard-write"]);
   await page.locator("#wind-copy").click();
@@ -314,6 +337,8 @@ async function testMobile(browser,port,width){
   await page.waitForFunction(()=>document.querySelector("#netsvg .node"));
   assert.ok(await page.locator("#holo-hero").isVisible());
   assert.match(await page.locator("#holo-render-status").innerText(),/真实模型网络|2.5D 降级/);
+  assert.equal(await page.locator("#v39-deltas .v39-delta").count(),0);
+  assert.ok(await page.locator("#v39-time").isDisabled());
   await assertHologramUnobstructed(page,true);
   await inspectOverflow(page);
   await page.screenshot({path:path.join(shots,"hologram-first-screen-"+width+".png"),fullPage:false});
@@ -329,6 +354,10 @@ async function testMobile(browser,port,width){
   await page.locator('#wind-opportunity button[data-shock="订单爆发"]').click();
   await page.locator("#wind-run").click();
   assert.equal(await page.locator("#wind-impact > div").count(),4);
+  assert.equal(await page.locator("#v39-deltas .v39-delta").count(),5);
+  await page.locator("#v39-time").fill("9");
+  assert.equal(await page.locator("#compare-tick").inputValue(),"9");
+  await page.screenshot({path:path.join(shots,"impact-lens-"+width+".png"),fullPage:true});
   await inspectOverflow(page);
   await page.screenshot({path:path.join(shots,"wind-deck-"+width+".png"),fullPage:true});
   await page.locator('[data-mobile-to="canvas"]').click();
@@ -369,9 +398,10 @@ async function testMobile(browser,port,width){
   let browser;
   try{
     browser=await chromium.launch({channel:"chrome",headless:true,args:["--no-sandbox"]});
+    assertFrozenHologramSource();
     await testDesktop(browser,port);
     for(const width of [390,360])await testMobile(browser,port,width);
-    console.log("PASS V3.8 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
+    console.log("PASS V3.9 Chromium desktop 1440 and mobile 390/360; screenshots in v3/screenshots");
   }finally{
     if(browser)await browser.close();
     server.close();
