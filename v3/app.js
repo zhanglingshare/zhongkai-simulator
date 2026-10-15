@@ -869,7 +869,7 @@
           ?"冲击情景："+comparison.type+" / T"+comparison.tick
           :"仲恺 · 当前模型世界 / T"+sim.tick
       }),
-      focus:name=>{
+      focus:(name,{scroll=true}={})=>{
         if(!holoScene||!holoScene.graph)return null;
         const node=holoScene.select(name);
         if(!node)return null;
@@ -882,7 +882,7 @@
         holoScene.orbit(delta,pitch-camera.pitch);
         inspectHoloNode(node);
         el("holo-message").textContent="已定位模型主体："+name+"。节点已高亮并转入视野；空间坐标仅用于三维展示。";
-        el("holo-world").scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+        if(scroll)el("holo-world").scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
         return node;
       }
     };
