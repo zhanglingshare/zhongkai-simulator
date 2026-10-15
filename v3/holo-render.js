@@ -79,7 +79,6 @@ void main(){
  function mount(opts){
   const canvas=opts.canvas,tip=opts.tooltip,status=opts.status;
   const labels=opts.labels,labelMap=new Map();
-  let labelMode="core";
   let renderer=null,context2d=null,mode="fallback",graph=null,meta={},selected=null,hover=null;
   let cam={yaw:-.36,pitch:.18,distance:5.1},raf=0,lastFrame=0,visible=true,disposed=false;
   let start={x:0,y:0},dragged=false;
@@ -166,33 +165,16 @@ void main(){
   }
   function syncLabels(){
     if(!labels||!graph)return;
-    const width=canvas.clientWidth,height=canvas.clientHeight;
-    const nodes=graph.nodes.filter(n=>labelMode==="all"||n.w>=3&&n.alive)
-      .sort((a,b)=>
-        Number(b.name===selected)-Number(a.name===selected)||
-        b.w-a.w||Number(b.alive)-Number(a.alive)||
-        Core.hash(a.name)-Core.hash(b.name));
-    const accepted=[],retained=new Set();
-    for(const n of nodes){
-      const p=screen(n);
-      const chars=[...n.name].length;
-      const w=Math.min(Math.max(57,chars*12+18),180),h=23;
-      const offset=Math.max(13,40/p.depth);
-      const left=p.x-w/2,top=p.y+offset;
-      // Hide only labels that physically cannot fit inside the canvas; never hide underlying nodes.
-      if(left<4||left+w>width-4||top<3||top+h>height-14)continue;
-      const box={l:left-7,r:left+w+7,t:top-5,b:top+h+5};
-      if(accepted.some(x=>x.l<box.r&&x.r>box.l&&x.t<box.b&&x.b>box.t))continue;
-      accepted.push(box);retained.add(n.name);
+    const majors=graph.nodes.filter(n=>n.w>=3&&n.alive).sort((a,b)=>b.w-a.w||Core.hash(a.name)-Core.hash(b.name)).slice(0,6);
+    const included=new Set(majors.map(n=>n.name));
+    for(const [name,element] of labelMap)if(!included.has(name)){element.remove();labelMap.delete(name);}
+    for(const n of majors){
       let element=labelMap.get(n.name);
       if(!element){element=document.createElement("span");element.className="holo-node-label";labels.append(element);labelMap.set(n.name,element);}
       element.textContent=n.name;
-      element.style.left=p.x+"px";element.style.top=top+"px";
-      element.hidden=false;
-      element.classList.toggle("inactive",!n.alive);
-    }
-    for(const [name,element] of labelMap){
-      if(!retained.has(name)){element.remove();labelMap.delete(name);}
+      const p=screen(n);element.style.left=p.x+"px";element.style.top=(p.y+Math.max(13,40/p.depth))+"px";
+      const width=canvas.clientWidth,height=canvas.clientHeight;
+      element.hidden=p.x<width*.37||p.x>width*.86||p.y<height*.19||p.y>height*.76;
     }
   }
   function draw(now){
@@ -274,7 +256,6 @@ void main(){
     if(!graph)return null;const node=graph.nodes.find(n=>n.name===name);
     selected=node?name:null;schedule();return node||null;
    },
-   setLabelMode(value){if(value!=="core"&&value!=="all")return false;labelMode=value;schedule();return true;},
    orbit,zoom,resetCamera,
    dispose(){disposed=true;if(raf)cancelAnimationFrame(raf);if(ro)ro.disconnect();}
   };
