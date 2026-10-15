@@ -39,6 +39,8 @@ jobs:
         run: node v3/tests/holo.spec.cjs
       - name: V3.9 model-only impact lens unit tests
         run: node v3/tests/impact.spec.cjs
+      - name: Full model-subject atlas data and provenance tests
+        run: node v3/tests/atlas.spec.cjs
       - name: Browser interactions and responsive overflow checks
         run: node v3/tests/smoke.cjs
       - name: Upload screenshots for visual review

@@ -756,6 +756,7 @@
       if(el("holo-play")){el("holo-play").textContent="▶";el("holo-play").setAttribute("aria-label","播放演化");}
     }
     function inspectHoloNode(n){
+      window.dispatchEvent(new CustomEvent("zk:atlas-selected",{detail:{name:n.name}}));
       el("holo-node-detail").classList.add("is-inspected");
       el("holo-node-name").textContent=n.name;
       const nEdges=holoScene&&holoScene.graph?holoScene.graph.edges.filter(e=>e.a===n.name||e.b===n.name):[];
@@ -773,6 +774,7 @@
         holoScene.setGraph(snap.agents,edges||[],{tick:snap.tick});
       }else holoScene.setFrame(snap.agents,{tick:snap.tick});
       holoLastSnapshot=snap;
+      if(window.ZKAtlasBridge)window.dispatchEvent(new Event("zk:atlas-refresh"));
       const title=sceneLabel?"冲击情景 · "+sceneLabel:"仲恺 · 模型基线";
       el("holo-scene-name").textContent=title;
       const ticks=comparison&&holoMode==="comparison"?comparison.ticks:sim.params.ticks;
@@ -858,6 +860,33 @@
       }
     }
     setupHoloStage();
+    /* Public read-only atlas adapter; source is the existing holographic Sim graph.
+       select() turns the existing camera and highlights the node; no kernel changes. */
+    window.ZKAtlasBridge={
+      getGraph:()=>holoScene&&holoScene.graph,
+      getScene:()=>({
+        label:holoMode==="comparison"&&comparison&&!comparison.stale
+          ?"冲击情景："+comparison.type+" / T"+comparison.tick
+          :"仲恺 · 当前模型世界 / T"+sim.tick
+      }),
+      focus:(name,{scroll=true}={})=>{
+        if(!holoScene||!holoScene.graph)return null;
+        const node=holoScene.select(name);
+        if(!node)return null;
+        const yaw=Math.atan2(node.x,node.z);
+        const pitch=Math.atan2(node.y,Math.hypot(node.x,node.z));
+        const camera=holoScene.camera;
+        let delta=yaw-camera.yaw;
+        while(delta>Math.PI)delta-=Math.PI*2;
+        while(delta< -Math.PI)delta+=Math.PI*2;
+        holoScene.orbit(delta,pitch-camera.pitch);
+        inspectHoloNode(node);
+        el("holo-message").textContent="已定位模型主体："+name+"。节点已高亮并转入视野；空间坐标仅用于三维展示。";
+        if(scroll)el("holo-world").scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+        return node;
+      }
+    };
+    window.dispatchEvent(new Event("zk:atlas-refresh"));
 
     clearMini(el("graph-a"),"等待模拟");
     clearMini(el("graph-b"),"等待模拟");
