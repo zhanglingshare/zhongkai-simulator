@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="light">
 <title>仲恺产业风洞 V3.9 · 产业全息风洞 · 沉浸式三维推演</title>
 <meta name="description" content="仲恺产业风洞实验工作台：网络推演、同种子情景对比和可追溯的模型观察。">
-<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explore.css"><link rel="stylesheet" href="holo.css"><link rel="stylesheet" href="workbench-v39.css">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explore.css"><link rel="stylesheet" href="holo.css"><link rel="stylesheet" href="workbench-v39.css"><link rel="stylesheet" href="atlas.css">
 </head>
 <body>
 <div class="app">
@@ -155,6 +155,51 @@
         <div id="v39-insight-hint"><span class="v39-signal-dot"></span> 当前仅能观察模型内部结果，独立预测校准仍需证据。</div>
         <button type="button" id="v39-detail-button" class="v39-detail-button" disabled>查看完整 A/B 证据 →</button>
       </footer>
+    </section>
+
+
+    <section class="atlas-section" id="atlas-section" aria-labelledby="atlas-title">
+      <header class="atlas-heading">
+        <div class="atlas-eyebrow">04 / MODEL SUBJECT ATLAS · FULL INDEX</div>
+        <div class="atlas-title-row">
+          <div><h2 id="atlas-title">产业主体全景索引<span> / EVERY MODEL NODE</span></h2>
+            <p>全息图默认只标注少数核心节点，但这里列出当前模型中的<strong>全部主体</strong>：企业名称、产业角色及资源节点均可查找，点击可聚焦到上方的三维世界。</p></div>
+          <div class="atlas-counts" aria-label="模型节点统计">
+            <div><strong id="atlas-total">—</strong><span>模型主体</span></div>
+            <div><strong id="atlas-active">—</strong><span>模型内存续</span></div>
+            <div><strong id="atlas-found">—</strong><span>符合筛选</span></div>
+          </div>
+        </div>
+        <p class="atlas-disclosure"><strong>证据边界</strong>：这不是仲恺全部工商登记企业名册。部分节点为产业或公共资源角色；网络连接含历史/预设与模型推断，不等于现实采购合同、真实资金流或行政确认。</p>
+      </header>
+      <div class="atlas-controls">
+        <label class="atlas-search-wrap" for="atlas-search"><span>⌕</span><input id="atlas-search" type="search" placeholder="搜索主体名称、行业、模型角色…" autocomplete="off"></label>
+        <label class="atlas-type-wrap" for="atlas-type">主体类型 <select id="atlas-type"><option value="all">所有类型</option></select></label>
+        <div class="atlas-filters" role="group" aria-label="筛选模型主体">
+          <button type="button" data-atlas-filter="all" aria-pressed="true">全部</button>
+          <button type="button" data-atlas-filter="core" aria-pressed="false">核心主体</button>
+          <button type="button" data-atlas-filter="active" aria-pressed="false">模型内存续</button>
+          <button type="button" data-atlas-filter="inactive" aria-pressed="false">模型内退场</button>
+          <button type="button" data-atlas-filter="stressed" aria-pressed="false">低能量</button>
+        </div>
+      </div>
+      <div class="atlas-layout">
+        <div class="atlas-browser">
+          <div class="atlas-browser-head"><strong id="atlas-scene">仲恺 · 当前模型世界</strong><span id="atlas-page-label">读取中…</span></div>
+          <div id="atlas-list" class="atlas-list" aria-live="polite"><p class="atlas-placeholder">读取原模型主体与关系…</p></div>
+          <button type="button" id="atlas-more" class="atlas-more" hidden>展开全部筛选结果 ↓</button>
+        </div>
+        <aside class="atlas-inspector" aria-labelledby="atlas-inspector-title">
+          <span class="atlas-inspector-kicker">MODEL / SUBJECT INSPECTOR</span>
+          <h3 id="atlas-inspector-title">点击任一主体</h3>
+          <p class="atlas-inspector-intro" id="atlas-selected-intro">查看模型状态、关系来源和相邻节点。支持直接将三维相机转向选中节点。</p>
+          <div id="atlas-details" class="atlas-details" aria-live="polite">
+            <div class="atlas-empty-symbol">◎</div><p>当前显示模型中已构建的主体。请选择左侧名称，定位并检查。</p>
+          </div>
+          <button type="button" id="atlas-focus" class="atlas-focus" disabled>定位到上方全息世界 ↗</button>
+          <p class="atlas-inspector-foot">选择节点只改变显示焦点和相机，不会对模型注入冲击，也不会推断未经核实的经济事实。</p>
+        </aside>
+      </div>
     </section>
 
     <section class="v39-expert-intro" aria-label="专业模型研究工具">
@@ -363,6 +408,6 @@
 </div>
 <div class="compat" aria-hidden="true"><div id="data-lineage"></div><div id="report-locknote"></div><div id="report-box"></div><table id="param-table"><tbody></tbody></table><div id="missroles"></div><svg id="trend-chart"></svg></div>
 <script src="../model.js"></script>
-<script src="explore-core.js"></script><script src="holo-core.js"></script><script src="holo-render.js"></script><script src="impact-core.js"></script><script src="app.js"></script><script src="workbench-v39.js"></script>
+<script src="explore-core.js"></script><script src="holo-core.js"></script><script src="holo-render.js"></script><script src="impact-core.js"></script><script src="app.js"></script><script src="atlas-core.js"></script><script src="workbench-v39.js"></script><script src="atlas.js"></script>
 </body>
 </html>
