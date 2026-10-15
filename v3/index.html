@@ -41,15 +41,54 @@
           <span class="holo-brand-symbol">Z<span>.</span></span>
           <span>ZHONGKAI <small>INDUSTRIAL WIND TUNNEL</small></span>
         </a>
-        <div class="holo-top-right"><span class="holo-version">V3.8 / HOLOGRAPHIC WORLD</span><span id="holo-render-status" class="holo-render-status">图形引擎检测中</span></div>
+        <div class="holo-top-right"><span class="holo-version">V3.10 / HOLOGRAPHIC WORLD</span><span id="holo-render-status" class="holo-render-status">图形引擎检测中</span></div>
       </header>
       <div class="holo-hero-copy">
         <p class="holo-eyebrow"><span class="holo-blink"></span> OPEN RESEARCH · INTERACTIVE SIMULATION</p>
         <h1 id="holo-title">看见产业<br><em>另一种可能</em><span class="holo-title-dot">.</span></h1>
         <p class="holo-lead">一场冲击，如何穿过产业网络？<br>一个改变，又可能在哪里打开增长空间？</p>
+        <div class="holo-experiment-controls" aria-label="全息风洞实验配置">
+          <label class="holo-select-box" for="holo-shock"><span>冲击情景 · 14 种</span>
+            <select id="holo-shock">
+              <optgroup label="风险 / 不利条件">
+                <option value="链主外迁">链主外迁</option>
+                <option value="芯片断供">芯片断供</option>
+                <option value="订单外流">订单外流</option>
+                <option value="产能过剩">产能过剩</option>
+                <option value="政策收紧">政策收紧</option>
+                <option value="用地收紧">用地收紧</option>
+                <option value="限电">限电</option>
+                <option value="融资难">融资难</option>
+                <option value="关税摩擦">关税摩擦</option>
+                <option value="供应链中断">供应链中断</option>
+                <option value="人才流失">人才流失</option>
+              </optgroup>
+              <optgroup label="增长 / 有利条件">
+                <option value="订单爆发">订单爆发</option>
+                <option value="政策利好">政策利好</option>
+                <option value="技术突破">技术突破</option>
+              </optgroup>
+            </select>
+          </label>
+          <label class="holo-select-box" for="holo-population"><span>模型主体规模</span>
+            <select id="holo-population">
+              <option value="24">24 · 标准研究局</option>
+              <option value="32">32 · 扩展网络</option>
+              <option value="41">41 · 全候选池</option>
+            </select>
+          </label>
+          <label class="holo-select-box" for="holo-label-mode"><span>名称标注密度</span>
+            <select id="holo-label-mode">
+              <option value="core">核心名称</option>
+              <option value="all">更多名称 · 自动避让</option>
+            </select>
+          </label>
+        </div>
+        <p class="holo-config-explain">41 个是现有模型候选主体与产业角色，不是仲恺全部真实企业。模型内空间与连接不代表真实交易。</p>
         <div class="holo-copy-actions">
-          <button type="button" id="holo-risk" class="holo-cta holo-cta-risk"><span>↗</span> 注入风险冲击</button>
-          <button type="button" id="holo-growth" class="holo-cta holo-cta-growth"><span>✦</span> 探索增长机会</button>
+          <button type="button" id="holo-risk" title="快捷演示链主外迁" class="holo-cta holo-cta-risk"><span>↗</span> 注入风险冲击</button>
+          <button type="button" id="holo-growth" title="快捷演示技术突破" class="holo-cta holo-cta-growth"><span>✦</span> 探索增长机会</button>
+          <button type="button" id="holo-run" class="holo-cta holo-cta-run"><span>▶</span> 运行选定情景</button>
         </div>
         <p id="holo-message" class="holo-message" role="status" aria-live="polite">当前展示模型基线世界。选择一种情景，观察真实模拟状态的演化。</p>
       </div>
@@ -103,7 +142,7 @@
       <div class="v39-research-guide">01 <span>设定情景</span> <b>→</b> 02 <span>观察差异</span> <b>→</b> 03 <span>检验与分享</span></div></div>
     </section>
     <section class="wind-deck" id="wind-deck" aria-labelledby="wind-title">
-      <div class="wind-heading"><span class="wind-kicker">V3.9 / SCENARIO STUDIO</span><h2 id="wind-title">选一种变化，启动一次实验。</h2>
+      <div class="wind-heading"><span class="wind-kicker">V3.10 / SCENARIO STUDIO</span><h2 id="wind-title">选一种变化，启动一次实验。</h2>
       <p>风险与增长同等重要。选一个公开可复现的模型情景，比较、反驳、分享。以下是模型内实验，不是现实预测。</p></div>
       <div class="wind-layout"><div class="wind-choices">
         <h3>探索风险 <span>RISK SIGNALS</span></h3>
