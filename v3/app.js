@@ -232,7 +232,7 @@
         playing=false;
         el("btn-play").textContent="▶ 播放";
       }
-      sim=new Sim(seed);
+      sim=new Sim(seed,Object.assign({},sim.params,{n_agents:Number(el("holo-population").value)}));
       selectedNode=null;
       posCache=null;
       if(window.kpiHistory)window.kpiHistory=[];
@@ -809,15 +809,20 @@
       },300);
     }
     function selectHoloScenario(shock){
+      if(!window.ZKShare||!window.ZKShare.shocks.includes(shock)){
+        el("holo-message").textContent="此冲击尚未登记在现有模型，已拒绝运行。";return;
+      }
       stopHoloPlayback();
+      el("holo-shock").value=shock;
       el("shock-sel").value=shock;
       el("shock-sel").dispatchEvent(new Event("change",{bubbles:true}));
       holoMode="comparison";
       runComparison(true);
       if(!comparison||comparison.stale){holoMode="live";paintHoloLive();return;}
+      el("holo-population").value=String(comparison.A.agents.length);
       el("holo-range").disabled=false;el("holo-play").disabled=false;
       renderComparisonAt(0);
-      el("holo-message").textContent="正在观察“"+shock+"”的模型内传播路径。拖动时间轴、旋转网络，检查每一步的主体状态。";
+      el("holo-message").textContent="正在观察“"+shock+"”对 "+comparison.A.agents.length+" 个模型主体的条件性影响。拖动时间轴或旋转网络，检查每一步的状态。";
       startHoloPlayback();
     }
     function setupHoloStage(){
@@ -828,6 +833,34 @@
           onSelect:inspectHoloNode
         });
         paintHoloLive();
+        const heroShock=el("holo-shock"),heroPopulation=el("holo-population"),heroLabels=el("holo-label-mode");
+        // The select accepts every shock registered in the original model, never invented free-form shocks.
+        heroShock.value=el("shock-sel").value;
+        heroPopulation.value=String(sim.params.n_agents);
+        heroLabels.addEventListener("change",()=>holoScene.setLabelMode(heroLabels.value));
+        heroShock.addEventListener("change",()=>{
+          el("shock-sel").value=heroShock.value;
+          el("shock-sel").dispatchEvent(new Event("change",{bubbles:true}));
+        });
+        el("shock-sel").addEventListener("change",()=>{heroShock.value=el("shock-sel").value;});
+        heroPopulation.addEventListener("change",()=>{
+          const requested=Number(heroPopulation.value),seed=safeSeed();
+          if(seed===null){heroPopulation.value=String(sim.params.n_agents);return;}
+          if(![24,32,41].includes(requested))return;
+          stopHoloPlayback();
+          holoMode="live";
+          if(typeof playing!=="undefined"&&playing){
+            clearInterval(playTimer);playing=false;el("btn-play").textContent="▶ 播放";
+          }
+          // Rebuild with the existing 41-member candidate pool, never invent any enterprise.
+          const parameters=Object.assign({},sim.params,{n_agents:requested});
+          sim=new Sim(seed,parameters);
+          selectedNode=null;posCache=null;window.kpiHistory=[];
+          refreshSelectors();render();markCompareStale();
+          paintHoloLive();
+          el("holo-message").textContent="已重新抽样 "+sim.agents.length+" 个真实模型候选主体／产业角色（种子 "+seed+"）。不同主体规模的模型结果不应直接视为现实增长预测。";
+        });
+        el("holo-run").addEventListener("click",()=>selectHoloScenario(heroShock.value));
         el("holo-risk").addEventListener("click",()=>selectHoloScenario("链主外迁"));
         el("holo-growth").addEventListener("click",()=>selectHoloScenario("技术突破"));
         el("holo-play").addEventListener("click",()=>{
