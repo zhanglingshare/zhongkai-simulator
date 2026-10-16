@@ -41,8 +41,8 @@ jobs:
         run: node v3/tests/impact.spec.cjs
       - name: Full model-subject atlas data and provenance tests
         run: node v3/tests/atlas.spec.cjs
-      - name: Browser interactions and responsive overflow checks
-        run: node v3/tests/smoke.cjs
+      - name: V3.11 lab browser interactions and responsive overflow checks
+        run: node v3/tests/lab-v311-smoke.cjs
       - name: Upload screenshots for visual review
         if: always()
         uses: actions/upload-artifact@v4

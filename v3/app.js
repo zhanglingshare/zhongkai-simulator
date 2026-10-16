@@ -209,6 +209,7 @@
       if(robustness)el("robust-status").textContent="实验设置已改变：以下多种子结果来自上一次研究，不会自动更新。";
       if(comparison){
         comparison.stale=true;
+        if(!holoScene)window.dispatchEvent(new Event("zk:atlas-refresh"));
         el("compare-note").textContent="实验设置已变化：下方保留上一次对比（种子 "+comparison.seed+"，冲击“"+comparison.type+"”）。点击“按当前选择运行 A/B”才能更新结果。";
         el("status-b").textContent="旧结果 · t"+comparison.tick;
         if(typeof refreshWindResults==="function")refreshWindResults();
@@ -407,6 +408,7 @@
         base:[comparison.A0,...comparison.A.snapshots.slice(1)],
         scenario:[comparison.B0,...comparison.B.snapshots.slice(1)]
       }}));
+      if(!holoScene)window.dispatchEvent(new Event("zk:atlas-refresh"));
     }
     function runComparison(preserveHero=false){
       const seed=safeSeed();
@@ -863,14 +865,39 @@
     /* Public read-only atlas adapter; source is the existing holographic Sim graph.
        select() turns the existing camera and highlights the node; no kernel changes. */
     window.ZKAtlasBridge={
-      getGraph:()=>holoScene&&holoScene.graph,
+      getGraph:()=>{
+        if(holoScene&&holoScene.graph)return holoScene.graph;
+        if(!HoloCore)return null;
+        const t=comparison&&!comparison.stale?comparison.tick:null;
+        const snap=t===null?sim._snap():getComparisonSnapshots(t).b;
+        return HoloCore.build(snap.agents,t===null?sim.edges:comparison.B.edges);
+      },
       getScene:()=>({
         label:holoMode==="comparison"&&comparison&&!comparison.stale
           ?"冲击情景："+comparison.type+" / T"+comparison.tick
           :"仲恺 · 当前模型世界 / T"+sim.tick
       }),
       focus:(name,{scroll=true}={})=>{
-        if(!holoScene||!holoScene.graph)return null;
+        if(!holoScene){
+          // Lab has no duplicated hologram. Its atlas locates actual model subjects
+          // in the existing professional subject inspector instead.
+          const graph=window.ZKAtlasBridge.getGraph();
+          const node=graph&&graph.nodes.find(item=>item.name===name);
+          if(!node)return null;
+          const inspect=el("iv-sel");
+          if(inspect&&[...inspect.options].some(o=>o.value===name)){
+            inspect.value=name;
+            el("btn-iv")?.click();
+          }
+          if(scroll){
+            const advanced=el("lab-evidence");
+            if(advanced)advanced.open=true;
+            if(matchMedia("(max-width:760px)").matches)switchMobile("insight");
+            (el("lab-workstation")||el("atlas-section"))?.scrollIntoView({block:"start",behavior:"auto"});
+          }
+          return node;
+        }
+        if(!holoScene.graph)return null;
         const node=holoScene.select(name);
         if(!node)return null;
         const yaw=Math.atan2(node.x,node.z);

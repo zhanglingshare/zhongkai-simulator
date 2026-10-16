@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>仲恺产业风洞 V3.9 · 产业全息风洞 · 沉浸式三维推演</title>
+<title>仲恺产业风洞 V3.11 · 产业风洞实验室 · A/B 条件性研究</title>
 <meta name="description" content="仲恺产业风洞实验工作台：网络推演、同种子情景对比和可追溯的模型观察。">
-<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explore.css"><link rel="stylesheet" href="holo.css"><link rel="stylesheet" href="workbench-v39.css"><link rel="stylesheet" href="atlas.css">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explore.css"><link rel="stylesheet" href="workbench-v39.css"><link rel="stylesheet" href="atlas.css"><link rel="stylesheet" href="lab-v311.css">
 </head>
 <body>
 <div class="app">
   <nav class="rail" aria-label="产品导航">
-    <a href="index.html" class="rail-brand" title="V3 工作台">Z<span>.</span></a>
+    <a href="index.html" class="rail-brand" title="返回全息门户">Z<span>.</span></a>
     <a class="rail-link active" href="index.html" aria-current="page" title="情景实验室">▦<span class="sr-only">情景实验室</span></a>
     <a class="rail-link" href="../v2/montecarlo.html" title="蒙特卡洛">◈<span class="sr-only">蒙特卡洛</span></a>
     <a class="rail-link" href="../v2/sensitivity.html" title="敏感性分析">▥<span class="sr-only">敏感性分析</span></a>
@@ -24,86 +24,45 @@
     <a class="rail-link" href="../v2/" title="返回 V2">↗<span class="sr-only">返回 V2</span></a>
   </nav>
 
-  <div class="app-content holo-app">
-    <section class="holo-hero" id="holo-hero" aria-labelledby="holo-title">
-      <div class="holo-stars" aria-hidden="true"></div>
-      <div class="holo-floor" aria-hidden="true"></div>
-      <div class="holo-rings" aria-hidden="true"></div>
-      <div class="holo-world" id="holo-world" aria-label="独立三维产业网络交互区域">
-        <div class="holo-world-ambient" aria-hidden="true"></div>
-      <canvas id="holo-canvas" class="holo-canvas" role="img" aria-label="由当前产业模拟器的真实主体、关系和状态驱动的可旋转三维网络。拖动可旋转，滚轮缩放，点击节点查看模型信息。"></canvas>
-      <div id="holo-labels" class="holo-labels" aria-hidden="true"></div>
-      <div id="holo-hover" class="holo-hover" hidden></div>
-        <div class="holo-world-caption" aria-hidden="true">◎ 产业网络三维投影 · 旋转 / 缩放 / 点击节点</div>
-      </div>
-      <header class="holo-top">
-        <a href="index.html" class="holo-brand" title="仲恺产业风洞首页">
-          <span class="holo-brand-symbol">Z<span>.</span></span>
-          <span>ZHONGKAI <small>INDUSTRIAL WIND TUNNEL</small></span>
-        </a>
-        <div class="holo-top-right"><span class="holo-version">V3.8 / HOLOGRAPHIC WORLD</span><span id="holo-render-status" class="holo-render-status">图形引擎检测中</span></div>
-      </header>
-      <div class="holo-hero-copy">
-        <p class="holo-eyebrow"><span class="holo-blink"></span> OPEN RESEARCH · INTERACTIVE SIMULATION</p>
-        <h1 id="holo-title">看见产业<br><em>另一种可能</em><span class="holo-title-dot">.</span></h1>
-        <p class="holo-lead">一场冲击，如何穿过产业网络？<br>一个改变，又可能在哪里打开增长空间？</p>
-        <div class="holo-copy-actions">
-          <button type="button" id="holo-risk" class="holo-cta holo-cta-risk"><span>↗</span> 注入风险冲击</button>
-          <button type="button" id="holo-growth" class="holo-cta holo-cta-growth"><span>✦</span> 探索增长机会</button>
-        </div>
-        <p id="holo-message" class="holo-message" role="status" aria-live="polite">当前展示模型基线世界。选择一种情景，观察真实模拟状态的演化。</p>
-      </div>
-      <div class="holo-side-metrics" aria-label="模型内指数观测">
-        <div class="holo-metric"><span>MODEL / ABUNDANCE</span><strong id="holo-abundance">—</strong><small>景气指数</small></div>
-        <div class="holo-metric"><span>NETWORK / ORDER</span><strong id="holo-order">—</strong><small>协同指数</small></div>
-        <div class="holo-metric"><span>IMPACT / DISASTER</span><strong id="holo-disaster">—</strong><small>风险指数</small></div>
-        <div class="holo-metric"><span>AGENTS / ACTIVE</span><strong id="holo-active">—</strong><small>当前模型存续主体</small></div>
-      </div>
-      <div class="holo-node-detail" id="holo-node-detail" aria-live="polite">
-        <span>NODE / INSPECT</span><strong id="holo-node-name">探索产业主体</strong>
-        <p id="holo-node-text">拖动旋转世界 · 点击发光节点查看模型中的主体状态与关系</p>
-      </div>
-      <div class="holo-bottom">
-        <div class="holo-playback">
-          <button type="button" id="holo-play" class="holo-play" aria-label="播放或暂停演化" disabled>▶</button>
-          <div class="holo-timeline">
-            <div class="holo-timeline-top"><strong id="holo-scene-name">仲恺 · 模型基线</strong><span id="holo-time-label">T 00 / 20</span></div>
-            <input type="range" id="holo-range" aria-label="全息网络模拟时间步" min="0" max="20" step="1" value="0" disabled>
-            <div class="holo-scale"><span>冲击注入 T0</span><span>模型时间步（不是日历年）</span><span>T20</span></div>
-          </div>
-        </div>
-        <div class="holo-control-group" aria-label="三维相机与实验工具">
-          <button type="button" id="holo-zoom-in" aria-label="放大三维网络" title="放大">＋</button>
-          <button type="button" id="holo-zoom-out" aria-label="缩小三维网络" title="缩小">−</button>
-          <button type="button" id="holo-home" aria-label="重置三维视角" title="重置视角">⌖</button>
-          <button type="button" id="holo-compare" class="holo-compare" title="进入完整实验工具">进入研究工作台 ↗</button>
-        </div>
-      </div>
-      <p class="holo-science">独立公开研究 · 仅呈现模型内的条件性可能 · 非经济预测、现实发生概率或官方决策意见</p>
-    </section>
+  <div class="app-content holo-app lab-v311">
 
 
-    <header class="masthead">
-      <div>
-        <div class="breadcrumb">ZHONGKAI / RESEARCH WORKBENCH</div>
-        <div class="head-title"><h1>产业情景实验室</h1><span class="version">V3.9 · 研究系统</span></div>
-        <p>提出一个问题，观察产业网络，比较不同情景。</p>
-      </div>
-      <div class="head-right">
-        <span class="model-pill"><span class="status-dot"></span> 模型演示 · 非经济预测</span>
-        <a href="../v2/" class="back-link">返回 V2 <span aria-hidden="true">↗</span></a>
-      </div>
+
+    <header class="lab-header" aria-label="产业风洞实验室导航">
+      <a class="lab-brand" href="index.html"><span class="lab-brand-mark">Z<span>.</span></span>
+        <span>ZHONGKAI <small>INDUSTRIAL WIND TUNNEL</small></span></a>
+      <nav class="lab-nav" aria-label="主要导航">
+        <a href="index.html">全息产业世界</a>
+        <a href="lab.html" aria-current="page">情景实验室</a>
+        <a href="observations.html">公开证据</a>
+        <a href="verification.html">科学验证</a>
+      </nav>
     </header>
-
-
-    <section id="v39-research" class="v39-research-head" aria-labelledby="v39-research-title">
-      <div class="v39-research-meta"><span class="v39-pulse"></span> 02 / RESEARCH CONTROL SYSTEM <span class="v39-meta-line"></span> V3.9</div>
-      <div class="v39-research-row"><div><h2 id="v39-research-title">从一场冲击，<em>看透一组可能。</em></h2>
-      <p>选择风险或增长假设，让原模型计算 A/B。数字只属于模型，不是预测，也不代替任何主体作决策。</p></div>
-      <div class="v39-research-guide">01 <span>设定情景</span> <b>→</b> 02 <span>观察差异</span> <b>→</b> 03 <span>检验与分享</span></div></div>
+    <section class="lab-intro" id="lab-intro">
+      <div class="lab-intro-text">
+        <span class="lab-eyebrow">V3.11 / SCENARIO LAB · EXPERIMENTAL MODEL</span>
+        <h1>如果改变一个条件，<em>仲恺会怎样？</em></h1>
+        <p>选一组产业风险或增长条件，让同一个模拟模型运行 A 基线和 B 情景。
+          看见差异、检查主体、改变问题，再运行一次。</p>
+      </div>
+      <div class="lab-intro-side">
+        <span><i></i> MODEL / READY</span>
+        <strong>提出假设，而不是预测未来。</strong>
+        <small>公开研究 · 模型步并非日历年 · 结果不是现实发生概率</small>
+      </div>
     </section>
+    <div class="lab-flow" aria-label="实验流程">
+      <a href="#lab-stage" class="active">01 <span>选择条件</span></a><span class="lab-flow-arrow">→</span>
+      <a href="#lab-results">02 <span>影响透视</span></a><span class="lab-flow-arrow">→</span>
+      <a href="#lab-evidence">03 <span>深入验证</span></a>
+    </div>
+
+
+
+
+    <div class="lab-stage" id="lab-stage">
     <section class="wind-deck" id="wind-deck" aria-labelledby="wind-title">
-      <div class="wind-heading"><span class="wind-kicker">V3.9 / SCENARIO STUDIO</span><h2 id="wind-title">选一种变化，启动一次实验。</h2>
+      <div class="wind-heading"><span class="wind-kicker">01 / EXPERIMENT DESIGN</span><h2 id="wind-title">选一种变化，启动一次实验。</h2>
       <p>风险与增长同等重要。选一个公开可复现的模型情景，比较、反驳、分享。以下是模型内实验，不是现实预测。</p></div>
       <div class="wind-layout"><div class="wind-choices">
         <h3>探索风险 <span>RISK SIGNALS</span></h3>
@@ -113,6 +72,11 @@
       </div>
       <div class="wind-share">
         <div class="wind-spotlight" id="wind-spotlight"><span class="wind-overline">当前探索主题</span><strong id="wind-topic">尚未选择</strong><p id="wind-description">选择任一情景后，使用原始 Sim 模型进行基线和冲击对照。</p></div>
+        <div class="lab-parameters">
+          <label for="lab-all-shocks">完整冲击库 · 原模型 14 种<select id="lab-all-shocks" aria-label="选择全部模型冲击"></select></label>
+          <label for="lab-seed">实验随机种子<input id="lab-seed" type="number" min="1" max="2147483647" step="1" value="7"></label>
+          <p id="lab-input-warning" class="lab-input-warning" role="status"></p>
+        </div>
         <div class="wind-share-actions"><button class="btn primary" type="button" id="wind-run">运行 A/B 情景 ↗</button><button class="btn outline" type="button" id="wind-copy">复制可复现实验链接 ⤴</button></div>
         <p class="wind-share-note" id="wind-feedback" role="status" aria-live="polite">共享链接只保存公开的冲击类型和随机种子。别人可用相同输入重新运行模型，不泄漏或伪造计算结果。</p>
         <details class="v39-study-boundary"><summary>实验边界与复现限制 <span aria-hidden="true">⌄</span></summary><p class="wind-disclaimer">注：同一随机种子可复现当前版本模型实验，但冲击会改变随机流消耗，不能据此声称严格因果识别。模型参数、算法和公开资料可能随版本改变；链接中不包含模型版本的永久快照。</p></details>
@@ -120,6 +84,25 @@
     </section>
 
 
+      <aside class="lab-preview" id="lab-preview" aria-labelledby="lab-preview-title">
+        <div class="lab-preview-kicker">02 / SCENARIO OBSERVATION</div>
+        <h2 id="lab-preview-title">两条路径，<span>一个问题。</span></h2>
+        <p class="lab-preview-deck">同一组种子与参数。先运行原模型，再显示结果；不会预填模拟数字。</p>
+        <div class="lab-two-paths">
+          <div class="lab-path lab-path-a"><div><span>SCENARIO A</span><strong>基准世界</strong><small>不注入该情景冲击</small></div><span class="lab-path-glyph">A</span></div>
+          <div class="lab-path lab-path-b"><div><span>SCENARIO B</span><strong id="lab-b-name">待选择情景</strong><small>第 0 个模型步注入</small></div><span class="lab-path-glyph">B</span></div>
+        </div>
+        <div class="lab-preview-status" id="lab-preview-status" data-state="waiting">等待运行 · NO COMPUTED DATA</div>
+        <div class="lab-preview-metrics" id="lab-preview-metrics" aria-live="polite">
+          <div class="lab-preview-empty"><span>⌁</span><strong>结果留白，直到模型运行</strong>
+          <p>选择一个情景，点击运行 A/B。这里才会显示真正算出来的模型内差值。</p></div>
+        </div>
+        <a class="lab-results-jump" href="#lab-results">查看影响透视 <span>↓</span></a>
+        <p class="lab-preview-boundary">B − A · 数值描述模型差异，不是 GDP 增量或政策因果效应</p>
+      </aside>
+    </div>
+    <div class="lab-results" id="lab-results">
+    <div class="lab-results-brow"><div><span>02 / ANALYZE THE DIFFERENCE</span><h2>观察改变之后的世界。</h2><p>结果取自真实 A/B 模型快照；未运行前，不填数字，也不编造结论。</p></div><a href="#lab-stage">← 更换实验条件</a></div>
     <section class="v39-lens" id="v39-lens" aria-labelledby="v39-lens-title">
       <header class="v39-lens-head">
         <div><span class="v39-eyebrow">03 / IMPACT LENS · MODEL OBSERVATIONS</span>
@@ -158,6 +141,13 @@
     </section>
 
 
+    </div>
+    <details class="lab-advanced" id="lab-evidence">
+      <summary class="lab-advanced-summary">
+        <span><small>03 / PROFESSIONAL RESEARCH</small><strong>打开高级研究与完整 A/B 证据</strong><em>模型主体、双网络、稳健性、复现实验和导出工具都保留在这里。</em></span>
+        <span class="lab-expand-glyph" aria-hidden="true">＋</span>
+      </summary>
+      <div class="lab-advanced-content" id="lab-advanced-content">
     <section class="atlas-section" id="atlas-section" aria-labelledby="atlas-title">
       <header class="atlas-heading">
         <div class="atlas-eyebrow">04 / MODEL SUBJECT ATLAS · FULL INDEX</div>
@@ -192,19 +182,19 @@
         <aside class="atlas-inspector" aria-labelledby="atlas-inspector-title">
           <span class="atlas-inspector-kicker">MODEL / SUBJECT INSPECTOR</span>
           <h3 id="atlas-inspector-title">点击任一主体</h3>
-          <p class="atlas-inspector-intro" id="atlas-selected-intro">查看模型状态、关系来源和相邻节点。支持直接将三维相机转向选中节点。</p>
+          <p class="atlas-inspector-intro" id="atlas-selected-intro">查看模型状态、关系来源和相邻节点，可转到本页专业主体分析。</p>
           <div id="atlas-details" class="atlas-details" aria-live="polite">
             <div class="atlas-empty-symbol">◎</div><p>当前显示模型中已构建的主体。请选择左侧名称，定位并检查。</p>
           </div>
-          <button type="button" id="atlas-focus" class="atlas-focus" disabled>定位到上方全息世界 ↗</button>
-          <p class="atlas-inspector-foot">选择节点只改变显示焦点和相机，不会对模型注入冲击，也不会推断未经核实的经济事实。</p>
+          <button type="button" id="atlas-focus" class="atlas-focus" disabled>转到本页主体分析 ↗</button>
+          <p class="atlas-inspector-foot">选择节点只会更新主体查看区域，不会对模型注入冲击，也不会推断未经核实的经济事实。</p>
         </aside>
       </div>
     </section>
 
     <section class="v39-expert-intro" aria-label="专业模型研究工具">
       <div><span>04 / DEEP RESEARCH</span><h2>深入模型内部</h2>
-       <p>以下为专业研究操作：随机种子、规则化冲击、主体移除、模型状态曲线及完整 A/B 网络。首页全息主舞台保持不变。</p></div>
+       <p>以下为专业研究操作：随机种子、规则化冲击、主体移除、模型状态曲线及完整 A/B 网络。全息门户独立位于第一页。</p></div>
       <a href="#compare-section" class="v39-expert-link">直接查看完整 A/B →</a>
     </section>
     <nav class="mobile-switch" aria-label="手机工作区">
@@ -214,7 +204,7 @@
       <button type="button" data-mobile-to="compare" aria-pressed="false">情景对比</button>
     </nav>
 
-    <div class="workstation" data-mobile="input">
+    <div id="lab-workstation" class="workstation" data-mobile="input">
       <aside class="panel input-panel" aria-label="输入区">
         <div class="panel-head"><span class="section-num">01</span><h2>情景设置</h2><span class="head-hint">INPUT</span></div>
         <div class="inner">
@@ -402,12 +392,14 @@
       <div class="compare-provenance" id="compare-provenance">对比尚未运行。运行后展示随机种子、实验设置与对比口径。</div>
       <div class="bottom-links"><a href="measurement.html">模型指标—现实观测映射 ↗</a><a href="verification.html">科学验证与留出集回测 ↗</a><a href="observations.html">七年历史观测与基线对照 ↗</a><a href="../v2/montecarlo.html">批量模拟 ↗</a><a href="../v2/sensitivity.html">参数敏感性 ↗</a><a href="../v2/data.html">数据与血统 ↗</a><a href="../v2/reports.html">原版研究档案 ↗</a></div>
     </section>
+      </div>
+    </details>
     <div class="runtime" id="runtime-alert" role="alert" hidden></div>
-    <footer class="app-footer">仲恺产业风洞 V3.9 研究工作台 · 使用根目录 <code>model.js</code> 计算内核 · 相同种子不等于因果识别 · <a href="../v2/">稳定版本 V2</a></footer>
+    <footer class="app-footer">仲恺产业风洞 V3.11 产业风洞实验室 · 使用根目录 <code>model.js</code> 计算内核 · 相同种子不等于因果识别 · <a href="../v2/">稳定版本 V2</a></footer>
   </div>
 </div>
 <div class="compat" aria-hidden="true"><div id="data-lineage"></div><div id="report-locknote"></div><div id="report-box"></div><table id="param-table"><tbody></tbody></table><div id="missroles"></div><svg id="trend-chart"></svg></div>
 <script src="../model.js"></script>
-<script src="explore-core.js"></script><script src="holo-core.js"></script><script src="holo-render.js"></script><script src="impact-core.js"></script><script src="app.js"></script><script src="atlas-core.js"></script><script src="workbench-v39.js"></script><script src="atlas.js"></script>
+<script src="explore-core.js"></script><script src="holo-core.js"></script><script src="holo-render.js"></script><script src="impact-core.js"></script><script src="app.js"></script><script src="atlas-core.js"></script><script src="workbench-v39.js"></script><script src="atlas.js"></script><script src="lab-v311.js"></script>
 </body>
 </html>
