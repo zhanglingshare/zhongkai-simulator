@@ -69,22 +69,33 @@ function renderTrends(trends,tick){
  const host=el("v39-chart");host.replaceChildren();
  const selected=trends.filter(x=>x.key==="abundance"||x.key==="disaster");
  if(selected.length!==2)return;
+ host.dataset.tick=String(tick);
+ host.setAttribute("aria-label","模型第 "+tick+" 步的 A/B 景气及风险路径。只展示当前及之前真实模型快照；不是现实时间或预测曲线。");
  for(let k=0;k<2;k++){
   const dataset=selected[k],top=18+k*65,bottom=top+40;
   host.append(svg("text",{x:7,y:top-5,fill:"#91bfce","font-size":10},dataset.name));
   host.append(svg("line",{x1:39,x2:333,y1:bottom,y2:bottom,stroke:"#4b7688","stroke-opacity":.5}));
   const n=Math.max(dataset.a.length,dataset.b.length);
   const xy=p=>[39+(p.tick/Math.max(1,n-1))*287,bottom-p.value*39];
-  const line=(pts,color)=>{
-   const valid=pts.filter(p=>Number.isFinite(p.value));
+  const line=(pts,color,role)=>{
+   const valid=pts.filter(p=>p.tick<=tick&&Number.isFinite(p.value));
    if(!valid.length)return;
-   host.append(svg("polyline",{points:valid.map(p=>xy(p).map(x=>x.toFixed(1)).join(",")).join(" "),fill:"none",stroke:color,"stroke-width":2,"stroke-linejoin":"round","stroke-linecap":"round"}));
-   const latest=valid.find(p=>p.tick===tick);
-   if(latest){const [x,y]=xy(latest);host.append(svg("circle",{cx:x,cy:y,r:3.2,fill:color,stroke:"#0e2b40","stroke-width":1.2}));}
+   const positions=valid.map(p=>xy(p).map(x=>x.toFixed(1)).join(",")).join(" ");
+   host.append(svg("polyline",{points:positions,fill:"none",stroke:color,
+    "stroke-width":2.3,"stroke-linejoin":"round","stroke-linecap":"round",
+    "data-path":role,"data-upto":tick,"class":"v312-timeline-curve"}));
+   const latest=valid[valid.length-1];
+   if(latest){
+     const [x,y]=xy(latest);
+     host.append(svg("circle",{cx:x,cy:y,r:3.4,fill:color,stroke:"#092538",
+       "stroke-width":1.4,"class":"v312-curve-marker","data-marker":role}));
+   }
   };
-  line(dataset.a,"#54acc8");line(dataset.b,"#edab80");
+  line(dataset.a,"#54acc8",dataset.key+"-A");
+  line(dataset.b,"#edab80",dataset.key+"-B");
   const x=39+(tick/Math.max(1,n-1))*287;
-  host.append(svg("line",{x1:x,y1:top-1,x2:x,y2:bottom,stroke:"#bad8dd","stroke-width":.7,"stroke-dasharray":"2 3","stroke-opacity":.6}));
+  host.append(svg("line",{x1:x,y1:top-1,x2:x,y2:bottom,stroke:"#bad8dd",
+   "stroke-width":.8,"stroke-dasharray":"2 3","stroke-opacity":.7}));
  }
 }
 function update(detail){
