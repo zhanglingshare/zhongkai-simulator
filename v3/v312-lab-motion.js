@@ -88,7 +88,7 @@ function animateTruth(event){
      }
    }
   }
- }
+ });
  // Every curve displays only actual completed steps; reveal animation never fabricates points.
  const chart=$("v39-chart");
  if(chart)chart.classList.toggle("v312-animating",!reduced);
