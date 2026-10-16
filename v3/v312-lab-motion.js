@@ -113,6 +113,6 @@ $("wind-run")?.addEventListener("click",()=>{
   if(reduced){label.textContent="已计算到最终时间步 · 已遵从系统减少动态效果设置";return;}
   play();
  });
-});
+},{capture:true});
 label.textContent="运行实验后，能从 T0 观看真实模型结果逐步分化";
 })();
