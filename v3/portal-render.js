@@ -83,6 +83,7 @@ void main(){
   let renderer=null,context2d=null,mode="fallback",graph=null,meta={},selected=null,hover=null;
   let cam={yaw:-.36,pitch:.18,distance:5.1},raf=0,lastFrame=0,visible=true,disposed=false;
   let start={x:0,y:0},dragged=false;
+  let changeGlow=null; // Visual-only observed state transitions, never causal transmission.
   const pointers=new Map();
   let oldPinch=0;
   const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -109,6 +110,25 @@ void main(){
    });
    return best;
   }
+  function glowAt(name,now){
+    if(!changeGlow||reduced)return 0;
+    const elapsed=now-changeGlow.started;
+    if(elapsed>=680){changeGlow=null;return 0;}
+    const weight=changeGlow.weights.get(name)||0;
+    return weight*Math.sin(Math.PI*Math.min(1,elapsed/680));
+  }
+  function updateGlow(previous,next){
+    if(reduced||!previous){changeGlow=null;return;}
+    const prior=new Map(previous.nodes.map(n=>[n.name,n]));
+    const changed=new Map();
+    for(const n of next.nodes){
+      const was=prior.get(n.name);if(!was)continue;
+      const drift=Math.abs(n.energy-was.energy);
+      if(was.alive!==n.alive)changed.set(n.name,1);
+      else if(drift>.045)changed.set(n.name,Math.min(.9,.3+drift*2));
+    }
+    changeGlow=changed.size?{started:performance.now(),weights:changed}:null;
+  }
   function render2d(now,w,h,ratio){
     const ctx=context2d;if(!ctx)return;
     ctx.setTransform(ratio,0,0,ratio,0,0);ctx.clearRect(0,0,w,h);
@@ -118,7 +138,12 @@ void main(){
       const a=nodeMap.get(edge.a),b=nodeMap.get(edge.b);if(!a||!b)continue;
       const pa=screen(a),pb=screen(b);
       ctx.strokeStyle=!a.alive||!b.alive?"rgba(87,107,128,.19)":edge.layer==="hist"?"rgba(77,207,231,.48)":"rgba(75,151,171,.22)";
-      ctx.lineWidth=edge.layer==="hist"?1.25:.8;
+      const glow=Math.max(glowAt(a.name,now),glowAt(b.name,now));
+      if(glow>0){
+        // Adjacent connections are highlighted to show structure, NOT verified impact paths.
+        ctx.strokeStyle="rgba(242,170,117,"+(glow*.63)+")";
+      }
+      ctx.lineWidth=(edge.layer==="hist"?1.25:.8)+glow*1.8;
       ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
       if(edge.layer==="hist"&&a.alive&&b.alive&&!reduced){
         const phase=((now/2700)+(Core.hash(edge.a+edge.b)%97)/97)%1;
@@ -130,7 +155,13 @@ void main(){
      const p=screen(n),scale=clamp(5.1/p.depth,.55,1.7);
      const rad=(n.w>=3?11:n.w===2?7:4.6)*scale;
      const color=Core.palette(n),rgb=color.slice(0,3).map(x=>Math.round(x*255)).join(",");
-     ctx.shadowBlur=n.alive?rad*2.6:0;ctx.shadowColor="rgba("+rgb+",.7)";
+     const glow=glowAt(n.name,now);
+     if(glow>0){
+       ctx.strokeStyle="rgba(255,190,128,"+(glow*.88)+")";
+       ctx.lineWidth=1.4+glow*2.7;
+       ctx.beginPath();ctx.arc(p.x,p.y,rad+7+glow*11,0,Math.PI*2);ctx.stroke();
+     }
+     ctx.shadowBlur=n.alive?rad*(2.6+glow*4):0;ctx.shadowColor="rgba("+rgb+",.7)";
      ctx.fillStyle="rgba("+rgb+","+color[3]+")";
      ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
      ctx.strokeStyle=n.name===selected?"#fff":"rgba("+rgb+",.72)";
@@ -146,7 +177,10 @@ void main(){
     for(const e of graph.edges){
       const a=map.get(e.a),b=map.get(e.b);if(!a||!b)continue;
       const isActive=a.alive&&b.alive,c=edgeColors[e.layer]||edgeColors.unknown;
-      const color=isActive?c:[.34,.43,.54,.09];
+      const edgeGlow=Math.max(glowAt(a.name,now),glowAt(b.name,now));
+      const color=edgeGlow>0?
+        [.99,.65,.41,Math.min(.85,c[3]+edgeGlow*.5)]:
+        isActive?c:[.34,.43,.54,.09];
       push(lines,[a.x,a.y,a.z],color,1);push(lines,[b.x,b.y,b.z],color,1);
       if(isActive&&e.layer==="hist"&&!reduced){
        const k=((now/3100)+(Core.hash(e.a+e.b)%131)/131)%1;
@@ -155,6 +189,10 @@ void main(){
     }
     graph.nodes.forEach(n=>{
      const col=Core.palette(n);
+     const glow=glowAt(n.name,now);
+     if(glow>0){
+       push(points,[n.x,n.y,n.z],[1,.69,.40,glow*.54],(n.w>=3?43:27)+glow*65);
+     }
      const size=(n.w>=3?43:n.w===2?28:19);
      if(n.name===selected)push(points,[n.x,n.y,n.z],[1,.98,.84,.27],size+30);
      push(points,[n.x,n.y,n.z],[col[0],col[1],col[2],col[3]*.24],size*2.4);
@@ -261,11 +299,14 @@ void main(){
   return {
    get mode(){return mode;},get camera(){return {...cam};},get graph(){return graph;},
    setGraph(agents,edges,metaNext){
-    graph=Core.build(agents,edges);meta=metaNext||{};schedule();return graph;
+    graph=Core.build(agents,edges);changeGlow=null;meta=metaNext||{};schedule();return graph;
    },
    setFrame(agents,metaNext){
     if(!graph)return;
-    graph=Core.update(graph,agents);meta=metaNext||meta;
+    const before=graph;
+    graph=Core.update(graph,agents);
+    updateGlow(before,graph);
+    meta=metaNext||meta;
     const selectedNode=graph.nodes.find(n=>n.name===selected);
     if(selected&&!selectedNode)selected=null;
     schedule();
