@@ -120,12 +120,13 @@ $("wind-run")?.addEventListener("click",()=>{
  const eventAtClick=latest,nowSerial=++serial;
  if(interval!==null)stop();
  // Existing click handlers calculate a real A/B run synchronously.
- // Begin from T0 after they finish, not from an imaginary score.
- queueMicrotask(()=>{
+ // Browser event dispatch may checkpoint microtasks between listeners;
+ // defer until after original model click handlers have calculated the new snapshots.
+ setTimeout(()=>{
   if(nowSerial!==serial||!latest||latest.stale||latest===eventAtClick)return;
   if(reduced){label.textContent="已计算到最终时间步 · 已遵从系统减少动态效果设置";return;}
   play();
- });
+ },0);
 },{capture:true});
 label.textContent="运行实验后，能从 T0 观看真实模型结果逐步分化";
 })();
