@@ -77,6 +77,7 @@ async function laboratory(browser,port,width,reduce=false){
   await page.waitForTimeout(500);
   assert.equal(await page.locator("#compare-tick").inputValue(),"20");
  }else{
+  await page.waitForFunction(()=>document.querySelector("#v312-replay").textContent.includes("暂停"),null,{timeout:8000});
   await page.waitForFunction(()=>Number(document.querySelector("#compare-tick").value)>=2,null,{timeout:8000});
   await page.locator("#v312-replay").click(); // Stop without scrambling the true current tick.
   assert.match(await page.locator("#v312-replay-status").innerText(),/暂停/);
