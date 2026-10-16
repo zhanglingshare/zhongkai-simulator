@@ -62,7 +62,7 @@
 
     <div class="lab-stage" id="lab-stage">
     <section class="wind-deck" id="wind-deck" aria-labelledby="wind-title">
-      <div class="wind-heading"><span class="wind-kicker">V3.9 / SCENARIO STUDIO</span><h2 id="wind-title">选一种变化，启动一次实验。</h2>
+      <div class="wind-heading"><span class="wind-kicker">01 / EXPERIMENT DESIGN</span><h2 id="wind-title">选一种变化，启动一次实验。</h2>
       <p>风险与增长同等重要。选一个公开可复现的模型情景，比较、反驳、分享。以下是模型内实验，不是现实预测。</p></div>
       <div class="wind-layout"><div class="wind-choices">
         <h3>探索风险 <span>RISK SIGNALS</span></h3>
@@ -72,6 +72,11 @@
       </div>
       <div class="wind-share">
         <div class="wind-spotlight" id="wind-spotlight"><span class="wind-overline">当前探索主题</span><strong id="wind-topic">尚未选择</strong><p id="wind-description">选择任一情景后，使用原始 Sim 模型进行基线和冲击对照。</p></div>
+        <div class="lab-parameters">
+          <label for="lab-all-shocks">完整冲击库 · 原模型 14 种<select id="lab-all-shocks" aria-label="选择全部模型冲击"></select></label>
+          <label for="lab-seed">实验随机种子<input id="lab-seed" type="number" min="1" max="2147483647" step="1" value="7"></label>
+          <p id="lab-input-warning" class="lab-input-warning" role="status"></p>
+        </div>
         <div class="wind-share-actions"><button class="btn primary" type="button" id="wind-run">运行 A/B 情景 ↗</button><button class="btn outline" type="button" id="wind-copy">复制可复现实验链接 ⤴</button></div>
         <p class="wind-share-note" id="wind-feedback" role="status" aria-live="polite">共享链接只保存公开的冲击类型和随机种子。别人可用相同输入重新运行模型，不泄漏或伪造计算结果。</p>
         <details class="v39-study-boundary"><summary>实验边界与复现限制 <span aria-hidden="true">⌄</span></summary><p class="wind-disclaimer">注：同一随机种子可复现当前版本模型实验，但冲击会改变随机流消耗，不能据此声称严格因果识别。模型参数、算法和公开资料可能随版本改变；链接中不包含模型版本的永久快照。</p></details>
@@ -97,6 +102,7 @@
       </aside>
     </div>
     <div class="lab-results" id="lab-results">
+    <div class="lab-results-brow"><div><span>02 / ANALYZE THE DIFFERENCE</span><h2>观察改变之后的世界。</h2><p>结果取自真实 A/B 模型快照；未运行前，不填数字，也不编造结论。</p></div><a href="#lab-stage">← 更换实验条件</a></div>
     <section class="v39-lens" id="v39-lens" aria-labelledby="v39-lens-title">
       <header class="v39-lens-head">
         <div><span class="v39-eyebrow">03 / IMPACT LENS · MODEL OBSERVATIONS</span>
@@ -176,19 +182,19 @@
         <aside class="atlas-inspector" aria-labelledby="atlas-inspector-title">
           <span class="atlas-inspector-kicker">MODEL / SUBJECT INSPECTOR</span>
           <h3 id="atlas-inspector-title">点击任一主体</h3>
-          <p class="atlas-inspector-intro" id="atlas-selected-intro">查看模型状态、关系来源和相邻节点。支持直接将三维相机转向选中节点。</p>
+          <p class="atlas-inspector-intro" id="atlas-selected-intro">查看模型状态、关系来源和相邻节点，可转到本页专业主体分析。</p>
           <div id="atlas-details" class="atlas-details" aria-live="polite">
             <div class="atlas-empty-symbol">◎</div><p>当前显示模型中已构建的主体。请选择左侧名称，定位并检查。</p>
           </div>
-          <button type="button" id="atlas-focus" class="atlas-focus" disabled>定位到上方全息世界 ↗</button>
-          <p class="atlas-inspector-foot">选择节点只改变显示焦点和相机，不会对模型注入冲击，也不会推断未经核实的经济事实。</p>
+          <button type="button" id="atlas-focus" class="atlas-focus" disabled>转到本页主体分析 ↗</button>
+          <p class="atlas-inspector-foot">选择节点只会更新主体查看区域，不会对模型注入冲击，也不会推断未经核实的经济事实。</p>
         </aside>
       </div>
     </section>
 
     <section class="v39-expert-intro" aria-label="专业模型研究工具">
       <div><span>04 / DEEP RESEARCH</span><h2>深入模型内部</h2>
-       <p>以下为专业研究操作：随机种子、规则化冲击、主体移除、模型状态曲线及完整 A/B 网络。首页全息主舞台保持不变。</p></div>
+       <p>以下为专业研究操作：随机种子、规则化冲击、主体移除、模型状态曲线及完整 A/B 网络。全息门户独立位于第一页。</p></div>
       <a href="#compare-section" class="v39-expert-link">直接查看完整 A/B →</a>
     </section>
     <nav class="mobile-switch" aria-label="手机工作区">
@@ -198,7 +204,7 @@
       <button type="button" data-mobile-to="compare" aria-pressed="false">情景对比</button>
     </nav>
 
-    <div class="workstation" data-mobile="input">
+    <div id="lab-workstation" class="workstation" data-mobile="input">
       <aside class="panel input-panel" aria-label="输入区">
         <div class="panel-head"><span class="section-num">01</span><h2>情景设置</h2><span class="head-hint">INPUT</span></div>
         <div class="inner">
