@@ -7,7 +7,7 @@
 #world-stage .holo-node-label{transition:opacity 160ms ease-out,border-color 220ms,color 220ms}
 #world-stage .world-heading{opacity:.95}
 .v312-replaybar{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;margin:14px 0 17px;padding:9px 11px;border:1px solid rgba(88,161,186,.35);background:rgba(20,62,81,.31);border-radius:8px}
-#v312-replay{border:1px solid #53b0c6;background:rgba(19,83,107,.76);border-radius:6px;color:#d7faff;font:720 11px/1.5 inherit;min-height:37px;padding:8px 12px;cursor:pointer}
+#v312-replay{border:1px solid #53b0c6;background:rgba(19,83,107,.76);border-radius:6px;color:#d7faff;font:720 11px/1.5 "Segoe UI","PingFang SC",system-ui,sans-serif;min-height:37px;padding:8px 12px;cursor:pointer}
 #v312-replay:hover:not(:disabled){background:#22647a;color:white}
 #v312-replay:disabled{opacity:.4;cursor:not-allowed}
 #v312-replay-status{font-size:10px;line-height:1.65;color:#9dbdca;flex:1;min-width:160px}
