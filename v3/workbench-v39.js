@@ -72,11 +72,15 @@ function renderTrends(trends,tick){
  host.dataset.tick=String(tick);
  host.setAttribute("aria-label","模型第 "+tick+" 步的 A/B 景气及风险路径。只展示当前及之前真实模型快照；不是现实时间或预测曲线。");
  for(let k=0;k<2;k++){
-  const dataset=selected[k],top=18+k*65,bottom=top+40;
+  const dataset=selected[k],top=23+k*99,bottom=top+57;
   host.append(svg("text",{x:7,y:top-5,fill:"#91bfce","font-size":10},dataset.name));
   host.append(svg("line",{x1:39,x2:333,y1:bottom,y2:bottom,stroke:"#4b7688","stroke-opacity":.5}));
   const n=Math.max(dataset.a.length,dataset.b.length);
-  const xy=p=>[39+(p.tick/Math.max(1,n-1))*287,bottom-p.value*39];
+  const xy=p=>[39+(p.tick/Math.max(1,n-1))*287,bottom-p.value*52];
+  host.append(svg("line",{x1:39,x2:333,y1:bottom-26,y2:bottom-26,stroke:"#376778",
+    "stroke-opacity":.42,"stroke-dasharray":"2 5"}));
+  host.append(svg("text",{x:39,y:bottom+13,fill:"#709bac","font-size":8},"T0"));
+  host.append(svg("text",{x:309,y:bottom+13,fill:"#709bac","font-size":8},"T"+(n-1)));
   const line=(pts,color,role)=>{
    const valid=pts.filter(p=>p.tick<=tick&&Number.isFinite(p.value));
    if(!valid.length)return;
