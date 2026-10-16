@@ -7,7 +7,7 @@ if(!K||!$("v312-replay")||!$("compare-tick"))return;
 const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const playBtn=$("v312-replay"),label=$("v312-replay-status"),timeline=$("compare-tick");
 let latest=null,interval=null,internal=false,serial=0;
-const numericPrevious=new Map();
+const numericPrevious=new Map(),barPrevious=new Map();
 const frames=new Set();
 function cancelTweens(){
  for(const request of frames)cancelAnimationFrame(request);
@@ -74,6 +74,19 @@ function animateTruth(event){
    node.setAttribute("aria-label",m.name+"模型 B 减 A 精确值为 "+
      (m.delta>0?"+":"")+m.delta.toFixed(3)+"，数字过渡仅为显示动画");
    valueTween(node,previous,m.delta,240);
+   const bars=prefix==="preview"?
+      document.querySelectorAll("#lab-preview-metrics .lab-quick-fill"):
+      document.querySelectorAll("#v39-deltas .v39-delta-fill");
+   const bar=bars[i];
+   if(bar){
+     const next={width:bar.style.width,left:bar.style.left};
+     const prior=barPrevious.get(key)||{width:"0%",left:"50%"};
+     barPrevious.set(key,next);
+     if(!reduced&&typeof bar.animate==="function"&&
+       (prior.width!==next.width||prior.left!==next.left)){
+       bar.animate([prior,next],{duration:265,easing:"cubic-bezier(.19,1,.22,1)"});
+     }
+   }
   }
  }
  // Every curve displays only actual completed steps; reveal animation never fabricates points.
@@ -88,11 +101,11 @@ function onModel(e){
 window.addEventListener("zk:comparison",onModel);
 window.addEventListener("zk:compare-stale",()=>{
  serial++;stop("实验条件已变化，请重新运行，旧轨迹已清空");
- playBtn.disabled=true;latest=null;numericPrevious.clear();cancelTweens();
+ playBtn.disabled=true;latest=null;numericPrevious.clear();barPrevious.clear();cancelTweens();
 });
 window.addEventListener("zk:compare-clear",()=>{
  serial++;stop("A/B 已清空，等待新的实验");playBtn.disabled=true;
- latest=null;numericPrevious.clear();cancelTweens();
+ latest=null;numericPrevious.clear();barPrevious.clear();cancelTweens();
 });
 playBtn.addEventListener("click",()=>{
  if(interval!==null){serial++;stop("播放已暂停 · 可拖动时间轴或从头重放");}
