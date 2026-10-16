@@ -124,8 +124,8 @@ void main(){
     for(const n of next.nodes){
       const was=prior.get(n.name);if(!was)continue;
       const drift=Math.abs(n.energy-was.energy);
-      if(was.alive!==n.alive)changed.set(n.name,1);
-      else if(drift>.045)changed.set(n.name,Math.min(.9,.3+drift*2));
+      if(was.alive!==n.alive)changed.set(n.name,n.alive?1:-1);
+      else if(drift>.045)changed.set(n.name,Math.sign(n.energy-was.energy)*Math.min(.9,.3+drift*2));
     }
     changeGlow=changed.size?{started:performance.now(),weights:changed}:null;
   }
@@ -138,12 +138,14 @@ void main(){
       const a=nodeMap.get(edge.a),b=nodeMap.get(edge.b);if(!a||!b)continue;
       const pa=screen(a),pb=screen(b);
       ctx.strokeStyle=!a.alive||!b.alive?"rgba(87,107,128,.19)":edge.layer==="hist"?"rgba(77,207,231,.48)":"rgba(75,151,171,.22)";
-      const glow=Math.max(glowAt(a.name,now),glowAt(b.name,now));
-      if(glow>0){
-        // Adjacent connections are highlighted to show structure, NOT verified impact paths.
-        ctx.strokeStyle="rgba(242,170,117,"+(glow*.63)+")";
+      const one=glowAt(a.name,now),two=glowAt(b.name,now);
+      const glow=Math.abs(one)>=Math.abs(two)?one:two,level=Math.abs(glow);
+      if(level>0){
+        // Warm means observed energy decline/exit; teal means improvement/recovery.
+        // Edge emphasis shows adjacency only, NOT an identified causal path.
+        ctx.strokeStyle=(glow<0?"rgba(242,170,117,":"rgba(114,226,192,")+(level*.63)+")";
       }
-      ctx.lineWidth=(edge.layer==="hist"?1.25:.8)+glow*1.8;
+      ctx.lineWidth=(edge.layer==="hist"?1.25:.8)+level*1.8;
       ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
       if(edge.layer==="hist"&&a.alive&&b.alive&&!reduced){
         const phase=((now/2700)+(Core.hash(edge.a+edge.b)%97)/97)%1;
@@ -155,13 +157,13 @@ void main(){
      const p=screen(n),scale=clamp(5.1/p.depth,.55,1.7);
      const rad=(n.w>=3?11:n.w===2?7:4.6)*scale;
      const color=Core.palette(n),rgb=color.slice(0,3).map(x=>Math.round(x*255)).join(",");
-     const glow=glowAt(n.name,now);
-     if(glow>0){
-       ctx.strokeStyle="rgba(255,190,128,"+(glow*.88)+")";
-       ctx.lineWidth=1.4+glow*2.7;
-       ctx.beginPath();ctx.arc(p.x,p.y,rad+7+glow*11,0,Math.PI*2);ctx.stroke();
+     const glow=glowAt(n.name,now),level=Math.abs(glow);
+     if(level>0){
+       ctx.strokeStyle=(glow<0?"rgba(255,190,128,":"rgba(123,243,213,")+(level*.88)+")";
+       ctx.lineWidth=1.4+level*2.7;
+       ctx.beginPath();ctx.arc(p.x,p.y,rad+7+level*11,0,Math.PI*2);ctx.stroke();
      }
-     ctx.shadowBlur=n.alive?rad*(2.6+glow*4):0;ctx.shadowColor="rgba("+rgb+",.7)";
+     ctx.shadowBlur=n.alive?rad*(2.6+level*4):0;ctx.shadowColor="rgba("+rgb+",.7)";
      ctx.fillStyle="rgba("+rgb+","+color[3]+")";
      ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
      ctx.strokeStyle=n.name===selected?"#fff":"rgba("+rgb+",.72)";
@@ -177,9 +179,12 @@ void main(){
     for(const e of graph.edges){
       const a=map.get(e.a),b=map.get(e.b);if(!a||!b)continue;
       const isActive=a.alive&&b.alive,c=edgeColors[e.layer]||edgeColors.unknown;
-      const edgeGlow=Math.max(glowAt(a.name,now),glowAt(b.name,now));
-      const color=edgeGlow>0?
-        [.99,.65,.41,Math.min(.85,c[3]+edgeGlow*.5)]:
+      const first=glowAt(a.name,now),second=glowAt(b.name,now);
+      const edgeGlow=Math.abs(first)>=Math.abs(second)?first:second;
+      const level=Math.abs(edgeGlow);
+      const color=level>0?
+        edgeGlow<0?[.99,.65,.41,Math.min(.85,c[3]+level*.5)]:
+          [.39,.96,.78,Math.min(.85,c[3]+level*.5)]:
         isActive?c:[.34,.43,.54,.09];
       push(lines,[a.x,a.y,a.z],color,1);push(lines,[b.x,b.y,b.z],color,1);
       if(isActive&&e.layer==="hist"&&!reduced){
@@ -189,9 +194,10 @@ void main(){
     }
     graph.nodes.forEach(n=>{
      const col=Core.palette(n);
-     const glow=glowAt(n.name,now);
-     if(glow>0){
-       push(points,[n.x,n.y,n.z],[1,.69,.40,glow*.54],(n.w>=3?43:27)+glow*65);
+     const glow=glowAt(n.name,now),level=Math.abs(glow);
+     if(level>0){
+       const tint=glow<0?[1,.69,.40]:[.49,1,.81];
+       push(points,[n.x,n.y,n.z],[...tint,level*.54],(n.w>=3?43:27)+level*65);
      }
      const size=(n.w>=3?43:n.w===2?28:19);
      if(n.name===selected)push(points,[n.x,n.y,n.z],[1,.98,.84,.27],size+30);
