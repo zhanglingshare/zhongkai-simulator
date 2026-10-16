@@ -57,6 +57,17 @@ async function portal(browser,port,width,reduce=false){
  assert.ok(Number.isFinite(metric)&&metric>=0&&metric<=1);
  assert.match(await page.locator("#delta-disaster").innerText(),/B−A/);
  await overflow(page);
+ if(width===390&&!reduce){
+  // Snapshot strips come from the actual moving WebGL graph at the same fixed 41-node scenario.
+  for(const t of [0,4,8,12,16,20]){
+    await page.locator("#timeline-slider").fill(String(t));
+    await page.waitForTimeout(105);
+    await page.locator("#world-stage").screenshot({
+      path:path.join(shots,"v312-portal-frame-"+String(t).padStart(2,"0")+".png"),
+      animations:"disabled"
+    });
+  }
+ }
  if(!reduce)await page.screenshot({path:path.join(shots,"v312-portal-"+width+".png"),fullPage:false});
  assert.deepEqual(errors,[],"Portal JavaScript: "+errors.join(" | "));
  await page.close();
@@ -102,6 +113,17 @@ async function laboratory(browser,port,width,reduce=false){
   await page.locator("#v312-replay").click();
   await page.waitForFunction(()=>Number(document.querySelector("#v39-time").value)>=2,null,{timeout:9000});
   await page.locator("#v312-replay").click();
+ }
+ if(width===390&&!reduce){
+  // Time-series progress is real: the SVG includes only T0..Tselected points.
+  for(const t of [0,4,8,12,16,20]){
+    await page.locator("#v39-time").fill(String(t));
+    await page.waitForTimeout(105);
+    await page.locator("#v39-lens").screenshot({
+      path:path.join(shots,"v312-lab-frame-"+String(t).padStart(2,"0")+".png"),
+      animations:"disabled"
+    });
+  }
  }
  await page.locator("#lab-seed").fill("31");
  assert.equal(await page.locator("#v312-replay").isDisabled(),true);
