@@ -43,6 +43,8 @@ jobs:
         run: node v3/tests/atlas.spec.cjs
       - name: V3.11 lab browser interactions and responsive overflow checks
         run: node v3/tests/lab-v311-smoke.cjs
+      - name: V3.12 dynamic evolution and reduced-motion browser tests
+        run: node v3/tests/v312-motion-smoke.cjs
       - name: Upload screenshots for visual review
         if: always()
         uses: actions/upload-artifact@v4
