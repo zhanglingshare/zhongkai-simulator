@@ -1,0 +1,130 @@
+/* Story-first entry: replace expert dashboard defaults without removing a single
+   existing simulation control, metric, share tool, graph, or research route. */
+.portal-shell .portal-header{min-height:65px;background:rgba(2,13,26,.92);gap:24px}
+.portal-shell .site-nav{gap:15px}
+.portal-shell .site-nav a{font-size:13px;min-height:42px;padding:8px 11px;border-radius:9px}
+.portal-shell .site-nav a:hover{background:#173a4a}
+.portal-shell .portal-main{
+ display:flex;flex-direction:column;min-height:0;align-items:stretch;
+ max-width:1540px;margin:0 auto;padding:28px clamp(18px,4vw,64px) 26px;
+ background:radial-gradient(ellipse at 54% 36%,rgba(26,120,142,.22),transparent 55%),
+ linear-gradient(140deg,#031321,#061d30 62%,#030f1c);overflow:visible;gap:13px
+}
+.portal-shell .portal-main>.hero-story{display:block;align-self:stretch;padding:8px 0 0;min-width:0}
+.portal-shell .hero-story .hero-kicker{font-size:12px;letter-spacing:1.7px;color:#92d5dc}
+.portal-shell .hero-story h1{white-space:normal;font-size:clamp(37px,4.5vw,72px);
+ line-height:1.2;letter-spacing:-1.6px;margin:13px 0}
+.portal-shell .hero-story .hero-deck{font-size:16px;line-height:1.75;max-width:720px;color:#c4dee3}
+.portal-shell .hero-quick-actions{margin:20px 0 0;gap:12px}
+.portal-shell .hero-quick-actions button{font-size:17px;min-height:54px;padding:14px 25px;border-radius:14px}
+.portal-shell .hero-quick-actions span{font-size:13px}
+.portal-shell .story-emphasis{display:none}
+.portal-shell .world-stage{
+ width:100%;height:clamp(440px,62svh,800px);min-height:440px;
+ border:1px solid rgba(117,223,229,.26);border-radius:25px;
+ margin-top:15px;box-shadow:0 0 65px rgba(39,149,178,.14);
+ background:radial-gradient(ellipse at center,rgba(36,162,193,.27),rgba(7,46,70,.12) 45%,transparent 75%);
+}
+.portal-shell .world-heading{font-size:13px;letter-spacing:.6px;top:23px;left:23px}
+.portal-shell .world-heading small{font-size:11px}
+.portal-shell .world-footer{font-size:11px;gap:20px}
+.portal-shell .world-footer b{font-size:18px}
+.portal-shell .world-variation{font-size:12px;bottom:63px;padding:10px 16px;line-height:1.4}
+.portal-shell .story-result{
+ border:1px solid rgba(89,198,196,.4);border-radius:17px;
+ padding:19px clamp(17px,3vw,32px);margin:0;
+ background:linear-gradient(120deg,#123c4b,#0a2b40 65%,#0a2337);
+}
+.portal-shell .story-result-head{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.portal-shell .story-result-head span{font-size:13px;font-weight:750;color:#8de3df}
+.portal-shell .story-result-head strong{font-size:12px;color:#debc91}
+.portal-shell .story-result .scene-plain-result{font-size:clamp(17px,2vw,22px);font-weight:700;color:#e5faf7;line-height:1.65;margin:10px 0}
+.portal-shell .story-result small{font-size:12px;color:#a2c9d1;line-height:1.6}
+.portal-shell .story-settings,.portal-shell .story-research{
+ border:1px solid rgba(82,156,172,.38);border-radius:13px;
+ background:rgba(5,31,49,.74);padding:0 18px;max-width:none
+}
+.portal-shell .story-settings>summary,.portal-shell .story-research>summary{
+ list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;
+ font-size:15px;font-weight:740;color:#e3f5f6;padding:18px 0;cursor:pointer;
+ min-height:56px
+}
+.portal-shell .story-settings>summary::-webkit-details-marker,
+.portal-shell .story-research>summary::-webkit-details-marker{display:none}
+.portal-shell .story-settings>summary::after,.portal-shell .story-research>summary::after{
+ content:"＋";margin-left:auto;font-weight:500;color:#80dce4;font-size:22px
+}
+.portal-shell .story-settings[open]>summary::after,.portal-shell .story-research[open]>summary::after{content:"−"}
+.portal-shell .story-settings>summary span,.portal-shell .story-research>summary span{
+ font-size:12px;color:#91bfcc;font-weight:400;margin-left:10px
+}
+.portal-shell .story-settings .control-panel{width:100%;max-width:none;margin:0 0 18px;padding:19px}
+.portal-shell .story-settings .portal-field-pair{grid-template-columns:repeat(2,minmax(0,1fr))}
+.portal-shell .story-research .telemetry{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;
+ width:100%;margin:0;padding:5px 0 16px
+}
+.portal-shell .story-research .telemetry-head{grid-column:1/-1}
+.portal-shell .story-research .selected-subject{grid-column:1/-1}
+.portal-shell .story-research .telemetry-item>span{font-size:13px}
+.portal-shell .story-research .telemetry-item small{font-size:12px}
+.portal-shell .story-research .telemetry-item strong{font-size:23px}
+.portal-shell .playback-dock{max-width:1412px;margin:0 auto 12px;padding:12px clamp(18px,4vw,40px)}
+.portal-shell .playback-dock .dock-context strong{font-size:13px}
+.portal-shell .playback-dock #scene-message{font-size:11px;line-height:1.5}
+.portal-shell .portal-exits{max-width:1460px;margin:0 auto}
+.portal-shell .portal-exits .exits-heading h2{font-size:clamp(24px,2.6vw,34px)}
+.portal-shell .portal-more-paths{margin:15px 0 0;text-align:center;font-size:13px;color:#a7cbd5;line-height:1.8}
+.portal-shell .portal-more-paths a{color:#8ae0de;text-decoration:underline;text-underline-offset:3px}
+.portal-shell :is(.story-settings,.story-research) summary:focus-visible{outline:3px solid #77e8ea;outline-offset:3px}
+.portal-shell .story-settings button,.portal-shell .story-research button{min-height:44px}
+/* First-time lab visitors get an obvious actual-computation shortcut. */
+.lab-v311 .lab-story-first{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:17px}
+.lab-v311 .lab-story-first button{
+ background:#83e4df;color:#073044;border:1px solid #a1faf2;
+ border-radius:11px;padding:14px 20px;font-weight:800;font-size:15px;min-height:51px;cursor:pointer
+}
+.lab-v311 .lab-story-first small{font-size:12px;color:#c0d8dd;line-height:1.6}
+@media(max-width:960px){
+ .portal-shell .portal-main{display:flex;flex-direction:column;padding:18px}
+ .portal-shell .portal-main>.hero-story{display:block}
+ .portal-shell .portal-main .world-stage{height:54svh;min-height:400px}
+ .portal-shell .story-research .telemetry{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .portal-shell .story-research .telemetry-head,
+ .portal-shell .story-research .selected-subject{grid-column:1/-1}
+}
+@media(max-width:700px){
+ .portal-shell .portal-header{padding:10px 12px}
+ .portal-shell .brand-name{font-size:11px}
+ .portal-shell .site-nav{width:100%;justify-content:space-between;gap:5px;padding:8px 0 0}
+ .portal-shell .site-nav a{font-size:13px;padding:8px 7px;text-align:center;white-space:nowrap}
+ .portal-shell .portal-main{padding:15px 12px 21px;gap:10px}
+ .portal-shell .hero-story .hero-kicker{font-size:12px;line-height:1.5}
+ .portal-shell .hero-story h1{font-size:clamp(29px,8.1vw,43px);line-height:1.28;letter-spacing:-.6px;margin:10px 0}
+ .portal-shell .hero-story .hero-deck{font-size:14px;line-height:1.65;margin:10px 0}
+ .portal-shell .hero-quick-actions{margin:13px 0 0}
+ .portal-shell .hero-quick-actions button{min-height:50px;font-size:16px;width:100%}
+ .portal-shell .hero-quick-actions span{font-size:12px}
+ .portal-shell .portal-main .world-stage{height:51svh;min-height:330px;border-radius:15px;margin-top:7px}
+ .portal-shell .world-heading{font-size:10px;top:10px;left:9px}
+ .portal-shell .world-footer{font-size:10px;gap:7px;left:10px;right:10px}
+ .portal-shell .world-footer b{font-size:14px}
+ .portal-shell .world-variation{font-size:11px;line-height:1.45;bottom:46px;max-width:calc(100% - 20px)}
+ .portal-shell .story-result{padding:15px;border-radius:12px}
+ .portal-shell .story-result .scene-plain-result{font-size:17px;line-height:1.6}
+ .portal-shell .story-result small{font-size:12px}
+ .portal-shell .story-settings,.portal-shell .story-research{padding:0 12px}
+ .portal-shell .story-settings>summary,.portal-shell .story-research>summary{font-size:13px;padding:14px 0;flex-wrap:wrap}
+ .portal-shell .story-settings>summary span,.portal-shell .story-research>summary span{font-size:11px}
+ .portal-shell .story-settings .control-panel{padding:12px;margin-bottom:12px}
+ .portal-shell .story-settings .portal-field-pair{grid-template-columns:1fr 1fr;gap:8px}
+ .portal-shell .story-research .telemetry{gap:8px}
+ .portal-shell .story-research .telemetry-item>span{font-size:12px}
+ .portal-shell .playback-dock{padding:13px}
+ .portal-shell .portal-exits .exit-card p{font-size:13px}
+ .lab-v311 .lab-story-first{display:grid;grid-template-columns:1fr;gap:7px}
+ .lab-v311 .lab-story-first button{width:100%;font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){
+ .portal-shell :is(.story-settings,.story-research) summary{scroll-behavior:auto}
+}
