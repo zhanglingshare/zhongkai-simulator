@@ -2,6 +2,7 @@ name: V3 Workbench Browser Smoke
 on:
   push:
     branches:
+      - "main"
       - "chatgpt/v3.*"
     paths:
       - "v3/**"
@@ -45,6 +46,10 @@ jobs:
         run: node v3/tests/lab-v311-smoke.cjs
       - name: V3.12 dynamic evolution and reduced-motion browser tests
         run: node v3/tests/v312-motion-smoke.cjs
+      - name: V3.13 inflow research unit tests
+        run: node v3/tests/inflow.spec.cjs
+      - name: V3.13 inflow lab Chrome acceptance
+        run: node v3/tests/inflow-smoke.cjs
       - name: Upload screenshots for visual review
         if: always()
         uses: actions/upload-artifact@v4
