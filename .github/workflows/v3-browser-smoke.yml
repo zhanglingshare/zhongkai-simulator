@@ -50,6 +50,10 @@ jobs:
         run: node v3/tests/inflow.spec.cjs
       - name: V3.13 inflow lab Chrome acceptance
         run: node v3/tests/inflow-smoke.cjs
+      - name: V3.14 public company search unit tests
+        run: node v3/tests/company-assist.spec.cjs
+      - name: V3.14 company research browser smoke
+        run: node v3/tests/company-assist-smoke.cjs
       - name: Upload screenshots for visual review
         if: always()
         uses: actions/upload-artifact@v4

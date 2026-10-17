@@ -7,6 +7,7 @@ const reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: red
 let latest=null,displayTick=0,timer=null,nonce=0;
 const $form=$("inflow-form"),$slider=$("inflow-tick");
 const METRICS=Core?Core.METRICS:[];
+const FRIENDLY={abundance:"产业活跃程度",order:"协作顺畅程度",disaster:"系统承受的风险",mood:"参与者信心"};
 function element(name,cls,text){
  const e=document.createElement(name);if(cls)e.className=cls;if(text!==undefined)e.textContent=String(text);return e;
 }
@@ -123,10 +124,10 @@ function showMetric(frame){
  const root=$("inflow-metrics");root.replaceChildren();
  for(const m of METRICS){
   const item=frame.metrics[m.key],risk=m.key==="disaster";
-  const card=element("article","metric"),name=element("span","",m.label);
+  const card=element("article","metric"),name=element("span","",FRIENDLY[m.key]||m.label);
   const strong=element("strong",item.delta>0?(risk?"neg":"pos"):item.delta<0?(risk?"pos":"neg"):"",fmt(item.delta));
   strong.dataset.modelValue=String(item.delta);
-  const detail=element("small","","A "+fmtBare(item.a)+" / B "+fmtBare(item.b));
+  const detail=element("small","","未引入 "+fmtBare(item.a)+" / 引入后 "+fmtBare(item.b));
   const interpretation=item.delta===0?"模型内无差值":risk?
     (item.delta>0?"模型风险增加 / 承压":"模型风险下降 / 减压"):
     (item.delta>0?"模型值上升 / 非现实收益":"模型值下降 / 非现实损失");
@@ -191,15 +192,16 @@ function play(){
 function showUQ(data){
  const root=$("inflow-uq");root.replaceChildren();
  root.append(element("p","",data.includedSeeds+" 个有效种子 / "+data.samples.length+
-  " 个尝试；"+data.excludedSeeds+" 个因选定关系主体缺席而剔除。不可解释为现实事件概率。"));
+  " 次尝试；"+data.excludedSeeds+" 次因指定联系对象没有进入该次模拟而未统计。不是现实发生概率。"));
  for(const m of METRICS){
   const d=data.distribution[m.key],row=element("div","uq-row");
-  row.append(element("strong","",m.label+" · 有效样本 "+d.n));
-  row.append(element("code","","P10 "+fmtBare(d.p10)+" / P50 "+fmtBare(d.p50)+" / P90 "+fmtBare(d.p90)));
+  row.append(element("strong","",(FRIENDLY[m.key]||m.label)+" · 有效重复实验 "+d.n));
+  row.append(element("code","","较低值 "+fmtBare(d.p10)+" / 中间值 "+fmtBare(d.p50)+" / 较高值 "+fmtBare(d.p90)));
+  row.append(element("small","","按模型重复运行结果从小到大排序，取10%、50%、90%位置的值；不等于现实预测范围。"));
   root.append(row);
  }
  if(data.includedSeeds<8)root.append(element("p","","有效样本不足 8 个，分位数可能非常不稳定；建议改选不同的关系主体后重新探索。"));
- root.append(element("p","","仅抽样随机种子，没有覆盖企业规模、用地、订单或参数误差的不确定性。"));
+ root.append(element("p","","这里只是让模型换不同的随机起点重复运行，并没有验证企业规模、用地、订单或真实政策效果。"));
 }
 function showChanges(data){
  const root=$("inflow-subjects");root.replaceChildren();
@@ -227,7 +229,7 @@ function render(data){
   data.input.targets.length+" 条假设关系";
  $slider.disabled=false;$("inflow-play").disabled=!!reduced;
  $("inflow-export").disabled=false;
- $("play-status").textContent=reduced?"系统设置为减少动态效果，可拖动时间轴":"按播放查看 T0 → T20 的真实快照";
+ $("play-status").textContent=reduced?"已按系统设置减少动画，可手动拖动":"播放模拟的 20 步变化";
  showUQ(data);showChanges(data);showEvidence(data);
  showTick(reduced?20:0);
  message("实验已完成：模型结果只用于条件性比较，不是现实政策收益估计。","success");
@@ -235,11 +237,13 @@ function render(data){
 }
 $form.addEventListener("submit",e=>{
  e.preventDefault();stop();
+ if(!$("company-confirm").checked){message("请先核对企业资料，并勾选确认信息与联系仍是待核实假设。","error");return;}
  if(!Core||!Sim){message("原始 Sim 模型无法加载，不能运行实验。","error");return;}
  const check=Core.validate(Sim,input());
  if(!check.ok){stale();message(check.errors.join("；"),"error");return;}
  try{
   const data=Core.run(Sim,check.input,24);
+  if(data.ok&&window.ZKCompanyResearchUI){data.companyResearch=window.ZKCompanyResearchUI.snapshot();}
   if(!data.ok){stale();message(data.errors.join("；"),"error");return;}
   render(data);
  }catch(err){stale();message("实验计算失败："+err.message,"error");}
