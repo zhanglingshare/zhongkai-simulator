@@ -120,20 +120,20 @@
     </section>
 
     <section class="pane visualization" aria-labelledby="visual-title">
-      <div class="section-heading"><div><div class="section-number">02 / WHAT COULD CHANGE</div><h2 id="visual-title">进来之后，网络会怎样？</h2></div><span class="model-pill">SIM / MODEL</span></div>
+      <div class="section-heading"><div><div class="section-number">02 / WHAT COULD CHANGE</div><h2 id="visual-title">进来之后，网络会怎样？</h2></div><span class="model-pill">模型情景 · 非现实预测</span></div>
       <div class="scene-status"><span id="scene-badge">等待运行</span><span id="scene-count">模型主体以本次种子为准</span></div>
       <div class="network-wrap">
         <svg id="inflow-network" viewBox="0 0 640 340" role="img" aria-label="基于现有 Sim 主体与边绘制的条件性网络图"></svg>
       </div>
       <div class="legend"><span><i class="leg-baseline"></i>原模型已有边</span><span><i class="leg-assumed"></i>用户假设的新边</span><span><i class="leg-new"></i>拟接入企业</span></div>
       <div class="time-panel">
-        <div class="time-heading"><strong>模型时间轴 <span id="tick-label">T 00 / 20</span></strong><span>不是日历年</span></div>
+        <div class="time-heading"><strong>模拟进行到哪一步？ <span id="tick-label">T 00 / 20</span></strong><span>不是日历年</span></div>
         <input type="range" id="inflow-tick" min="0" max="20" step="1" value="0" disabled aria-label="选择模型时间步">
         <div class="time-buttons"><button id="inflow-play" type="button" disabled>▶ 逐步播放</button><span id="play-status">运行后显示真实 A/B 快照</span></div>
       </div>
       <div class="comparison">
-        <article><span>情景 A / 基线</span><strong id="count-a">—</strong><small>模型主体总数</small></article>
-        <article><span>情景 B / 接入</span><strong id="count-b">—</strong><small>其中一名为用户假设节点</small></article>
+        <article><span>没有引入这家企业</span><strong id="count-a">—</strong><small>模型主体总数</small></article>
+        <article><span>假设引入这家企业</span><strong id="count-b">—</strong><small>其中一名为用户假设节点</small></article>
         <article><span>新增主体状态</span><strong id="new-status">—</strong><small>模型内 T 步存续情况</small></article>
       </div>
       <p class="scientific-note">网络坐标只为展示而排布；边仅表示模型关系。新增虚线不是已确认合同，网络状态与模型差值不能作为真实因果证据。</p>
@@ -141,19 +141,19 @@
   </div>
 
   <section class="results pane" id="inflow-results" aria-labelledby="results-title">
-    <div class="section-heading"><div><div class="section-number">03 / COMPARE TWO POSSIBILITIES</div><h2 id="results-title">和没引入它相比，有什么不同？</h2></div><button id="inflow-export" type="button" disabled>↓ 下载研究 JSON</button></div>
+    <div class="section-heading"><div><div class="section-number">03 / COMPARE TWO POSSIBILITIES</div><h2 id="results-title">和没引入它相比，有什么不同？</h2></div><button id="inflow-export" type="button" disabled>↓ 下载实验记录</button></div>
     <div class="metric-grid" id="inflow-metrics">
-      <div class="empty-wide">运行实验后，显示当前时间步的模型景气、协同、风险、信心的 B−A 差值。风险增加表示承压。</div>
+      <div class="empty-wide">运行后，这里会比较“引入企业”与“没有引入”两种模拟结果。风险上升意味着模型承受的压力增加。</div>
     </div>
     <div class="two-results">
-      <div class="result-block"><h3>时间步演变 <small>仅画已走过的真实快照</small></h3><svg id="inflow-chart" viewBox="0 0 530 200" role="img" aria-label="模型景气和风险 A/B 轨迹"></svg><div class="chart-key">青线：A 基线景气　亮线：B 接入景气　橙线：A 基线风险　红线：B 接入风险</div></div>
-      <div class="result-block"><h3>多种子差值范围 <small>24 个尝试种子 / 只统计条件成立的实验</small></h3><div id="inflow-uq" class="uq-wrap"><p>尚未运行。不展示编造的区间或成功概率。</p></div></div>
+      <div class="result-block"><h3>变化是怎么发生的？ <small>只展示已经模拟到的步骤</small></h3><svg id="inflow-chart" viewBox="0 0 530 200" role="img" aria-label="模型景气和风险 A/B 轨迹"></svg><div class="chart-key">青线：A 基线景气　亮线：B 接入景气　橙线：A 基线风险　红线：B 接入风险</div></div>
+      <div class="result-block"><h3>换几次重新模拟，结果还一样吗？ <small>尝试 24 次不同的随机起点</small></h3><div id="inflow-uq" class="uq-wrap"><p>尚未运行。不展示编造的区间或成功概率。</p></div></div>
     </div>
-    <div class="result-block"><h3>现有主体变化 <small>只比较原本存在的节点</small></h3><div id="inflow-subjects">运行后列出存续差异与模型能量差异；不做真实企业收益排名。</div></div>
+    <div class="result-block"><h3>原本在这里的企业和角色，可能有哪些变化？ <small>仅作模型内观察</small></h3><div id="inflow-subjects">运行后列出存续差异与模型能量差异；不做真实企业收益排名。</div></div>
   </section>
 
   <section class="pane evidence" aria-labelledby="evidence-title">
-    <div><div class="section-number">04 / WHAT WE STILL DON'T KNOW</div><h2 id="evidence-title">下一步，该核实什么？</h2><p>证据不足时，模型应提出问题，而不是制造确信。</p></div>
+    <div><div class="section-number">04 / WHAT WE STILL DON'T KNOW</div><h2 id="evidence-title">还有哪些问题需要问企业？</h2><p>证据不足时，模型应提出问题，而不是制造确信。</p></div>
     <div class="evidence-grid"><div><h3>证据与冲突提示</h3><div id="inflow-warnings">等待实验输入。</div></div><div><h3>主动核实问题</h3><ol id="inflow-questions"><li>先填写企业接入假设。</li></ol></div></div>
     <p class="bottom-disclaimer">独立公开研究 · 未经过现实外推校准 · 模型种子分布不是现实概率 · 点击公开资料搜索时仅将企业名称发送至 Wikidata；其余输入不由本站主动上传 · 不支持涉密数据。</p>
   </section>
