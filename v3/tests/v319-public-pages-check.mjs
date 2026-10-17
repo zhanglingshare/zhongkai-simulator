@@ -1,6 +1,6 @@
 /* Best-effort independent GitHub Pages availability check; reports unverified
    when blocked by network. It is NOT the local Chrome regression. */
-const assert=require("node:assert/strict");
+import assert from "node:assert/strict";
 const base="https://zhanglingshare.github.io/zhongkai-simulator/v3/";
 async function get(path){
  const stop=new AbortController(),timer=setTimeout(()=>stop.abort(),10000);
