@@ -8,7 +8,6 @@ const company=$("company-name"),start=$("investigate-company"),reportHost=$("inv
 apply=$("investigation-apply"),status=$("investigation-status"),consent=$("investigation-online-consent");
 const config=window.ZKInvestigationConfig||{apiUrl:"",providerLabel:"未配置"};
 let result=null,edited={},chosenRecord=null,run=0,activeQuery="",acceptedSnapshot=null,lastAccepted=null,applying=false;
-const diagnostics=[];const note=(tag,details)=>{diagnostics.push({tag,details,run,haveLast:!!lastAccepted});if(diagnostics.length>16)diagnostics.shift();};
 const make=(tag,css,t)=>{const node=document.createElement(tag);if(css)node.className=css;
  if(t!==undefined)node.textContent=String(t);return node;};
 const statusText=(s,kind="")=>{status.textContent=s;status.dataset.kind=kind;};
@@ -71,7 +70,7 @@ function render(){
  questions.append(ul);reportHost.append(questions);
 }
 async function investigate(){
- const q=company.value.trim();activeQuery=q;const marker=++run;note("investigate-start",q);apply.disabled=true;edited={};acceptedSnapshot=null;lastAccepted=null;
+ const q=company.value.trim();activeQuery=q;const marker=++run;apply.disabled=true;edited={};acceptedSnapshot=null;lastAccepted=null;
  if(q.length<2){result={ok:false,reason:"请至少输入两个字的企业名称"};render();statusText(result.reason,"warning");return;}
  start.disabled=true;statusText("正在检查国内公开证据及授权接口状态……","pending");
  let docs=[],providerState="";
@@ -113,7 +112,6 @@ async function investigate(){
 start.addEventListener("click",()=>{investigate().catch(err=>{
  statusText("调查未完成："+err.message+"。可改用下方国内搜索入口手工核查。","warning");start.disabled=false;});});
 apply.addEventListener("click",()=>{
- note("apply-start",result?.query);
  if(!result?.ok||!window.ZKCompanyDossierUI)return;
  // Take values from the live editable controls at approval time. Other legacy
  // form listeners may have invalidated the cached edits while focus changed.
@@ -142,11 +140,11 @@ apply.addEventListener("click",()=>{
   warning:approved.warnings,identityChanged:approved.identityChanged,
   clientConsent:consent.checked,sourceCount:result.documents,
   scope:"Independent public or licensed data vendor claims, not proof of investment"};
- lastAccepted=JSON.parse(JSON.stringify(acceptedSnapshot));note("apply-stored",lastAccepted.name);
+ lastAccepted=JSON.parse(JSON.stringify(acceptedSnapshot));
  statusText("调查结论已填入可编辑表单；修改身份资料会使之前的在地判断失效。仍需确认研究情景与业务联系。","success");
  $("company-confirm").checked=false;
 });
-company.addEventListener("input",event=>{note("company-input",{value:company.value,isTrusted:event.isTrusted,applying});if(applying)return;
+company.addEventListener("input",event=>{if(applying)return;
  // Old lookup components sometimes dispatch a synthetic input event that
  // repeats the identical company value. That must not cancel an in-flight
  // lookup or silently discard the human-reviewed dossier.
@@ -166,7 +164,6 @@ if(typeof previous==="function"){
   return {...r,investigation:approved?JSON.parse(JSON.stringify(approved)):null};
  };
 }
-window.__V317Diagnostics=()=>({events:diagnostics,name:company.value,approvedName:acceptedSnapshot?.name,lastName:lastAccepted?.name,lastExists:!!lastAccepted,resultQuery:result?.query,applying,run,normalizedName:E.normal(company.value),normalizedLast:E.normal(lastAccepted?.name)});
 if(!configuredUrl()){statusText("未连接授权数据服务。可先使用已整理公开资料样本调查；国家级实时工商数据查询未启用。");}
 render();
 })();
