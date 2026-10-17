@@ -1,6 +1,7 @@
 /* V3.17 optional licensed-company data backend. No scraping.
    A real contract, token, fixed endpoint and frontend origin are required. */
 import http from "node:http";
+import {timingSafeEqual} from "node:crypto";
 import {fileURLToPath} from "node:url";
 import {resolve} from "node:path";
 import {createRequire} from "node:module";
@@ -10,13 +11,14 @@ function text(v,max=120){return String(v??"").trim().slice(0,max);}
 function settings(env){
  const origin=text(env.INVESTIGATION_ALLOWED_ORIGIN,220);
  const endpoint=text(env.TYC_ENTERPRISE_ENDPOINT,400),token=text(env.TYC_TOKEN,1000);
+ const gatewayToken=text(env.INVESTIGATION_GATEWAY_TOKEN,1000);
  let validEndpoint=false;
  try{const u=new URL(endpoint);validEndpoint=u.protocol==="https:"&&u.hostname==="open.api.tianyancha.com"&&
    /^\/services\//.test(u.pathname)&&!u.username&&!u.password&&!u.hash;}catch{}
  let validOrigin=false;try{const u=new URL(origin);
    validOrigin=(u.protocol==="https:"||u.hostname==="localhost"&&u.protocol==="http:")&&
    u.origin===origin;}catch{}
- return {origin,endpoint,token,available:!!(validEndpoint&&validOrigin&&token&&token.length>=8)};
+ return {origin,endpoint,token,gatewayToken,available:!!(validEndpoint&&validOrigin&&token&&token.length>=8&&gatewayToken.length>=16)};
 }
 function toDocument(raw,name,at){
  const root=raw?.result;
@@ -44,7 +46,7 @@ function createHandler({env=process.env,fetcher=globalThis.fetch,now=()=>Date.no
   const origin=req.headers.origin||"";
   function answer(code,body){res.writeHead(code,{"content-type":"application/json; charset=utf-8",
    "cache-control":"no-store, private","x-content-type-options":"nosniff",
-   ...(origin&&origin===config.origin?{"access-control-allow-origin":origin,"vary":"Origin"}:{})});
+   ...(origin&&origin===config.origin?{"access-control-allow-origin":origin,"access-control-allow-credentials":"true","vary":"Origin"}:{})});
    res.end(JSON.stringify(body));}
   if(origin&&origin!==config.origin){answer(403,{ok:false,error:"origin-not-allowed"});return;}
   if(req.url==="/api/investigation-health"&&req.method==="GET"){
@@ -54,11 +56,18 @@ function createHandler({env=process.env,fetcher=globalThis.fetch,now=()=>Date.no
   if(req.url!=="/api/company-investigate"){answer(404,{ok:false,error:"not-found"});return;}
   if(req.method==="OPTIONS"){
    if(!origin||origin!==config.origin){answer(403,{ok:false,error:"origin-not-allowed"});return;}
-   res.writeHead(204,{"access-control-allow-origin":origin,"access-control-allow-methods":"POST, OPTIONS",
+   res.writeHead(204,{"access-control-allow-origin":origin,"access-control-allow-credentials":"true","access-control-allow-methods":"POST, OPTIONS",
     "access-control-allow-headers":"content-type","access-control-max-age":"3600"});res.end();return;
   }
   if(req.method!=="POST"){answer(405,{ok:false,error:"method-not-allowed"});return;}
   if(!config.available){answer(503,{ok:false,error:"licensed-provider-not-configured"});return;}
+  // This token MUST be injected by an authenticated trusted reverse proxy.
+  // This service must bind to loopback, never be exposed directly.
+  const supplied=Buffer.from(text(req.headers["x-internal-investigation-gateway"],1000));
+  const trusted=Buffer.from(config.gatewayToken);
+  if(supplied.length!==trusted.length||!timingSafeEqual(supplied,trusted)){
+   answer(403,{ok:false,error:"trusted-gateway-required"});return;
+  }
   const identity=req.socket?.remoteAddress||"unknown";
   const stamp=now(),bucket=rate.get(identity)||{start:stamp,count:0};
   if(stamp-bucket.start>60000){bucket.start=stamp;bucket.count=0;}
