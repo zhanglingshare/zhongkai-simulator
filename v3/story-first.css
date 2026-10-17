@@ -10,7 +10,11 @@
  background:radial-gradient(ellipse at 54% 36%,rgba(26,120,142,.22),transparent 55%),
  linear-gradient(140deg,#031321,#061d30 62%,#030f1c);overflow:visible;gap:13px
 }
-.portal-shell .portal-main>.hero-story{display:block;align-self:stretch;padding:8px 0 0;min-width:0}
+.portal-shell .portal-main>.hero-story{display:block;order:0;align-self:stretch;padding:8px 0 0;min-width:0}
+.portal-shell .portal-main>.world-stage{order:1}
+.portal-shell .portal-main>.story-result{order:2}
+.portal-shell .portal-main>.story-settings{order:3}
+.portal-shell .portal-main>.story-research{order:4}
 .portal-shell .hero-story .hero-kicker{font-size:12px;letter-spacing:1.7px;color:#92d5dc}
 .portal-shell .hero-story h1{white-space:normal;font-size:clamp(37px,4.5vw,72px);
  line-height:1.2;letter-spacing:-1.6px;margin:13px 0}
