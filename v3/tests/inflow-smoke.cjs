@@ -19,7 +19,10 @@ async function test(browser,port,width,reduce=false){
   isMobile:mobile,hasTouch:mobile,reducedMotion:reduce?"reduce":"no-preference"});
  const errors=[];page.on("pageerror",err=>errors.push(err.message));
  await page.goto("http://127.0.0.1:"+port+"/v3/inflow.html",{waitUntil:"load"});
- await page.waitForFunction(()=>document.querySelectorAll("#link-one option").length>4);
+ await page.waitForFunction(()=>document.querySelectorAll("#link-one option").length>4,null,{timeout:7000}).catch(async err=>{
+  const message=await page.locator("#form-message").innerText();
+  throw new Error("Inflow selectors never loaded: "+message+"; page errors="+errors.join("|")+"; "+err.message);
+ });
  assert.equal(await page.locator("#inflow-export").isDisabled(),true);
  await page.locator("#company-name").fill("独立研究测试新节点");
  await page.locator("#link-one").selectOption({index:1});
