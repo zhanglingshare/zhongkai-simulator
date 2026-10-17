@@ -120,7 +120,7 @@ function paint(t){
  const target=frames?.target||protagonist?.name||"这家链主";
  let title,caption,chapter,explanation,plain;
  if(!frames){
-  title="先认出「"+target+"」这个节点";
+  title="先认出「"+target+"」";
   const links=base.edges.filter(e=>e.a===target||e.b===target).length;
   caption="点播放，看它退出模型，以及 "+links+" 条相邻模型连线的变化。";
   chapter="01 · 先看清主角";explanation="退出会留下清楚的空位；按住按钮可以对照。";
@@ -141,7 +141,7 @@ function paint(t){
   plain="模拟第 0 步：「"+target+"」已退出，"+lost+" 条相邻模型连线停止亮起。";
  }else if(frames.kind==="exit"){
   chapter=(phase==="key"?"03 · 停在这里，对照一下":t===MAX_TICKS?"04 · 看完后续结果":"03 · 观察后续变化")+" · 第 "+t+" 步";
-  title=t===MAX_TICKS?"这条路径里，仍有 "+info.b.alive+" 个角色运转":phase==="key"?"第 "+t+" 步，两条路径有 "+changes.length+" 个角色不同":"退出之后，其他角色怎样了？";
+  title=t===MAX_TICKS?"仍有 "+info.b.alive+" 个角色在运转":phase==="key"?"同一步，"+changes.length+" 个角色不同":"退出之后，其他角色怎样了？";
   caption=phase==="key"?"演示已暂停。按住下方按钮，看同一步的未退出路径。":t===MAX_TICKS?"未退出路径为 "+info.a.alive+" 个；这里呈现的是本次模型结果。":"有变化的角色持续标色，退出的角色保留位置和名字。";
   explanation="与未退出时相比："+info.exits.length+" 个角色只在这里退出；"+info.returns.length+" 个角色只在这里保持运转。";
   plain="模拟第 "+t+" 步：「"+target+"」保持退出。当前有 "+info.b.alive+" 个模型角色运转，未退出路径为 "+info.a.alive+" 个。角色差异见下方名单。";
