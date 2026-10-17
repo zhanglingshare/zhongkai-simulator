@@ -5,12 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#06121e">
-<title>V3.13 · 新企业接入实验室 | 仲恺产业风洞</title>
+<title>V3.14 · 企业资料预判断 | 仲恺产业风洞</title>
 <meta name="description" content="用公开研究模型比较一个假设新企业接入前后的产业网络、模型内指数与不确定性。独立探索，不作现实预测。">
-<link rel="stylesheet" href="inflow.css">
+<link rel="stylesheet" href="inflow.css"><link rel="stylesheet" href="company-assist.css">
 <script defer src="portal-kernel.js"></script>
 <script defer src="inflow-core.js"></script>
+<script defer src="company-assist-core.js"></script>
 <script defer src="inflow.js"></script>
+<script defer src="company-assist.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -22,29 +24,47 @@
     <a class="active" href="inflow.html" aria-current="page">新企业接入</a>
     <a href="measurement.html">科学验证</a>
   </nav>
-  <span class="version">V3.13 / RESEARCH PREVIEW</span>
+  <span class="version">V3.14 / COMPANY LOOKUP</span>
 </header>
 <main>
   <section class="intro">
     <div class="intro-main">
       <p class="overline"><span class="dot"></span> 第三页 / 接入假设 · INCREMENTAL INFLOW</p>
       <h1>如果一家新企业<br><em>进入仲恺产业网络？</em></h1>
-      <p class="lede">不是简单计算“多一家企业”。让新节点进入既有模型，比较接入前后模型网络的演化，再问：哪些结果稳得住，哪些证据仍缺失？</p>
+      <p class="lede">输入企业名称，查找公开资料，看看它可能做什么、与谁有关。你可以修改每条信息，再让模型比较接入前后的变化。</p>
     </div>
-    <aside class="intro-note"><strong>可检验的假设，<br>不是确定的结论。</strong><p>使用现有 Sim 仿真方程。只把用户输入的关系加入 B 情景；模型结果不是 GDP 预测、招商收益或真实政策因果效应。</p></aside>
+    <aside class="intro-note"><strong>系统先找资料，<br>最后由你决定。</strong><p>使用现有 Sim 仿真方程。只把用户输入的关系加入 B 情景；模型结果不是 GDP 预测、招商收益或真实政策因果效应。</p></aside>
   </section>
 
   <div class="work-grid">
     <section class="pane inputs" aria-labelledby="input-title">
-      <div class="section-number">01 / BUILD THE HYPOTHESIS</div>
-      <h2 id="input-title">告诉模型，谁要进来？</h2>
-      <p class="section-help">名称仅作本次实验标签；不代表企业真实存在或已签约。数据只在当前浏览器运行。</p>
+      <div class="section-number">01 / FIND · REVIEW · CONFIRM</div>
+      <h2 id="input-title">这家企业叫什么？</h2>
+      <p class="section-help">填一个名称就能查。没查到也可以自己补充。搜索会把输入的企业名称发给公开知识库 Wikidata；其他填写内容仅在浏览器处理。</p>
       <form id="inflow-form" novalidate>
-        <label>拟接入企业（假设名称）
-          <input id="company-name" name="company" maxlength="60" autocomplete="off" placeholder="例如：拟引入的机器人配套企业" required>
+        <label>企业名称（必填）
+          <input id="company-name" name="company" maxlength="60" autocomplete="off" placeholder="输入企业名，例如：某某科技有限公司" required>
         </label>
+        <div class="lookup-actions">
+          <button type="button" id="company-search">⌕ 查找公开资料并初步判断</button>
+          <span>只查公开知识库 · 不查询企业征信或工商底档</span>
+        </div>
+        <div id="company-search-status" class="lookup-status" role="status" aria-live="polite">可先查找，或直接填写下面的信息。</div>
+        <div id="company-search-results" class="lookup-results" aria-label="公开资料候选结果"></div>
         <div class="two">
-          <label>产业角色
+          <label>主要做什么（可修改）
+            <textarea id="company-business" rows="2" maxlength="360" placeholder="例如：工业机器人零部件、智能制造装备"></textarea>
+          </label>
+          <label>在哪里（可选）
+            <input id="company-location" maxlength="80" placeholder="例如：惠州、深圳">
+          </label>
+        </div>
+        <label>企业官网（可选）
+          <input id="company-website" type="url" maxlength="500" placeholder="https://…">
+        </label>
+        <div id="company-assessment" class="assistant-assessment" aria-live="polite">填入“主要做什么”，系统会给出一个可修改的行业判断。</div>
+        <div class="two">
+          <label>它在产业链里更像哪种企业？
             <select id="company-type">
               <option value="supplier">配套企业</option>
               <option value="oem">整机制造</option>
@@ -52,50 +72,55 @@
               <option value="anchor">链主企业</option>
             </select>
           </label>
-          <label>模型权重假设
+          <label>模型影响程度（不确定就选一般）
             <select id="company-weight">
               <option value="1">1 · 一般节点</option>
               <option value="2">2 · 较高权重</option>
             </select>
           </label>
         </div>
-        <label>假设关系一（必须）
+        <div class="candidate-guide"><strong>它可能和仲恺哪些主体有关？</strong><p>下面是基于现有模型类型的可核实候选，不代表真的有采购、合作或供应关系。点击候选仅作为实验假设。</p><div id="company-links" class="link-suggestions"></div></div>
+        <label>可能联系的对象 1（需选择）
           <select id="link-one" required><option value="">选择模型中的已有主体</option></select>
         </label>
-        <label>假设关系二（可选）
+        <label>可能联系的对象 2（可选）
           <select id="link-two"><option value="">暂不增加</option></select>
         </label>
-        <label>假设关系三（可选）
+        <label>可能联系的对象 3（可选）
           <select id="link-three"><option value="">暂不增加</option></select>
         </label>
         <div class="two">
-          <label>关系证据级别
+          <label>这些联系有依据吗？
             <select id="evidence">
               <option value="unverified">尚无材料</option>
               <option value="user_claim">用户提供陈述</option>
               <option value="public_document">公开文件待核验</option>
             </select>
           </label>
-          <label>随机种子
+          <label>实验编号（一般不用改）
             <input id="seed" type="number" min="1" max="999999" step="1" value="23" inputmode="numeric">
           </label>
         </div>
-        <label>公开材料链接（可选、HTTPS）
+        <label>查到的资料链接（可修改）
           <input id="source" type="url" maxlength="500" placeholder="https://…">
         </label>
-        <label>研究备注（可选）
+        <label>还想补充什么？（可选）
           <textarea id="notes" rows="2" maxlength="600" placeholder="说明企业接入假设和资料口径；不要填写商业秘密。"></textarea>
         </label>
+        <label class="confirmation">
+          <input type="checkbox" id="company-confirm">
+          <span>我检查过上面的信息。我知道自动查找可能匹配错企业，推荐的联系对象也只是模拟假设。</span>
+        </label>
         <div class="controls">
-          <button type="submit" id="inflow-run" class="primary">▶ 运行 A/B 接入实验</button>
+          <button type="submit" id="inflow-run" class="primary">▶ 看看它进来后会怎样</button>
           <button type="button" id="inflow-reset" class="secondary">清空结果</button>
         </div>
-        <p id="form-message" class="form-message" role="alert" aria-live="polite">先填写企业名称，指定至少一个假设关系。</p>
+        <p id="form-message" class="form-message" role="alert" aria-live="polite">先填写企业名称，查找或补充资料，确认后再开始。</p>
       </form>
     </section>
 
     <section class="pane visualization" aria-labelledby="visual-title">
-      <div class="section-heading"><div><div class="section-number">02 / NETWORK EVOLUTION</div><h2 id="visual-title">把变化放进网络</h2></div><span class="model-pill">SIM / MODEL</span></div>
+      <div class="section-heading"><div><div class="section-number">02 / WHAT COULD CHANGE</div><h2 id="visual-title">进来之后，网络会怎样？</h2></div><span class="model-pill">SIM / MODEL</span></div>
       <div class="scene-status"><span id="scene-badge">等待运行</span><span id="scene-count">模型主体以本次种子为准</span></div>
       <div class="network-wrap">
         <svg id="inflow-network" viewBox="0 0 640 340" role="img" aria-label="基于现有 Sim 主体与边绘制的条件性网络图"></svg>
@@ -116,7 +141,7 @@
   </div>
 
   <section class="results pane" id="inflow-results" aria-labelledby="results-title">
-    <div class="section-heading"><div><div class="section-number">03 / CONDITIONAL COMPARISON</div><h2 id="results-title">A/B 差异与模型内不确定性</h2></div><button id="inflow-export" type="button" disabled>↓ 下载研究 JSON</button></div>
+    <div class="section-heading"><div><div class="section-number">03 / COMPARE TWO POSSIBILITIES</div><h2 id="results-title">和没引入它相比，有什么不同？</h2></div><button id="inflow-export" type="button" disabled>↓ 下载研究 JSON</button></div>
     <div class="metric-grid" id="inflow-metrics">
       <div class="empty-wide">运行实验后，显示当前时间步的模型景气、协同、风险、信心的 B−A 差值。风险增加表示承压。</div>
     </div>
@@ -130,7 +155,7 @@
   <section class="pane evidence" aria-labelledby="evidence-title">
     <div><div class="section-number">04 / WHAT WE STILL DON'T KNOW</div><h2 id="evidence-title">下一步，该核实什么？</h2><p>证据不足时，模型应提出问题，而不是制造确信。</p></div>
     <div class="evidence-grid"><div><h3>证据与冲突提示</h3><div id="inflow-warnings">等待实验输入。</div></div><div><h3>主动核实问题</h3><ol id="inflow-questions"><li>先填写企业接入假设。</li></ol></div></div>
-    <p class="bottom-disclaimer">独立公开研究 · 未经过现实外推校准 · 模型种子分布不是现实概率 · 不采集或上传企业填报信息 · 不支持涉密数据。</p>
+    <p class="bottom-disclaimer">独立公开研究 · 未经过现实外推校准 · 模型种子分布不是现实概率 · 点击公开资料搜索时仅将企业名称发送至 Wikidata；其余输入不由本站主动上传 · 不支持涉密数据。</p>
   </section>
 </main>
 <footer><a href="index.html">← 全息产业世界</a><span>ZHONGKAI / CONDITIONAL RESEARCH</span><a href="lab.html">回到 A/B 风洞 →</a></footer>
