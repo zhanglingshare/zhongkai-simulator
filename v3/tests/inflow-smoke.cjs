@@ -25,6 +25,7 @@ async function test(browser,port,width,reduce=false){
  });
  assert.equal(await page.locator("#inflow-export").isDisabled(),true);
  await page.locator("#company-name").fill("独立研究测试新节点");
+ await page.locator("#company-scenario").selectOption("proposed_new");
  await page.locator("#link-one").selectOption({index:1});
  await page.locator("#link-two").selectOption({index:2});
  await page.locator("#company-confirm").check();
