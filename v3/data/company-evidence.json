@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "refreshed_at": "2026-10-17",
+  "coverage": "Curated two-company evidence sample; NOT full registry or live search.",
+  "records": [
+    {
+      "id": "hz-bsj",
+      "name": "惠州市博实结科技有限公司",
+      "aliases": [
+        "惠州博实结",
+        "博实结"
+      ],
+      "location": "惠州市仲恺高新区惠风西三路1号",
+      "business": "物联网智能终端设备制造、车载定位设备及智能硬件相关业务",
+      "website": "https://www.bsjkj.com/",
+      "role_hint": "oem",
+      "area": "zhongkai",
+      "presence": "existing",
+      "sources": [
+        {
+          "url": "https://www.bsjkj.com/aboutus/contact.html",
+          "publisher": "博实结官网",
+          "field": "location",
+          "assertion": "官网公开惠州地址为惠州市仲恺高新区惠风西三路1号博实结产业园",
+          "type": "enterprise"
+        },
+        {
+          "url": "https://www.bsjkj.com/",
+          "publisher": "博实结官网",
+          "field": "business",
+          "assertion": "官网展示车联网、位置服务和物联网智能硬件等业务",
+          "type": "enterprise"
+        },
+        {
+          "url": "https://jyw.gpnu.edu.cn/info/1148/9266.htm",
+          "publisher": "广东技术师范大学就业创业指导网",
+          "field": "name",
+          "assertion": "该单位刊载惠州市博实结科技有限公司招聘信息与仲恺工作地点",
+          "type": "institution"
+        }
+      ],
+      "notice": "企业在仲恺已有公开地址；此演示是将存量企业补入原模型，而非声称新签约。"
+    },
+    {
+      "id": "gd-lyh",
+      "name": "广东利元亨智能装备股份有限公司",
+      "aliases": [
+        "利元亨",
+        "广东利元亨"
+      ],
+      "location": "广东省惠州市惠城区马安镇新鹏路4号",
+      "business": "锂电池等新能源领域的智能制造装备、工厂自动化解决方案",
+      "website": "https://www.liyuanheng.com/",
+      "role_hint": "oem",
+      "area": "huicheng",
+      "presence": "existing_outside",
+      "sources": [
+        {
+          "url": "https://szrobotics.cn/nd.jsp?_ngc=-1&fromColId=-1&groupId=21&id=114",
+          "publisher": "深圳市机器人协会公开企业介绍",
+          "field": "location",
+          "assertion": "企业公开介绍列明总公司地址为惠州市惠城区马安镇新鹏路4号",
+          "type": "association"
+        },
+        {
+          "url": "https://szrobotics.cn/nd.jsp?_ngc=-1&fromColId=-1&groupId=21&id=114",
+          "publisher": "深圳市机器人协会公开企业介绍",
+          "field": "business",
+          "assertion": "介绍其面向新能源领域提供智能装备与数智工厂解决方案",
+          "type": "association"
+        }
+      ],
+      "notice": "公开公司地址属于惠城区，不是仲恺已落地证明。未找到拟在仲恺新投资的项目证据；不得将此案例称为真实招商项目。"
+    }
+  ]
+}
