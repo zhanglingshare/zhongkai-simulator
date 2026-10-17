@@ -67,6 +67,7 @@ async function visit(browser,port,width,reduced){
    await page.locator("#story-people .story-person").first().click();
    assert.equal(await page.locator("#subject-name").textContent(),expected.items[0].name);
  }
+ if(width===390&&reduced)await screen(page,"story-following-names-390.png");
  assert.equal(await page.locator("#world-node-count").innerText(),"41");
  await page.locator("#story-settings summary").click();
  assert.equal(await page.locator("#portal-population").isVisible(),true);
