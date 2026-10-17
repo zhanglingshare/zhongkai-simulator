@@ -1,0 +1,159 @@
+{
+  "schema": "zk-enterprise-pilot-v321",
+  "snapshotId": "pilot-baseline-2026-10-17",
+  "capturedAt": "2026-10-17",
+  "sourceLedger": "data/enterprise-validation-20.json",
+  "notes": "Five sourced pilots spanning official EIA acceptance, partial building filing, awards allocation, self-described site, and public SOE profile. None establishes completed new招商, jobs or incremental investment; browser/source-index review is not legal registry verification.",
+  "cases": [
+    {
+      "id": "e18",
+      "name": "惠州市华阳精机有限公司",
+      "category": "expansion-project-application",
+      "district": "仲恺高新区",
+      "recommendedStudyKind": "expansion",
+      "sourceQuality": "official-environment-reception-not-permit",
+      "source": [
+        {
+          "id": "huayang-eia-20251029",
+          "url": "https://www.hzzk.gov.cn/zzgxqzdlyxxgk/hjbhxxgk/jsxmhjyxpj/content/post_5635982.html",
+          "publisher": "惠州市生态环境局仲恺高新区分局",
+          "publishedAt": "2025-10-29",
+          "retrievedAt": "2026-10-17",
+          "evidenceText": "公示受理华阳精机汽车轻量化零部件产品产能扩建项目（三期）的环评文件；建设单位惠州市华阳精机有限公司，地点惠州市东江高新科技产业园上霞北路1号华阳工业园C区C9、C10厂房",
+          "support": "环评文件受理和建设单位、地点、拟扩产项目名称",
+          "excludes": "不证明环评最终批准、实际投产、总投资兑现、净新增就业或新招商"
+        }
+      ],
+      "claims": [
+        {
+          "field": "projectStage",
+          "value": "环评受理公示（2025-10-29）",
+          "sourceId": "huayang-eia-20251029"
+        },
+        {
+          "field": "site",
+          "value": "东江高新科技产业园上霞北路1号华阳工业园C区C9、C10厂房",
+          "sourceId": "huayang-eia-20251029"
+        }
+      ],
+      "watch": "扩产增量与现有产能分离；环评受理不能推算资本开支和新增岗位"
+    },
+    {
+      "id": "e11",
+      "name": "惠州创维数字技术有限公司",
+      "category": "partial-construction-completion-filing",
+      "district": "仲恺高新区",
+      "recommendedStudyKind": "backfill",
+      "sourceQuality": "official-subset-of-buildings-filed",
+      "source": [
+        {
+          "id": "skyworth-20250613",
+          "url": "https://www.hzzk.gov.cn/bmpd/cxjshzhzfj/ywspgs/content/post_5544752.html",
+          "publisher": "仲恺高新区城乡建设和综合执法局",
+          "publishedAt": "2025-06-13",
+          "retrievedAt": "2026-10-17",
+          "evidenceText": "2025年5月竣工验收备案公示列出创维数字产业园一期部分宿舍、食堂等设施5月7日备案，以及智能制造项目一期部分厂房及设施5月30日备案；申请单位惠州创维数字技术有限公司",
+          "support": "指定设施的房屋市政工程竣工验收备案清单和申请单位",
+          "excludes": "不代表全部工厂已投产、实际产值、项目投资全部到位或者形成新招商净增量"
+        }
+      ],
+      "claims": [
+        {
+          "field": "projectStage",
+          "value": "部分建筑设施竣工验收备案（2025-05）",
+          "sourceId": "skyworth-20250613"
+        },
+        {
+          "field": "site",
+          "value": "惠州仲恺潼湖生态智慧区梧村河东片区",
+          "sourceId": "skyworth-20250613"
+        }
+      ],
+      "watch": "竣工验收备案不等于全项目投产；要另查增量投资与生产状态"
+    },
+    {
+      "id": "e08",
+      "name": "惠州亿纬锂能股份有限公司",
+      "category": "government-award-allocation",
+      "district": "仲恺高新区",
+      "recommendedStudyKind": "backfill",
+      "sourceQuality": "official-award-list-only",
+      "source": [
+        {
+          "id": "eve-award-20260514",
+          "url": "https://gxj.huizhou.gov.cn/gkmlpt/content/5/5769/post_5769719.html",
+          "publisher": "惠州市工业和信息化局",
+          "publishedAt": "2026-05-14",
+          "retrievedAt": "2026-10-17",
+          "evidenceText": "工业设计中心奖励安排通知及附件列有惠州亿纬锂能股份有限公司，仲恺高新区，安排奖励资金40万元",
+          "support": "奖励资金安排计划所列名称、区县、40万元奖励安排",
+          "excludes": "奖励安排不是已经拨款的证明；40万元不是项目投资额，也不证明新引进或扩产"
+        }
+      ],
+      "claims": [
+        {
+          "field": "recognition",
+          "value": "工业设计中心奖励安排计划：40万元（非投资金额）",
+          "sourceId": "eve-award-20260514"
+        }
+      ],
+      "watch": "不能把奖补金额误写为招商投资或新增经营收入"
+    },
+    {
+      "id": "e19",
+      "name": "惠州市博实结科技有限公司",
+      "category": "company-site-self-report",
+      "district": "仲恺高新区",
+      "recommendedStudyKind": "backfill",
+      "sourceQuality": "self-report-not-independent-registry",
+      "source": [
+        {
+          "id": "bsj-contact",
+          "url": "https://www.bsjkj.com/aboutus/contact.html",
+          "publisher": "博实结科技企业官网",
+          "publishedAt": "",
+          "retrievedAt": "2026-10-17",
+          "evidenceText": "企业官网联系页列出惠州地址：惠州市仲恺高新区惠风西三路1号博实结产业园",
+          "support": "公司网站自述的惠州联络地址",
+          "excludes": "不证明此名称的工商登记状态、实际经营规模或新项目投资及净新增就业"
+        }
+      ],
+      "claims": [
+        {
+          "field": "site",
+          "value": "惠州市仲恺高新区惠风西三路1号博实结产业园（企业自述）",
+          "sourceId": "bsj-contact"
+        }
+      ],
+      "watch": "企业自述地址≠工商核验；现存经营主体补录净新增经济影响归零"
+    },
+    {
+      "id": "e20",
+      "name": "惠州仲恺高新区高新投资有限公司",
+      "category": "government-soe-profile",
+      "district": "仲恺高新区",
+      "recommendedStudyKind": "backfill",
+      "sourceQuality": "government-background-not-current-registry",
+      "source": [
+        {
+          "id": "hi-invest-profile",
+          "url": "https://www.hzzk.gov.cn/zzgxqzdlyxxgk/gyqyxxgk/jbxx/content/post_5442092.html",
+          "publisher": "仲恺高新区重点领域信息公开",
+          "publishedAt": "2025-01-15",
+          "retrievedAt": "2026-10-17",
+          "evidenceText": "官方简介称该国有独资企业于2023年12月14日正式成立，注册资本10亿元，主要从事产业与股权投资",
+          "support": "2025年官方简介的成立背景、注册资本口径和业务描述",
+          "excludes": "注册资本不代表已实际缴纳资本、2026年最新工商状态、招商新增项目或实际投资兑现"
+        }
+      ],
+      "claims": [
+        {
+          "field": "soebasis",
+          "value": "2025年公开简介：注册资本10亿元（非实际项目投资）",
+          "sourceId": "hi-invest-profile"
+        }
+      ],
+      "watch": "注册资本≠已实缴资本≠项目实际投资；不参与新工业企业招商增量测算"
+    }
+  ]
+}

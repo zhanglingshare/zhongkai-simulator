@@ -1,0 +1,80 @@
+/* V3.21 extension to existing scientific trust page; no global UI rewrite */
+.pilot-lab{border-color:#377a84;background:linear-gradient(150deg,#12364a,#0c2638)}
+.pilot-steps{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 20px}
+.pilot-steps span{border:1px solid #42838a;background:#163f50;border-radius:8px;padding:9px 12px;font-size:11px;color:#b7edf0}
+.pilot-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;align-items:start}
+.pilot-data,.pilot-review{display:grid;align-content:start;gap:13px;min-width:0}
+.pilot-label{color:#bde1e6;font-size:11px}
+.pilot-control{min-width:0;width:100%;max-width:100%;background:#0b2b3d;border:1px solid #4b7d88;padding:10px;color:#e3f8fb;border-radius:8px;font-size:12px;line-height:1.5}
+.pilot-source{border:1px solid #396477;border-radius:12px;background:#0a2738;padding:16px;min-width:0}
+.pilot-source h3{font-size:17px;line-height:1.55;margin:0 0 8px;color:#e5fbf8}
+.pilot-source p{margin:7px 0;color:#bed7dc;line-height:1.7;font-size:11px}
+.pilot-source .pilot-category{font-size:11px;color:#85cfdb}
+.pilot-alert{padding:11px 13px;background:#483a37;border-left:3px solid #d5ad8d;border-radius:6px;color:#f1d2b8!important;font-size:11px;line-height:1.7}
+.pilot-source-card{display:grid;gap:8px;border-top:1px solid #345a6c;padding:12px 0}
+.pilot-source-card strong{font-size:12px;color:#dbf4f4}
+.pilot-source-card small{font-size:10px;color:#9fbfc9;line-height:1.65}
+.pilot-source-card a{font-size:11px;text-decoration:underline}
+.pilot-source-card .pilot-supported{color:#b0e1c8}
+.pilot-source-card .pilot-not-supported{color:#e4bf9b}
+.pilot-subhead{color:#b0eaeb;font-size:12px;font-weight:800;letter-spacing:.03em}
+.pilot-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pilot-field{min-width:0;border:1px solid #375c6b;border-radius:9px;padding:10px;display:grid;gap:6px;background:#0e3043}
+.pilot-field strong{font-size:11px;color:#e0f2f4}.pilot-field span{font-size:10px;color:#ddbc95}
+.pilot-field[data-status=indexed] span{color:#9fdec7}.pilot-field small{font-size:10px;line-height:1.6;color:#b4cbd5;overflow-wrap:anywhere}
+.pilot-issues{display:grid;gap:8px;background:#0e2b3d;border-radius:10px;padding:13px;border:1px solid #3b6674;min-width:0}
+.pilot-mini-kpi{font-size:11px;line-height:1.75;margin:0;color:#c3e0e3}
+.pilot-issues small{font-size:10px;line-height:1.65}
+.pilot-question-list{display:grid;gap:6px;color:#a6cdd6;line-height:1.6;font-size:11px;margin:5px 0;padding-left:20px}
+.pilot-conflict{display:grid;gap:6px;border-radius:9px;border:1px solid #b58b59;background:#453633;padding:10px}
+.pilot-conflict strong{color:#f6d4ae;font-size:11px}.pilot-conflict p{color:#e9c4a7;font-size:10px;line-height:1.6;margin:0}
+.pilot-add,.pilot-simulation,.pilot-snapshot,.pilot-assumptions{border:1px solid #416b7e;border-radius:11px;padding:15px;min-width:0;background:#112f41}
+.pilot-add summary,.pilot-simulation summary,.pilot-snapshot summary,.pilot-assumptions summary{font-weight:700;font-size:13px;color:#c9f3f2;cursor:pointer;line-height:1.5}
+.pilot-add[open] summary,.pilot-simulation[open] summary{margin-bottom:13px}
+.pilot-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.pilot-form label,.pilot-toprow label,.pilot-snapshot label{display:grid;gap:6px;color:#bbd9dc;font-size:10px;min-width:0}
+.pilot-form label:nth-child(2),.pilot-form label:nth-child(3){grid-column:span 2}
+.pilot-form button{grid-column:span 2;border:1px solid #7edbd7;border-radius:8px;padding:11px;background:#185972;color:#effff9;cursor:pointer}
+.pilot-fine{color:#a8c5d1;font-size:10px;line-height:1.65}
+.pilot-manual{display:grid;gap:8px}
+.pilot-added{display:grid;gap:6px;padding:12px;background:#0c293c;border:1px solid #3d6778;border-radius:10px}
+.pilot-added strong{font-size:12px}.pilot-added p{font-size:11px;line-height:1.65;margin:0}
+.pilot-added small,.pilot-added a{font-size:10px;color:#bdd7d9}
+.pilot-review-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:5px}
+.pilot-review-buttons button{background:#1c536a;color:#e0eff2;border:1px solid #548898;border-radius:6px;padding:9px 10px;font-size:10px;cursor:pointer}
+.pilot-review-buttons button:disabled{opacity:.4}
+.pilot-simulation,.pilot-snapshot{margin-top:18px}
+.pilot-toprow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pilot-assumptions{margin:15px 0;padding:12px;background:#0c2b3c}
+.pilot-assumption-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:13px}
+.pilot-assumption{display:grid;gap:6px;padding:10px;background:#15394d;border-radius:9px;min-width:0}
+.pilot-assumption strong{font-size:11px;color:#e4f7fa}.pilot-assumption small{font-size:9px;color:#9fbfcc}
+.pilot-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.pilot-pair input{width:100%;font-size:11px;min-height:38px}
+.pilot-confirm{display:flex;gap:10px;align-items:flex-start;padding:12px 0;color:#d6eaf0;font-size:11px;line-height:1.65}
+.pilot-confirm input{flex-shrink:0;width:17px;height:17px;accent-color:#4ebbb3;margin-top:2px}
+.pilot-actions{display:flex;flex-wrap:wrap;gap:10px}
+.pilot-actions button,.pilot-snapshot>button{padding:12px 16px;border-radius:8px;border:1px solid #75d4d3;background:#16627c;color:#eaffff;font-weight:650;font-size:12px;cursor:pointer}
+.pilot-actions button:disabled{opacity:.4;cursor:not-allowed}
+#pilot-status{font-size:11px;color:#bbd5df;line-height:1.7;margin:11px 0}
+#pilot-status[data-kind=warning]{color:#ffccad}#pilot-status[data-kind=success]{color:#a6eacb}
+.pilot-measures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.pilot-measure{padding:14px 10px;display:grid;gap:8px;background:#0c3347;border:1px solid #3e7180;border-radius:9px;min-width:0}
+.pilot-measure span{font-size:10px;color:#bbd6df}.pilot-measure strong{font-size:15px;overflow-wrap:anywhere;color:#e3f7f9}
+.pilot-measure small{font-size:9px;line-height:1.5;color:#a1c5cf}
+.pilot-study-notes{display:grid;gap:5px;margin-top:12px;border:1px solid #2d5267;background:#0b293b;border-radius:9px;padding:12px}
+.pilot-study-notes strong{font-size:11px}.pilot-study-notes p{font-size:10px;color:#b4d5da;margin:0;line-height:1.6}
+.pilot-snapshot{display:grid;gap:10px}.pilot-snapshot summary{margin-bottom:10px}
+.pilot-snapshot p{font-size:11px;color:#b0cdd8;line-height:1.7;margin:0}
+.pilot-version{display:grid;gap:7px;padding:9px 0;color:#bde3e4;font-size:11px}
+.pilot-version a{font-size:11px}.pilot-diff-row{border-left:2px solid #bd976a;padding:8px;background:#1c3b49;margin-bottom:7px!important}
+@media(max-width:960px){.pilot-grid{grid-template-columns:1fr}.pilot-assumption-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.pilot-steps{gap:5px}.pilot-steps span{font-size:9px;padding:7px 9px}
+.pilot-fields,.pilot-form,.pilot-toprow,.pilot-assumption-fields,.pilot-measures{grid-template-columns:1fr}
+.pilot-form label:nth-child(2),.pilot-form label:nth-child(3),.pilot-form button{grid-column:span 1}
+.pilot-add,.pilot-simulation,.pilot-snapshot{padding:12px}
+.pilot-assumption-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pilot-assumption{padding:8px}
+.pilot-pair{grid-template-columns:1fr}
+.pilot-toprow{gap:9px}
+.pilot-source{padding:12px}}

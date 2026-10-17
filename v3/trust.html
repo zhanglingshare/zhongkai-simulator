@@ -1,18 +1,18 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark"><meta name="theme-color" content="#081322">
-<title>V3.20 · 现实证据与模型可信度工作台 | 仲恺产业风洞</title>
+<title>V3.21 · 现实证据与模型可信度工作台 | 仲恺产业风洞</title>
 <meta name="description" content="分开审计20家企业公开证据、2019-2025年度观测、回溯朴素基线和Sim独立验证门槛。没有预测存档不声称真实预测准确率。">
-<link rel="stylesheet" href="trust.css">
+<link rel="stylesheet" href="trust.css"><link rel="stylesheet" href="pilot-closure.css">
 <script defer src="observations-core.js"></script><script defer src="benchmark-core.js"></script>
 <script defer src="measurement-core.js"></script><script defer src="trust-core.js"></script>
-<script defer src="trust-ui.js"></script>
+<script defer src="trust-ui.js"></script><script defer src="economic-impact-core.js"></script><script defer src="pilot-closure-core.js"></script><script defer src="pilot-closure-ui.js"></script>
 </head><body>
 <div class="trust-shell">
 <header class="trust-nav">
   <a class="trust-brand" href="index.html" aria-label="返回仲恺全息产业世界"><b>Z<span>.</span></b><span>ZHONGKAI<small>INDUSTRIAL RESEARCH</small></span></a>
   <nav aria-label="工作台导航"><a href="index.html">全息世界</a><a href="lab.html">风洞实验</a><a href="inflow.html">企业接入</a><a class="active" href="trust.html" aria-current="page">可信度核验</a></nav>
-  <span class="trust-edition">V3.20 / EVIDENCE FIRST</span>
+  <span class="trust-edition">V3.21 / VERIFIABLE PILOTS</span>
 </header>
 <main>
 <section class="trust-hero">
@@ -61,6 +61,65 @@
    </div>
    <div id="enterprise-detail" class="enterprise-detail"><p>选择企业后显示逐字段证据与缺口。</p></div>
  </div>
+</section>
+<section class="trust-section pilot-lab" id="pilot-lab" aria-labelledby="pilot-title">
+<div class="section-heading"><div><div class="eyebrow">V3.21 / SOURCE → DISPUTE → REVIEW → CONDITIONAL MODEL</div>
+<h2 id="pilot-title">五家真实企业 · 验证闭环</h2></div><div class="heading-meta">原始材料优先 · 不自动认证工商或投资</div></div>
+<p class="section-description">这里的“五家”是公开来源的试点，不是五家已经新落地的招商项目。按证据链依次处理：查看记录 → 标记缺口或冲突 → 人工说明 → 条件性经济演算 → 导出完整可复核报告。</p>
+<div class="pilot-steps" aria-label="闭环流程">
+<span>01 公开证据</span><span>02 差异与缺口</span><span>03 人工复核</span><span>04 条件演算</span><span>05 研究留痕</span>
+</div>
+<div class="pilot-grid">
+ <div class="pilot-data">
+   <label class="pilot-label" for="pilot-case">选择试点企业</label>
+   <select id="pilot-case" class="pilot-control" aria-label="选择一家公司进行验证"><option>正在载入公开试点台账…</option></select>
+   <div id="pilot-source" class="pilot-source" aria-live="polite">正在载入证据…</div>
+   <div class="pilot-subhead">逐字段可核实性</div>
+   <div id="pilot-fields" class="pilot-fields"></div>
+ </div>
+ <div class="pilot-review">
+   <div class="pilot-subhead">来源冲突 / 待补证据</div>
+   <div id="pilot-issues" class="pilot-issues" aria-live="polite">等待来源审核…</div>
+   <details class="pilot-add" open><summary>补充一条待复核证据（不会自动认证）</summary>
+     <form id="pilot-evidence-form" class="pilot-form">
+       <label>字段<select id="pilot-evidence-field" class="pilot-control"></select></label>
+       <label>材料声称的事实<input id="pilot-evidence-value" class="pilot-control" placeholder="仅写材料中能直接支持的事实" required></label>
+       <label>材料原文网址<input id="pilot-evidence-url" type="url" class="pilot-control" placeholder="https://…" required></label>
+       <label>材料日期<input id="pilot-evidence-date" type="date" class="pilot-control" required></label>
+       <label>记录人或复核标识<input id="pilot-evidence-reviewer" class="pilot-control" placeholder="人工输入" required></label>
+       <button type="submit">记录证据 → 检查是否存在差异</button>
+     </form>
+     <p class="pilot-fine">补充材料仅作为用户声称。点击“已查看”仍不等于工商核验，也不会自动修改模型输入。</p>
+   </details>
+   <div id="pilot-manual" class="pilot-manual"></div>
+ </div>
+</div>
+<details class="pilot-simulation" id="pilot-simulation" open>
+ <summary>人工复核后，运行条件性经济测算（独立于 Sim）</summary>
+ <p class="section-description">从现实证据跳到模型假设需要一个清晰的边界。这里仍复用 V3.18 的经济计算核心；完整产业网络 A/B 风洞请另到 <a href="inflow.html">新企业接入实验室 ↗</a> 手动建立情景。绝不将人工填写的数字当作已被公开资料证实。</p>
+ <div class="pilot-toprow">
+  <label>研究类型<select id="pilot-kind" class="pilot-control"><option value="backfill">既有企业补录（现实增量归零）</option><option value="expansion">既有企业扩产的假设增量</option><option value="proposed_new">拟新引进项目（须独立项目依据）</option></select></label>
+  <label>独立扩产/新引进依据（仅变更类型时强制）<input id="pilot-proof" class="pilot-control" type="url" placeholder="https://…"></label>
+  <label>复核人<input id="pilot-reviewer" class="pilot-control" placeholder="必填"></label>
+  <label>人工复核结论及未解决疑问<textarea id="pilot-review-note" class="pilot-control" rows="2" placeholder="请写明哪些材料不足、哪些仍是推断"></textarea></label>
+ </div>
+ <details class="pilot-assumptions"><summary>展开经济假设参数（全部默认空白）</summary>
+ <div id="pilot-assumption-fields" class="pilot-assumption-fields"></div></details>
+ <label class="pilot-confirm"><input id="pilot-confirm" type="checkbox"><span>我确认：数值是条件性研究假设，非政府许可、企业实际承诺或已核实投资；存量补录不计算新增经济收益。</span></label>
+ <div class="pilot-actions"><button id="pilot-run" type="button">运行本案例条件性测算 →</button><button id="pilot-export" type="button" disabled>↓ 导出证据 + 审核 + 测算报告</button></div>
+ <p id="pilot-status" role="status" aria-live="polite">必须明确研究类型及人工复核说明，才允许运行。</p>
+ <div id="pilot-results" class="pilot-results"><p>没有足够的前提时，不提供投资或就业数字。</p></div>
+</details>
+<details class="pilot-snapshot"><summary>数据版本快照与历史变化</summary>
+ <p>2026-10-17的试点原始材料已存为只增不改的Git快照。比较展示的是来源记录变动，不代表企业生产经营真的变化；后续豆包 Skills 可以通过专用追加脚本提交新版本，不能无痕覆盖旧文件。</p>
+ <div id="pilot-version" class="pilot-version">等待快照索引…</div>
+ <label>比较新的来源快照 JSON（只在本页读取，不自动上传）
+ <input id="pilot-compare-file" type="file" accept=".json,application/json"></label>
+ <div id="pilot-changes" aria-live="polite"></div>
+ <label>导入此前导出的人工核验工作记录 JSON（只在本页恢复，不上传）
+ <input id="pilot-import-session" type="file" accept=".json,application/json"></label>
+ <button type="button" id="pilot-export-review">↓ 导出当前调查与版本记录（即使没有测算）</button>
+</details>
 </section>
 <section class="trust-section" aria-labelledby="future-title">
  <div class="section-heading"><div><div class="eyebrow">04 / FROZEN BEFORE THE OUTCOME</div><h2 id="future-title">为真正的独立预测预注册</h2></div><div class="heading-meta">导出未封存草稿 · 不是已认证预测</div></div>
