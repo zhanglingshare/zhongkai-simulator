@@ -3,13 +3,15 @@
 (function(){
 "use strict";
 const $=id=>document.getElementById(id),S=window.ZKSim,H=window.ZKHolo;
-const Core=window.ZKHoloCore,Story=window.ZKHomeStory;
-if(!S||!H||!Core||!Story){$("scene-message").textContent="模型或三维渲染模块未载入，请刷新页面或进入模拟实验室。";return;}
+const Core=window.ZKHoloCore,Story=window.ZKHomeStory,Stage=window.ZKStoryStage;
+if(!S||!H||!Core||!Story||!Stage){$("scene-message").textContent="模型或三维渲染模块未载入，请刷新页面或进入模拟实验室。";return;}
 const SHOCKS=window.ZKRegisteredShocks||[];
 const SIZES=[24,32,41],MAX_TICKS=20;
 let seed=7,base=null,view=null,frames=null,cursor=0,timer=null,sceneTimer=null,selected=null;
 let phase="idle",peek=false,running=false,protagonist=null;
 const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const contrast=Stage.contrast($("home-contrast"),{metric:"links"});
+const scrubber=Stage.timeline($("timeline-slider"),{stage:$("world-stage"),onStart:stop});
 const msg=text=>$("scene-message").textContent=text;
 const safeInt=(v,lo,hi)=>Number.isSafeInteger(Number(v))&&Number(v)>=lo&&Number(v)<=hi?Number(v):null;
 function pop(){return safeInt($("portal-population").value,24,41)||41;}
@@ -112,6 +114,8 @@ function paint(t){
  setText("home-links-detail","初始 "+initial.links+" 条 · 两端都仍运转");
  $("world-stage").dataset.phase=phase;$("world-stage").dataset.peek=String(before);
  document.body.dataset.storyState=phase;
+ contrast.update(phase==="intro"?null:info,{tick:t,peek:before});$("home-current-counts").hidden=!!info&&phase!=="intro";
+ scrubber.update(t,frames?.keyTick??null,!!frames);
  $("home-peek").disabled=!frames||phase==="intro";
  $("home-peek").textContent=frames?.kind==="exit"?"按住看未退出时":"按住看未发生时";
  $("home-peek").setAttribute("aria-pressed",String(peek));
@@ -190,7 +194,7 @@ function run(shock,atTick=0){
  const b=new S(seed,{n_agents:size,ticks:MAX_TICKS}),result=b.shock(shock);
  if(!result.ok){msg("该冲击不能运行。");return;}
  const A=[base._snap()],B=[b._snap()];for(let i=0;i<MAX_TICKS;i++){base.step();b.step();A.push(base._snap());B.push(b._snap());}
- frames={kind:"shock",A,B,shock,edges:base.edges,initial:A[0]};enableTimeline();
+ frames={kind:"shock",A,B,shock,edges:base.edges,initial:A[0],keyTick:Story.keyTick(A,B)};enableTimeline();
  setText("scene-title",shock+" · 条件情景");setText("portal-run","↻ 重新运行此情景");
  paint(atTick);msg("当前为原模型的「"+shock+"」情景，可按住对照未发生时。");
  if(!reduced)play();
@@ -310,7 +314,7 @@ try{
  $("portal-shock").addEventListener("change",()=>{if(frames){reset();$("portal-run").textContent="▶ 开始情景推演";}});
  $("portal-labels").addEventListener("change",()=>view.setLabelMode($("portal-labels").value));
  $("portal-reset").addEventListener("click",()=>{reset();$("portal-run").textContent="▶ 开始情景推演";});
- $("timeline-slider").addEventListener("input",()=>{stop();peek=false;phase="scrub";paint(Number($("timeline-slider").value));});
+ $("timeline-slider").addEventListener("input",()=>{stop();peek=false;const t=Number($("timeline-slider").value);phase=t===frames?.keyTick?"key":"scrub";paint(t);});
  $("timeline-play").addEventListener("click",()=>{if(running){stop();paint(cursor);}else play();});
  $("home-next").addEventListener("click",()=>{
   if(!frames){if(protagonist)runExit(protagonist.name);return;}

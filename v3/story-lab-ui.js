@@ -1,11 +1,13 @@
 (function(){'use strict';
-const $=id=>document.getElementById(id),Sim=window.ZKSim,H=window.ZKHomeStory,C=window.ZKStoryLab;
+const $=id=>document.getElementById(id),Sim=window.ZKSim,H=window.ZKHomeStory,C=window.ZKStoryLab,Stage=window.ZKStoryStage;
 Sim.storyShocks=window.ZKRegisteredShocks;
 const words={less:'更少',same:'一样多',more:'更多'},reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let input={kind:'exit',target:'TCL华星',seed:7,pop:41,tick:20},experiment=null,guess=null,tick=20,peek=false,timer=null,running=false,repeatToken=0,selected=null,metric='disaster',showAllRoles=false;
+let input={kind:'exit',target:'TCL华星',seed:7,pop:41,tick:20},experiment=null,guess=null,tick=20,peek=false,timer=null,running=false,repeatToken=0,selected=null,metric='disaster',showAllRoles=false,roleSignature='';
 const node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=String(text);return n;};
 const message=s=>$('story-message').textContent=s;
 const view=window.ZKHolo.mount({canvas:$('story-canvas'),labels:$('story-labels'),tooltip:$('story-hover'),status:$('story-render-mode'),onSelect:n=>select(n.name)});
+const contrast=Stage.contrast($('story-contrast')),scrubber=Stage.timeline($('story-time'),{stage:$('story-stage'),onStart:stop});
+function focusStage(){document.body.classList.add('focus-mode');$('stage-settings').disabled=false;}
 function stop(){if(timer!==null)clearTimeout(timer);timer=null;running=false;$('story-play').textContent='▶ 看过程';}
 function targets(){const s=new Sim(Number($('story-seed').value)||7,{n_agents:Number($('story-size').value),ticks:20}),old=$('story-target').value||input.target;
  $('story-target').replaceChildren(...s.agents.filter(a=>a.type==='anchor'&&a.alive).map(a=>new Option(a.name,a.name)));
@@ -18,7 +20,7 @@ function context(){const s=read(),label=s.kind==='exit'?s.target+'退出':s.shoc
  $('scenario-description').textContent=s.kind==='exit'?'让指定链主退出，其余按原模型规则演化。':'使用原模型的「'+s.shock+'」情景预设；不指定某一家退出。';
  document.querySelectorAll('[data-scenario]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.scenario===(s.kind==='exit'?'exit':s.shock))));
 }
-function invalidate(){stop();repeatToken++;experiment=null;guess=null;peek=false;selected=null;showAllRoles=false;
+function invalidate(){stop();document.body.classList.remove('focus-mode');contrast.update(null);scrubber.update(20,null,false);$('stage-settings').disabled=true;$('stage-balance').textContent='';$('stage-status').textContent='';$('stage-experiment').textContent='同一场实验';roleSignature='';repeatToken++;experiment=null;guess=null;peek=false;selected=null;showAllRoles=false;
  $('story-stage').dataset.state='waiting';$('story-stage').dataset.peek='false';$('stage-empty').hidden=false;$('story-canvas').hidden=true;$('story-labels').hidden=true;
  $('guess-result').hidden=true;$('stage-prediction').textContent='';$('repeat-results').hidden=true;$('metric-note').textContent='揭晓后查看原模型指数。';
  for(const id of ['story-hold','story-play','story-time','story-key','story-share','story-repeat'])$(id).disabled=true;
@@ -37,7 +39,7 @@ function select(name){if(!experiment)return;selected=name;const n=view.select(na
  document.querySelectorAll('#story-role-list li').forEach(li=>li.dataset.selected=String(li.dataset.name===name));
  message(name+'：'+(n.alive?'当前路径仍在运转':'当前路径已退出')+'。');
 }
-function roles(info){const list=$('story-role-list');list.replaceChildren();
+function roles(info){const signature=JSON.stringify([tick,showAllRoles,info.changes]);if(signature===roleSignature)return;roleSignature=signature;const list=$('story-role-list');list.replaceChildren();
  const changes=info.changes.slice().sort((a,b)=>Number(b.name===experiment.target)-Number(a.name===experiment.target)||Number(b.exit)-Number(a.exit)||Math.abs(b.change)-Math.abs(a.change));
  $('roles-summary').textContent='第 '+tick+' 步：'+info.exits.length+' 个角色只在改变后退出，'+info.returns.length+' 个只在改变后仍运转；'+(info.weaker.length+info.stronger.length)+' 个存续角色经营状态有差异。';
  if(!changes.length){list.append(node('li','','这一步未发现明显角色差异。'));return;}
@@ -50,6 +52,9 @@ function paint(t){if(!experiment)return;tick=Math.max(0,Math.min(20,Math.trunc(t
  const info=H.frameInfo(experiment,tick),snapshot=peek?experiment.A[tick]:experiment.B[tick],counts=peek?info.a:info.b;
  view.setFrame(snapshot.agents,{tick});view.setStoryFocus(peek?[]:info.changes);view.setStoryScene({hero:experiment.target,phase:tick===20?'final':'scrub',peek,changes:info.changes});
  const last=C.outcome(experiment);$('stage-prediction').textContent='你猜'+words[guess]+' · 最后一步'+words[last.choice]+'（未改变 '+last.a+' / 改变后 '+last.b+'）';
+ contrast.update(info,{tick,peek});scrubber.update(tick,experiment.keyTick,true);
+ $('stage-balance').textContent='只在改变后退出 '+info.exits.length+' 个 · 只在改变后仍运转 '+info.returns.length+' 个';
+ $('path-composition').textContent='第 '+tick+' 步，两条路径中：'+info.exits.map(c=>c.name).join('、')+(info.exits.length?'只在改变后退出。':'没有角色只在改变后退出。')+(info.returns.length?info.returns.map(c=>c.name).join('、')+'只在改变后仍运转。':'没有角色只在改变后仍运转。')+'数量净差为 '+(info.b.alive-info.a.alive)+' 个。';
  $('story-stage').dataset.peek=String(peek);$('story-stage').dataset.state='ready';$('story-hold').setAttribute('aria-pressed',String(peek));
  $('story-alive').textContent=counts.alive;$('story-links').textContent=counts.links;
  $('story-alive-ref').textContent='未改变 '+info.a.alive+' / 改变后 '+info.b.alive;
@@ -67,7 +72,7 @@ function paint(t){if(!experiment)return;tick=Math.max(0,Math.min(20,Math.trunc(t
 function reveal(){const s=read();if(!guess)return;try{stop();experiment=C.run(Sim,s);input=s;repeatToken++;$('repeat-results').hidden=true;
  const out=C.outcome(experiment);$('guess-result').hidden=false;$('guess-result').textContent='你猜「'+words[guess]+'」；这次最后一步是「'+words[out.choice]+'」。未改变 '+out.a+' 个，改变后 '+out.b+' 个。'+(guess===out.choice?'这次与你的判断一致。':'这次与你的判断不同。');
  $('story-canvas').hidden=false;$('story-labels').hidden=false;$('stage-empty').hidden=true;
- view.resetCamera();view.setGraph(experiment.B[s.tick].agents,experiment.edges,{tick:s.tick});
+ focusStage();$('stage-experiment').textContent=(s.kind==='exit'?s.target+'退出':s.shock)+' · '+s.pop+' 角色 · 起点 '+s.seed;view.resetCamera();view.setGraph(experiment.B[s.tick].agents,experiment.edges,{tick:s.tick});
  for(const id of ['story-hold','story-play','story-time','story-key','story-share','story-repeat'])$(id).disabled=false;
  $('story-key').textContent='关键变化 · 第 '+experiment.keyTick+' 步';$('story-reveal').textContent='重新揭晓这场实验';peek=false;paint(s.tick);if(s.kind==='exit')select(s.target);
  $('story-stage').scrollIntoView({block:'start',behavior:'auto'});message('已揭晓同一场模型实验。直觉判断对照的是最后一步，画面可查看任意一步。');
@@ -98,11 +103,12 @@ for(const b of document.querySelectorAll('[data-guess]'))b.addEventListener('cli
 for(const b of document.querySelectorAll('[data-scenario]'))b.addEventListener('click',()=>{$('story-shock').value=b.dataset.scenario;invalidate();});
 for(const id of ['story-target','story-shock','story-size'])$(id).addEventListener('change',()=>{if(id==='story-size')targets();input.tick=20;invalidate();});
 $('story-seed').addEventListener('input',()=>{input.tick=20;targets();invalidate();});
+$('stage-settings').addEventListener('click',()=>{stop();if(peek)endPeek();document.body.classList.remove('focus-mode');document.querySelector('.experiment-console').scrollIntoView({block:'start',behavior:'auto'});$('story-reveal').focus({preventScroll:true});});
 $('story-reveal').addEventListener('click',reveal);$('story-time').addEventListener('input',()=>{stop();peek=false;paint(Number($('story-time').value));});$('story-play').addEventListener('click',play);$('story-key').addEventListener('click',()=>{stop();peek=false;paint(experiment.keyTick);});$('story-repeat').addEventListener('click',repeat);
 const hold=$('story-hold');hold.addEventListener('pointerdown',e=>{if(hold.disabled)return;e.preventDefault();hold.setPointerCapture(e.pointerId);beginPeek();});for(const type of ['pointerup','pointercancel','lostpointercapture'])hold.addEventListener(type,endPeek);
 hold.addEventListener('keydown',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();if(!e.repeat)beginPeek();}});hold.addEventListener('keyup',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();endPeek();}});hold.addEventListener('blur',endPeek);const pause=()=>{stop();if(peek)endPeek();else if(experiment)paint(tick);};window.addEventListener('blur',pause);document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
 for(const b of document.querySelectorAll('[data-metric]'))b.addEventListener('click',()=>{metric=b.dataset.metric;document.querySelectorAll('[data-metric]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));paint(tick);});
-$('story-share').addEventListener('click',async()=>{if(!experiment)return;const url=new URL(location.href);url.searchParams.set('scenario',encodeURIComponent(JSON.stringify(C.payload({...input,tick}))));url.hash='';try{await navigator.clipboard.writeText(url.toString());message('已复制同一场实验的条件与时间步；对方可先判断再揭晓。');}catch{const f=node('textarea');f.value=url.toString();f.readOnly=true;f.setAttribute('aria-label','手动复制实验链接');$('story-message').replaceChildren(f);f.select();}});
+$('story-share').addEventListener('click',async()=>{if(!experiment)return;const url=new URL(location.href);url.searchParams.set('scenario',encodeURIComponent(JSON.stringify(C.payload({...input,tick}))));url.hash='';try{await navigator.clipboard.writeText(url.toString());message('已复制同一场实验的条件与时间步；对方可先判断再揭晓。');$('story-share').textContent='已复制 ✓';setTimeout(()=>{$('story-share').textContent='复制这场实验';},1800);}catch{const f=node('textarea');f.value=url.toString();f.readOnly=true;f.setAttribute('aria-label','手动复制实验链接');$('story-message').replaceChildren(f);f.select();}});
 const raw=new URLSearchParams(location.search).get('scenario'),received=raw?C.decode(Sim,raw):null;
 if(received){input=received;$('story-size').value=input.pop;$('story-seed').value=input.seed;$('story-shock').value=input.kind==='exit'?'exit':input.shock;}
 else if(raw)$('story-notice').textContent='链接条件无效，已恢复 41 个角色、起点 7 的默认实验。';
