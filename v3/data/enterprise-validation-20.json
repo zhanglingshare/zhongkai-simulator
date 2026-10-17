@@ -1,0 +1,420 @@
+{
+  "schema": "zk-enterprise-public-evidence-v1",
+  "updated": "2026-10-17",
+  "purpose": "20 real-company public-record name matches; NOT 20 complete government registry / new investment verification.",
+  "permittedConclusions": [
+    "source document mentions exact named organization",
+    "district label only where source contains it",
+    "project association only when public source identifies applicant/construction unit"
+  ],
+  "notVerified": [
+    "business registration status",
+    "beneficial owner",
+    "investment realization",
+    "incremental jobs",
+    "real local procurement contracts",
+    "any claim that all 20 are newly attracted to Zhongkai"
+  ],
+  "items": [
+    {
+      "id": "e01",
+      "name": "惠州市正牌科电有限公司",
+      "sourceCategory": "award",
+      "source": {
+        "url": "https://gxj.huizhou.gov.cn/gkmlpt/content/5/5769/post_5769719.html",
+        "publisher": "惠州市工业和信息化局",
+        "documentDate": "2026-05-14",
+        "fact": "列入2026年市级工业设计中心奖励安排计划"
+      },
+      "officialDistrict": "惠城区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-list-district",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "奖励名单反映历史获评、县区归属，并非项目拟投资记录"
+    },
+    {
+      "id": "e02",
+      "name": "惠州市天宝创能科技有限公司",
+      "sourceCategory": "award",
+      "source": {
+        "url": "https://gxj.huizhou.gov.cn/gkmlpt/content/5/5769/post_5769719.html",
+        "publisher": "惠州市工业和信息化局",
+        "documentDate": "2026-05-14",
+        "fact": "列入2026年市级工业设计中心奖励安排计划"
+      },
+      "officialDistrict": "惠城区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-list-district",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "奖励名单反映历史获评、县区归属，并非项目拟投资记录"
+    },
+    {
+      "id": "e03",
+      "name": "广东威林科技股份有限公司",
+      "sourceCategory": "award",
+      "source": {
+        "url": "https://gxj.huizhou.gov.cn/gkmlpt/content/5/5769/post_5769719.html",
+        "publisher": "惠州市工业和信息化局",
+        "documentDate": "2026-05-14",
+        "fact": "列入2026年市级工业设计中心奖励安排计划"
+      },
+      "officialDistrict": "惠城区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-list-district",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "奖励名单反映历史获评、县区归属，并非项目拟投资记录"
+    },
+    {
+      "id": "e04",
+      "name": "广东利元亨智能装备股份有限公司",
+      "sourceCategory": "award",
+      "source": {
+        "url": "https://gxj.huizhou.gov.cn/gkmlpt/content/5/5769/post_5769719.html",
+        "publisher": "惠州市工业和信息化局",
+        "documentDate": "2026-05-14",
+        "fact": "列入2026年市级工业设计中心奖励安排计划"
+      },
+      "officialDistrict": "惠城区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-list-district",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "奖励名单反映历史获评、县区归属，并非项目拟投资记录"
+    },
+    {
+      "id": "e05",
+      "name": "胜宏科技（惠州）股份有限公司",
+      "sourceCategory": "award",
+      "source": {
+        "url": "https://gxj.huizhou.gov.cn/gkmlpt/content/5/5769/post_5769719.html",
+        "publisher": "惠州市工业和信息化局",
+        "documentDate": "2026-05-14",
+        "fact": "列入2026年市级工业设计中心奖励安排计划"
+      },
+      "officialDistrict": "惠阳区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-list-district",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "奖励名单反映历史获评、县区归属，并非项目拟投资记录"
+    },
+    {
+      "id": "e06",
+      "name": "惠州市特创电子科技股份有限公司",
+      "sourceCategory": "award",
+      "source": {
+        "url": "https://gxj.huizhou.gov.cn/gkmlpt/content/5/5769/post_5769719.html",
+        "publisher": "惠州市工业和信息化局",
+        "documentDate": "2026-05-14",
+        "fact": "列入2026年市级工业设计中心奖励安排计划"
+      },
+      "officialDistrict": "惠东县",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-list-district",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "奖励名单反映历史获评、县区归属，并非项目拟投资记录"
+    },
+    {
+      "id": "e07",
+      "name": "广东微电新能源股份有限公司",
+      "sourceCategory": "award",
+      "source": {
+        "url": "https://gxj.huizhou.gov.cn/gkmlpt/content/5/5769/post_5769719.html",
+        "publisher": "惠州市工业和信息化局",
+        "documentDate": "2026-05-14",
+        "fact": "列入2026年市级工业设计中心奖励安排计划"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-list-district",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "奖励名单反映历史获评、县区归属，并非项目拟投资记录"
+    },
+    {
+      "id": "e08",
+      "name": "惠州亿纬锂能股份有限公司",
+      "sourceCategory": "award",
+      "source": {
+        "url": "https://gxj.huizhou.gov.cn/gkmlpt/content/5/5769/post_5769719.html",
+        "publisher": "惠州市工业和信息化局",
+        "documentDate": "2026-05-14",
+        "fact": "列入2026年市级工业设计中心奖励安排计划"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-list-district",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "奖励名单反映历史获评、县区归属，并非项目拟投资记录"
+    },
+    {
+      "id": "e09",
+      "name": "龙旗电子（惠州）有限公司",
+      "sourceCategory": "award",
+      "source": {
+        "url": "https://gxj.huizhou.gov.cn/gkmlpt/content/5/5769/post_5769719.html",
+        "publisher": "惠州市工业和信息化局",
+        "documentDate": "2026-05-14",
+        "fact": "列入2026年市级工业设计中心奖励安排计划"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-list-district",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "奖励名单反映历史获评、县区归属，并非项目拟投资记录"
+    },
+    {
+      "id": "e10",
+      "name": "惠州市乐亿通科技股份有限公司",
+      "sourceCategory": "award",
+      "source": {
+        "url": "https://gxj.huizhou.gov.cn/gkmlpt/content/5/5769/post_5769719.html",
+        "publisher": "惠州市工业和信息化局",
+        "documentDate": "2026-05-14",
+        "fact": "列入2026年市级工业设计中心奖励安排计划"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-list-district",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "奖励名单反映历史获评、县区归属，并非项目拟投资记录"
+    },
+    {
+      "id": "e11",
+      "name": "惠州创维数字技术有限公司",
+      "sourceCategory": "build",
+      "source": {
+        "url": "https://www.hzzk.gov.cn/bmpd/cxjshzhzfj/ywspgs/content/post_5544752.html",
+        "publisher": "仲恺高新区城乡建设和综合执法局",
+        "documentDate": "2025-06-13",
+        "fact": "列入2025年5月房屋市政工程竣工验收备案公示的申请单位"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "project-location-in-Zhongkai",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "项目竣工备案的申请单位不等于全项目投产或新增投资已实现"
+    },
+    {
+      "id": "e12",
+      "name": "视爵（惠州）实业有限公司",
+      "sourceCategory": "build",
+      "source": {
+        "url": "https://www.hzzk.gov.cn/bmpd/cxjshzhzfj/ywspgs/content/post_5544752.html",
+        "publisher": "仲恺高新区城乡建设和综合执法局",
+        "documentDate": "2025-06-13",
+        "fact": "列入2025年5月房屋市政工程竣工验收备案公示的申请单位"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "project-location-in-Zhongkai",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "项目竣工备案的申请单位不等于全项目投产或新增投资已实现"
+    },
+    {
+      "id": "e13",
+      "name": "惠州集宇科技产业发展有限公司",
+      "sourceCategory": "build",
+      "source": {
+        "url": "https://www.hzzk.gov.cn/bmpd/cxjshzhzfj/ywspgs/content/post_5544752.html",
+        "publisher": "仲恺高新区城乡建设和综合执法局",
+        "documentDate": "2025-06-13",
+        "fact": "列入2025年5月房屋市政工程竣工验收备案公示的申请单位"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "project-location-in-Zhongkai",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "项目竣工备案的申请单位不等于全项目投产或新增投资已实现"
+    },
+    {
+      "id": "e14",
+      "name": "惠州市庆广化工有限公司",
+      "sourceCategory": "water",
+      "source": {
+        "url": "https://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/wgk/glgk/ssjygk/content/post_5687097.html",
+        "publisher": "仲恺高新区城乡建设和综合执法局",
+        "documentDate": "2026-01-09",
+        "fact": "列入2025年仲恺排水户随机抽查公告的企业名称"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "project-location-in-Zhongkai",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "此材料是排水监管抽查，不用于推断企业发展前景、诚信或投资规模"
+    },
+    {
+      "id": "e15",
+      "name": "惠州市玖晟实业有限公司",
+      "sourceCategory": "water",
+      "source": {
+        "url": "https://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/wgk/glgk/ssjygk/content/post_5687097.html",
+        "publisher": "仲恺高新区城乡建设和综合执法局",
+        "documentDate": "2026-01-09",
+        "fact": "列入2025年仲恺排水户随机抽查公告的企业名称"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "project-location-in-Zhongkai",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "此材料是排水监管抽查，不用于推断企业发展前景、诚信或投资规模"
+    },
+    {
+      "id": "e16",
+      "name": "惠州市意德厨房家具有限公司",
+      "sourceCategory": "water",
+      "source": {
+        "url": "https://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/wgk/glgk/ssjygk/content/post_5687097.html",
+        "publisher": "仲恺高新区城乡建设和综合执法局",
+        "documentDate": "2026-01-09",
+        "fact": "列入2025年仲恺排水户随机抽查公告的企业名称"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "project-location-in-Zhongkai",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "此材料是排水监管抽查，不用于推断企业发展前景、诚信或投资规模"
+    },
+    {
+      "id": "e17",
+      "name": "惠州市瑞源医疗科技有限公司",
+      "sourceCategory": "water",
+      "source": {
+        "url": "https://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/wgk/glgk/ssjygk/content/post_5687097.html",
+        "publisher": "仲恺高新区城乡建设和综合执法局",
+        "documentDate": "2026-01-09",
+        "fact": "列入2025年仲恺排水户随机抽查公告的企业名称"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "project-location-in-Zhongkai",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "此材料是排水监管抽查，不用于推断企业发展前景、诚信或投资规模"
+    },
+    {
+      "id": "e18",
+      "name": "惠州市华阳精机有限公司",
+      "sourceCategory": "exp",
+      "source": {
+        "url": "https://www.hzzk.gov.cn/zzgxqzdlyxxgk/hjbhxxgk/jsxmhjyxpj/content/post_5635982.html",
+        "publisher": "惠州市生态环境局仲恺高新区分局",
+        "documentDate": "2025-10-29",
+        "fact": "列入华阳精机汽车轻量化零部件产能扩建（三期）环评受理公示的建设单位"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "project-location-in-Zhongkai",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "环境影响评价受理并不等于项目已建成、投资已兑现"
+    },
+    {
+      "id": "e19",
+      "name": "惠州市博实结科技有限公司",
+      "sourceCategory": "bsj",
+      "source": {
+        "url": "https://www.bsjkj.com/aboutus/contact.html",
+        "publisher": "博实结企业官网",
+        "documentDate": "",
+        "fact": "公开企业地点信息：仲恺高新区惠风西三路1号"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-address",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "企业官网地点线索，不是新增落地或工商状态证明"
+    },
+    {
+      "id": "e20",
+      "name": "惠州仲恺高新区高新投资有限公司",
+      "sourceCategory": "invest",
+      "source": {
+        "url": "https://www.hzzk.gov.cn/zzgxqzdlyxxgk/gyqyxxgk/jbxx/content/post_5442092.html",
+        "publisher": "仲恺高新区重点领域信息公开",
+        "documentDate": "2025-01-15",
+        "fact": "公开仲恺高新投资有限公司简介、办公地址和主要业务"
+      },
+      "officialDistrict": "仲恺高新区",
+      "check": {
+        "nameMention": "public-record-supported",
+        "districtAtRecord": "public-address",
+        "legalIdentity": "not-verified",
+        "actualInvestment": "not-verified",
+        "investorNewToZhongkai": "not-verified"
+      },
+      "note": "政府公开企业简介不等于新增投资已兑现"
+    }
+  ]
+}

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#06121e">
-<title>V3.17 · 中国企业智能调查实验室 | 仲恺产业风洞</title>
+<title>V3.18 · 增量经济影响与企业证据 | 仲恺产业风洞</title>
 <meta name="description" content="用公开研究模型比较一个假设新企业接入前后的产业网络、模型内指数与不确定性。独立探索，不作现实预测。">
 <link rel="stylesheet" href="inflow.css"><link rel="stylesheet" href="company-assist.css">
 <script defer src="portal-kernel.js"></script>
@@ -14,12 +14,15 @@
 <script defer src="company-china-core.js"></script>
 <script defer src="company-dossier-core.js"></script>
 <script defer src="company-investigation-core.js"></script>
+<script defer src="economic-impact-core.js"></script>
 <script defer src="company-investigation-config.js"></script>
 <script defer src="inflow.js"></script>
 <script defer src="company-china.js"></script>
 <script defer src="company-dossier-ui.js"></script>
 <script defer src="company-investigation-ui.js"></script>
-<script defer src="company-investigation-ui.js"></script>
+<script defer src="economic-impact-ui.js"></script>
+
+
 </head>
 <body>
 <div class="shell">
@@ -31,7 +34,7 @@
     <a class="active" href="inflow.html" aria-current="page">新企业接入</a>
     <a href="measurement.html">科学验证</a>
   </nav>
-  <span class="version">V3.17 / CHINA COMPANY INVESTIGATION</span>
+  <span class="version">V3.18 / ECONOMIC TRANSMISSION LAB</span>
 </header>
 <main>
   <section class="intro">
@@ -181,6 +184,49 @@
     </div>
     <div class="result-block"><h3>原本在这里的企业和角色，可能有哪些变化？ <small>仅作模型内观察</small></h3><div id="inflow-subjects">运行后列出存续差异与模型能量差异；不做真实企业收益排名。</div></div>
   </section>
+
+<section class="pane economic-lab" id="economic-lab" aria-labelledby="economic-title">
+  <div class="section-heading"><div><div class="section-number">V3.18 / NET NEW IMPACT · ASSUMPTIONS ONLY</div>
+    <h2 id="economic-title">这家企业，能带来多少真正的新增量？</h2></div><span class="model-pill">经济情景计算 · 非预测</span></div>
+  <p class="section-help">与上方的产业关系网络不同，这里单独算<b>新投资、本地采购留存、岗位替代和土地/能源/水资源压力</b>。不把原 Sim 指数折算成GDP、税收或真实招商收益。未填数字不会被系统补出来。</p>
+  <div class="econ-layout">
+    <div class="econ-fields">
+      <p class="econ-context" id="econ-context">研究身份与上方“你要研究什么？”同步。新引进或扩产需填写相对现状的增量；存量补录的现实经济增量为零。</p>
+      <div class="section-number">A / USER-SUPPLIED ASSUMPTION RANGES</div>
+      <div class="econ-input-table"><div class="econ-input-line"><div><strong>本项目新增投资</strong><small>亿元，一次性资本开支</small></div><label>下界<input id="econ-investment-low" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label><label>上界<input id="econ-investment-high" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label></div>
+<div class="econ-input-line"><div><strong>年度采购额</strong><small>亿元/年，不等于增加值</small></div><label>下界<input id="econ-procurement-low" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label><label>上界<input id="econ-procurement-high" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label></div>
+<div class="econ-input-line"><div><strong>当地采购比例</strong><small>%，实际购买仲恺产品服务份额</small></div><label>下界<input id="econ-localShare-low" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label><label>上界<input id="econ-localShare-high" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label></div>
+<div class="econ-input-line"><div><strong>当地供应商替代比例</strong><small>%，可能挤走的原有本地订单</small></div><label>下界<input id="econ-supplierDisplacement-low" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label><label>上界<input id="econ-supplierDisplacement-high" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label></div>
+<div class="econ-input-line"><div><strong>新增直接岗位</strong><small>人，不含现有岗位</small></div><label>下界<input id="econ-jobs-low" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label><label>上界<input id="econ-jobs-high" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label></div>
+<div class="econ-input-line"><div><strong>岗位替代比例</strong><small>%，可能替代的已有本地岗位</small></div><label>下界<input id="econ-jobDisplacement-low" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label><label>上界<input id="econ-jobDisplacement-high" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label></div>
+<div class="econ-input-line"><div><strong>新增工业用地</strong><small>亩</small></div><label>下界<input id="econ-land-low" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label><label>上界<input id="econ-land-high" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label></div>
+<div class="econ-input-line"><div><strong>新增年用电</strong><small>万千瓦时/年</small></div><label>下界<input id="econ-power-low" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label><label>上界<input id="econ-power-high" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label></div>
+<div class="econ-input-line"><div><strong>新增年用水</strong><small>万吨/年</small></div><label>下界<input id="econ-water-low" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label><label>上界<input id="econ-water-high" type="number" min="0" step="any" inputmode="decimal" placeholder="待填"></label></div></div>
+      <div class="section-number">B / 资源容量上界 · 与项目需求使用相同单位</div>
+      <div class="econ-capacities">
+        <label>可用工业用地（亩）<input id="econ-cap-land" type="number" min="0" step="any" inputmode="decimal" placeholder="不清楚可留空"></label>
+        <label>可用年供电（万千瓦时/年）<input id="econ-cap-power" type="number" min="0" step="any" inputmode="decimal" placeholder="不清楚可留空"></label>
+        <label>可用年供水（万吨/年）<input id="econ-cap-water" type="number" min="0" step="any" inputmode="decimal" placeholder="不清楚可留空"></label>
+      </div>
+      <label class="econ-ack"><input id="econ-assumption-confirm" type="checkbox"><span>我确认这是用于研究的假设区间，已区分新增量和存量；并不声称这些是企业真实承诺。</span></label>
+      <div class="econ-controls"><button id="econ-run" type="button">▶ 计算条件性增量</button><button id="econ-save" type="button" disabled>保存到对比</button><button id="econ-export" type="button" disabled>↓ 导出经济研究记录</button></div>
+      <p id="econ-message" class="form-message" role="status" aria-live="polite">先选择研究情景并输入可核实或明确标记为假设的数字。</p>
+    </div>
+    <div class="econ-output">
+      <div class="section-number">C / CALCULATED CONSEQUENCES</div>
+      <div id="econ-metrics" class="econ-metrics"><p class="empty-wide">尚未运行。不自动生成投资额、就业或产值。</p></div>
+      <div id="econ-resource-check" class="econ-resources"><p>资源承载力：待输入并测算。</p></div>
+      <div id="econ-evidence-questions" class="econ-questions"><p>测算后列出最值得向企业核实的问题。</p></div>
+      <p class="scientific-note">P10/P50/P90只是你输入的区间内做256次假设敏感性抽样，<b>不是现实概率、统计置信区间或实际经济预测</b>。</p>
+    </div>
+  </div>
+  <div class="econ-comparison"><div class="section-heading"><h3>对比两个方案的净增量与资源压力</h3><button id="econ-clear-comparison" type="button">清空对比</button></div><div id="econ-compare-cards"><p>运行后点击“保存到对比”，最多比较两个输入方案。缺少指标时不强行排名。</p></div></div>
+</section>
+<section class="pane real-roster" aria-labelledby="real-roster-title">
+  <div class="section-heading"><div><div class="section-number">V3.18 / SOURCE AUDIT</div><h2 id="real-roster-title">20家真实企业 · 公开材料核对台账</h2></div><button id="open-validation-roster" type="button">展开证据台账</button></div>
+  <p class="section-help">20家企业均有可点击的公开记录，但证据强度不等：有的是企业名单，有的是项目备案、环境文件或企业官网。<b>不代表20家企业已完成工商、投资、产值和上下游关系的全面核验。</b></p>
+  <div id="real-roster-results" aria-live="polite"></div>
+</section>
 
   <section class="pane evidence" aria-labelledby="evidence-title">
     <div><div class="section-number">04 / WHAT WE STILL DON'T KNOW</div><h2 id="evidence-title">还有哪些问题需要问企业？</h2><p>证据不足时，模型应提出问题，而不是制造确信。</p></div>
