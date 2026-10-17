@@ -36,7 +36,11 @@ async function visit(browser,port,width,reduced){
   stage:document.querySelector("#world-stage").getBoundingClientRect().top,
   opt:document.querySelector("#story-settings").getBoundingClientRect().top
  }));
- assert.ok(pos.story<pos.stage&&pos.stage<pos.opt,"One story -> full network -> optional research "+JSON.stringify(pos));
+ // Desktop now puts the story beside the world; mobile keeps the reading sequence.
+ assert.ok((width>=1100?Math.abs(pos.story-pos.stage)<2:pos.story<pos.stage)&&pos.stage<pos.opt,
+   "Story beside world on desktop, before world on mobile, research below both "+JSON.stringify(pos));
+ assert.ok(await page.locator(".hero-story").evaluate(n=>Boolean(n.compareDocumentPosition(document.getElementById("world-stage"))&Node.DOCUMENT_POSITION_FOLLOWING)),
+   "DOM reading order must remain story before network");
  assert.match(await page.locator("#portal-story-result").innerText(),/点上面的播放按钮/);
  assert.equal(await page.locator("#timeline-slider").isDisabled(),true);
  if(width===390&&reduced)await screen(page,"story-first-initial-390.png");
