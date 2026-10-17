@@ -64,8 +64,6 @@
   try{
    const d=await Core.details(entry.id);
    if(generation!==searchGeneration)return;
-   selected={id:d.id,source:d.source,origin:d.origin,provenance:d.provenance,
-     originallyReturnedName:d.name,originallyReturnedDescription:d.business};
    update(name,d.name||entry.name);
    update(business,d.business||entry.description);
    if(d.location)update(place,d.location);
@@ -73,6 +71,8 @@
    update($("source"),d.source);
    // A public knowledge-base item is NOT proof of a supply contract.
    update($("evidence"),"unverified");
+   selected={id:d.id,source:d.source,origin:d.origin,provenance:d.provenance,
+     originallyReturnedName:d.name,originallyReturnedDescription:d.business};
    manualType=false;
    explain();
    setStatus("已填入公开知识库条目 "+d.id+"；请核对名称、业务、地点和网站，必要时修改。", "success");
