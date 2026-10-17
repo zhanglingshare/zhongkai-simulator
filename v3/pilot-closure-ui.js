@@ -4,6 +4,15 @@
 const $=id=>document.getElementById(id),P=window.ZKPilotClosure,E=window.ZKEconomicInflow;
 if(!P||!E||!$("pilot-lab"))return;
 const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=String(text);return e;};
+// Friendly on-screen labels for the five existing source classifications.
+const categoryName=Object.freeze({
+ "expansion-project-application":"产能扩建 · 环评受理",
+ "partial-construction-completion-filing":"厂房设施 · 部分竣工备案",
+ "government-award-allocation":"工业设计中心 · 奖励安排",
+ "company-site-self-report":"企业官网 · 地址线索",
+ "government-soe-profile":"国有平台 · 官方介绍"
+});
+const categoryLabel=k=>categoryName[k]||"公开资料类别待核对";
 const fmt=(v,unit)=>v===null||v===undefined||!Number.isFinite(v)?"未知":v.toLocaleString("zh-CN",{maximumFractionDigits:unit==="人"?0:3});
 const economicKeys=Object.keys(E.RANGES),capacityKeys=Object.keys(E.CAPACITIES);
 let registry=null,base=null,item=null,latest=null,diff=null;
@@ -18,7 +27,7 @@ function appendLink(container,txt,href){
 }
 function sourcePanel(){
  const host=$("pilot-source");host.replaceChildren();
- host.append(el("h3","",item.name),el("p","pilot-category",item.district+" · "+item.category),
+ host.append(el("h3","",item.name),el("p","pilot-category",item.district+" · "+categoryLabel(item.category)),
   el("p","pilot-alert","本案例来自公开来源，但不是完整工商尽调："+item.watch));
  item.source.forEach(s=>{
   const div=el("article","pilot-source-card");
@@ -235,7 +244,7 @@ async function init(){
   const fields=$("pilot-evidence-field");fields.replaceChildren();
   for(const [key,desc]of Object.entries(P.FIELDS)){const o=el("option","",desc.label);o.value=key;fields.append(o);}
   const picker=$("pilot-case");picker.replaceChildren();
-  cur.cases.forEach(c=>{const o=el("option","",c.name+" · "+c.category);o.value=c.id;picker.append(o);});
+  cur.cases.forEach(c=>{const o=el("option","",c.name+" · "+categoryLabel(c.category));o.value=c.id;picker.append(o);});
   selectCase(cur.cases[0].id);showVersion();showDiff();
  }catch(err){
   $("pilot-source").replaceChildren(el("p","pilot-alert","试点证据资料加载失败："+err.message));
