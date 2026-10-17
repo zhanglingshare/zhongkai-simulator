@@ -35,8 +35,26 @@ seed.addEventListener("input",()=>{
  legacySeed.dispatchEvent(new Event("input",{bubbles:true}));
 });
 legacySeed.addEventListener("input",()=>{seed.value=legacySeed.value;});
+function explain(metrics){
+ const box=el("lab-plain-result");if(!box)return;
+ box.replaceChildren();
+ const important=metrics.slice().filter(x=>Number.isFinite(x.delta))
+  .sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta))[0];
+ if(!important)return;
+ const nearZero=Math.abs(important.delta)<.0005;
+ const sentence=nearZero?
+  "这次实验的五项模型指数几乎没有变化。":
+  "这次模型对照中，「"+important.name+"」变化最明显："+
+   (important.delta>0?"升高":"降低")+" "+Math.abs(important.delta).toFixed(3)+"。";
+ box.append(make("strong","",sentence),
+   make("p","","你看到的是当前模型中“改变前 / 改变后”的差异，而不是现实的经济损失、岗位变化或政策预测。下方保留所有指标供你核查。"));
+}
 function empty(stale=false){
  validResult=false;
+ const plain=el("lab-plain-result");if(plain){
+   plain.replaceChildren(make("strong","",stale?"条件变了，结果需要重算":"还没有进行实验"),
+     make("p","",stale?"刚才的数字已经失效，请重新运行后再比较。":"选择一种风险或机会，点击运行，先看一句话结果，再看完整数字。"));
+ }
  const host=el("lab-preview-metrics");host.replaceChildren();
  const card=make("div","lab-preview-empty");
  card.append(make("span","",stale?"↺":"⌁"),
@@ -53,6 +71,7 @@ function render(event){
  let metrics;
  try{metrics=K.compare(event.a,event.b);}
  catch(e){empty(true);return;}
+ explain(metrics);
  const host=el("lab-preview-metrics");host.replaceChildren();
  const scale=Math.max(...metrics.map(item=>Math.abs(item.delta)),.02);
  for(const item of metrics){
