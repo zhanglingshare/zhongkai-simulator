@@ -110,7 +110,7 @@
  .portal-shell .hero-quick-actions button{min-height:50px;font-size:16px;width:100%}
  .portal-shell .hero-quick-actions span{font-size:12px}
  .portal-shell .portal-main .world-stage{height:51svh;min-height:330px;border-radius:15px;margin-top:7px}
- .portal-shell .world-heading{font-size:10px;top:10px;left:9px}
+ .portal-shell .world-heading{font-size:10px;top:10px;left:9px;right:10px;transform:none;white-space:normal;display:flex;flex-wrap:wrap;line-height:1.45}
  .portal-shell .world-footer{font-size:10px;gap:7px;left:10px;right:10px}
  .portal-shell .world-footer b{font-size:14px}
  .portal-shell .world-variation{font-size:11px;line-height:1.45;bottom:46px;max-width:calc(100% - 20px)}
