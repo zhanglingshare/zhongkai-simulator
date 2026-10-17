@@ -58,7 +58,7 @@ async function visit(browser,port,width,reduced){
  assert.match(await page.locator("#portal-story-result").innerText(),new RegExp("模拟第 "+t+" 步"));
  assert.match(await page.locator("#portal-story-result").innerText(),/模型|假设/);
  assert.ok(await page.locator("#role-story-focus").isVisible());
- assert.equal(await page.locator("#world-node-count").innerText(),"41");
+ assert.equal(await page.locator("#world-node-count").innerText(),await page.evaluate(t=>String(window.ZKHomeStory.exitRun(window.ZKSim,7,41,"TCL华星").B[t].agents.filter(n=>n.alive).length),t));
  await page.locator("#story-settings summary").click();
  assert.equal(await page.locator("#portal-population").isVisible(),true);
  await page.locator("#portal-population").selectOption("24");

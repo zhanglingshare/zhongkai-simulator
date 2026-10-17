@@ -44,7 +44,7 @@ async function check(browser,port,width){
  assert.match(narrative,/模型|假设/);
  assert.match(narrative,/模拟第 6 步/);
  const total=await page.locator("#world-node-count").innerText();
- assert.equal(total,"41");
+ assert.equal(total,await page.evaluate(()=>String(window.ZKHomeStory.exitRun(window.ZKSim,7,41,"TCL华星").B[6].agents.filter(n=>n.alive).length)));
  await page.locator("#story-settings summary").click();
  await page.locator("#portal-population").selectOption("24");
  assert.equal(await page.locator("#world-node-count").innerText(),"24");

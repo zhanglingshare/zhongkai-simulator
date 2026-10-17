@@ -6,15 +6,16 @@
 <meta name="theme-color" content="#020c17">
 <meta name="description" content="仲恺产业风洞：基于公开证据的可交互三维产业网络，探索风险传播和潜在增长条件。独立研究、非官方决策建议。">
 <title>仲恺产业风洞 · 看见产业如何连起来</title>
-<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css"><link rel="stylesheet" href="visual-interaction.css">
+<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css"><link rel="stylesheet" href="visual-interaction.css"><link rel="stylesheet" href="home-impact.css">
 <script defer src="portal-kernel.js"></script>
 <script defer src="holo-core.js"></script>
 <script defer src="visual-entry-core.js"></script>
 <script defer src="story-render.js"></script>
 <script defer src="role-story-core.js"></script>
+<script defer src="home-story-core.js"></script>
 <script defer src="portal.js"></script>
 </head>
-<body>
+<body class="story-home" data-story-state="idle">
 <div class="portal-shell">
   <header class="portal-header">
     <a class="brand" href="index.html" aria-label="仲恺产业风洞首页">
@@ -36,28 +37,47 @@
       <div class="hero-story">
         <p class="hero-kicker"><span class="hero-diamond">◈</span> 一个关于产业的假设故事</p>
         <h1 id="portal-title">假如<span class="company-phrase">一家大厂</span>突然搬走，<br><span>谁会受到影响？</span></h1>
-        <p class="hero-deck">不用学经济学，也不用填表。按一下播放，看一场假设中的产业变化。</p>
-        <div class="hero-quick-actions"><button id="hero-quickstart" type="button">▶ 看看会发生什么</button><span>一键播放 · 看完再决定要不要深入</span></div>
+        <p class="hero-deck" id="hero-deck">不用学经济学，也不用填表。按一下播放，看一场假设中的产业变化。</p>
+        <div class="hero-quick-actions"><button id="hero-quickstart" type="button">▶ 看看它离开后</button><span>看清退出的一刻 · 按住可对照</span></div>
         <div class="story-emphasis"><span class="emphasis-rule"></span><p>这不是现实新闻，而是一次可重复的模型演示。</p></div>
 
 
       </div>
 
-      <div class="world-stage" id="world-stage">
-        <div class="world-orbit world-orbit-one" aria-hidden="true"></div>
-        <div class="world-orbit world-orbit-two" aria-hidden="true"></div>
-        <div class="world-grid" aria-hidden="true"></div>
-        <canvas id="holo-canvas" class="world-canvas" role="img" aria-label="可交互三维产业关系网络。拖动旋转，滚轮或双指缩放，点击模型主体查看更多信息。"></canvas>
-        <div id="holo-labels" class="holo-labels" aria-hidden="true"></div>
-        <div id="holo-hover" class="holo-hover" hidden></div>
-        <div class="world-heading"><span class="crosshair">⌖</span> <span>这是一张模型里的产业关系网</span><small id="render-mode">载入真实模型关系…</small></div>
-        <div class="world-corner world-corner-tl" aria-hidden="true"></div>
-        <div class="world-corner world-corner-tr" aria-hidden="true"></div>
-        <div class="world-corner world-corner-bl" aria-hidden="true"></div>
-        <div class="world-corner world-corner-br" aria-hidden="true"></div>
-        <div class="world-variation" id="world-variation" data-changed="false" role="status" aria-live="off" title="青绿光效：模型能量上升；橙色光效：模型能量下降或退场。强调相邻关系不等于现实因果传播。">模型里的产业关系 · 点上方按钮开始</div>
-        <div class="world-footer"><span><b id="world-node-count">—</b> 个产业角色</span>
-          <span><b id="world-edge-count">—</b> 条模型连线</span><span class="world-pointer">拖动旋转 · 点击主体</span></div>
+      <div class="world-stage" id="world-stage" data-phase="idle" aria-label="产业故事演示与同一步前后对照">
+        <div class="home-story-header">
+          <div class="home-story-eyebrow"><span>假设演示</span><span id="home-story-chapter">01 · 先认出主角</span></div>
+          <h2 id="home-story-title">一张网，先看清谁在其中。</h2>
+          <p id="home-story-caption">点播放，观察一家链主退出模型后，画面怎样变化。</p>
+        </div>
+        <div class="story-network-area">
+          <div class="world-orbit world-orbit-one" aria-hidden="true"></div>
+          <div class="world-grid" aria-hidden="true"></div>
+          <canvas id="holo-canvas" class="world-canvas" role="img" aria-label="模型产业关系网络。按住对照按钮，可在同一镜头同一步查看未退出的路径。"></canvas>
+          <div id="holo-labels" class="holo-labels" aria-hidden="true"></div>
+          <div id="holo-hover" class="holo-hover" hidden></div>
+          <div class="world-heading"><small id="render-mode">载入模型关系…</small></div>
+          <div class="home-network-legend" aria-label="颜色含义"><span><i class="legend-exit"></i>退出</span><span><i class="legend-weaker"></i>较弱</span><span><i class="legend-stronger"></i>较强</span><span><i class="legend-same"></i>无明显差异</span></div>
+          <div class="home-view-label" id="home-view-label">初始模型世界</div>
+        </div>
+        <div class="home-story-summary">
+          <div class="world-footer home-live-counts">
+            <div><span>仍在运转</span><strong><b id="world-node-count">—</b><small>个角色</small></strong><small id="home-alive-detail">等待模型载入</small></div>
+            <div><span>仍亮着的模型连线</span><strong><b id="world-edge-count">—</b><small>条</small></strong><small id="home-links-detail">两端都仍在运转</small></div>
+          </div>
+          <p id="world-variation" class="home-story-explanation" data-changed="false" role="status" aria-live="polite">点上方播放，看看会发生什么。</p>
+          <div class="home-compare-actions">
+            <button id="home-peek" type="button" disabled aria-pressed="false" aria-controls="holo-canvas">按住看未退出时</button>
+            <button id="home-next" type="button" disabled>等待开始</button>
+          </div>
+          <div class="home-inline-timeline" id="home-inline-timeline">      <button type="button" id="timeline-play" class="timeline-play" disabled aria-label="播放模型演化">▶</button>
+      <div class="timeline-control"><div class="timeline-heading"><span>模拟过程（不是现实年份）</span><output id="timeline-output" for="timeline-slider">T 00 / 20</output></div>
+        <input id="timeline-slider" type="range" min="0" max="20" value="0" step="1" disabled aria-label="模型时间步回放">
+        <div class="timeline-hints"><span>初始冲击</span><span>模型步 ≠ 现实年份</span><span>T20</span></div>
+      </div>
+</div>
+          <p class="home-story-footnote">模型关系包含预设与推断；连线熄灭表示至少一端退出模型。</p>
+        </div>
       </div>
 
       <div class="world-build"><p id="world-build-status" role="status" aria-live="off">链主、配套、服务与人才，正在组成一张网。</p><button id="world-build-replay" type="button">↻ 重新看组网</button></div>
@@ -76,7 +96,7 @@
           <label class="portal-field" for="portal-shock"><span>风险 / 增长情景</span>
             <select id="portal-shock" aria-label="选择产业风险或增长情景">
               <optgroup label="风险冲击">
-                <option>链主外迁</option><option>芯片断供</option><option>订单外流</option>
+                <option value="链主外迁">外迁压力（不指定主体）</option><option>芯片断供</option><option>订单外流</option>
                 <option>产能过剩</option><option>政策收紧</option><option>用地收紧</option>
                 <option>限电</option><option>融资难</option><option>关税摩擦</option>
                 <option>供应链中断</option><option>人才流失</option>
@@ -125,16 +145,8 @@
           <button type="button" id="subject-clear">清除聚焦 ⟲</button>
         </div>
       </aside>
-      </details>
-    </section>
-
     <section class="playback-dock" aria-label="模型时间演化控制">
       <div class="dock-context"><span class="dock-emblem">⟡</span><div><strong id="scene-title">基线 · 产业网络</strong><small id="scene-message" role="status" aria-live="polite">41 个已登记的模型候选主体就绪，选择情景可观察变化。</small></div></div>
-      <button type="button" id="timeline-play" class="timeline-play" disabled aria-label="播放模型演化">▶</button>
-      <div class="timeline-control"><div class="timeline-heading"><span>模拟过程（不是现实年份）</span><output id="timeline-output" for="timeline-slider">T 00 / 20</output></div>
-        <input id="timeline-slider" type="range" min="0" max="20" value="0" step="1" disabled aria-label="模型时间步回放">
-        <div class="timeline-hints"><span>初始冲击</span><span>模型步 ≠ 现实年份</span><span>T20</span></div>
-      </div>
       <div class="camera-controls" role="group" aria-label="三维镜头">
         <button id="camera-in" type="button" aria-label="放大三维网络">＋</button>
         <button id="camera-out" type="button" aria-label="缩小三维网络">−</button>
@@ -142,6 +154,10 @@
       </div>
       <button class="share-current" type="button" id="share-scene" aria-label="分享当前实验设置">分享情景 ↗</button>
     </section>
+      </details>
+    </section>
+
+
 
     <section class="portal-exits" aria-labelledby="portal-exits-title">
       <div class="exits-heading"><span>继续探索 · 按兴趣选择</span><h2 id="portal-exits-title">想自己试，还是看看证据？</h2></div>
@@ -153,7 +169,7 @@
       <p class="portal-more-paths">更多研究入口：<a href="inflow.html">企业进入产业网络</a> · <a href="trust.html">企业资料是否可信</a></p>
     </section>
   </main>
-  <footer class="portal-footer"><span>ZHONGKAI · PUBLIC RESEARCH / V3.22</span>
+  <footer class="portal-footer"><span>ZHONGKAI · PUBLIC RESEARCH / V3.23</span>
     <span>公开信息下的条件性模拟 · 非官方平台、非现实发生概率、非政策决策建议</span></footer>
 </div>
 </body></html>
