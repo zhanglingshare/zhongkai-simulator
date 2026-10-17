@@ -52,7 +52,8 @@ async function visit(browser,port,width,reduced){
  let t=Number(await page.locator("#timeline-slider").inputValue());
  assert.ok(t>=1&&t<=20);
  assert.match(await page.locator("#portal-story-result").innerText(),new RegExp("模拟第 "+t+" 步"));
- assert.match(await page.locator("#portal-story-result").innerText(),/不是现实企业受损名单/);
+ assert.match(await page.locator("#portal-story-result").innerText(),/模型|假设/);
+ assert.ok(await page.locator("#role-story-focus").isVisible());
  assert.equal(await page.locator("#world-node-count").innerText(),"41");
  await page.locator("#story-settings summary").click();
  assert.equal(await page.locator("#portal-population").isVisible(),true);
