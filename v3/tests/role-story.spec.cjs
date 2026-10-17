@@ -1,0 +1,13 @@
+const assert=require("node:assert/strict");
+const S=require("../role-story-core.js");
+const a={agents:[{name:"厂甲",alive:true,energy:.9},{name:"厂乙",alive:true,energy:.7},{name:"厂丙",alive:true,energy:.55},{name:"厂丁",alive:false,energy:.2}]};
+const b={agents:[{name:"厂甲",alive:false,energy:0},{name:"厂乙",alive:true,energy:.4},{name:"厂丙",alive:true,energy:.55},{name:"厂丁",alive:true,energy:.5}]};
+const c=S.compare(a,b,3);
+assert.deepEqual(c.map(x=>x.name),["厂甲","厂丁","厂乙"]);
+assert.deepEqual(c.map(x=>x.direction),["退出模拟","重新运转","状态更弱"]);
+assert.equal(S.compare(a,a).length,0);
+assert.match(S.summary(c,"链主外迁",9),/厂甲/);
+assert.match(S.summary([], "链主外迁",9),/没有发现明显/);
+assert.match(S.summary([], "链主外迁",0),/假设/);
+assert.equal(S.compare(a,{agents:[{name:"新编造主体",alive:true,energy:.4}]}).length,0);
+console.log("PASS: named-role narrative uses only aligned real model agent A/B snapshots");
