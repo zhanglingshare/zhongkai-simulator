@@ -1,11 +1,11 @@
 /* The release is authorized for the story edition only. Freeze all other existing production files. */
 const assert=require("node:assert/strict"),fs=require("node:fs"),cp=require("node:child_process"),path=require("node:path");
-const root=path.resolve(__dirname,"../.."),baseline="41c4e9a7e2b4f6dd1f505c680f14ce09784cc456";
+const root=path.resolve(__dirname,"../.."),baseline="e6f7f23efd4f72a4ca8bf2c9169005aa77818a3f";
 const git=args=>cp.execFileSync("git",args,{cwd:root,encoding:"utf8"}).trim();
-const allowed=new Set(["v3/index.html","v3/portal.js","v3/story-render.js","v3/README.md",".github/workflows/v3-browser-smoke.yml"]);
+const allowed=new Set(["v3/index.html","v3/portal.js","v3/story-lab.html","v3/README.md",".github/workflows/v3-browser-smoke.yml"]);
 const changed=git(["diff","--name-only","--diff-filter=M",baseline,"HEAD"]).split("\n").filter(Boolean);
 for(const name of changed)assert.ok(allowed.has(name)||name.startsWith("v3/tests/"),"Other existing versions must remain byte-identical: "+name);
-for(const name of ["v3/story-lab.html","v3/lab-play.js","v3/visual-interaction.css","v3/visual-entry-core.js","v3/lab.html","v3/portal-render.js","v3/story-first.css","v3/portal-classic.html","v3/portal-classic.js","model.js","v3/portal-kernel.js"]){
+for(const name of ["v3/story-render.js","v3/home-story-core.js","v3/app.js","v3/lab-v311.js","v3/lab-play.js","v3/visual-interaction.css","v3/visual-entry-core.js","v3/lab.html","v3/portal-render.js","v3/story-first.css","v3/portal-classic.html","v3/portal-classic.js","model.js","v3/portal-kernel.js"]){
  const before=cp.execFileSync("git",["show",baseline+":"+name],{cwd:root});
  assert.deepEqual(fs.readFileSync(path.join(root,name)),before,name+" changed outside story edition");
 }

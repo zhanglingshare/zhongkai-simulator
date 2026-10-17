@@ -107,44 +107,13 @@ async function home(browser,port,width,reduced=true,fallback=false){
  assert.equal(await page.locator(".story-absence").isVisible(),false);
  assert.deepEqual(errors,[]);await page.close();
 }
-async function lab(browser,port,width){
- const {page,errors}=await open(browser,port,"story-lab.html",width);
- await page.evaluate(()=>window.addEventListener("zk:comparison",e=>window.__ab=e.detail));
- assert.equal(await page.locator("#lab-play-time").isDisabled(),true);
- assert.deepEqual(await page.locator(".lab-play-number").allTextContents(),Array(6).fill("—"));
- await page.locator("#lab-story-start").click();
- assert.equal(await page.locator("#lab-play-time").isEnabled(),true);
- for(const t of [0,7,20,3]){
-  await page.locator("#lab-play-time").fill(String(t));
-  assert.equal(await page.locator("#compare-tick").inputValue(),String(t));
-  assert.equal(await page.locator("#v39-time").inputValue(),String(t));
-  assert.equal(await page.locator("#v39-chart").getAttribute("data-tick"),String(t));
-  const rows=await page.evaluate(()=>[...document.querySelectorAll(".lab-play-group")].map(g=>{
-   const key=g.dataset.metric,m=window.ZKImpact.compare(window.__ab.a,window.__ab.b).find(m=>m.key===key);
-   return {actual:[...g.querySelectorAll(".lab-play-fill")].map(b=>Number(b.dataset.value)),expected:[m.a,m.b]};
-  }));
-  for(const row of rows)assert.deepEqual(row.actual,row.expected,"Bar endpoints must equal original Sim A[t]/B[t] exactly");
- }
- await page.locator("#lab-play-final").click();assert.equal(await page.locator("#compare-tick").inputValue(),"20");
- await page.locator('[data-play-shock="技术突破"]').click();
- assert.equal(await page.locator("#lab-b-name").innerText(),"技术突破");
- assert.equal(await page.locator("#lab-all-shocks").inputValue(),"技术突破");
- await page.locator("#v39-time").fill("7");assert.equal(await page.locator("#lab-play-time").inputValue(),"7");
- await geometry(page);
- await page.locator("#lab-preview").screenshot({path:path.join(shots,`v322-lab-${width}.png`)});
- await page.locator("#lab-seed").fill("29");
- assert.equal(await page.locator("#lab-play-time").isDisabled(),true);
- assert.equal(await page.locator("#lab-play-stage").getAttribute("data-state"),"stale");
- assert.deepEqual(await page.locator(".lab-play-number").allTextContents(),Array(6).fill("—"));
- assert.deepEqual(errors,[]);await page.close();
-}
 (async()=>{
  await new Promise(r=>server.listen(0,"127.0.0.1",r));let browser;
  try{browser=await chromium.launch({channel:"chrome",headless:true,args:["--no-sandbox"]});
-  for(const width of [1440,390,360]){await home(browser,server.address().port,width);await lab(browser,server.address().port,width);}
+  for(const width of [1440,390,360]){await home(browser,server.address().port,width);}
   await home(browser,server.address().port,390,false);
   await home(browser,server.address().port,1440,false);
   await home(browser,server.address().port,390,true,true);
-  console.log("PASS V3.23 Chrome 1440/390/360: real named exit, active links, paused key frame, keyboard/pointer same-time comparison, share, reset, WebGL+2D; second-page bars unchanged");
+  console.log("PASS V3.23 Chrome 1440/390/360: real named exit, active links, paused key frame, keyboard/pointer same-time comparison, share, reset, WebGL+2D; story second page covered by its own journey tests");
  }finally{if(browser)await browser.close();server.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

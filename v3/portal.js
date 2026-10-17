@@ -157,6 +157,13 @@ function paint(t){
  setText("portal-story-result",plain);
  setText("story-phase",!frames?"等你按播放":peek?"正在查看对照":phase==="intro"?"先认出主角":phase==="key"?"关键变化 · 已暂停":t===MAX_TICKS?"已经播完 · 可以再试":"模拟第 "+t+" 步");
  renderRoles(changes);
+ // Keep the story's next page on exactly this experiment and time step.
+ const handoff=frames?(frames.kind==="exit"?{v:3,kind:"exit",target:frames.target,seed,pop:selectedSize(),tick:t}:{v:2,shock:frames.shock,seed,pop:selectedSize(),tick:t}):null;
+ document.querySelectorAll('a[href^="story-lab.html"]').forEach(link=>{
+  const url=new URL("story-lab.html",location.href);
+  if(handoff)url.searchParams.set("scenario",encodeURIComponent(JSON.stringify(handoff)));
+  link.setAttribute("href",handoff?"story-lab.html"+url.search:"story-lab.html");
+ });
  $("timeline-slider").value=String(t);setText("timeline-output","T "+String(t).padStart(2,"0")+" / "+MAX_TICKS);
  if(selected){const node=view.graph.nodes.find(n=>n.name===selected);if(node){view.select(selected);selectNode(node);}}
  window.dispatchEvent(new CustomEvent("zk:home-frame",{detail:{kind:frames?.kind||"baseline",target:frames?.target||null,tick:t,phase,peek:before,
