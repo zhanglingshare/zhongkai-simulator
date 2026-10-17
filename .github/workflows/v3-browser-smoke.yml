@@ -60,6 +60,12 @@ jobs:
         run: node v3/tests/company-dossier.spec.cjs
       - name: V3.16 source-bound research Chrome acceptance
         run: node v3/tests/company-dossier-smoke.cjs
+      - name: V3.17 multi-source enterprise audit and synthetic 20-company fixtures
+        run: node v3/tests/company-investigation.spec.cjs
+      - name: V3.17 licensed China API backend secure adapter mocks
+        run: node v3/tests/company-investigation-server.spec.mjs
+      - name: V3.17 company investigation Chrome E2E
+        run: node v3/tests/company-investigation-smoke.cjs
       - name: Upload screenshots for visual review
         if: always()
         uses: actions/upload-artifact@v4

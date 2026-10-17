@@ -50,7 +50,7 @@
    send($("company-business"),record.business);
    send($("company-location"),record.location);
    send($("company-website"),record.website||"");
-   send($("source"),record.sources[0].url);
+   send($("source"),record.sources?.[0]?.url||"");
    send($("evidence"),"unverified");
    if(record.role_hint)send($("company-type"),record.role_hint);
   }
@@ -123,6 +123,15 @@
    }};
   };
  }
+ window.ZKCompanyDossierUI={
+  getSelected:()=>selected?JSON.parse(JSON.stringify(selected)):null,
+  getIndex:async()=>load(),
+  applyReviewed:record=>{
+   if(!record||typeof record.name!=="string"||record.name.trim().length<2||
+       !Array.isArray(record.sources)||record.sources.some(s=>!D.isHttps(s.url)))return false;
+   pick(record,true);return true;
+  }
+ };
  // Inform users at the output screen whether this is a model backfill or hypothetical new actor.
  const note=$("scenario-result-note");
  form.addEventListener("submit",()=>{
