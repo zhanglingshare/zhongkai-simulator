@@ -46,9 +46,9 @@
 .story-home .story-research .camera-controls button{height:35px;width:35px}
 .story-home .story-research .share-current{height:35px}
 .story-home .holo-node-label{transition:opacity .2s;background:#102e3de8}
-.story-home .holo-node-label.story-exited{border-color:#ed9989;color:#ffd3c5;background:#512f2bea}
-.story-home .holo-node-label.story-weaker{border-color:#dba86c;color:#ffdcac;background:#493b2bec}
-.story-home .holo-node-label.story-stronger{border-color:#76cfa7;color:#c7f7dd;background:#183f38ed}
+.story-home .world-stage .holo-node-label.story-exited{border-color:#ed9989;color:#ffd3c5;background:#512f2bea;box-shadow:0 0 12px #ed998922}
+.story-home .world-stage .holo-node-label.story-weaker{border-color:#dba86c;color:#ffdcac;background:#493b2bec;box-shadow:0 0 12px #dba86c22}
+.story-home .world-stage .holo-node-label.story-stronger{border-color:#76cfa7;color:#c7f7dd;background:#183f38ed;box-shadow:0 0 12px #76cfa722}
 .story-home .holo-node-label.story-unchanged{opacity:.6}
 .story-absence{position:absolute;display:grid;place-items:center;width:62px;height:62px;border:2px dashed #ffd2b9;border-radius:50%;transform:translate(-50%,-50%);color:#ffd2b9;pointer-events:none;box-shadow:0 0 0 10px #a7604b12,0 0 32px #d2865722}
 .story-absence::before,.story-absence::after{content:"";position:absolute;width:23px;height:2px;top:29px;left:18px;background:#ffc1a4;transform:rotate(45deg)}

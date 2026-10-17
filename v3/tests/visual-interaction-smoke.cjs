@@ -73,6 +73,7 @@ async function home(browser,port,width,reduced=true,fallback=false){
  await page.locator("#home-peek").focus();await page.keyboard.down("Space");
  assert.equal(await page.locator("#home-peek").getAttribute("aria-pressed"),"true");
  assert.deepEqual(await page.evaluate(()=>window.__home.displayed),expected.a);
+ await page.locator(".story-absence").waitFor({state:"hidden"});
  assert.equal(await page.locator(".story-absence").isVisible(),false);
  assert.equal(await page.locator("#timeline-slider").inputValue(),"9");
  await page.locator("#world-stage").screenshot({path:path.join(shots,`v323-before-${width}.png`)});
@@ -98,6 +99,7 @@ async function home(browser,port,width,reduced=true,fallback=false){
  await page.locator("#world-build-replay").click();
  assert.equal(await page.locator("#world-node-count").innerText(),"41");
  assert.equal(await page.locator("#home-peek").isDisabled(),true);
+ await page.locator(".story-absence").waitFor({state:"hidden"});
  assert.equal(await page.locator(".story-absence").isVisible(),false);
  assert.deepEqual(errors,[]);await page.close();
 }

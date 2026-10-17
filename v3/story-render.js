@@ -283,11 +283,13 @@ void main(){
     const nodes=graph.nodes.filter(n=>nodeProgress(n)>=1&&!(storyActive()&&n.name===storyScene.hero&&!n.alive)&&
       (storyActive()?(n.name===storyScene.hero||sceneChanges.has(n.name)||n.name===selected||introLabels.has(n.name)):labelMode==="all"||storyFocus.has(n.name)||n.name===selected||n.w>=3&&n.alive))
       .sort((a,b)=>
+        Number(b.name===storyScene?.hero)-Number(a.name===storyScene?.hero)||
         Number(b.name===selected)-Number(a.name===selected)||
         Number(storyFocus.has(b.name))-Number(storyFocus.has(a.name))||
         b.w-a.w||Number(b.alive)-Number(a.alive)||
         Core.hash(a.name)-Core.hash(b.name));
     const accepted=[],retained=new Set();
+    if(absence&&!absence.hidden&&hero){const p=screen(hero);accepted.push({l:p.x-91,r:p.x+91,t:p.y-75,b:p.y+35});}
     for(const n of nodes){
       const p=screen(n);
       const state=roleState(n),suffix=!storyActive()?"":state==="exited"?" · 已退出":state==="weaker"?" · 较弱":state==="stronger"?" · 较强":n.name===storyScene.hero?storyScene.peek?" · 未退出":" · 主角":"";
