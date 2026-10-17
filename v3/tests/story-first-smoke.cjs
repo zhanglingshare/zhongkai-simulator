@@ -59,6 +59,11 @@ async function visit(browser,port,width,reduced){
  },t);
  assert.equal(await page.locator("#portal-story-result").innerText(),expected.title);
  assert.equal(await page.locator("#story-explanation").innerText(),expected.description);
+ const banner=await page.locator("#world-variation").innerText();
+ assert.ok(banner.includes(expected.counts.exit+" 个角色退出"),
+   "Graph banner and story must use the same A[t]/B[t] definition: "+banner);
+ assert.ok(banner.includes(expected.counts.down+" 个角色较弱"),
+   "Graph banner and story must agree about weaker roles: "+banner);
  assert.deepEqual(await page.locator("#story-people .story-person").evaluateAll(xs=>xs.map(x=>x.dataset.name)),
   expected.items.map(x=>x.name),"Story cards must match the actual model snapshots");
  assert.ok((await page.locator("#story-people .story-person").count())<=3);
