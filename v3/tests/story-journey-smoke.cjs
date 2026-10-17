@@ -3,7 +3,7 @@ const assert=require('node:assert/strict'),http=require('node:http'),fs=require(
 const root=path.resolve(__dirname,'../..'),shots=path.join(root,'v3/screenshots');fs.mkdirSync(shots,{recursive:true});
 const types={'.html':'text/html;charset=utf-8','.js':'application/javascript;charset=utf-8','.css':'text/css;charset=utf-8','.json':'application/json;charset=utf-8'};
 const server=http.createServer((req,res)=>{const file=path.resolve(root,'.'+new URL(req.url,'http://localhost').pathname);if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}fs.readFile(file,(e,d)=>{if(e){res.writeHead(404).end();return;}res.writeHead(200,{'content-type':types[path.extname(file)]||'text/plain'});res.end(d);});});
-async function open(browser,port,width,file='story-lab.html',fallback=false){const page=await browser.newPage({viewport:{width,height:width<700?844:1000},reducedMotion:'reduce'}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+async function open(browser,port,width,file='story-lab.html',fallback=false,motion=false){const page=await browser.newPage({viewport:{width,height:width<700?844:1000},reducedMotion:motion?'no-preference':'reduce',hasTouch:width<700}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.addInitScript(()=>{window.addEventListener('zk:story-frame',e=>window.__frame=e.detail);window.addEventListener('zk:story-repeat',e=>window.__repeat=e.detail);window.addEventListener('zk:story-evidence',e=>window.__evidence=e.detail);window.addEventListener('zk:home-frame',e=>window.__home=e.detail);Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async s=>window.__copied=s}});});
  if(fallback)await page.addInitScript(()=>{const old=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return type==='webgl'?null:old.call(this,type,...args);};});
  await page.goto(`http://127.0.0.1:${port}/v3/${file}`);return {page,errors};}
@@ -19,6 +19,7 @@ async function lab(browser,port,width,fallback=false){const {page:p,errors}=awai
  const f=await p.evaluate(()=>window.__frame);assert.deepEqual(f.a,original.baseline);assert.deepEqual(f.b,original.scenario);assert.deepEqual(f.edges,original.edges);assert.equal(f.settings.pop,41);
  const out=await p.evaluate(()=>window.ZKStoryLab.outcome(window.ZKStoryLab.run(window.ZKSim,{...window.__frame.settings,tick:20})));
  assert.match(await p.locator('#guess-result').innerText(),new RegExp('未改变 '+out.a+' 个，改变后 '+out.b+' 个'));assert.match(await p.locator('#stage-prediction').innerText(),/最后一步/);
+ const role=p.locator('#story-role-list li[data-name] button').first();const roleName=await role.innerText();await role.click();assert.ok((await p.locator('#story-message').innerText()).includes(roleName.split(' · ')[0]));
  for(const t of [0,9,20,6]){await p.locator('#story-time').fill(String(t));const truth=await p.evaluate(()=>{const r=window.ZKStoryLab.run(window.ZKSim,window.__frame.settings);return {a:r.A[window.__frame.tick],b:r.B[window.__frame.tick],info:window.ZKHomeStory.frameInfo(r,window.__frame.tick)};});
   assert.deepEqual(await p.evaluate(()=>window.__frame.a),truth.a);assert.deepEqual(await p.evaluate(()=>window.__frame.b),truth.b);assert.equal(await p.locator('#story-alive').innerText(),String(truth.info.b.alive));assert.equal(await p.locator('#story-links').innerText(),String(truth.info.b.links));}
  await p.locator('#story-stage').scrollIntoViewIfNeeded();await p.locator('.story-absence').waitFor({state:'visible'});await p.locator('#story-stage').screenshot({path:path.join(shots,`v324-lab-${width}${fallback?'-2d':''}.png`)});
@@ -30,11 +31,18 @@ async function lab(browser,port,width,fallback=false){const {page:p,errors}=awai
  await p.locator('#story-repeat').click();await p.waitForFunction(()=>window.__repeat?.values.length===24);
  const repeat=await p.evaluate(()=>window.__repeat),truth=await p.evaluate(()=>Array.from({length:24},(_,i)=>{const s={...window.__frame.settings,seed:window.ZKStoryLab.seedAt(window.__frame.settings.seed,i)};return window.ZKStoryLab.outcome(window.ZKStoryLab.run(window.ZKSim,s)).delta;}));
  assert.deepEqual(repeat.values,truth);assert.equal(repeat.summary.less+repeat.summary.same+repeat.summary.more,24);assert.equal(await p.locator('#repeat-chart circle').count(),24);await p.locator('#repeat-chart circle').first().focus();assert.match(await p.locator('#repeat-range').innerText(),/第 1 组/);
+ await p.locator('#repeat-inspect').fill('24');assert.match(await p.locator('#repeat-range').innerText(),/第 24 组/);
  if(width===390)await p.locator('.repeat-section').screenshot({path:path.join(shots,'v324-repeat-390.png')});
  await p.locator('#story-share').click();const shared=await p.evaluate(()=>window.__copied);const payload=JSON.parse(decodeURIComponent(new URL(shared).searchParams.get('scenario')));assert.deepEqual(payload,{v:3,kind:'exit',target:'TCL华星',seed:7,pop:41,tick:6});
  await p.locator('#story-target').selectOption({index:1});assert.equal(await p.locator('#story-time').isDisabled(),true);assert.equal(await p.locator('#story-alive').innerText(),'—');assert.equal(await p.locator('#repeat-results').isVisible(),false);assert.equal(await p.locator('#story-reveal').isDisabled(),true);
  await p.locator('[data-scenario="技术突破"]').click();await p.locator('[data-guess="same"]').click();await p.locator('#story-reveal').click();assert.equal(await p.evaluate(()=>window.__frame.settings.kind),'shock');assert.equal(await p.evaluate(()=>window.__frame.settings.shock),'技术突破');
  await geometry(p);assert.deepEqual(errors,[]);await p.close();}
+async function motion(browser,port){const {page:p,errors}=await open(browser,port,390,'story-lab.html',false,true);await p.locator('[data-guess="less"]').click();await p.locator('#story-reveal').click();
+ await p.locator('#story-play').click();await p.waitForFunction(()=>window.__frame.tick===window.__frame.keyTick&&document.getElementById('stage-phase').textContent.includes('已暂停'),null,{timeout:10000});
+ const key=await p.locator('#story-time').inputValue();await p.waitForTimeout(450);assert.equal(await p.locator('#story-time').inputValue(),key);
+ const h=await p.locator('#story-hold').boundingBox(),client=await p.context().newCDPSession(p);await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:h.x+h.width/2,y:h.y+h.height/2}]});
+ assert.equal(await p.evaluate(()=>window.__frame.peek),true);await p.waitForTimeout(250);assert.equal(await p.locator('#story-time').inputValue(),key);await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});assert.equal(await p.evaluate(()=>window.__frame.peek),false);
+ await p.locator('#story-play').click();await p.waitForFunction(()=>window.__frame.tick===20,null,{timeout:10000});assert.equal(await p.locator('#story-play').innerText(),'▶ 看过程');assert.deepEqual(errors,[]);await p.close();}
 async function links(browser,port){const {page:p,errors}=await open(browser,port,390,'story-lab.html');
  assert.match(await p.locator('#story-continuity').innerText(),/41 个模型角色/);
  await p.locator('[data-guess="same"]').click();await p.locator('#story-reveal').click();assert.equal(await p.evaluate(()=>window.__frame.settings.pop),41);
@@ -54,6 +62,6 @@ async function evidence(browser,port,width){const {page:p,errors}=await open(bro
  // A failed ledger fetch must not leave a plausible fabricated chart.
  if(width===390){const q=await browser.newPage();await q.route('**/annual-2019-2025.json',r=>r.fulfill({status:503,body:'unavailable'}));await q.goto(`http://127.0.0.1:${port}/v3/story-evidence.html`);await q.locator('#evidence-error').waitFor({state:'visible'});assert.equal(await q.locator('#evidence-metric').isDisabled(),true);assert.equal(await q.locator('#evidence-chart circle').count(),0);await q.close();}}
 (async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;try{browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});const port=server.address().port;
- for(const w of [1440,390,360]){await lab(browser,port,w);await evidence(browser,port,w);}await lab(browser,port,390,true);await links(browser,port);
+ for(const w of [1440,390,360]){await lab(browser,port,w);await evidence(browser,port,w);}await lab(browser,port,390,true);await links(browser,port);await motion(browser,port);
  console.log('PASS story journey Chrome: homepage handoff, guess/reveal, exact snapshots, pointer/keyboard hold, role focus, 24 same-condition seeds, invalidation, legacy shares, sourced evidence and mobile geometry');
  }finally{if(browser)await browser.close();server.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

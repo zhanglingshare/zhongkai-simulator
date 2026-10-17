@@ -82,13 +82,14 @@ async function repeat(){if(!experiment)return;const s={...input,tick:20},token=+
  if(token!==repeatToken)return;const summary=C.summarize(values);for(const k of ['less','same','more'])$('repeat-'+k).textContent=summary[k];
  $('repeat-results').hidden=false;$('repeat-status').textContent='完成 24 个起点；每组比较第 20 步，条件与当前实验相同。';
  const chart=$('repeat-chart');chart.replaceChildren();const NS='http://www.w3.org/2000/svg',svg=(tag,attrs,text)=>{const n=document.createElementNS(NS,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n;};
- const scale=Math.max(1,...values.map(Math.abs)),x=i=>60+i/23*600,y=v=>78-v/scale*52;
- chart.append(svg('line',{x1:60,y1:y(0),x2:660,y2:y(0),stroke:'#8dacae','stroke-dasharray':'4 4'}));
- for(const v of [-scale,0,scale])chart.append(svg('text',{x:45,y:y(v)+5,'text-anchor':'end',fill:'#a9c9cf','font-size':15},(v>0?'+':'')+v));
- chart.append(svg('text',{x:60,y:157,fill:'#a9c9cf','font-size':14},'第 1 组'),svg('text',{x:660,y:157,'text-anchor':'end',fill:'#a9c9cf','font-size':14},'第 24 组'));
+ const W=Math.max(280,Math.min(800,chart.clientWidth||720));chart.setAttribute('viewBox','0 0 '+W+' 170');
+ const scale=Math.max(1,...values.map(Math.abs)),x=i=>50+i/23*(W-75),y=v=>78-v/scale*52;
+ chart.append(svg('line',{x1:50,y1:y(0),x2:W-25,y2:y(0),stroke:'#8dacae','stroke-dasharray':'4 4'}));
+ for(const v of [-scale,0,scale])chart.append(svg('text',{x:35,y:y(v)+5,'text-anchor':'end',fill:'#a9c9cf','font-size':12},(v>0?'+':'')+v));
+ chart.append(svg('text',{x:50,y:157,fill:'#a9c9cf','font-size':12},'第 1 组'),svg('text',{x:W-25,y:157,'text-anchor':'end',fill:'#a9c9cf','font-size':12},'第 24 组'));
  const inspect=i=>{const v=values[i];$('repeat-inspect').value=i+1;$('repeat-group-label').textContent='第 '+(i+1)+' 组';$('repeat-range').textContent='第 '+(i+1)+' 组，起点 '+C.seedAt(s.seed,i)+'：改变后比未改变'+(v<0?'少 '+(-v):v>0?'多 '+v:'一样多')+' 个角色。';chart.querySelectorAll('circle').forEach((c,j)=>c.setAttribute('stroke',i===j?'#fff0b9':'#143747'));};
  $('repeat-inspect').oninput=()=>inspect(Number($('repeat-inspect').value)-1);$('repeat-inspect').value=1;$('repeat-group-label').textContent='第 1 组';
- values.forEach((v,i)=>{const text='第 '+(i+1)+' 组，起点 '+C.seedAt(s.seed,i)+'，角色数量差 '+v;const circle=svg('circle',{cx:x(i),cy:y(v),r:7,fill:v<0?'#e5a082':v>0?'#89d8ad':'#95b8c7',stroke:'#143747','stroke-width':2,tabindex:0,role:'button','aria-label':text});circle.append(svg('title',{},text));for(const event of ['pointerenter','click','focus'])circle.addEventListener(event,()=>inspect(i));chart.append(circle);});
+ values.forEach((v,i)=>{const text='第 '+(i+1)+' 组，起点 '+C.seedAt(s.seed,i)+'，角色数量差 '+v;const circle=svg('circle',{cx:x(i),cy:y(v),r:Math.min(7,(W-75)/23*.35),fill:v<0?'#e5a082':v>0?'#89d8ad':'#95b8c7',stroke:'#143747','stroke-width':2,tabindex:0,role:'button','aria-label':text});circle.append(svg('title',{},text));for(const event of ['pointerenter','click','focus'])circle.addEventListener(event,()=>inspect(i));chart.append(circle);});
  $('repeat-range').textContent='这 24 组的角色数量差异范围：'+(summary.min>=0?'+':'')+summary.min+' 至 '+(summary.max>=0?'+':'')+summary.max+' 个。';
  window.dispatchEvent(new CustomEvent('zk:story-repeat',{detail:{settings:s,values,seeds:values.map((_,i)=>C.seedAt(s.seed,i)),summary}}));
  }catch(e){$('repeat-status').textContent='检查未完成：'+e.message;}finally{if(token===repeatToken)$('story-repeat').disabled=false;}}
