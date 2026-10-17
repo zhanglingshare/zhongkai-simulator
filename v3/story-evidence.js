@@ -8,7 +8,7 @@ if(tabs.some(t=>t.dataset.panel===location.hash.slice(1)))switchPanel(location.h
 const safeLink=(url,title)=>{try{const u=new URL(url);if(u.protocol!=='https:'||u.username||u.password)throw Error();const a=node('a','',title+' ↗');a.href=u.toString();a.target='_blank';a.rel='noopener noreferrer';return a;}catch{return node('span','','来源链接格式有待复核');}};
 const format=n=>Number(n).toLocaleString('zh-CN',{maximumFractionDigits:3});
 function source(){const metric=$('evidence-metric').value,year=Number($('evidence-year').value),def=dataset.metric_definitions[metric],r=(audit.byMetric[metric]||[]).find(x=>x.year===year),host=$('evidence-source');host.replaceChildren();
- document.querySelectorAll('#evidence-chart [data-year]').forEach(p=>{const selected=Number(p.dataset.year)===year,c=p.querySelector('circle');c.setAttribute('stroke-width',selected?'4':'2');c.setAttribute('stroke',selected?'#ffe4a9':'#8fbdbb');});
+ document.querySelectorAll('#evidence-chart [data-year]').forEach(p=>{const selected=Number(p.dataset.year)===year,c=p.querySelector('circle');if(!c)return;c.setAttribute('stroke-width',selected?'4':'2');c.setAttribute('stroke',selected?'#ffe4a9':'#8fbdbb');});
  if(!r){host.append(node('p','notice',year+' 年没有这项原始观测；这里留空，不补值。'));return;}
  const box=node('article','source-card');box.append(node('strong','',year+' 年 · '+format(r.value)+' '+r.unit));
  box.append(node('span','evidence-status',r.review_status==='official_page_checked'?'台账标记：政府原文已查看':r.review_status==='mirrored_plus_official_corroboration'?'台账标记：转载及政府佐证':'台账标记：转载待复核'));
@@ -24,7 +24,7 @@ function chart(){const key=$('evidence-metric').value,def=dataset.metric_definit
  for(let i=0;i<4;i++){const v=min+(max-min)*i/3,yy=y(v);chart.append(svg('line',{x1:55,y1:yy,x2:W-20,y2:yy,stroke:'#315665'}),svg('text',{x:45,y:yy+5,'text-anchor':'end',fill:'#8bb0bc','font-size':11},v.toFixed(Math.abs(v)>=10?0:1)));}
  for(let i=1;i<series.length;i++){const a=series[i-1],b=series[i];if(b.year-a.year!==1||key==='retail_current'&&a.year===2019&&b.year===2020)continue;chart.append(svg('line',{x1:x(a.year),y1:y(a.value),x2:x(b.year),y2:y(b.value),stroke:'#7ed8d1','stroke-width':3}));}
  for(const year of years){const row=series.find(r=>r.year===year),label=year+' 年：'+(row?format(row.value)+' '+row.unit:'无原始观测');const g=svg('g',{tabindex:0,role:'button','aria-label':label,'data-year':year});g.append(svg('text',{x:x(year),y:253,'text-anchor':'middle',fill:'#b0cbd0','font-size':11},year));
- g.append(svg('circle',{cx:x(year),cy:row?y(row.value):218,r:7,fill:row?'#8ee2d5':'#183644',stroke:row?'#c7fff0':'#6b919f','stroke-width':2}));g.append(svg('title',{},label));if(!row)g.append(svg('text',{x:x(year),y:200,'text-anchor':'middle',fill:'#7699a7','font-size':11},'无记录'));
+ if(row)g.append(svg('circle',{cx:x(year),cy:y(row.value),r:7,fill:'#8ee2d5',stroke:'#c7fff0','stroke-width':2}));g.append(svg('title',{},label));if(!row)g.append(svg('text',{x:x(year),y:226,'text-anchor':'middle',fill:'#7699a7','font-size':11},'无记录'));
  const choose=()=>{$('evidence-year').value=year;source();};g.addEventListener('click',choose);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}});chart.append(g);}
  source();
 }
