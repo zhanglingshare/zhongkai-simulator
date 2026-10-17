@@ -1,0 +1,64 @@
+/* Evidence-synced story overlays. Every named item comes from the real Sim A/B
+   comparison for the exact frame being drawn. Nothing in this style implies causality. */
+.portal-shell .story-spotlight{
+ position:absolute;top:67px;right:18px;z-index:8;
+ display:grid;gap:6px;max-width:min(310px,48%);
+ padding:13px 16px;border:1px solid rgba(254,192,121,.92);
+ border-radius:13px;background:rgba(6,25,37,.90);
+ box-shadow:0 9px 30px rgba(0,0,0,.24);
+ pointer-events:none;backdrop-filter:blur(8px);
+}
+.portal-shell .story-spotlight[hidden]{display:none}
+.portal-shell .story-spotlight-kicker{
+ font-size:11px;line-height:1.45;color:#ffdb9c;font-weight:760;
+}
+.portal-shell .story-spotlight strong{font-size:17px;line-height:1.4;color:#f3fbfc;overflow-wrap:anywhere}
+.portal-shell .story-spotlight span:last-child{font-size:12px;line-height:1.5;color:#e4c9a7}
+.portal-shell .story-people-title{
+ font-size:16px;line-height:1.5;color:#e4fcf6;margin:21px 0 12px;
+ display:flex;gap:9px;flex-wrap:wrap;align-items:baseline
+}
+.portal-shell .story-people-title span{font-size:12px;color:#a6cad1;font-weight:400}
+.portal-shell .story-people{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.portal-shell .story-person{
+ display:grid;align-content:start;text-align:left;gap:6px;
+ color:#edfcfc;background:#0a2a3e;border:1px solid #447585;border-radius:11px;
+ padding:13px 14px;cursor:pointer;min-height:146px;
+}
+.portal-shell .story-person:is(:hover,:focus-visible){border-color:#a4f5e7;background:#17445a}
+.portal-shell .story-person[data-kind=lower],
+.portal-shell .story-person[data-kind=exit]{border-left:4px solid #f7ad7d}
+.portal-shell .story-person[data-kind=higher],
+.portal-shell .story-person[data-kind=active]{border-left:4px solid #65dfbd}
+.portal-shell .story-person strong{font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+.portal-shell .story-person-role{font-size:12px;color:#b4cfda;line-height:1.4}
+.portal-shell .story-person-desc{font-size:12px;color:#daebed;line-height:1.55}
+.portal-shell .story-person-action{font-size:12px;color:#85e7e6;font-weight:800;margin-top:auto;padding-top:5px}
+.portal-shell .story-people-empty{margin:0;padding:12px;color:#c5dfe2;font-size:14px;line-height:1.7}
+.portal-shell .story-method-note{font-size:12px;color:#b5d2d7;line-height:1.6;margin:13px 0 0}
+.portal-shell .holo-node-label.story-highlight{
+ color:#fff3dc;background:rgba(68,37,25,.89);
+ border:1px solid #f4ba85;text-shadow:0 0 7px rgba(255,179,106,.75);
+ box-shadow:0 0 11px rgba(255,179,106,.32)
+}
+.portal-shell .holo-node-label.story-highlight.inactive{text-decoration:line-through;text-decoration-color:#d6b5a2}
+@media(max-width:920px){
+ .portal-shell .story-people{grid-template-columns:1fr}
+ .portal-shell .story-person{min-height:0;grid-template-columns:1fr;gap:5px}
+ .portal-shell .story-person-action{margin-top:0}
+}
+@media(max-width:600px){
+ .portal-shell .story-spotlight{right:10px;top:55px;max-width:57%;padding:9px 10px;gap:4px}
+ .portal-shell .story-spotlight-kicker{font-size:10px}
+ .portal-shell .story-spotlight strong{font-size:13px}
+ .portal-shell .story-spotlight span:last-child{font-size:11px}
+ .portal-shell .story-people-title{font-size:16px}
+ .portal-shell .story-people-title span{font-size:12px}
+ .portal-shell .story-person{padding:12px 14px;min-height:66px}
+ .portal-shell .story-person strong{font-size:15px}
+ .portal-shell .story-person-desc{font-size:13px}
+ .portal-shell .story-people-empty{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){
+ .portal-shell .story-person{transition:none}
+}

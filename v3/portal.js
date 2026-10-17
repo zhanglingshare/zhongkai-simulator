@@ -3,8 +3,8 @@
 (function(){
 "use strict";
 const $=id=>document.getElementById(id),S=window.ZKSim,H=window.ZKHolo;
-const Core=window.ZKHoloCore;
-if(!S||!H||!Core){$("scene-message").textContent="模型或三维渲染模块未载入，请刷新页面或进入模拟实验室。";return;}
+const Core=window.ZKHoloCore,Story=window.ZKStoryEvidence;
+if(!S||!H||!Core||!Story){$("scene-message").textContent="模型或三维渲染模块未载入，请刷新页面或进入模拟实验室。";return;}
 const SHOCKS=window.ZKRegisteredShocks||[];
 const SIZES=[24,32,41],MAX_TICKS=20;
 let seed=7,base=null,view=null,frames=null,cursor=0,timer=null,chosen=null,selected=null;
@@ -98,27 +98,67 @@ function paint(t){
      banner.dataset.changed="false";
    }
  }
- // Story captions are derived only from the original model's completed A/B
- // snapshots at the selected tick, not from real company data or causal inference.
- const story=$("portal-story-result"),phase=$("story-phase");
- if(phase)phase.textContent=!frames?"等你按播放":t===0?"故事开始了":t===MAX_TICKS?"已经播完 · 可以再试":"正在播放 · "+t+"/"+MAX_TICKS;
+ // Scene meaning, named focus and 3D highlights are all driven by the *same*
+ // already computed model snapshots at this selected tick. Never infer causal spread.
+ const story=$("portal-story-result"),phase=$("story-phase"),people=$("story-people");
+ const spotlight=$("story-spotlight");
+ const result=frames&&reference?Story.compare(reference,snap,base.edges,3):{ok:false,items:[],total:0};
+ const items=result.items||[];
+ view.setHighlights(items);
+ // This trace matches the visible named cards exactly, useful for accessible
+ // browser tests and checking frame-synced graph emphasis.
+ $("world-stage").dataset.storyTick=String(t);
+ $("world-stage").dataset.highlightedActors=items.map(x=>x.name).join("|");
+ if(phase)phase.textContent=!frames?"等你按播放":t===0?"故事开始了":t===MAX_TICKS?"故事播完 · 还可以再试":"故事进行中 · "+t+"/"+MAX_TICKS;
+ if(spotlight){
+   spotlight.hidden=items.length===0||!frames;
+   if(items.length){
+     $("story-spotlight-name").textContent=items[0].name;
+     $("story-spotlight-status").textContent=items[0].kind==="exit"?"模型里退出了":
+       items[0].kind==="active"?"模型里继续运转":items[0].kind==="lower"?"状态变弱":"状态变强";
+   }
+ }
  if(story){
-   if(frames&&reference&&t>0){
-     const activeB=snap.agents.filter(a=>a.alive).length,activeA=reference.agents.filter(a=>a.alive).length;
-     const risk=snap.state.disaster-reference.state.disaster;
-     const count=activeB===activeA?"数量和不发生变化时一样":
-       "比不发生变化时"+(activeB<activeA?"少了 ":"多了 ")+Math.abs(activeA-activeB)+" 个";
-     const direction=Math.abs(risk)<.0005?"变化很小":risk>0?"更高":"更低";
-     story.textContent="模拟第 "+t+" 步：模型里还有 "+activeB+" 个产业角色在运转，"+
-       count+"（基准情景 "+activeA+" 个）。模型中的压力提示"+direction+"。"+
-       "这不是现实企业受损名单，也不是现实会发生的预测。";
-   }else if(frames){
-     story.textContent="「"+frames.shock+"」只是一个假设。看着这些点和线，观察接下来哪些模型角色会变化。";
+   if(frames&&reference){
+     if(items.length){
+       const top=items[0],description=top.kind==="exit"?"退出了模拟网络":
+         top.kind==="active"?"继续在模型里运转":
+         top.kind==="lower"?"在模型里的状态变弱了":"在模型里的状态变强了";
+       story.textContent="模拟第 "+t+" 步：先看「"+top.name+"」，"+
+         "与没有这件事的模型相比，它"+description+"。"+
+         "下方还列出其他明显变化，点名字就能在网络中找到。"+
+         "这不是现实企业受损名单。";
+     }else{
+       story.textContent="模拟第 "+t+" 步：现在还没有发现明显不同的产业角色。"+
+         "有时候画面在动，结果也不一定和另一种情景不同；继续看，或者自己拖动进度条。"+
+         "这不是现实企业受损名单。";
+     }
    }else{
      story.textContent="点上面的播放按钮，看看模型里的产业角色会怎样变化。";
    }
  }
-  $("timeline-slider").value=String(t);
+ if(people){
+   people.replaceChildren();
+   if(!items.length){
+     const p=document.createElement("p");p.className="story-people-empty";
+     p.textContent=!frames?"开始播放后，这里才会列出真实算出的角色变化。":
+       "这一刻没有超过比较门槛的角色差异。没有名单，不等于现实中没有变化。";
+     people.append(p);
+   }else for(const item of items){
+     const btn=document.createElement("button");btn.type="button";
+     btn.className="story-person";
+     btn.dataset.actor=item.name;btn.dataset.kind=item.kind;
+     btn.setAttribute("aria-label","在全息网络中定位 "+item.name+"："+item.explanation);
+     const title=document.createElement("strong");title.textContent=item.name;
+     const role=document.createElement("span");role.className="story-person-role";role.textContent=item.role;
+     const desc=document.createElement("span");desc.className="story-person-desc";desc.textContent=item.explanation;
+     const look=document.createElement("span");look.className="story-person-action";look.textContent="看它在哪里 ↗";
+     btn.append(title,role,desc,look);
+     btn.addEventListener("click",()=>focusNode(item.name));
+     people.append(btn);
+   }
+ }
+   $("timeline-slider").value=String(t);
  $("timeline-output").textContent="T "+String(t).padStart(2,"0")+" / "+MAX_TICKS;
  $("world-node-count").textContent=snap.agents.length;
  $("world-edge-count").textContent=base.edges.length;

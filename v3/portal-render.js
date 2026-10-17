@@ -81,6 +81,7 @@ void main(){
   const labels=opts.labels,labelMap=new Map();
   let labelMode="core";
   let renderer=null,context2d=null,mode="fallback",graph=null,meta={},selected=null,hover=null;
+  let highlights=new Map(); // Current tick real A/B findings only, never alleged causal propagation.
   let cam={yaw:-.36,pitch:.18,distance:5.1},raf=0,lastFrame=0,visible=true,disposed=false;
   let start={x:0,y:0},dragged=false;
   let changeGlow=null; // Visual-only observed state transitions, never causal transmission.
@@ -145,7 +146,9 @@ void main(){
         // Edge emphasis shows adjacency only, NOT an identified causal path.
         ctx.strokeStyle=(glow<0?"rgba(242,170,117,":"rgba(114,226,192,")+(level*.63)+")";
       }
-      ctx.lineWidth=(edge.layer==="hist"?1.25:.8)+level*1.8;
+      if(highlights.has(a.name)||highlights.has(b.name))ctx.strokeStyle="rgba(131,221,225,.65)";
+      ctx.lineWidth=(edge.layer==="hist"?1.25:.8)+level*1.8+
+        (highlights.has(a.name)||highlights.has(b.name)?1:0);
       ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
       if(edge.layer==="hist"&&a.alive&&b.alive&&!reduced){
         const phase=((now/2700)+(Core.hash(edge.a+edge.b)%97)/97)%1;
@@ -158,6 +161,12 @@ void main(){
      const rad=(n.w>=3?11:n.w===2?7:4.6)*scale;
      const color=Core.palette(n),rgb=color.slice(0,3).map(x=>Math.round(x*255)).join(",");
      const glow=glowAt(n.name,now),level=Math.abs(glow);
+     const focus=highlights.get(n.name);
+     if(focus){
+       ctx.strokeStyle=focus==="higher"||focus==="active"?"rgba(107,245,207,.98)":"rgba(255,182,105,.98)";
+       ctx.lineWidth=3;
+       ctx.beginPath();ctx.arc(p.x,p.y,rad+10,0,Math.PI*2);ctx.stroke();
+     }
      if(level>0){
        ctx.strokeStyle=(glow<0?"rgba(255,190,128,":"rgba(123,243,213,")+(level*.88)+")";
        ctx.lineWidth=1.4+level*2.7;
@@ -186,7 +195,9 @@ void main(){
         edgeGlow<0?[.99,.65,.41,Math.min(.85,c[3]+level*.5)]:
           [.39,.96,.78,Math.min(.85,c[3]+level*.5)]:
         isActive?c:[.34,.43,.54,.09];
-      push(lines,[a.x,a.y,a.z],color,1);push(lines,[b.x,b.y,b.z],color,1);
+      const emphasized=highlights.has(a.name)||highlights.has(b.name);
+      const ink=emphasized?[.50,.92,.91,Math.max(.68,color[3])]:color;
+      push(lines,[a.x,a.y,a.z],ink,1);push(lines,[b.x,b.y,b.z],ink,1);
       if(isActive&&e.layer==="hist"&&!reduced){
        const k=((now/3100)+(Core.hash(e.a+e.b)%131)/131)%1;
        push(particles,[a.x+(b.x-a.x)*k,a.y+(b.y-a.y)*k,a.z+(b.z-a.z)*k],[.72,.96,1,.79],9);
@@ -195,6 +206,11 @@ void main(){
     graph.nodes.forEach(n=>{
      const col=Core.palette(n);
      const glow=glowAt(n.name,now),level=Math.abs(glow);
+     const focus=highlights.get(n.name);
+     if(focus){
+       const good=focus==="higher"||focus==="active";
+       push(points,[n.x,n.y,n.z],[good?.35:1,good?.98:.7,good?.84:.41,.51],(n.w>=3?74:55));
+     }
      if(level>0){
        const tint=glow<0?[1,.69,.40]:[.49,1,.81];
        push(points,[n.x,n.y,n.z],[...tint,level*.54],(n.w>=3?43:27)+level*65);
@@ -211,8 +227,9 @@ void main(){
   function syncLabels(){
     if(!labels||!graph)return;
     const width=canvas.clientWidth,height=canvas.clientHeight;
-    const nodes=graph.nodes.filter(n=>labelMode==="all"||n.w>=3&&n.alive)
+    const nodes=graph.nodes.filter(n=>labelMode==="all"||n.w>=3&&n.alive||highlights.has(n.name))
       .sort((a,b)=>
+        Number(highlights.has(b.name))-Number(highlights.has(a.name))||
         Number(b.name===selected)-Number(a.name===selected)||
         b.w-a.w||Number(b.alive)-Number(a.alive)||
         Core.hash(a.name)-Core.hash(b.name));
@@ -234,6 +251,7 @@ void main(){
       element.style.left=p.x+"px";element.style.top=top+"px";
       element.hidden=false;
       element.classList.toggle("inactive",!n.alive);
+      element.classList.toggle("story-highlight",highlights.has(n.name));
     }
     for(const [name,element] of labelMap){
       if(!retained.has(name)){element.remove();labelMap.delete(name);}
@@ -322,6 +340,13 @@ void main(){
     selected=node?name:null;schedule();return node||null;
    },
    setLabelMode(value){if(value!=="core"&&value!=="all")return false;labelMode=value;schedule();return true;},
+   setHighlights(items){
+    // An explicit map of at most three matched model names for the current tick.
+    const eligible=new Set(graph?.nodes.map(n=>n.name)||[]);
+    highlights=new Map((Array.isArray(items)?items:[]).slice(0,3)
+     .filter(x=>x&&eligible.has(x.name)).map(x=>[x.name,x.kind]));
+    schedule();return [...highlights.keys()];
+   },
    orbit,zoom,resetCamera,
    dispose(){disposed=true;if(raf)cancelAnimationFrame(raf);if(ro)ro.disconnect();}
   };

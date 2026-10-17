@@ -1,0 +1,41 @@
+"use strict";
+const assert=require("node:assert/strict"),Story=require("../story-evidence-core.js");
+const actor=(name,alive,energy,type="factory")=>({name,alive,energy,type});
+const base={agents:[actor("供应商甲",true,.8),actor("物流乙",true,.6,"logistics"),actor("配套丙",true,.5),actor("甲乙关系",true,.75)]};
+const changed={agents:[actor("供应商甲",false,.21),actor("物流乙",true,.53,"logistics"),actor("配套丙",true,.52),actor("甲乙关系",true,.95)]};
+const edges=[{a:"供应商甲",b:"物流乙"},{a:"物流乙",b:"配套丙"}];
+const e=Story.compare(base,changed,edges);
+assert.equal(e.ok,true);
+assert.equal(e.items.length,3);
+assert.equal(e.items[0].name,"供应商甲");
+assert.equal(e.items[0].kind,"exit");
+assert.equal(e.items[0].relatedCount,1);
+assert.equal(e.items[1].name,"物流乙");
+assert.equal(e.items[1].kind,"lower");
+assert.ok(Math.abs(e.items[1].delta+.07)<1e-12);
+assert.equal(e.items[2].kind,"higher");
+assert.equal(e.total,3);
+assert.equal(e.items.some(x=>x.name==="配套丙"),false,"Tiny change must not become invented impact");
+const same=Story.compare(base,base,edges);
+assert.equal(same.total,0);
+assert.deepEqual(same.items,[]);
+assert.match(same.why,/没有足够明显/);
+assert.equal(Story.compare(base,null).ok,false);
+assert.equal(Story.compare(null,changed).ok,false);
+const unmapped=Story.compare(base,{agents:[actor("新增未知公司",true,.2)]},edges);
+assert.equal(unmapped.items.length,0,"Unmatched new name cannot be interpreted as an exited company");
+const reverse=Story.compare(changed,base);
+assert.equal(reverse.items[0].kind,"active");
+const unknown=Story.compare(
+ {agents:[actor("缺能源",true,NaN)]},{agents:[actor("缺能源",true,.5)]},[]);
+assert.equal(unknown.total,0,"Nonnumeric evidence must remain unknown");
+const atThreshold=Story.compare(
+ {agents:[actor("边界主体",true,.500)]},{agents:[actor("边界主体",true,.500+Story.THRESHOLD)]},[]);
+assert.equal(atThreshold.items.length,1);
+const belowThreshold=Story.compare(
+ {agents:[actor("小变化",true,.5)]},{agents:[actor("小变化",true,.5001)]},[]);
+assert.equal(belowThreshold.items.length,0);
+assert.ok(Story.compare(base,changed,edges,1).items.length===1);
+assert.ok(Story.compare(base,changed,edges,99).items.length<=5,"Never overwhelm user");
+assert.ok(e.items.every(x=>!Object.hasOwn(x,"prediction")&&!Object.hasOwn(x,"cause")));
+console.log("PASS public story actor names, live-vs-baseline distinctions, honest unknowns, sorting, thresholds and no fabricated impact");
