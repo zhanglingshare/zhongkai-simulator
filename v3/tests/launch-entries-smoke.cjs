@@ -21,7 +21,8 @@ assert.ok(!story.includes('portal-classic.js'),"Story may not accidentally run v
 const server=http.createServer((req,res)=>{
  let filename;try{filename=path.resolve(root,"."+decodeURI(new URL(req.url,"http://127.0.0.1").pathname));}
  catch{res.writeHead(400).end();return;}
- if(!filename.startsWith(root+path.sep)){res.writeHead(403).end();return;}
+ if(!filename.startsWith(root+path.sep)&&filename!==root){res.writeHead(403).end();return;}
+ if(filename===root)filename=path.join(root,"index.html");
  fs.readFile(filename,(err,data)=>{if(err){res.writeHead(404).end();return;}
  res.writeHead(200,{"content-type":types[path.extname(filename)]||"text/plain"});res.end(data);});
 });
