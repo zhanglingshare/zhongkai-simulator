@@ -25,7 +25,11 @@ async function test(browser,port,width,reduce=false){
  await page.locator("#link-one").selectOption({index:1});
  await page.locator("#link-two").selectOption({index:2});
  await page.locator("#inflow-run").click();
- await page.waitForFunction(()=>document.querySelectorAll("#inflow-metrics .metric").length===4,{timeout:15000});
+ await page.waitForFunction(()=>document.querySelectorAll("#inflow-metrics .metric").length===4,null,{timeout:6000}).catch(async err=>{
+  const formMessage=await page.locator("#form-message").innerText();
+  const counts=await page.evaluate(()=>({core:!!window.ZKInflow,sim:!!window.ZKSim,metrics:document.querySelectorAll("#inflow-metrics .metric").length,opts:[...document.querySelectorAll("#link-one,#link-two")].map(n=>n.value)}));
+  throw new Error("Inflow UI result absent: "+formMessage+"; runtime="+JSON.stringify(counts)+"; errors="+errors.join("|")+"; "+err.message);
+ });
  assert.equal(await page.locator("#count-a").innerText(),"24");
  assert.equal(await page.locator("#count-b").innerText(),"25");
  assert.equal(await page.locator("#inflow-network .assumed-edge").count(),2);
