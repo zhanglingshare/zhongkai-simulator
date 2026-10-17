@@ -27,7 +27,7 @@ async function test(browser,port,width){
  assert.match(await page.locator("#trust-backtest-score").innerText(),/朴素/);
  await page.locator("#trust-metric").selectOption("industry_invest_growth");
  assert.equal(await page.locator("#trust-fold-table tr").count(),4);
- assert.match(await page.locator(".trust-footnote").innerText(),/不是 Sim/);
+ assert.match(await page.locator(".trust-footnote").innerText(),/不涉及.*Sim/);
  assert.match(await page.locator("#enterprise-detail").innerText(),/尚未核实/);
  await page.locator("#enterprise-filter").selectOption("仲恺高新区");
  assert.equal(await page.locator(".enterprise-choice").count(),14);
