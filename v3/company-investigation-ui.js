@@ -7,7 +7,7 @@ if(!E||!D)return;
 const company=$("company-name"),start=$("investigate-company"),reportHost=$("investigation-report"),
 apply=$("investigation-apply"),status=$("investigation-status"),consent=$("investigation-online-consent");
 const config=window.ZKInvestigationConfig||{apiUrl:"",providerLabel:"未配置"};
-let result=null,edited={},chosenRecord=null,run=0,acceptedSnapshot=null;
+let result=null,edited={},chosenRecord=null,run=0,acceptedSnapshot=null,applying=false;
 const make=(tag,css,t)=>{const node=document.createElement(tag);if(css)node.className=css;
  if(t!==undefined)node.textContent=String(t);return node;};
 const statusText=(s,kind="")=>{status.textContent=s;status.dataset.kind=kind;};
@@ -20,7 +20,7 @@ function sourceLink(s){
  const a=make("a","","查看原始来源 ↗");a.href=s.url;a.target="_blank";a.rel="noopener noreferrer";return a;
 }
 function render(){
- reportHost.replaceChildren();apply.disabled=!result?.ok;
+ reportHost.replaceChildren();apply.disabled=!result?.ok||!result.documents;
  if(!result?.ok){reportHost.append(make("p","",result?.reason||"请输入企业名称，调查后会显示有出处的企业资料。"));return;}
  const overview=make("div","investigation-overview");
  overview.append(make("strong","",result.documents+" 条适用来源记录 · "+
@@ -119,7 +119,8 @@ apply.addEventListener("click",()=>{
  if(!approved.record.sources.length){
   statusText("没有可核对的业务或实际经营地点来源，无法当作已审核的企业档案；可使用下方手工表单。","warning");return;
  }
- const done=window.ZKCompanyDossierUI.applyReviewed(approved.record);
+ applying=true;
+ let done=false;try{done=window.ZKCompanyDossierUI.applyReviewed(approved.record);}finally{applying=false;}
  if(!done){statusText("未能应用调查结果；请检查来源链接","warning");return;}
  acceptedSnapshot={name:result.query,fieldStatus:Object.fromEntries(E.KEYS.map(k=>[k,result.fields[k].status])),
   originalSources:result.fields,approved:approved.values,userChanges:approved.userChanges,
@@ -129,7 +130,7 @@ apply.addEventListener("click",()=>{
  statusText("调查结论已填入可编辑表单；修改身份资料会使之前的在地判断失效。仍需确认研究情景与业务联系。","success");
  $("company-confirm").checked=false;
 });
-company.addEventListener("input",()=>{run++;result=null;edited={};acceptedSnapshot=null;
+company.addEventListener("input",()=>{if(applying)return;run++;result=null;edited={};acceptedSnapshot=null;
  apply.disabled=true;reportHost.replaceChildren();
  statusText("名称已修改，之前调查结果不适用。","warning");start.disabled=false;});
 const previous=window.ZKCompanyResearchUI?.snapshot;
