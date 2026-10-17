@@ -1,0 +1,38 @@
+const assert=require("node:assert/strict"),vm=require("node:vm"),fs=require("node:fs"),path=require("node:path");
+const Core=require("../company-china-core.js");
+const dir=path.resolve(__dirname,"..");
+for(const name of ["company-china-core.js","company-china.js","company-assist-core.js","inflow.js"]){
+ new vm.Script(fs.readFileSync(path.join(dir,name),"utf8"),{filename:name});
+}
+const record=Core.getCase();
+assert.equal(record.name,"惠州市博实结科技有限公司");
+assert.equal(record.kind,"existing-enterprise-as-model-inflow");
+assert.equal(record.type,"oem");
+assert.match(record.location,/仲恺高新区/);
+assert.match(record.note,/并非新签约/);
+assert.ok(record.links.every(s=>Core.safeLink(s)));
+const mutate=Core.getCase();mutate.name="not company";assert.equal(Core.getCase().name,record.name,"case must be immutable from consumers");
+const links=Core.buildLinks("惠州市博实结科技有限公司");
+assert.equal(links.length,6);
+assert.equal(links[0].id,"baidu");
+assert.ok(links[0].url.startsWith("https://www.baidu.com/s?wd="));
+assert.ok(links.find(x=>x.id==="government").url.includes("huizhou.gov.cn"));
+assert.ok(links.find(x=>x.id==="qcc").directSearch===false);
+assert.ok(links.find(x=>x.id==="tianyancha").directSearch===false);
+assert.ok(links.find(x=>x.id==="gsxt").directSearch===false);
+assert.ok(links.every(x=>Core.safeLink(x.url)));
+assert.throws(()=>Core.buildLinks("A"),/至少两个字/);
+const excerpt=Core.analyzeExcerpt("企业从事智能终端设备制造和研发。地址位于惠州市仲恺高新区惠风西三路1号。");
+assert.equal(excerpt.ok,true);
+assert.ok(excerpt.business.includes("智能终端设备"));
+assert.ok(excerpt.location.includes("惠州市仲恺高新区"));
+assert.equal(Core.analyzeExcerpt("短").ok,false);
+assert.equal(Core.safeLink("javascript:alert(1)"),"");
+assert.equal(Core.safeLink("http://www.baidu.com"),"");
+assert.ok(Core.getCase().additionalSource.includes("bsjkj.com"));
+const html=fs.readFileSync(path.join(dir,"inflow.html"),"utf8");
+assert.ok(html.includes("company-china.js"));
+assert.ok(!html.includes("<script defer src=\"company-assist.js\""));
+assert.ok(html.includes("load-zhongkai-case"));
+assert.ok(!html.includes("Wikidata"));
+console.log("PASS V3.15 domestic providers, sourced Zhongkai example, explicit model-inflow caveat, excerpt processing, no Wikidata runtime");

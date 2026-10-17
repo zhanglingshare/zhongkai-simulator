@@ -52,7 +52,9 @@ jobs:
         run: node v3/tests/inflow-smoke.cjs
       - name: V3.14 public company search unit tests
         run: node v3/tests/company-assist.spec.cjs
-      - name: V3.14 company research browser smoke
+      - name: V3.15 Chinese search and Zhongkai case contracts
+        run: node v3/tests/company-china.spec.cjs
+      - name: V3.15 China-based enterprise case Chrome acceptance
         run: node v3/tests/company-assist-smoke.cjs
       - name: Upload screenshots for visual review
         if: always()

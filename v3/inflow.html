@@ -5,14 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#06121e">
-<title>V3.14 · 企业资料预判断 | 仲恺产业风洞</title>
+<title>V3.15 · 中国企业检索与仲恺案例 | 仲恺产业风洞</title>
 <meta name="description" content="用公开研究模型比较一个假设新企业接入前后的产业网络、模型内指数与不确定性。独立探索，不作现实预测。">
 <link rel="stylesheet" href="inflow.css"><link rel="stylesheet" href="company-assist.css">
 <script defer src="portal-kernel.js"></script>
 <script defer src="inflow-core.js"></script>
 <script defer src="company-assist-core.js"></script>
+<script defer src="company-china-core.js"></script>
 <script defer src="inflow.js"></script>
-<script defer src="company-assist.js"></script>
+<script defer src="company-china.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -24,7 +25,7 @@
     <a class="active" href="inflow.html" aria-current="page">新企业接入</a>
     <a href="measurement.html">科学验证</a>
   </nav>
-  <span class="version">V3.14 / COMPANY LOOKUP</span>
+  <span class="version">V3.15 / CHINA SEARCH + LOCAL CASE</span>
 </header>
 <main>
   <section class="intro">
@@ -40,17 +41,19 @@
     <section class="pane inputs" aria-labelledby="input-title">
       <div class="section-number">01 / FIND · REVIEW · CONFIRM</div>
       <h2 id="input-title">这家企业叫什么？</h2>
-      <p class="section-help">填一个名称就能查。没查到也可以自己补充。搜索会把输入的企业名称发给公开知识库 Wikidata；其他填写内容仅在浏览器处理。</p>
+      <p class="section-help">先体验一个仲恺真实企业的演示案例，或输入企业名称，用百度、360、企查查等中国平台查资料。公开资料由你确认，系统再根据介绍做初步行业判断。</p>
+        <div class="local-case" id="zhongkai-demo"><div><span class="case-tag">仲恺高新区 · 真实企业参考</span><strong>惠州市博实结科技有限公司</strong><p>车载智能终端 / 物联网硬件。该企业已在仲恺经营，示范的是把现有企业补入模型，并非“新签约落地”。</p></div><button type="button" id="load-zhongkai-case">用这个案例演示 →</button><a href="https://gxj.huizhou.gov.cn/zwgk/ssjygk/content/post_3920441.html" target="_blank" rel="noopener noreferrer">惠州市工信局依据 ↗</a></div>
       <form id="inflow-form" novalidate>
         <label>企业名称（必填）
           <input id="company-name" name="company" maxlength="60" autocomplete="off" placeholder="输入企业名，例如：某某科技有限公司" required>
         </label>
         <div class="lookup-actions">
-          <button type="button" id="company-search">⌕ 查找公开资料并初步判断</button>
-          <span>只查公开知识库 · 不查询企业征信或工商底档</span>
+          <button type="button" id="company-search">⌕ 用中国平台查这家企业</button>
+          <span>百度 / 360 / 惠州政府 / 企查查 / 天眼查 / 国家公示系统</span>
         </div>
-        <div id="company-search-status" class="lookup-status" role="status" aria-live="polite">可先查找，或直接填写下面的信息。</div>
-        <div id="company-search-results" class="lookup-results" aria-label="公开资料候选结果"></div>
+        <div id="company-search-status" class="lookup-status" role="status" aria-live="polite">可打开国内搜索结果核对。全面自动填单需要授权企业数据接口，目前不会冒充已经抓到搜索结果。</div>
+        <div id="company-search-results" class="lookup-results" aria-label="中国公开资料查询入口"></div>
+        <div class="paste-helper"><label for="company-excerpt">复制一段公开介绍（可选）<textarea id="company-excerpt" rows="3" maxlength="1000" placeholder="把百度、企业官网或政府网站查到的业务介绍粘贴在这里"></textarea></label><button type="button" id="extract-company-excerpt">从这段资料提取业务线索 →</button><small>仅分析你粘贴的文字，不自动验证内容。企业数据不会上传到本站服务器。</small></div>
         <div class="two">
           <label>主要做什么（可修改）
             <textarea id="company-business" rows="2" maxlength="360" placeholder="例如：工业机器人零部件、智能制造装备"></textarea>
@@ -62,7 +65,7 @@
         <label>企业官网（可选）
           <input id="company-website" type="url" maxlength="500" placeholder="https://…">
         </label>
-        <div id="company-assessment" class="assistant-assessment" aria-live="polite">填入“主要做什么”，系统会给出一个可修改的行业判断。</div>
+        <div id="company-assessment" class="assistant-assessment" aria-live="polite">系统会根据业务文字给出可修改的行业初判；不会仅凭名字判定规模。</div>
         <div class="two">
           <label>它在产业链里更像哪种企业？
             <select id="company-type">
@@ -109,7 +112,7 @@
         </label>
         <label class="confirmation">
           <input type="checkbox" id="company-confirm">
-          <span>我检查过上面的信息。我知道自动查找可能匹配错企业，推荐的联系对象也只是模拟假设。</span>
+          <span>我核对过企业资料，明白搜索结果与模型推荐的业务联系都需要核实；案例中的已落地企业只代表模型新增节点。</span>
         </label>
         <div class="controls">
           <button type="submit" id="inflow-run" class="primary">▶ 看看它进来后会怎样</button>
@@ -155,7 +158,7 @@
   <section class="pane evidence" aria-labelledby="evidence-title">
     <div><div class="section-number">04 / WHAT WE STILL DON'T KNOW</div><h2 id="evidence-title">还有哪些问题需要问企业？</h2><p>证据不足时，模型应提出问题，而不是制造确信。</p></div>
     <div class="evidence-grid"><div><h3>证据与冲突提示</h3><div id="inflow-warnings">等待实验输入。</div></div><div><h3>主动核实问题</h3><ol id="inflow-questions"><li>先填写企业接入假设。</li></ol></div></div>
-    <p class="bottom-disclaimer">独立公开研究 · 未经过现实外推校准 · 模型种子分布不是现实概率 · 点击公开资料搜索时仅将企业名称发送至 Wikidata；其余输入不由本站主动上传 · 不支持涉密数据。</p>
+    <p class="bottom-disclaimer">独立公开研究 · 未经过现实外推校准 · 模型种子分布不是现实概率 · 国内检索会在用户点击时打开第三方平台，其查询行为受对应平台规则约束 · 本页不存储企业秘密或自动爬取工商资料。</p>
   </section>
 </main>
 <footer><a href="index.html">← 全息产业世界</a><span>ZHONGKAI / CONDITIONAL RESEARCH</span><a href="lab.html">回到 A/B 风洞 →</a></footer>
