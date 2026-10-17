@@ -18,11 +18,6 @@ assert.match(story,/story-first.css/);
 assert.ok(!classic.includes('story-first.css'),"Old page must not be replaced by new entry style");
 assert.ok(!classic.includes('id="story-settings"'),"Old classic page must have visible original controls");
 assert.ok(!story.includes('portal-classic.js'),"Story may not accidentally run vintage app");
-assert.equal(read("v3/portal-classic.js"),(function(){
- // Classic script has the frozen original V3 experience; match checkout's baseline via
- // a fixed canonical digest to detect accidental updates.
- return read("v3/portal-classic.js");
-})());
 const server=http.createServer((req,res)=>{
  let filename;try{filename=path.resolve(root,"."+decodeURI(new URL(req.url,"http://127.0.0.1").pathname));}
  catch{res.writeHead(400).end();return;}
