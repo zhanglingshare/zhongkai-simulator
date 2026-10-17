@@ -105,6 +105,10 @@ function paint(t){
  const result=frames&&reference?Story.compare(reference,snap,base.edges,3):{ok:false,items:[],total:0};
  const items=result.items||[];
  view.setHighlights(items);
+ // This trace matches the visible named cards exactly, useful for accessible
+ // browser tests and checking frame-synced graph emphasis.
+ $("world-stage").dataset.storyTick=String(t);
+ $("world-stage").dataset.highlightedActors=items.map(x=>x.name).join("|");
  if(phase)phase.textContent=!frames?"等你按播放":t===0?"故事开始了":t===MAX_TICKS?"故事播完 · 还可以再试":"故事进行中 · "+t+"/"+MAX_TICKS;
  if(spotlight){
    spotlight.hidden=items.length===0||!frames;
