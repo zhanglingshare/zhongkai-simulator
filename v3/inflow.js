@@ -98,7 +98,7 @@ function drawNetwork(agents,edges,newName,targets){
   const group=svg("g",{"data-subject":a.name});
   if(isNew)group.append(svg("circle",{cx:p.x,cy:p.y,r:23,class:"halo"}));
   const circle=svg("circle",{cx:p.x,cy:p.y,r,
-   class:"subject"+(!a.alive?" off":"")+(isNew?" new":isTarget?" target":"")}));
+   class:"subject"+(!a.alive?" off":"")+(isNew?" new":isTarget?" target":"")});
   group.append(circle);
   const tip=svg("title");tip.textContent=a.name+" · "+a.type+" · "+(a.alive?"存续":"退出")+" · 模型能量 "+Number(a.energy).toFixed(3);
   group.append(tip);
