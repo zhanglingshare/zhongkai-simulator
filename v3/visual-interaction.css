@@ -1,0 +1,93 @@
+/* V3.22: visible structure and direct manipulation, over unchanged model output. */
+.portal-shell .hero-story h1{text-wrap:balance}
+.portal-shell .hero-story h1 .company-phrase{white-space:nowrap;color:inherit;text-shadow:none}
+.portal-shell .world-build{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:8px;color:#b8dce2;font-size:13px}
+.portal-shell .world-build p{flex:1;margin:0;min-width:170px;line-height:1.6}
+.portal-shell .world-build button{background:#0e3549;border:1px solid #4e9fae;color:#d5f7f5;padding:9px 14px;border-radius:9px;min-height:44px;cursor:pointer;font:inherit}
+.portal-shell .build-batches{display:flex;gap:6px;flex-wrap:wrap;list-style:none;padding:0;margin:8px 0 0}
+.portal-shell .build-batches li{font-size:11px;color:#91b4c2;border:1px solid #285165;padding:5px 9px;border-radius:20px;background:#0a2639;transition:background .2s,color .2s}
+.portal-shell .build-batches li[data-state=active]{color:#f7d1a6;border-color:#ae865a;background:#47372d}
+.portal-shell .build-batches li[data-state=done]{color:#b2f0de;border-color:#387c7f;background:#103e49}
+.portal-shell .portal-main>.world-build{order:1}
+.portal-shell .portal-main>.build-batches{order:1;margin:0 0 4px}
+.portal-shell .world-stage .holo-node-label.story-focus{color:#fff1de;background:#543927;border-color:#f5b682;font-weight:800;box-shadow:0 0 15px #f4b87844}
+.portal-shell .role-story-person[aria-pressed=true]{border-color:#ffd29e;background:#574331}
+.portal-shell .world-stage .world-heading{pointer-events:none;left:20px;right:20px;transform:none;white-space:normal;flex-wrap:wrap;gap:6px;line-height:1.5}
+.portal-shell .world-stage .world-heading small{display:block;flex-basis:100%;margin-left:0}
+.portal-shell .world-stage .world-footer{pointer-events:none}
+/* Operate and compare inside the SAME card, with an honest common 0–1 scale. */
+.lab-v311 .lab-play-stage{margin:17px 0 8px;padding:17px 14px 14px;border:1px solid #4d8b9c;border-radius:14px;background:linear-gradient(160deg,#123c4d,#092536);min-width:0}
+.lab-play-head{display:flex;align-items:start;justify-content:space-between;gap:8px}
+.lab-play-head h3{font-size:19px;line-height:1.4;margin:0;color:#edfcf7;letter-spacing:-.4px}
+.lab-play-head>span{font-size:11px;border-radius:20px;background:#194b57;border:1px solid #4e8b8e;padding:4px 8px;color:#c2e6de;white-space:nowrap}
+.lab-play-legend{display:flex;gap:16px;font-size:12px;margin:13px 0 9px;color:#c6e1e7;flex-wrap:wrap}
+.lab-play-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;background:#6ac9e2;margin-right:6px}
+.lab-play-legend span:last-child i{background:#ffb77e}
+.lab-play-bars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;min-width:0;position:relative;margin:15px 0 13px}
+.lab-play-group{min-width:0;text-align:center}
+.lab-play-chart{height:152px;display:flex;gap:8px;align-items:end;justify-content:center;border-bottom:1px solid #6492a2;position:relative;background:repeating-linear-gradient(to top,transparent 0,transparent calc(25% - 1px),#ffffff09 calc(25% - 1px),#ffffff09 25%)}
+.lab-play-chart::before{content:"1";position:absolute;top:-12px;left:0;font-size:9px;color:#7fabb9}
+.lab-play-column{height:100%;width:32px;display:flex;align-items:end;position:relative;min-width:0}
+.lab-play-fill{position:relative;width:100%;height:0;background:linear-gradient(0deg,#287992,#83e2ee);border-radius:5px 5px 0 0;transition:height .24s cubic-bezier(.2,.8,.2,1);min-height:0}
+.lab-play-column[data-path=b] .lab-play-fill{background:linear-gradient(0deg,#ab6c49,#ffd09d)}
+.lab-play-number{position:absolute;left:50%;bottom:calc(100% + 5px);transform:translateX(-50%);font-size:11px;color:#b5e4f1;font-weight:750;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lab-play-column[data-path=b] .lab-play-number{color:#ffd8b3}
+.lab-play-group h4{color:#d9eff1;font-size:12px;line-height:1.5;margin:10px 0 3px}
+.lab-play-group>small{display:block;color:#9bbfca;font-size:10px;line-height:1.5}
+.lab-play-gap{display:block;font-size:12px;font-weight:750;color:#b5d4dc;margin-top:5px;min-height:18px;font-variant-numeric:tabular-nums}
+.lab-play-gap[data-tone=good]{color:#96e5c8}.lab-play-gap[data-tone=bad]{color:#ffc6a2}
+.lab-play-control{border-top:1px solid #356478;padding-top:12px;margin-top:8px}
+.lab-play-control label{display:flex;justify-content:space-between;gap:10px;color:#c8e4e8;font-size:13px;font-weight:700;line-height:1.6}
+.lab-play-control output{color:#ffd1a3;font-variant-numeric:tabular-nums}
+.lab-play-control input{display:block;width:100%;min-height:40px;accent-color:#ffbd88;cursor:ew-resize;margin:4px 0 0}
+.lab-play-ticks{display:flex;justify-content:space-between;color:#96bac7;font-size:10px}
+.lab-play-hint{font-size:12px;line-height:1.75;color:#b2d1db;margin:11px 0 0;min-height:42px}
+.lab-play-stage[data-state=waiting] .lab-play-fill,.lab-play-stage[data-state=stale] .lab-play-fill{height:0!important}
+.lab-play-stage[data-state=waiting] .lab-play-chart,.lab-play-stage[data-state=stale] .lab-play-chart{opacity:.45}
+.lab-play-reset{background:none;border:1px solid #578d9b;color:#c9e8e7;border-radius:6px;padding:7px 9px;min-height:36px;font:inherit;font-size:11px;cursor:pointer;margin-top:10px}
+.lab-play-reset:disabled{opacity:.4;cursor:default}
+.lab-play-switch{display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid #315f71;margin-top:13px;padding-top:12px}
+.lab-play-switch>span{flex-basis:100%;font-size:11px;color:#98c5cf;margin-bottom:2px}
+.lab-play-switch button{border:1px solid #4e889b;border-radius:7px;color:#cee9e9;background:#10394d;min-height:44px;padding:8px 9px;font:inherit;font-size:11px;cursor:pointer;flex:1;white-space:nowrap}
+.lab-play-switch button[aria-pressed=true]{background:#5b422c;border-color:#d6a16c;color:#ffdbaf}
+.lab-v311 .lab-preview-status{margin-top:12px}
+.lab-v311 .lab-play-research{border-top:1px solid #31576b;margin-top:12px;padding-top:12px}
+.lab-play-research>summary{cursor:pointer;color:#add5de;font-size:12px;min-height:40px}
+.lab-v311 .lab-preview-metrics{min-height:0}
+.lab-v311 .lab-stage{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.lab-v311 .lab-two-paths{grid-template-columns:1fr 1fr}
+.lab-v311 .lab-path{padding:10px;min-width:0}.lab-v311 .lab-path-glyph{font-size:23px}
+.lab-v311 .lab-path strong{font-size:13px}
+.lab-v311 .lab-preview-plain{margin-top:10px}
+@media(min-width:1100px){.portal-shell .portal-main{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:16px 30px;padding-top:30px;align-items:start}
+ .portal-shell .portal-main>.hero-story{grid-column:1;grid-row:1;padding-top:25px}
+ .portal-shell .hero-story h1{font-size:clamp(37px,3.7vw,59px)}
+ .portal-shell .portal-main>.world-stage{grid-column:2;grid-row:1/4;height:clamp(430px,60svh,660px);margin:0;min-height:430px}
+ .portal-shell .portal-main>.world-build{grid-column:1;grid-row:2}
+ .portal-shell .portal-main>.build-batches{grid-column:1;grid-row:3}
+ .portal-shell .portal-main>.story-result{grid-column:1/-1;grid-row:4}
+ .portal-shell .portal-main>.story-settings{grid-column:1/-1;grid-row:5}
+ .portal-shell .portal-main>.story-research{grid-column:1/-1;grid-row:6}
+}
+@media(max-width:980px){.lab-v311 .lab-stage{grid-template-columns:1fr}.lab-play-chart{height:170px}}
+@media(max-width:700px){
+ .portal-shell .world-build{font-size:12px;gap:8px}.portal-shell .world-build p{min-width:155px}.portal-shell .world-build button{font-size:12px;padding:7px 10px}
+ .portal-shell .build-batches{gap:5px}.portal-shell .build-batches li{font-size:10px;padding:4px 8px}
+ .portal-shell .world-stage .world-heading{left:10px;right:10px}
+ .lab-v311 .lab-play-stage{padding:14px 10px 12px}.lab-play-head h3{font-size:17px}.lab-play-head>span{font-size:10px}
+ .lab-play-bars{gap:9px}.lab-play-chart{height:133px;gap:7px}.lab-play-column{width:27px}.lab-play-number{font-size:10px}
+ .lab-play-group h4{font-size:12px}.lab-play-gap{font-size:11px}.lab-play-group>small{font-size:9px}
+ .lab-v311 .lab-two-paths{gap:6px}.lab-v311 .lab-path small{font-size:9px}.lab-v311 .lab-path-glyph{display:none}
+}
+@media(prefers-reduced-motion:reduce){.lab-play-fill,.portal-shell .build-batches li{transition:none}}
+
+/* Narrative stays attached to actual named simulated agents, not just aggregate indices. */
+.portal-shell .role-story-focus{padding:12px 0 2px}
+.portal-shell .role-story-focus>strong{font-size:14px;color:#91e2df;display:block;margin-bottom:11px}
+.portal-shell .role-story-focus>p{font-size:13px;color:#b8d5dd;line-height:1.65}
+.portal-shell .role-story-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.portal-shell .role-story-list li{min-width:0;background:#09283a;border:1px solid #326479;border-radius:11px;padding:11px;display:grid;gap:7px}
+.portal-shell .role-story-person{display:block;min-height:44px;border:1px solid #6ac6c8;border-radius:8px;background:#14536a;color:#e9fffa;
+ cursor:pointer;text-align:left;font-size:13px;font-weight:750;padding:10px;overflow-wrap:anywhere}
+.portal-shell .role-story-list li span{font-size:12px;line-height:1.6;color:#b5d0d9}
+@media(max-width:700px){.portal-shell .role-story-list{grid-template-columns:1fr}.portal-shell .role-story-person{font-size:14px}.portal-shell .role-story-list li{padding:9px}}

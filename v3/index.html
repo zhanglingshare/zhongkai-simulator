@@ -5,11 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#020c17">
 <meta name="description" content="仲恺产业风洞：基于公开证据的可交互三维产业网络，探索风险传播和潜在增长条件。独立研究、非官方决策建议。">
-<title>仲恺产业风洞 · 产业关系全息门户 · 沉浸体验优化</title>
-<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css">
+<title>仲恺产业风洞 · 看见产业如何连起来</title>
+<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css"><link rel="stylesheet" href="visual-interaction.css">
 <script defer src="portal-kernel.js"></script>
 <script defer src="holo-core.js"></script>
-<script defer src="portal-render.js"></script>
+<script defer src="visual-entry-core.js"></script>
+<script defer src="story-render.js"></script>
+<script defer src="role-story-core.js"></script>
 <script defer src="portal.js"></script>
 </head>
 <body>
@@ -22,7 +24,7 @@
     <span class="edition"><span class="online-pulse"></span> 产业故事 · 真实模型</span>
     <nav class="site-nav" aria-label="门户导航">
       <a class="nav-active" href="#world">看产业故事</a>
-      <a href="lab.html">自己试变化 ↗</a>
+      <a href="story-lab.html">自己试变化 ↗</a>
       <a href="trust.html">资料靠谱吗？ ↗</a>
 
     </nav>
@@ -33,7 +35,7 @@
       <div class="portal-atmosphere" aria-hidden="true"></div>
       <div class="hero-story">
         <p class="hero-kicker"><span class="hero-diamond">◈</span> 一个关于产业的假设故事</p>
-        <h1 id="portal-title">假如一家大厂突然搬走，<br><span>谁会受到影响？</span></h1>
+        <h1 id="portal-title">假如<span class="company-phrase">一家大厂</span>突然搬走，<br><span>谁会受到影响？</span></h1>
         <p class="hero-deck">不用学经济学，也不用填表。按一下播放，看一场假设中的产业变化。</p>
         <div class="hero-quick-actions"><button id="hero-quickstart" type="button">▶ 看看会发生什么</button><span>一键播放 · 看完再决定要不要深入</span></div>
         <div class="story-emphasis"><span class="emphasis-rule"></span><p>这不是现实新闻，而是一次可重复的模型演示。</p></div>
@@ -58,9 +60,13 @@
           <span><b id="world-edge-count">—</b> 条模型连线</span><span class="world-pointer">拖动旋转 · 点击主体</span></div>
       </div>
 
+      <div class="world-build"><p id="world-build-status" role="status" aria-live="off">链主、配套、服务与人才，正在组成一张网。</p><button id="world-build-replay" type="button">↻ 重新看组网</button></div>
+      <ol class="build-batches" id="build-batches" aria-label="产业主体入场顺序"></ol>
+
       <section class="story-result" aria-label="这次模拟里发生了什么">
         <div class="story-result-head"><span>看到了什么？</span><strong id="story-phase">还没开始</strong></div>
         <p class="scene-plain-result" id="portal-story-result" aria-live="polite">点上面的播放按钮，看看模型里的产业角色会怎样变化。</p>
+        <div class="role-story-focus" id="role-story-focus" aria-label="变化最明显的模型角色" aria-live="off"><p>播放开始后，这里会指出模型里哪些角色发生变化。</p></div>
         <small>这里都是假设模型的内部结果，不是某家真实企业已经搬迁，也不是裁员或 GDP 预测。</small>
       </section>
       <details class="story-settings" id="story-settings">
@@ -140,14 +146,14 @@
     <section class="portal-exits" aria-labelledby="portal-exits-title">
       <div class="exits-heading"><span>继续探索 · 按兴趣选择</span><h2 id="portal-exits-title">想自己试，还是看看证据？</h2></div>
       <div class="exit-grid">
-        <a class="exit-card" href="lab.html"><span class="exit-id">01 / SIMULATION LAB</span><strong>模拟实验室 <span>↗</span></strong><p>自己换一个条件，看看模拟前后有哪些变化。</p></a>
+        <a class="exit-card" href="story-lab.html"><span class="exit-id">01 / TRY THE STORY</span><strong>故事里试一试 <span>↗</span></strong><p>自己换一个条件，看看模拟前后有哪些变化。</p></a>
         <a class="exit-card" href="observations.html"><span class="exit-id">02 / PUBLIC OBSERVATIONS</span><strong>公开数据与证据 <span>↗</span></strong><p>看看这些数据来自哪里，有哪些地方还不确定。</p></a>
         <a class="exit-card" href="verification.html"><span class="exit-id">03 / SCIENTIFIC REVIEW</span><strong>方法、局限与质疑 <span>↗</span></strong><p>想认真研究？这里保留完整的方法和限制。</p></a>
       </div>
       <p class="portal-more-paths">更多研究入口：<a href="inflow.html">企业进入产业网络</a> · <a href="trust.html">企业资料是否可信</a></p>
     </section>
   </main>
-  <footer class="portal-footer"><span>ZHONGKAI · PUBLIC RESEARCH / V3.21</span>
+  <footer class="portal-footer"><span>ZHONGKAI · PUBLIC RESEARCH / V3.22</span>
     <span>公开信息下的条件性模拟 · 非官方平台、非现实发生概率、非政策决策建议</span></footer>
 </div>
 </body></html>

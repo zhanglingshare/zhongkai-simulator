@@ -28,6 +28,12 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install -y fonts-noto-cjk
       - name: Install test harness
         run: npm install --no-save --no-audit --no-fund playwright
+      - name: V3.22 real graph entrance timing and no-mutation tests
+        run: node v3/tests/visual-entry.spec.cjs
+      - name: Story-only release scope and unchanged other versions
+        run: node v3/tests/story-scope.spec.cjs
+      - name: V3.22 direct manipulation and same-snapshot Chrome acceptance
+        run: node v3/tests/visual-interaction-smoke.cjs
       - name: Evidence validation unit tests
         run: node v3/tests/validation.spec.cjs
       - name: Historic observation integrity and calibration gate tests
@@ -95,6 +101,8 @@ jobs:
         run: node v3/tests/v320-public-pages-check.mjs
       - name: V3.21 presentation-only immersion, onboarding, narrative and mobile readability
         run: node v3/tests/experience-polish-smoke.cjs
+      - name: Named industrial role story uses only real A/B model states
+        run: node v3/tests/role-story.spec.cjs
       - name: Story-first one-click actual Sim and accessible research desktop/mobile browser acceptance
         run: node v3/tests/story-first-smoke.cjs
       - name: Public project introduction launch links and distinct legacy classic V3 Chrome acceptance

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>仲恺大众故事版 · 自己试一试</title>
+<meta name="description" content="仲恺产业风洞实验工作台：网络推演、同种子情景对比和可追溯的模型观察。">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explore.css"><link rel="stylesheet" href="workbench-v39.css"><link rel="stylesheet" href="atlas.css"><link rel="stylesheet" href="lab-v311.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css"><link rel="stylesheet" href="visual-interaction.css">
+</head>
+<body>
+<div class="app">
+  <nav class="rail" aria-label="产品导航">
+    <a href="index.html" class="rail-brand" title="返回全息门户">Z<span>.</span></a>
+    <a class="rail-link active" href="index.html" aria-current="page" title="故事版互动">▦<span class="sr-only">情景实验室</span></a>
+    <a class="rail-link" href="../v2/montecarlo.html" title="蒙特卡洛">◈<span class="sr-only">蒙特卡洛</span></a>
+    <a class="rail-link" href="../v2/sensitivity.html" title="敏感性分析">▥<span class="sr-only">敏感性分析</span></a>
+    <a class="rail-link" href="measurement.html" title="现实观测与模型指数映射">◉<span class="sr-only">现实观测映射</span></a>
+    <a class="rail-link" href="verification.html" title="科学验证与证据">◇<span class="sr-only">科学验证与证据</span></a>
+    <a class="rail-link" href="observations.html" title="历史观测与校准门槛">▤<span class="sr-only">历史观测与校准门槛</span></a>
+    <a class="rail-link" href="../v2/data.html" title="数据与原始材料">▤<span class="sr-only">数据与原始材料</span></a>
+    <a class="rail-link" href="../v2/gates.html" title="研究准备">◎<span class="sr-only">研究准备</span></a>
+    <span class="rail-spacer"></span>
+    <a class="rail-link" href="../v2/" title="返回 V2">↗<span class="sr-only">返回 V2</span></a>
+  </nav>
+
+  <div class="app-content holo-app lab-v311">
+
+
+
+    <header class="lab-header" aria-label="产业风洞实验室导航">
+      <a class="lab-brand" href="index.html"><span class="lab-brand-mark">Z<span>.</span></span>
+        <span>ZHONGKAI <small>INDUSTRIAL WIND TUNNEL</small></span></a>
+      <nav class="lab-nav" aria-label="主要导航">
+        <a href="index.html">全息产业世界</a>
+        <a href="story-lab.html" aria-current="page">故事版互动</a>
+        <a href="inflow.html">新企业接入</a>
+        <a href="observations.html">公开证据</a>
+        <a href="verification.html">科学验证</a>
+      </nav>
+    </header>
+    <section class="lab-intro" id="lab-intro">
+      <div class="lab-intro-text">
+        <span class="lab-eyebrow">真实模型的条件实验 / PLAY & EXPLORE</span>
+        <h1>如果一家大厂搬走，<em>会发生什么？</em></h1>
+        <p>不用先理解模型。按下面的按钮，直接看两个假设中的产业世界有什么不同。</p>
+        <div class="lab-story-first"><button id="lab-story-start" type="button">▶ 一键试试“大厂搬走”</button><small>不填参数 · 用已有模型推演</small></div>
+      </div>
+      <div class="lab-intro-side">
+        <span><i></i> MODEL / READY</span>
+        <strong>提出假设，而不是预测未来。</strong>
+        <small>公开研究 · 模型步并非日历年 · 结果不是现实发生概率</small>
+      </div>
+    </section>
+    <div class="lab-flow" aria-label="实验流程">
+      <a href="#lab-stage" class="active">01 <span>选择条件</span></a><span class="lab-flow-arrow">→</span>
+      <a href="#lab-results">02 <span>影响透视</span></a><span class="lab-flow-arrow">→</span>
+      <a href="#lab-evidence">03 <span>深入验证</span></a>
+    </div>
+
+
+
+
+    <div class="lab-stage" id="lab-stage">
+    <section class="wind-deck" id="wind-deck" aria-labelledby="wind-title">
+      <div class="wind-heading"><span class="wind-kicker">01 / EXPERIMENT DESIGN</span><h2 id="wind-title">选一种变化，启动一次实验。</h2>
+      <p>先选「风险」或「机会」，按下运行。不用懂模型术语，也能看到结果；这是模型内条件实验，不是现实预测。</p></div>
+      <div class="wind-layout"><div class="wind-choices">
+        <h3>探索风险 <span>RISK SIGNALS</span></h3>
+        <div class="wind-preset-grid" id="wind-risk"></div>
+        <h3>探索增长 <span>OPPORTUNITY SIGNALS</span></h3>
+        <div class="wind-preset-grid" id="wind-opportunity"></div>
+      </div>
+      <div class="wind-share">
+        <div class="wind-spotlight" id="wind-spotlight"><span class="wind-overline">当前探索主题</span><strong id="wind-topic">尚未选择</strong><p id="wind-description">选择任一情景后，使用原始 Sim 模型进行基线和冲击对照。</p></div>
+        <div class="lab-parameters">
+          <label for="lab-all-shocks">其它变化（原有14种）<select id="lab-all-shocks" aria-label="选择全部模型冲击"></select></label>
+          <label for="lab-seed">重复实验编号（专业设置）<input id="lab-seed" type="number" min="1" max="2147483647" step="1" value="7"></label>
+          <p id="lab-input-warning" class="lab-input-warning" role="status"></p>
+        </div>
+        <div class="wind-share-actions"><button class="btn primary" type="button" id="wind-run">▶ 看看改变后有什么不同</button><button class="btn outline" type="button" id="wind-copy">复制可复现实验链接 ⤴</button></div>
+        <p class="wind-share-note" id="wind-feedback" role="status" aria-live="polite">共享链接只保存公开的冲击类型和随机种子。别人可用相同输入重新运行模型，不泄漏或伪造计算结果。</p>
+        <details class="v39-study-boundary"><summary>实验边界与复现限制 <span aria-hidden="true">⌄</span></summary><p class="wind-disclaimer">注：同一随机种子可复现当前版本模型实验，但冲击会改变随机流消耗，不能据此声称严格因果识别。模型参数、算法和公开资料可能随版本改变；链接中不包含模型版本的永久快照。</p></details>
+      </div></div>
+    </section>
+
+
+      <aside class="lab-preview" id="lab-preview" aria-labelledby="lab-preview-title">
+        <div class="lab-preview-kicker">02 / SCENARIO OBSERVATION</div>
+        <h2 id="lab-preview-title">两条路径，<span>一个问题。</span></h2>
+        <p class="lab-preview-deck">同一组种子与参数。先运行原模型，再显示结果；不会预填模拟数字。</p>
+        <div class="lab-two-paths">
+          <div class="lab-path lab-path-a"><div><span>SCENARIO A</span><strong>基准世界</strong><small>不注入该情景冲击</small></div><span class="lab-path-glyph">A</span></div>
+          <div class="lab-path lab-path-b"><div><span>SCENARIO B</span><strong id="lab-b-name">待选择情景</strong><small>第 0 个模型步注入</small></div><span class="lab-path-glyph">B</span></div>
+        </div>
+        <section class="lab-play-stage" id="lab-play-stage" data-state="waiting" aria-labelledby="lab-play-title">
+          <div class="lab-play-head"><h3 id="lab-play-title">拖一拖，看差距怎么出现</h3><span>同一步对照</span></div>
+          <div class="lab-play-legend"><span><i></i>A 未发生这件事</span><span><i></i>B 发生这件事</span></div>
+          <div class="lab-play-bars" id="lab-play-bars">
+            <div class="lab-play-group" data-metric="abundance">
+              <div class="lab-play-chart" role="img" aria-label="尚未运行模型">
+                <div class="lab-play-column" data-path="a"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+                <div class="lab-play-column" data-path="b"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+              </div><h4>产业活力</h4><small>模型指数 · 高一些较好</small><strong class="lab-play-gap">—</strong>
+            </div>
+            <div class="lab-play-group" data-metric="disaster">
+              <div class="lab-play-chart" role="img" aria-label="尚未运行模型">
+                <div class="lab-play-column" data-path="a"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+                <div class="lab-play-column" data-path="b"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+              </div><h4>压力风险</h4><small>模型指数 · 低一些较好</small><strong class="lab-play-gap">—</strong>
+            </div>
+            <div class="lab-play-group" data-metric="survivors">
+              <div class="lab-play-chart" role="img" aria-label="尚未运行模型">
+                <div class="lab-play-column" data-path="a"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+                <div class="lab-play-column" data-path="b"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+              </div><h4>仍在运转</h4><small>模型角色 · 数量</small><strong class="lab-play-gap">—</strong>
+            </div>
+          </div>
+          <div class="lab-play-control"><label for="lab-play-time">拖动查看过程 <output id="lab-play-time-out" for="lab-play-time">等待运行</output></label>
+            <input id="lab-play-time" type="range" min="0" max="20" step="1" value="20" disabled aria-label="拖动比较同一步的两组模型结果">
+            <div class="lab-play-ticks"><span>第 0 步</span><span>模型步骤，不是年份</span><span id="lab-play-end">第 20 步</span></div>
+          </div>
+          <p class="lab-play-hint" id="lab-play-hint" role="status" aria-live="polite">先运行一次，再拖动。柱高显示原模型的实际快照，不预填结果。</p>
+          <button class="lab-play-reset" id="lab-play-final" type="button" disabled>直接看最后一步 →</button>
+          <div class="lab-play-switch" aria-label="换个情景立即运行"><span>再试一种变化</span><button type="button" data-play-shock="链主外迁">大厂搬走</button><button type="button" data-play-shock="技术突破">技术突破</button><button type="button" data-play-shock="供应链中断">供应中断</button></div>
+        </section>
+        <div class="lab-preview-plain" id="lab-plain-result" role="status" aria-live="polite"><strong>还没有进行实验</strong><p>先在左侧选一个变化并点击运行，系统会用普通话提示这次模型里的主要差异。</p></div>
+        <div class="lab-preview-status" id="lab-preview-status" data-state="waiting">等待运行 · NO COMPUTED DATA</div>
+        <details class="lab-play-research"><summary>展开全部五项指标</summary>
+        <div class="lab-preview-metrics" id="lab-preview-metrics" aria-live="polite">
+          <div class="lab-preview-empty"><span>⌁</span><strong>结果留白，直到模型运行</strong>
+          <p>选择一个情景，点击运行 A/B。这里才会显示真正算出来的模型内差值。</p></div>
+        </div>
+        </details>
+        <a class="lab-results-jump" href="#lab-results">查看影响透视 <span>↓</span></a>
+        <p class="lab-preview-boundary">B − A · 数值描述模型差异，不是 GDP 增量或政策因果效应</p>
+      </aside>
+    </div>
+    <div class="lab-results" id="lab-results">
+    <div class="lab-results-brow"><div><span>02 / ANALYZE THE DIFFERENCE</span><h2>观察改变之后的世界。</h2><p>结果取自真实 A/B 模型快照；未运行前，不填数字，也不编造结论。</p></div><a href="#lab-stage">← 更换实验条件</a></div>
+    <section class="v39-lens" id="v39-lens" aria-labelledby="v39-lens-title">
+      <header class="v39-lens-head">
+        <div><span class="v39-eyebrow">03 / IMPACT LENS · MODEL OBSERVATIONS</span>
+          <h2 id="v39-lens-title">影响透视 <span>IMPACT / B − A</span></h2>
+          <p>对照真实模型快照，观察风险与增长的正负效应。差值统一采用 <strong>B − A</strong>，不是现实概率或因果贡献。</p></div>
+        <div class="v39-lens-state" id="v39-lens-state">WAITING FOR EXPERIMENT</div>
+      </header>
+      <div class="v39-lens-content">
+        <div class="v39-lens-main">
+          <div class="v39-lens-chapter"><span>01 · FIVE DIMENSIONS</span><strong id="v39-scenario">选择情景，打开模型内的另一条路径</strong><small id="v39-context">准备运行 A/B 对照 · 实验前不生成任何结果</small></div>
+          <div class="v39-timebar"><label for="v39-time">模型时间步 <output id="v39-time-out" for="v39-time">—</output></label>
+            <input type="range" id="v39-time" min="0" max="20" value="20" step="1" disabled aria-label="影响透视同步时间步">
+            <p>滑动即可同步底部 A/B 证据时间轴，绝非现实日历年份。</p>
+          </div>
+          <div class="v312-replaybar" aria-label="A/B 动态演化播放控制">
+            <button type="button" id="v312-replay" disabled>▶ 重放两条模型路径</button>
+            <span id="v312-replay-status" aria-live="polite">选择情景并运行后，可观看 T0—T20 的模型轨迹分化</span>
+          </div>
+          <div id="v39-deltas" class="v39-deltas" aria-live="polite">
+            <div class="v39-empty"><span>◇</span><strong>等待第一次模型实验</strong><p>先在上方选择一个情景，再点击“运行并对比”。这里将显示五项真正算出的模型差值。</p></div>
+          </div>
+          <div class="v39-lens-foot">所有方向均对应模型内部五项指标；风险上升是负面状态，不会被误标为增长。更换输入后旧结果将被清除。</div>
+        </div>
+        <div class="v39-lens-secondary">
+          <div class="v39-mini-header"><span>02 · CONNECTED CONSEQUENCES</span><strong>主体状态差异</strong></div>
+          <div id="v39-agents" class="v39-agent-list">
+            <div class="v39-wait-icon">✧</div><p>情景运行后，展示两局在同一时间步的主体存续及经营能量差异，而非未经识别的因果排名。</p>
+          </div>
+          <div class="v39-trend-block">
+            <div class="v39-mini-header"><span>03 · TEMPORAL SIGNAL</span><strong>景气 / 风险双轨演化</strong></div>
+            <svg id="v39-chart" viewBox="0 0 340 210" role="img" aria-label="模型 A/B 景气和风险随模拟时间步演化的真实快照折线，运行后出现"></svg>
+            <div class="v39-chart-legend"><span><i class="v39-line-a"></i>A 基线</span><span><i class="v39-line-b"></i>B 情景</span><span>模型时间步</span></div>
+          </div>
+        </div>
+      </div>
+      <footer class="v39-lens-actions">
+        <div id="v39-insight-hint"><span class="v39-signal-dot"></span> 当前仅能观察模型内部结果，独立预测校准仍需证据。</div>
+        <button type="button" id="v39-detail-button" class="v39-detail-button" disabled>查看完整 A/B 证据 →</button>
+      </footer>
+    </section>
+
+
+    </div>
+    <details class="lab-advanced" id="lab-evidence">
+      <summary class="lab-advanced-summary">
+        <span><small>03 / PROFESSIONAL RESEARCH</small><strong>打开高级研究与完整 A/B 证据</strong><em>模型主体、双网络、稳健性、复现实验和导出工具都保留在这里。</em></span>
+        <span class="lab-expand-glyph" aria-hidden="true">＋</span>
+      </summary>
+      <div class="lab-advanced-content" id="lab-advanced-content">
+    <section class="atlas-section" id="atlas-section" aria-labelledby="atlas-title">
+      <header class="atlas-heading">
+        <div class="atlas-eyebrow">04 / MODEL SUBJECT ATLAS · FULL INDEX</div>
+        <div class="atlas-title-row">
+          <div><h2 id="atlas-title">产业主体全景索引<span> / EVERY MODEL NODE</span></h2>
+            <p>全息图默认只标注少数核心节点，但这里列出当前模型中的<strong>全部主体</strong>：企业名称、产业角色及资源节点均可查找，点击可聚焦到上方的三维世界。</p></div>
+          <div class="atlas-counts" aria-label="模型节点统计">
+            <div><strong id="atlas-total">—</strong><span>模型主体</span></div>
+            <div><strong id="atlas-active">—</strong><span>模型内存续</span></div>
+            <div><strong id="atlas-found">—</strong><span>符合筛选</span></div>
+          </div>
+        </div>
+        <p class="atlas-disclosure"><strong>证据边界</strong>：这不是仲恺全部工商登记企业名册。部分节点为产业或公共资源角色；网络连接含历史/预设与模型推断，不等于现实采购合同、真实资金流或行政确认。</p>
+      </header>
+      <div class="atlas-controls">
+        <label class="atlas-search-wrap" for="atlas-search"><span>⌕</span><input id="atlas-search" type="search" placeholder="搜索主体名称、行业、模型角色…" autocomplete="off"></label>
+        <label class="atlas-type-wrap" for="atlas-type">主体类型 <select id="atlas-type"><option value="all">所有类型</option></select></label>
+        <div class="atlas-filters" role="group" aria-label="筛选模型主体">
+          <button type="button" data-atlas-filter="all" aria-pressed="true">全部</button>
+          <button type="button" data-atlas-filter="core" aria-pressed="false">核心主体</button>
+          <button type="button" data-atlas-filter="active" aria-pressed="false">模型内存续</button>
+          <button type="button" data-atlas-filter="inactive" aria-pressed="false">模型内退场</button>
+          <button type="button" data-atlas-filter="stressed" aria-pressed="false">低能量</button>
+        </div>
+      </div>
+      <div class="atlas-layout">
+        <div class="atlas-browser">
+          <div class="atlas-browser-head"><strong id="atlas-scene">仲恺 · 当前模型世界</strong><span id="atlas-page-label">读取中…</span></div>
+          <div id="atlas-list" class="atlas-list" aria-live="polite"><p class="atlas-placeholder">读取原模型主体与关系…</p></div>
+          <button type="button" id="atlas-more" class="atlas-more" hidden>展开全部筛选结果 ↓</button>
+        </div>
+        <aside class="atlas-inspector" aria-labelledby="atlas-inspector-title">
+          <span class="atlas-inspector-kicker">MODEL / SUBJECT INSPECTOR</span>
+          <h3 id="atlas-inspector-title">点击任一主体</h3>
+          <p class="atlas-inspector-intro" id="atlas-selected-intro">查看模型状态、关系来源和相邻节点，可转到本页专业主体分析。</p>
+          <div id="atlas-details" class="atlas-details" aria-live="polite">
+            <div class="atlas-empty-symbol">◎</div><p>当前显示模型中已构建的主体。请选择左侧名称，定位并检查。</p>
+          </div>
+          <button type="button" id="atlas-focus" class="atlas-focus" disabled>转到本页主体分析 ↗</button>
+          <p class="atlas-inspector-foot">选择节点只会更新主体查看区域，不会对模型注入冲击，也不会推断未经核实的经济事实。</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="v39-expert-intro" aria-label="专业模型研究工具">
+      <div><span>04 / DEEP RESEARCH</span><h2>深入模型内部</h2>
+       <p>以下为专业研究操作：随机种子、规则化冲击、主体移除、模型状态曲线及完整 A/B 网络。全息门户独立位于第一页。</p></div>
+      <a href="#compare-section" class="v39-expert-link">直接查看完整 A/B →</a>
+    </section>
+    <nav class="mobile-switch" aria-label="手机工作区">
+      <button type="button" data-mobile-to="input" aria-pressed="true">设置情景</button>
+      <button type="button" data-mobile-to="canvas" aria-pressed="false">观察演化</button>
+      <button type="button" data-mobile-to="insight" aria-pressed="false">结果洞察</button>
+      <button type="button" data-mobile-to="compare" aria-pressed="false">情景对比</button>
+    </nav>
+
+    <div id="lab-workstation" class="workstation" data-mobile="input">
+      <aside class="panel input-panel" aria-label="输入区">
+        <div class="panel-head"><span class="section-num">01</span><h2>情景设置</h2><span class="head-hint">INPUT</span></div>
+        <div class="inner">
+          <label for="research-question" class="field-name">研究问题</label>
+          <textarea id="research-question" rows="3" maxlength="300">如果产业链发生断供，仲恺企业网络将如何演化？</textarea>
+          <p class="field-tip">问题是实验备注，不会作为自由文本直接输入模型。</p>
+
+          <label for="shock-sel" class="field-name">冲击类型</label>
+          <select id="shock-sel">
+            <option value="芯片断供">芯片断供</option>
+            <option value="链主外迁">链主外迁</option>
+            <option value="订单外流">订单外流</option>
+            <option value="融资难">融资难</option>
+            <option value="用地收紧">用地收紧</option>
+            <option value="供应链中断">供应链中断</option>
+            <option value="人才流失">人才流失</option>
+            <option value="限电">限电</option>
+            <option value="产能过剩">产能过剩</option>
+            <option value="关税摩擦">关税摩擦</option>
+            <option value="政策收紧">政策收紧</option>
+            <option value="订单爆发">订单爆发</option>
+            <option value="政策利好">政策利好</option>
+            <option value="技术突破">技术突破</option>
+          </select>
+          <p class="field-tip">使用已有引擎的固定冲击定义；本版暂不伪造连续强度调节。</p>
+          <div class="field-split">
+            <div>
+              <label for="seed-input" class="field-name">随机种子</label>
+              <input id="seed-input" type="number" min="1" max="2147483647" value="7" step="1">
+            </div>
+            <div>
+              <label for="time-input" class="field-name">时间范围</label>
+              <input id="time-input" type="text" value="20 个模型步" readonly>
+            </div>
+          </div>
+          <button class="btn outline fill" id="load-seed" type="button">重新载入种子</button>
+          <div class="divider"></div>
+          <div class="action-note">当前局操作</div>
+          <button class="btn primary fill" id="btn-shock" type="button">向当前局注入冲击 <span aria-hidden="true">↗</span></button>
+          <button class="btn outline fill compare-shortcut" id="btn-design-compare" type="button">直接对比 A / B 两种情景 <span aria-hidden="true">↘</span></button>
+          <p class="field-tip">注入后可在中央画布单步推进或播放；不会自动创建 A/B 对照。</p>
+          <div class="feedback" id="nl-result" role="status" aria-live="polite"></div>
+
+          <details class="advanced">
+            <summary>高级实验操作 <span>原模型能力</span></summary>
+            <label for="remove-sel" class="field-name">移除主体</label>
+            <select id="remove-sel"></select>
+            <button class="btn outline fill" id="btn-remove" type="button">执行移除</button>
+            <label for="pert-metric" class="field-name">状态变量扰动</label>
+            <div class="field-split">
+              <select id="pert-metric">
+                <option value="abundance">景气</option>
+                <option value="order">协同</option>
+                <option value="disaster">风险</option>
+                <option value="mood">信心</option>
+              </select>
+              <input id="pert-delta" type="number" step=".05" value="-.2">
+            </div>
+            <button class="btn outline fill" id="btn-pert" type="button">执行扰动</button>
+            <label for="nl-input" class="field-name">自然语言指令（规则解析）</label>
+            <input id="nl-input" type="text" placeholder="例：TCL华星外迁">
+            <div class="field-split"><button class="btn outline" id="btn-nl" type="button">解析并执行</button><button class="btn textbtn" id="nl-hint" type="button">填入示例</button></div>
+          </details>
+        </div>
+      </aside>
+
+      <main class="panel canvas-panel" aria-label="主工作区">
+        <div class="panel-head">
+          <span class="section-num">02</span><h2>计算画布</h2><span class="head-hint" id="world-lbl">仲恺基准</span>
+        </div>
+        <div class="canvas-content">
+          <div class="canvas-topline">
+            <div><strong>产业网络演化</strong><p id="network-count">读取模型主体…</p></div>
+            <span class="live-label"><i></i> 当前局 <b id="tick-lbl">0</b> / 20</span>
+          </div>
+          <div class="view-tabs" role="tablist" aria-label="画布视图">
+            <button type="button" class="chosen" data-view="network" role="tab" aria-selected="true">产业网络</button>
+            <button type="button" data-view="trends" role="tab" aria-selected="false">指标演化</button>
+            <button type="button" data-view="timeline" role="tab" aria-selected="false">事件时间线</button>
+          </div>
+          <section class="view active" id="view-network" role="tabpanel" aria-label="产业网络">
+            <div class="network-frame">
+              <svg id="netsvg" viewBox="0 0 760 560" role="img" aria-label="实际模型生成的产业主体关系网络"></svg>
+            </div>
+            <div class="graph-legend"><span><i class="legend-dot main-dot"></i>链主</span><span><i class="legend-dot"></i>配套/服务</span><span><i class="legend-dot risk-dot"></i>红色轮廓表示负面状态</span><span>点击节点查看主体</span></div>
+          </section>
+          <section class="view" id="view-trends" role="tabpanel" aria-label="指标演化" hidden>
+            <div id="trends-grid" class="trends-grid"><p class="no-result">从当前局的实际状态快照生成五个指标曲线。</p></div>
+          </section>
+          <section class="view" id="view-timeline" role="tabpanel" aria-label="事件时间线" hidden>
+            <div id="tl-log" class="timeline-log"></div>
+          </section>
+          <div class="playback">
+            <div class="play-buttons"><button class="btn dark" id="btn-play" type="button">▶ 播放</button><button class="btn outline" id="btn-step" type="button">单步</button><button class="btn outline" id="btn-reset" type="button">重置</button></div>
+            <label for="track" class="sr-only">模型时间步</label>
+            <input type="range" id="track" min="0" max="20" value="0">
+          </div>
+          <div class="graph-foot">时间步是模型内部顺序，不是日历时间。点击“重置”将恢复当前随机种子的默认局。</div>
+        </div>
+      </main>
+
+      <aside class="panel insight-panel" aria-label="结果洞察区">
+        <div class="panel-head"><span class="section-num">03</span><h2>结果洞察</h2><span class="head-hint">INSIGHTS</span></div>
+        <div class="inner">
+          <div class="eyebrow">当前模拟状态</div>
+          <div class="stats">
+            <div class="stat"><div class="stat-heading"><span>景气</span><b id="k-ab">—</b></div><div class="meter"><span id="b-ab"></span></div></div>
+            <div class="stat"><div class="stat-heading"><span>协同</span><b id="k-or">—</b></div><div class="meter"><span id="b-or"></span></div></div>
+            <div class="stat"><div class="stat-heading"><span>风险</span><b id="k-di">—</b></div><div class="meter"><span id="b-di"></span></div></div>
+            <div class="stat"><div class="stat-heading"><span>信心</span><b id="k-mo">—</b></div><div class="meter"><span id="b-mo"></span></div></div>
+            <div class="stat"><div class="stat-heading"><span>存续率</span><b id="k-su">—</b></div><div class="meter"><span id="b-su"></span></div></div>
+          </div>
+          <div class="section-divider"></div>
+          <div class="eyebrow">局势说明</div>
+          <div id="plain-summary" class="narrative">基于当前局生成的简要说明。</div>
+          <div class="section-divider"></div>
+          <div class="eyebrow">主体观察</div>
+          <div class="focus-info" id="focus-info"><p class="no-result">点击中央网络的主体节点，查看主体状态与相关记录。</p></div>
+          <details class="detail-native">
+            <summary>按名称查找主体</summary>
+            <select id="iv-sel" aria-label="选择主体"></select>
+            <button class="btn outline fill" id="btn-iv" type="button">查看主体</button>
+            <div id="iv-box"></div>
+          </details>
+          <div class="science-note"><b>模型边界 · 尚无独立校准证明</b><p>这些是仿真状态指数，不是 GDP 预测值，也不能直接当作真实发生概率。</p><p><a href="verification.html">查看参数血统及历史回测门槛 ↗</a></p></div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="comparison" id="compare-section" aria-labelledby="compare-title">
+      <div class="compare-heading">
+        <div class="panel-head clear"><span class="section-num">04</span><h2 id="compare-title">情景对比</h2><span class="head-hint">A / B COMPARISON</span></div>
+        <div class="compare-actions"><button class="btn primary" type="button" id="btn-compare">按当前选择运行 A/B →</button><button class="btn outline" id="toggle-compare" type="button" aria-pressed="false">专注对比 ⛶</button><button class="btn outline" type="button" id="btn-clear-compare">清空结果</button></div>
+      </div>
+      <p class="compare-description" id="compare-note">基线 A 与冲击 B 使用相同种子和模型参数，均演化 20 步。B 在第 0 步注入选定冲击；此对照不修改上方当前局。</p>
+      <div class="compare-body" id="compare-body">
+        <div class="scenario-card">
+          <div class="scenario-name"><span class="scenario-badge a">A</span><div><h3>基准情景</h3><p>默认产业网络与参数</p></div><span class="scenario-status" id="status-a">未运行</span></div>
+          <svg id="graph-a" class="mini-network" viewBox="0 0 760 430" role="img" aria-label="A情景产业网络"></svg>
+        </div>
+        <div class="scenario-card">
+          <div class="scenario-name"><span class="scenario-badge b">B</span><div><h3>冲击情景</h3><p id="scenario-label">待选择冲击</p></div><span class="scenario-status" id="status-b">未运行</span></div>
+          <svg id="graph-b" class="mini-network" viewBox="0 0 760 430" role="img" aria-label="B情景产业网络"></svg>
+        </div>
+      </div>
+      <div class="compare-timeline">
+        <div class="compare-time-title"><div><strong>同步观察时间步</strong><span>让两张网络固定位置、一起演化</span></div><output id="compare-tick-value" for="compare-tick">t20 / 20</output></div>
+        <label class="sr-only" for="compare-tick">A/B 对比时间步</label>
+        <input type="range" id="compare-tick" min="0" max="20" value="20" disabled>
+        <div class="compare-timeline-hint" id="compare-timeline-hint">运行后可拖动到任意模型时间步，查看同一时刻的网络与指标差异。</div>
+      </div>
+      <div class="difference" id="difference">
+        <div class="difference-head"><h3>五项模型变化（改变后 − 未改变）</h3><p>差异条以零为中心；右侧为 B 高于 A，左侧为 B 低于 A</p></div>
+        <div id="compare-metrics" class="compare-metrics" aria-live="polite"><p class="no-result">等待执行 A/B 对比。</p></div>
+      </div>
+      <div class="compare-analytics">
+        <section class="analysis-panel" aria-labelledby="compare-trends-title">
+          <div class="analysis-heading"><h3 id="compare-trends-title">同时间轴 · 指标演化</h3><span>A 基线 / B 冲击</span></div>
+          <div id="compare-trends" class="compare-trends"><p class="no-result">等待 A/B 模型运行。</p></div>
+        </section>
+        <section class="analysis-panel" aria-labelledby="compare-agents-title">
+          <div class="analysis-heading"><h3 id="compare-agents-title">主体状态差异</h3><span>点击定位两侧网络</span></div>
+          <p class="impact-caveat">按存续状态、经营能量与预期变化的观察差异排序，非因果影响贡献值。</p>
+          <div id="compare-agents" class="compare-agents"><p class="no-result">等待主体差异计算。</p></div>
+        </section>
+      </div>
+      <section class="robustness" aria-labelledby="robust-title" id="robust-section">
+        <div class="robust-heading">
+          <div><span class="research-kicker">05 / ROBUSTNESS STUDY</span><h3 id="robust-title">多种子稳健性检查</h3>
+            <p>将同一个 A/B 设定放进不同随机种子，观察差值分布及方向是否一致。</p></div>
+          <span class="study-tag">模型内敏感性 · 非现实发生概率</span>
+        </div>
+        <div class="robust-controls">
+          <label for="robust-n">模拟种子数
+            <select id="robust-n"><option value="24">24 组 · 快速</option><option value="48" selected>48 组 · 标准</option><option value="96">96 组 · 详细</option></select>
+          </label>
+          <button class="btn primary" type="button" id="btn-robust">运行稳健性检查 →</button>
+          <button class="btn outline" type="button" id="btn-cancel-robust" hidden>中止计算</button>
+          <button class="btn outline" type="button" id="btn-export" disabled>导出当前研究 JSON ↓</button>
+        </div>
+        <div id="robust-status" role="status" aria-live="polite" class="robust-status">请先运行 A/B 对比，再执行多种子检查。</div>
+        <div id="robust-results" class="robust-results"><p class="no-result">尚无重复实验结果。</p></div>
+        <p class="robust-footnote">方法边界：每一组使用相同种子构建基线 A 与冲击 B，但注入冲击可能改变随机数消耗顺序；这里的差值分布只描述当前模拟模型和抽样设定，不构成现实因果效应、经济预测概率或置信区间。</p>
+      </section>
+      <div class="compare-provenance" id="compare-provenance">对比尚未运行。运行后展示随机种子、实验设置与对比口径。</div>
+      <div class="bottom-links"><a href="measurement.html">模型指标—现实观测映射 ↗</a><a href="verification.html">科学验证与留出集回测 ↗</a><a href="observations.html">七年历史观测与基线对照 ↗</a><a href="../v2/montecarlo.html">批量模拟 ↗</a><a href="../v2/sensitivity.html">参数敏感性 ↗</a><a href="../v2/data.html">数据与血统 ↗</a><a href="../v2/reports.html">原版研究档案 ↗</a></div>
+    </section>
+      </div>
+    </details>
+    <div class="runtime" id="runtime-alert" role="alert" hidden></div>
+    <footer class="app-footer">仲恺大众故事版 V3.22 · <a href="lab.html">专业实验室</a> · 使用根目录 <code>model.js</code> 计算内核 · 相同种子不等于因果识别 · <a href="../v2/">稳定版本 V2</a></footer>
+  </div>
+</div>
+<div class="compat" aria-hidden="true"><div id="data-lineage"></div><div id="report-locknote"></div><div id="report-box"></div><table id="param-table"><tbody></tbody></table><div id="missroles"></div><svg id="trend-chart"></svg></div>
+<script src="../model.js"></script>
+<script src="explore-core.js"></script><script src="holo-core.js"></script><script src="holo-render.js"></script><script src="impact-core.js"></script><script src="app.js"></script><script src="atlas-core.js"></script><script src="workbench-v39.js"></script><script src="atlas.js"></script><script src="lab-v311.js"></script><script src="v312-lab-motion.js"></script><script src="lab-play.js"></script>
+</body>
+</html>
