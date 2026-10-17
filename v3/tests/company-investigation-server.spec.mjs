@@ -1,11 +1,11 @@
 /* Mock-only licensed provider integration; no live vendor token in CI. */
 import assert from "node:assert/strict";
 import http from "node:http";
-import {settings,toDocument,createHandler} from "../../../services/company-investigation/server.mjs";
+import {settings,toDocument,createHandler} from "../../services/company-investigation/server.mjs";
 const baseEnv={
  INVESTIGATION_ALLOWED_ORIGIN:"https://zhanglingshare.github.io",
  INVESTIGATION_GATEWAY_TOKEN:"this-is-only-a-test-gateway-secret",
- TYC_ENTERPRISE_ENDPOINT:"https://open.api.tianyancha.com/services/open/ic/baseinfo/2.0",
+ TYC_ENTERPRISE_ENDPOINT:"https://open.api.tianyancha.com/services/v4/open/baseinfoV3",
  TYC_TOKEN:"fake-api-token-never-sent-to-real-host"
 };
 assert.equal(settings(baseEnv).available,true);
