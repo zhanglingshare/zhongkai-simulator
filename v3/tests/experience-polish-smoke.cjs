@@ -88,7 +88,7 @@ async function check(browser,port,width){
  assert.ok(positions.pilots<positions.baseline,"Pilot source review should lead statistical baseline");
  assert.match(await page.locator(".trust-first-action").innerText(),/先查一家企业的证据/);
  assert.equal(await page.locator("#pilot-case option").count(),5);
- assert.match(await page.locator("#pilot-case option").first().innerText(),/产能扩建/);
+ assert.match(await page.locator("#pilot-case option").first().textContent(),/产能扩建/);
  assert.doesNotMatch(await page.locator("#pilot-case").innerText(),/expansion-project-application|government-award-allocation/,
   "Raw engineering source type must be explained in Chinese");
  assert.match(await page.locator("#pilot-source").innerText(),/不证明/);
