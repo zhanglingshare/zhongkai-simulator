@@ -160,6 +160,7 @@ if(typeof previous==="function"){
   return {...r,investigation:approved?JSON.parse(JSON.stringify(approved)):null};
  };
 }
+window.__V317Diagnostics=()=>({name:company.value,approvedName:acceptedSnapshot?.name,lastName:lastAccepted?.name,lastExists:!!lastAccepted,resultQuery:result?.query,applying,run,normalizedName:E.normal(company.value),normalizedLast:E.normal(lastAccepted?.name)});
 if(!configuredUrl()){statusText("未连接授权数据服务。可先使用已整理公开资料样本调查；国家级实时工商数据查询未启用。");}
 render();
 })();
