@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#06121e">
 <title>V3.19 · 招商决策反转与主动尽调 | 仲恺产业风洞</title>
 <meta name="description" content="用公开研究模型比较一个假设新企业接入前后的产业网络、模型内指数与不确定性。独立探索，不作现实预测。">
-<link rel="stylesheet" href="inflow.css"><link rel="stylesheet" href="company-assist.css">
+<link rel="stylesheet" href="inflow.css"><link rel="stylesheet" href="company-assist.css"><link rel="stylesheet" href="experience-polish.css">
 <script defer src="portal-kernel.js"></script>
 <script defer src="inflow-core.js"></script>
 <script defer src="company-assist-core.js"></script>
@@ -36,29 +36,29 @@
     <a class="active" href="inflow.html" aria-current="page">新企业接入</a>
     <a href="measurement.html">科学验证</a><a href="trust.html">可信度工作台</a>
   </nav>
-  <span class="version">V3.19 / DECISION REVERSAL LAB</span>
+  <span class="version">企业接入 · 模型实验</span>
 </header>
 <main>
   <section class="intro">
     <div class="intro-main">
-      <p class="overline"><span class="dot"></span> 第三页 / 接入假设 · INCREMENTAL INFLOW</p>
-      <h1>如果一家新企业<br><em>进入仲恺产业网络？</em></h1>
-      <p class="lede">输入企业名称，查找公开资料，看看它可能做什么、与谁有关。你可以修改每条信息，再让模型比较接入前后的变化。</p>
-    </div>
-    <aside class="intro-note"><strong>系统先找资料，<br>最后由你决定。</strong><p>使用现有 Sim 仿真方程。只把用户输入的关系加入 B 情景；模型结果不是 GDP 预测、招商收益或真实政策因果效应。</p></aside>
+      <p class="overline"><span class="dot"></span> 企业怎样影响产业网络？ / 模型情景</p>
+      <h1>假如一家企业加入产业网络，<br><em>哪些连接会改变？</em></h1>
+      <p class="lede">不需要懂经济学。先用现有企业案例体验，再试着修改资料，观察模型里的关系和结果有什么不同。</p>
+    <div class="inflow-first-steps"><a href="#zhongkai-demo">① 先试一个已有企业案例 ↓</a><a href="#inflow-metrics">② 看模型变化 ↓</a><a href="#decision-lab">③ 深入比较判断 ↓</a></div></div>
+    <aside class="intro-note"><strong>先看演示，<br>再核实事实。</strong><p>使用现有 Sim 仿真方程。只把用户输入的关系加入 B 情景；模型结果不是 GDP 预测、招商收益或真实政策因果效应。</p></aside>
   </section>
 
   <div class="work-grid">
     <section class="pane inputs" aria-labelledby="input-title">
       <div class="section-number">01 / FIND · REVIEW · CONFIRM</div>
-      <h2 id="input-title">这家企业叫什么？</h2>
-      <p class="section-help">输入企业名，查看公开资料、逐项来源与矛盾。你可以编辑调查结论；只有确认后，才会把资料用于下一步模拟。</p>
-        <div class="local-case" id="zhongkai-demo"><div><span class="case-tag">仲恺高新区 · 真实企业参考</span><strong>惠州市博实结科技有限公司</strong><p>车载智能终端 / 物联网硬件。该企业已在仲恺经营，示范的是把现有企业补入模型，并非“新签约落地”。</p></div><button type="button" id="load-zhongkai-case">用这个案例演示 →</button><a href="https://gxj.huizhou.gov.cn/zwgk/ssjygk/content/post_3920441.html" target="_blank" rel="noopener noreferrer">惠州市工信局依据 ↗</a></div>
+      <h2 id="input-title">先选一个企业试试</h2>
+      <p class="section-help">第一次来？直接点下面的示范按钮；想研究其它企业，再输入名称并核对证据。</p>
+        <div class="local-case" id="zhongkai-demo"><div><span class="case-tag">仲恺高新区 · 真实企业参考</span><strong>惠州市博实结科技有限公司</strong><p>车载智能终端 / 物联网硬件。该企业已在仲恺经营，示范的是把现有企业补入模型，并非“新签约落地”。</p></div><button type="button" id="load-zhongkai-case">① 用已有企业开始演示 →</button><a href="https://gxj.huizhou.gov.cn/zwgk/ssjygk/content/post_3920441.html" target="_blank" rel="noopener noreferrer">惠州市工信局依据 ↗</a></div>
       <form id="inflow-form" novalidate>
         <label>企业名称（必填）
           <input id="company-name" name="company" maxlength="60" autocomplete="off" placeholder="输入企业名，例如：某某科技有限公司" required>
         </label>
-        <div class="dossier-search"><button type="button" id="company-auto-dossier">✦ 自动查找并预判断</button><span>现阶段自动填充仅覆盖已审核的公开样本（2 家）；并非任意企业的实时全网搜索。</span><div id="company-dossier-status" class="lookup-status" role="status" aria-live="polite">可以先试试博实结，或搜索“利元亨”。查不到时不会编造企业档案。</div><div id="company-dossier-hits" class="lookup-results"></div></div>
+        <div class="dossier-search"><button type="button" id="company-auto-dossier">✦ 查找已有的企业资料</button><span>现阶段自动填充仅覆盖已审核的公开样本（2 家）；并非任意企业的实时全网搜索。</span><div id="company-dossier-status" class="lookup-status" role="status" aria-live="polite">可以先试试博实结，或搜索“利元亨”。查不到时不会编造企业档案。</div><div id="company-dossier-hits" class="lookup-results"></div></div>
         <section class="investigation-panel" aria-labelledby="investigation-title">
           <div class="section-number">V3.17 / EVIDENCE FIRST</div>
           <h3 id="investigation-title">系统替你调查，结论由你把关</h3>
@@ -189,7 +189,7 @@
 
 <section class="pane economic-lab" id="economic-lab" aria-labelledby="economic-title">
   <div class="section-heading"><div><div class="section-number">V3.18 / NET NEW IMPACT · ASSUMPTIONS ONLY</div>
-    <h2 id="economic-title">这家企业，能带来多少真正的新增量？</h2></div><span class="model-pill">经济情景计算 · 非预测</span></div>
+    <h2 id="economic-title">如果是新增投资，模型能算出哪些变化？</h2></div><span class="model-pill">经济情景计算 · 非预测</span></div>
   <p class="section-help">与上方的产业关系网络不同，这里单独算<b>新投资、本地采购留存、岗位替代和土地/能源/水资源压力</b>。不把原 Sim 指数折算成GDP、税收或真实招商收益。未填数字不会被系统补出来。</p>
   <div class="econ-layout">
     <div class="econ-fields">
@@ -226,7 +226,7 @@
 </section>
 <section class="pane decision-lab" id="decision-lab" aria-labelledby="decision-title">
  <div class="section-heading"><div><div class="section-number">V3.19 / REVERSE THE DECISION</div>
- <h2 id="decision-title">什么条件下，你的判断会反转？</h2></div><span class="model-pill">可解释门槛 · 非自动审批</span></div>
+ <h2 id="decision-title">哪些条件会改变你的判断？</h2></div><span class="model-pill">可解释门槛 · 非自动审批</span></div>
  <p class="section-help">你来定义判断门槛，系统只检查 V3.18 假设区间能否满足它。<b>没有门槛，系统不会自作主张打分；没有证据，就不会给出真实招商结论。</b> 修改任何输入，下面的结论会同步更新。</p>
  <div class="decision-layout">
   <div class="decision-input">

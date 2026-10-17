@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#020c17">
 <meta name="description" content="仲恺产业风洞：基于公开证据的可交互三维产业网络，探索风险传播和潜在增长条件。独立研究、非官方决策建议。">
-<title>仲恺产业风洞 · 产业关系全息门户 V3.12</title>
-<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css">
+<title>仲恺产业风洞 · 产业关系全息门户 · 沉浸体验优化</title>
+<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css">
 <script defer src="portal-kernel.js"></script>
 <script defer src="holo-core.js"></script>
 <script defer src="portal-render.js"></script>
@@ -19,7 +19,7 @@
       <span class="brand-mark">Z<span>·</span></span>
       <span class="brand-name">ZHONGKAI <small>INDUSTRIAL WIND TUNNEL</small></span>
     </a>
-    <span class="edition"><span class="online-pulse"></span> V3.12 / NETWORK EVOLUTION</span>
+    <span class="edition"><span class="online-pulse"></span> 产业世界 / LIVE MODEL</span>
     <nav class="site-nav" aria-label="门户导航">
       <a class="nav-active" href="#world">全息网络</a>
       <a href="lab.html">模拟实验 <span>↗</span></a>
@@ -34,12 +34,13 @@
       <div class="portal-atmosphere" aria-hidden="true"></div>
       <div class="hero-story">
         <p class="hero-kicker"><span class="hero-diamond">◈</span> 产业关系全息入口 / OPEN RESEARCH</p>
-        <h1 id="portal-title">看见连接。<br><span>看见变化。</span></h1>
-        <p class="hero-deck">当链主、供应商、资源与产业角色相互连接，一次冲击可能改变什么？一种增长条件又会带来怎样的反应？</p>
+        <h1 id="portal-title">一家关键工厂变动，<br><span>谁会受到影响？</span></h1>
+        <p class="hero-deck">点一下，亲眼看这个产业网络里的企业与角色如何变化。你看到的是模型推演，不是现实发生过的事件。</p>
+        <div class="hero-quick-actions"><button id="hero-quickstart" type="button">▶ 看一次「链主外迁」</button><span>无需填写参数 · 使用现有模型情景</span></div>
         <div class="story-emphasis"><span class="emphasis-rule"></span><p>不替任何人作决定。<br>只把值得注意的可能性照亮。</p></div>
 
         <div class="control-panel" aria-label="全息网络情景控制">
-          <div class="panel-eyebrow"><span>01</span> 选择一次产业实验 <span class="panel-meta">SCENARIO</span></div>
+          <div class="panel-eyebrow"><span>01</span> 想试另一个变化？ <span class="panel-meta">SCENARIO</span></div>
           <label class="portal-field" for="portal-shock"><span>风险 / 增长情景</span>
             <select id="portal-shock" aria-label="选择产业风险或增长情景">
               <optgroup label="风险冲击">
@@ -63,8 +64,8 @@
             </label>
             <label class="portal-field" for="portal-labels"><span>名称显示</span>
               <select id="portal-labels">
-                <option value="core">核心标注</option>
-                <option value="all" selected>更多名称</option>
+                <option value="core" selected>核心标注</option>
+                <option value="all">更多名称</option>
               </select>
             </label>
           </div>
@@ -97,11 +98,11 @@
       </div>
 
       <aside class="telemetry" aria-label="当前场景模型数据及选中主体">
-        <div class="telemetry-head"><span class="radio-light"></span> 02 / MODEL RESPONSE</div>
-        <div class="telemetry-item"><span>景气 / ABUNDANCE</span><strong id="metric-abundance">—</strong><small id="delta-abundance">模型内部指标</small></div>
-        <div class="telemetry-item"><span>协同 / ORDER</span><strong id="metric-order">—</strong><small id="delta-order">模型内部指标</small></div>
-        <div class="telemetry-item risk-metric"><span>风险 / DISASTER</span><strong id="metric-disaster">—</strong><small id="delta-disaster">模型内部指标</small></div>
-        <div class="telemetry-item"><span>存续 / ACTIVE</span><strong id="metric-active">—</strong><small>当前模型主体</small></div>
+        <div class="telemetry-head"><span class="radio-light"></span> 模型在这一刻发生了什么</div>
+        <div class="telemetry-item"><span>经营景气（模型内）</span><strong id="metric-abundance">—</strong><small id="delta-abundance">模型内部指标</small></div>
+        <div class="telemetry-item"><span>合作协同（模型内）</span><strong id="metric-order">—</strong><small id="delta-order">模型内部指标</small></div>
+        <div class="telemetry-item risk-metric"><span>压力风险（模型内）</span><strong id="metric-disaster">—</strong><small id="delta-disaster">模型内部指标</small></div>
+        <div class="telemetry-item"><span>仍在运转的主体</span><strong id="metric-active">—</strong><small>当前模型主体</small></div>
         <div class="selected-subject"><span>SELECTED / MODEL SUBJECT</span>
           <strong id="subject-name">点击网络节点</strong>
           <p id="subject-detail">查看主体类别、模型能量与已建模关系。节点包括企业和产业角色，不是行政企业名录。</p>
@@ -111,9 +112,9 @@
     </section>
 
     <section class="playback-dock" aria-label="模型时间演化控制">
-      <div class="dock-context"><span class="dock-emblem">⟡</span><div><strong id="scene-title">基线 · 产业网络</strong><small id="scene-message" role="status" aria-live="polite">41 个已登记的模型候选主体就绪，选择情景可观察变化。</small></div></div>
+      <div class="dock-context"><span class="dock-emblem">⟡</span><div><strong id="scene-title">基线 · 产业网络</strong><small id="scene-message" role="status" aria-live="polite">41 个已登记的模型候选主体就绪，选择情景可观察变化。</small><p class="scene-plain-result" id="portal-story-result" aria-live="off">选一种变化，再看模型里哪些主体的状态发生改变。结果不等于现实企业的实际损失。</p></div></div>
       <button type="button" id="timeline-play" class="timeline-play" disabled aria-label="播放模型演化">▶</button>
-      <div class="timeline-control"><div class="timeline-heading"><span>SIMULATION / MODEL TICK</span><output id="timeline-output" for="timeline-slider">T 00 / 20</output></div>
+      <div class="timeline-control"><div class="timeline-heading"><span>模拟过程（不是现实年份）</span><output id="timeline-output" for="timeline-slider">T 00 / 20</output></div>
         <input id="timeline-slider" type="range" min="0" max="20" value="0" step="1" disabled aria-label="模型时间步回放">
         <div class="timeline-hints"><span>初始冲击</span><span>模型步 ≠ 现实年份</span><span>T20</span></div>
       </div>
