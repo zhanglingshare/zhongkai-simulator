@@ -30,10 +30,11 @@ async function check(browser,port,width){
  if(width<=960){
   const p=await page.evaluate(()=>{
    const a=document.querySelector("#world-stage").getBoundingClientRect(),
-    b=document.querySelector(".control-panel").getBoundingClientRect();
+    b=document.querySelector("#story-settings").getBoundingClientRect();
    return {stage:a.top,controls:b.top};
   });
-  assert.ok(p.stage<p.controls,"Mobile users should see visual world before expert form: "+JSON.stringify(p));
+  assert.ok(p.stage<p.controls,"Immersive model must appear before optional settings: "+JSON.stringify(p));
+  assert.equal(await page.locator("#portal-population").isVisible(),false);
  }
  await page.locator("#hero-quickstart").click();
  assert.equal(await page.locator("#timeline-slider").isEnabled(),true);
