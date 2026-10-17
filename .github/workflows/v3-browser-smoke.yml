@@ -19,6 +19,8 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -80,6 +82,17 @@ jobs:
         run: node v3/tests/trust-audit-smoke.cjs
       - name: V3.20 independent public V3.19 Pages access check
         run: node v3/tests/v319-public-pages-check.mjs
+      - name: V3.21 real-source pilot audit, contradictory evidence, guarded economics and append-only snapshot tests
+        run: node v3/tests/pilot-closure.spec.cjs
+      - name: V3.21 five-company validation loop Chrome desktop and mobile acceptance
+        run: node v3/tests/pilot-closure-smoke.cjs
+      - name: V3.21 ensure prior Git source snapshots cannot be rewritten
+        if: github.event_name == 'pull_request'
+        env:
+          V321_BASE_COMMIT: ${{ github.event.pull_request.base.sha }}
+        run: node v3/scripts/check-snapshot-history.cjs
+      - name: V3.21 independently verify previous V3.20 live GitHub Pages
+        run: node v3/tests/v320-public-pages-check.mjs
       - name: Upload screenshots for visual review
         if: always()
         uses: actions/upload-artifact@v4
