@@ -138,3 +138,8 @@
  .portal-shell .hero-quick-actions button{transition:none}
  :where(.portal-shell,.lab-v311,.shell,.trust-shell) *{scroll-behavior:auto!important}
 }
+@media(max-width:760px){
+ /* Expert icon rail duplicates the public navigation on phone. Keep the
+    same destinations in existing research pages; show only one navigation. */
+ .app>.rail{display:none}
+}
