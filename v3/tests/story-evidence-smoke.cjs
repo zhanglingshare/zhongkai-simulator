@@ -50,7 +50,11 @@ async function check(browser,port,width){
    assert.ok(summary.includes(expected[0].name));
    const tags=await page.locator("#holo-labels .story-highlight").count();
    assert.ok(tags<=3,"Never clutter hologram with >3 highlighted names");
-   await page.locator("#story-people .story-person").first().click();
+   if(width===390&&tick===9){
+    const dir=path.join(root,"v3/screenshots");fs.mkdirSync(dir,{recursive:true});
+    await page.screenshot({path:path.join(dir,"story-evidence-synced-full-390.png"),fullPage:true});
+  }
+  await page.locator("#story-people .story-person").first().click();
    assert.equal(await page.locator("#subject-name").textContent(),expected[0].name,
     "Click model actor in story must move original hologram focus");
   }else{
