@@ -17,9 +17,26 @@ function stop(){
  if(timer!==null){window.clearInterval(timer);timer=null;}
  $("timeline-play").textContent="▶";$("timeline-play").setAttribute("aria-label","播放模型演化");
 }
+const numberAnimations=new Map(),previousTargets=new Map();
 function metric(id,value){
- const node=$(id);
- node.textContent=Number.isFinite(value)?value.toFixed(3):"—";
+ const node=$(id);if(!node)return;
+ const last=previousTargets.get(id),running=numberAnimations.get(id);
+ if(running)cancelAnimationFrame(running);
+ numberAnimations.delete(id);
+ previousTargets.set(id,value);
+ if(!Number.isFinite(value)){node.textContent="—";return;}
+ // Intermediate digits are a visual tween; only T0–T20 snapshot endpoints are model values.
+ if(reduced||!Number.isFinite(last)||Math.abs(value-last)<.0005){
+   node.textContent=value.toFixed(3);return;
+ }
+ const start=performance.now(),duration=240;
+ const frame=now=>{
+   const u=Math.min(1,(now-start)/duration),ease=1-Math.pow(1-u,3);
+   node.textContent=(last+(value-last)*ease).toFixed(3);
+   if(u<1)numberAnimations.set(id,requestAnimationFrame(frame));
+   else{node.textContent=value.toFixed(3);numberAnimations.delete(id);}
+ };
+ numberAnimations.set(id,requestAnimationFrame(frame));
 }
 function updateStats(snapshot,baseSnapshot){
  if(!snapshot)return;
@@ -63,6 +80,24 @@ function paint(t){
    view.setGraph(snap.agents,base.edges,{tick:t});
  }else view.setFrame(snap.agents,{tick:t});
  updateStats(snap,reference);
+ // Counts are factual comparisons of consecutive *model* snapshots; no attribution asserted.
+ const banner=$("world-variation");
+ if(banner){
+   if(frames&&t>0){
+     const earlier=new Map(frames.B[t-1].agents.map(n=>[n.name,n]));
+     const exits=snap.agents.filter(n=>earlier.get(n.name)?.alive&&!n.alive).length;
+     const declined=snap.agents.filter(n=>earlier.get(n.name)?.alive&&n.alive&&
+       Number.isFinite(n.energy)&&Number.isFinite(earlier.get(n.name).energy)&&
+       n.energy<earlier.get(n.name).energy-.045).length;
+     const riskDelta=snap.state.disaster-frames.B[t-1].state.disaster;
+     banner.textContent="T"+String(t).padStart(2,"0")+" 模型观察 · "+
+       declined+" 主体能量下降 · "+exits+" 退场 · 风险 Δ "+(riskDelta>0?"+":"")+riskDelta.toFixed(3);
+     banner.dataset.changed=exits||declined?"true":"false";
+   }else{
+     banner.textContent=frames?"冲击已注入 · 拖动时间轴观察模型状态":"模型基线 · 选择情景开始观察";
+     banner.dataset.changed="false";
+   }
+ }
  $("timeline-slider").value=String(t);
  $("timeline-output").textContent="T "+String(t).padStart(2,"0")+" / "+MAX_TICKS;
  $("world-node-count").textContent=snap.agents.length;
@@ -78,6 +113,7 @@ function reset({preserveSeed=true}={}){
  frames=null;cursor=0;selected=null;
  base=new S(seed,{n_agents:selectedSize(),ticks:MAX_TICKS});
  $("portal-population").value=String(base.agents.length);
+ previousTargets.clear();
  $("timeline-play").disabled=true;$("timeline-slider").disabled=true;
  $("subject-name").textContent="点击网络节点";
  $("subject-detail").textContent="查看主体类别、模型能量与已建模关系。节点包括企业和产业角色，不是行政企业名录。";

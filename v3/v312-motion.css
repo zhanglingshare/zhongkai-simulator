@@ -1,0 +1,35 @@
+/* V3.12 unified model-state motion language. Motion visualizes completed Sim snapshots,
+   not inferred physical pathways, real economic causation or additional model results. */
+:root{--v312-tick:340ms;--v312-flash:rgba(242,174,121,.58);--v312-model-positive:#74d9b8;--v312-model-negative:#e9a282}
+.world-variation{position:absolute;z-index:5;pointer-events:none;bottom:52px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 34px);background:rgba(5,37,55,.88);border:1px solid rgba(91,177,201,.42);border-radius:24px;padding:7px 14px;color:#afdae5;font:710 10px/1.65 ui-monospace,Consolas,monospace;letter-spacing:.1px;text-align:center;white-space:normal;box-shadow:0 4px 30px rgba(4,21,34,.2);backdrop-filter:blur(8px)}
+.world-variation[data-changed="true"]{color:#ffca9d;border-color:rgba(233,170,122,.6);background:rgba(73,46,39,.82)}
+#metric-abundance,#metric-order,#metric-disaster,#timeline-output,.telemetry-item strong{font-variant-numeric:tabular-nums}
+#world-stage .holo-node-label{transition:opacity 160ms ease-out,border-color 220ms,color 220ms}
+#world-stage .world-heading{opacity:.95}
+.v312-replaybar{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;margin:14px 0 17px;padding:9px 11px;border:1px solid rgba(88,161,186,.35);background:rgba(20,62,81,.31);border-radius:8px}
+#v312-replay{border:1px solid #53b0c6;background:rgba(19,83,107,.76);border-radius:6px;color:#d7faff;font:720 11px/1.5 "Segoe UI","PingFang SC",system-ui,sans-serif;min-height:37px;padding:8px 12px;cursor:pointer}
+#v312-replay:hover:not(:disabled){background:#22647a;color:white}
+#v312-replay:disabled{opacity:.4;cursor:not-allowed}
+#v312-replay-status{font-size:10px;line-height:1.65;color:#9dbdca;flex:1;min-width:160px}
+.lab-has-results .lab-preview{border-color:rgba(100,207,217,.61);box-shadow:0 0 33px rgba(22,166,188,.1)}
+.lab-quick-fill,.v39-delta-fill{will-change:width,left}
+#v39-chart{isolation:isolate}
+#v39-chart .v312-timeline-curve{stroke-linecap:round;stroke-linejoin:round}
+#v39-chart.v312-animating .v312-curve-marker{animation:v312-marker-enter 250ms ease-out}
+#v39-chart.v312-animating .v312-timeline-curve{animation:v312-segment-appear 250ms ease-out}
+@keyframes v312-marker-enter{from{opacity:.35}to{opacity:1}}
+@keyframes v312-segment-appear{from{opacity:.58}to{opacity:1}}
+@media(max-width:700px){
+ .world-variation{bottom:40px;padding:5px 9px;font-size:9px;max-width:calc(100% - 15px)}
+ .v312-replaybar{gap:7px}
+ #v312-replay{width:100%;min-height:38px}
+ #v312-replay-status{min-width:0;text-align:center;font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{scroll-behavior:auto!important}
+ #world-stage .holo-node-label{transition:none}
+ .lab-has-results .lab-preview{box-shadow:none}
+ #v39-chart.v312-animating .v312-curve-marker,
+ #v39-chart.v312-animating .v312-timeline-curve{animation:none!important}
+ .lab-quick-fill,.v39-delta-fill{transition:none!important;will-change:auto}
+}
