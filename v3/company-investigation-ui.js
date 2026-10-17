@@ -7,7 +7,7 @@ if(!E||!D)return;
 const company=$("company-name"),start=$("investigate-company"),reportHost=$("investigation-report"),
 apply=$("investigation-apply"),status=$("investigation-status"),consent=$("investigation-online-consent");
 const config=window.ZKInvestigationConfig||{apiUrl:"",providerLabel:"未配置"};
-let result=null,edited={},chosenRecord=null,run=0,acceptedSnapshot=null,lastAccepted=null,applying=false;
+let result=null,edited={},chosenRecord=null,run=0,activeQuery="",acceptedSnapshot=null,lastAccepted=null,applying=false;
 const diagnostics=[];const note=(tag,details)=>{diagnostics.push({tag,details,run,haveLast:!!lastAccepted});if(diagnostics.length>16)diagnostics.shift();};
 const make=(tag,css,t)=>{const node=document.createElement(tag);if(css)node.className=css;
  if(t!==undefined)node.textContent=String(t);return node;};
@@ -71,7 +71,7 @@ function render(){
  questions.append(ul);reportHost.append(questions);
 }
 async function investigate(){
- const q=company.value.trim();const marker=++run;note("investigate-start",q);apply.disabled=true;edited={};acceptedSnapshot=null;lastAccepted=null;
+ const q=company.value.trim();activeQuery=q;const marker=++run;note("investigate-start",q);apply.disabled=true;edited={};acceptedSnapshot=null;lastAccepted=null;
  if(q.length<2){result={ok:false,reason:"请至少输入两个字的企业名称"};render();statusText(result.reason,"warning");return;}
  start.disabled=true;statusText("正在检查国内公开证据及授权接口状态……","pending");
  let docs=[],providerState="";
@@ -147,8 +147,12 @@ apply.addEventListener("click",()=>{
  $("company-confirm").checked=false;
 });
 company.addEventListener("input",event=>{note("company-input",{value:company.value,isTrusted:event.isTrusted,applying});if(applying)return;
+ // Old lookup components sometimes dispatch a synthetic input event that
+ // repeats the identical company value. That must not cancel an in-flight
+ // lookup or silently discard the human-reviewed dossier.
+ if(!event.isTrusted&&activeQuery&&E.normal(company.value)===E.normal(activeQuery))return;
  if(lastAccepted&&E.normal(company.value)===E.normal(lastAccepted.name))return;
- run++;result=null;edited={};acceptedSnapshot=null;
+ run++;activeQuery="";result=null;edited={};acceptedSnapshot=null;
  // Legacy auto-fill events are synthetic. Only a genuine human identity edit
  // may revoke an approved dossier; snapshot still checks the current name.
  if(event.isTrusted)lastAccepted=null;
