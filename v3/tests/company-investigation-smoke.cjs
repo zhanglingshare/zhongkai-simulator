@@ -18,10 +18,12 @@ async function check(browser,port,width,licensed=false){
   await page.route("**/company-investigation-config.js",r=>r.fulfill({status:200,contentType:"application/javascript",
    body:'window.ZKInvestigationConfig={apiUrl:"https://licensed.example.test/api/company-investigate",providerLabel:"测试授权数据"};'}));
   await page.route("https://licensed.example.test/api/company-investigate",route=>{
+   const cors={"access-control-allow-origin":"http://127.0.0.1:"+port,"access-control-allow-credentials":"true","access-control-allow-methods":"POST, OPTIONS","access-control-allow-headers":"content-type"};
+   if(route.request().method()==="OPTIONS"){route.fulfill({status:204,headers:cors,body:""});return;}
    const sent=route.request().postDataJSON();
    assert.equal(sent.consent,true);
    assert.equal(sent.name,"惠州市博实结科技有限公司");
-   route.fulfill({status:200,contentType:"application/json",headers:{"access-control-allow-origin":"http://127.0.0.1:"+port,"access-control-allow-credentials":"true"},
+   route.fulfill({status:200,contentType:"application/json",headers:cors,
     body:JSON.stringify({ok:true,name:sent.name,documents:[{
      companyName:sent.name,fields:{business:"工业机器人零部件供应",registrationStatus:"存续",
       registeredAddress:"惠州市仲恺高新区某地（测试数据）"},
