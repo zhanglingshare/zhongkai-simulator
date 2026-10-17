@@ -7,7 +7,7 @@ if(!E||!D)return;
 const company=$("company-name"),start=$("investigate-company"),reportHost=$("investigation-report"),
 apply=$("investigation-apply"),status=$("investigation-status"),consent=$("investigation-online-consent");
 const config=window.ZKInvestigationConfig||{apiUrl:"",providerLabel:"未配置"};
-let result=null,edited={},chosenRecord=null,run=0,acceptedSnapshot=null,applying=false;
+let result=null,edited={},chosenRecord=null,run=0,acceptedSnapshot=null,lastAccepted=null,applying=false;
 const make=(tag,css,t)=>{const node=document.createElement(tag);if(css)node.className=css;
  if(t!==undefined)node.textContent=String(t);return node;};
 const statusText=(s,kind="")=>{status.textContent=s;status.dataset.kind=kind;};
@@ -140,17 +140,21 @@ apply.addEventListener("click",()=>{
   warning:approved.warnings,identityChanged:approved.identityChanged,
   clientConsent:consent.checked,sourceCount:result.documents,
   scope:"Independent public or licensed data vendor claims, not proof of investment"};
+ lastAccepted=JSON.parse(JSON.stringify(acceptedSnapshot));
  statusText("调查结论已填入可编辑表单；修改身份资料会使之前的在地判断失效。仍需确认研究情景与业务联系。","success");
  $("company-confirm").checked=false;
 });
-company.addEventListener("input",()=>{if(applying)return;run++;result=null;edited={};acceptedSnapshot=null;
+company.addEventListener("input",()=>{if(applying)return;
+ if(lastAccepted&&E.normal(company.value)===E.normal(lastAccepted.name))return;
+ run++;result=null;edited={};acceptedSnapshot=null;lastAccepted=null;
  apply.disabled=true;reportHost.replaceChildren();
  statusText("名称已修改，之前调查结果不适用。","warning");start.disabled=false;});
 const previous=window.ZKCompanyResearchUI?.snapshot;
 if(typeof previous==="function"){
  window.ZKCompanyResearchUI.snapshot=()=>{
   const r=previous();
-  return {...r,investigation:acceptedSnapshot?JSON.parse(JSON.stringify(acceptedSnapshot)):null};
+  const approved=lastAccepted&&E.normal(company.value)===E.normal(lastAccepted.name)?lastAccepted:null;
+  return {...r,investigation:approved?JSON.parse(JSON.stringify(approved)):null};
  };
 }
 if(!configuredUrl()){statusText("未连接授权数据服务。可先使用已整理公开资料样本调查；国家级实时工商数据查询未启用。");}
