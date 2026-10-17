@@ -70,6 +70,10 @@ jobs:
         run: node v3/tests/economic-impact.spec.cjs
       - name: V3.18 scenario economics and source ledger Chrome mobile acceptance
         run: node v3/tests/economic-impact-smoke.cjs
+      - name: V3.19 exact decision thresholds and 20-source diligence boundary tests
+        run: node v3/tests/decision-reversal.spec.cjs
+      - name: V3.19 decision inversion Chrome desktop and mobile E2E
+        run: node v3/tests/decision-reversal-smoke.cjs
       - name: Upload screenshots for visual review
         if: always()
         uses: actions/upload-artifact@v4
