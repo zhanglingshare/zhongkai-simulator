@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="light">
 <title>仲恺产业风洞 · 大众体验精修 · 动态产业风洞实验室 · A/B 条件性研究</title>
 <meta name="description" content="仲恺产业风洞实验工作台：网络推演、同种子情景对比和可追溯的模型观察。">
-<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explore.css"><link rel="stylesheet" href="workbench-v39.css"><link rel="stylesheet" href="atlas.css"><link rel="stylesheet" href="lab-v311.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css">
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="explore.css"><link rel="stylesheet" href="workbench-v39.css"><link rel="stylesheet" href="atlas.css"><link rel="stylesheet" href="lab-v311.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css"><link rel="stylesheet" href="visual-interaction.css">
 </head>
 <body>
 <div class="app">
@@ -93,12 +93,45 @@
           <div class="lab-path lab-path-a"><div><span>SCENARIO A</span><strong>基准世界</strong><small>不注入该情景冲击</small></div><span class="lab-path-glyph">A</span></div>
           <div class="lab-path lab-path-b"><div><span>SCENARIO B</span><strong id="lab-b-name">待选择情景</strong><small>第 0 个模型步注入</small></div><span class="lab-path-glyph">B</span></div>
         </div>
+        <section class="lab-play-stage" id="lab-play-stage" data-state="waiting" aria-labelledby="lab-play-title">
+          <div class="lab-play-head"><h3 id="lab-play-title">拖一拖，看差距怎么出现</h3><span>同一步对照</span></div>
+          <div class="lab-play-legend"><span><i></i>A 未发生这件事</span><span><i></i>B 发生这件事</span></div>
+          <div class="lab-play-bars" id="lab-play-bars">
+            <div class="lab-play-group" data-metric="abundance">
+              <div class="lab-play-chart" role="img" aria-label="尚未运行模型">
+                <div class="lab-play-column" data-path="a"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+                <div class="lab-play-column" data-path="b"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+              </div><h4>产业活力</h4><small>模型指数 · 高一些较好</small><strong class="lab-play-gap">—</strong>
+            </div>
+            <div class="lab-play-group" data-metric="disaster">
+              <div class="lab-play-chart" role="img" aria-label="尚未运行模型">
+                <div class="lab-play-column" data-path="a"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+                <div class="lab-play-column" data-path="b"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+              </div><h4>压力风险</h4><small>模型指数 · 低一些较好</small><strong class="lab-play-gap">—</strong>
+            </div>
+            <div class="lab-play-group" data-metric="survivors">
+              <div class="lab-play-chart" role="img" aria-label="尚未运行模型">
+                <div class="lab-play-column" data-path="a"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+                <div class="lab-play-column" data-path="b"><div class="lab-play-fill"><span class="lab-play-number">—</span></div></div>
+              </div><h4>仍在运转</h4><small>模型角色 · 数量</small><strong class="lab-play-gap">—</strong>
+            </div>
+          </div>
+          <div class="lab-play-control"><label for="lab-play-time">拖动查看过程 <output id="lab-play-time-out" for="lab-play-time">等待运行</output></label>
+            <input id="lab-play-time" type="range" min="0" max="20" step="1" value="20" disabled aria-label="拖动比较同一步的两组模型结果">
+            <div class="lab-play-ticks"><span>第 0 步</span><span>模型步骤，不是年份</span><span id="lab-play-end">第 20 步</span></div>
+          </div>
+          <p class="lab-play-hint" id="lab-play-hint" role="status" aria-live="polite">先运行一次，再拖动。柱高显示原模型的实际快照，不预填结果。</p>
+          <button class="lab-play-reset" id="lab-play-final" type="button" disabled>直接看最后一步 →</button>
+          <div class="lab-play-switch" aria-label="换个情景立即运行"><span>再试一种变化</span><button type="button" data-play-shock="链主外迁">大厂搬走</button><button type="button" data-play-shock="技术突破">技术突破</button><button type="button" data-play-shock="供应链中断">供应中断</button></div>
+        </section>
         <div class="lab-preview-plain" id="lab-plain-result" role="status" aria-live="polite"><strong>还没有进行实验</strong><p>先在左侧选一个变化并点击运行，系统会用普通话提示这次模型里的主要差异。</p></div>
         <div class="lab-preview-status" id="lab-preview-status" data-state="waiting">等待运行 · NO COMPUTED DATA</div>
+        <details class="lab-play-research"><summary>展开全部五项指标</summary>
         <div class="lab-preview-metrics" id="lab-preview-metrics" aria-live="polite">
           <div class="lab-preview-empty"><span>⌁</span><strong>结果留白，直到模型运行</strong>
           <p>选择一个情景，点击运行 A/B。这里才会显示真正算出来的模型内差值。</p></div>
         </div>
+        </details>
         <a class="lab-results-jump" href="#lab-results">查看影响透视 <span>↓</span></a>
         <p class="lab-preview-boundary">B − A · 数值描述模型差异，不是 GDP 增量或政策因果效应</p>
       </aside>
@@ -406,6 +439,6 @@
 </div>
 <div class="compat" aria-hidden="true"><div id="data-lineage"></div><div id="report-locknote"></div><div id="report-box"></div><table id="param-table"><tbody></tbody></table><div id="missroles"></div><svg id="trend-chart"></svg></div>
 <script src="../model.js"></script>
-<script src="explore-core.js"></script><script src="holo-core.js"></script><script src="holo-render.js"></script><script src="impact-core.js"></script><script src="app.js"></script><script src="atlas-core.js"></script><script src="workbench-v39.js"></script><script src="atlas.js"></script><script src="lab-v311.js"></script><script src="v312-lab-motion.js"></script>
+<script src="explore-core.js"></script><script src="holo-core.js"></script><script src="holo-render.js"></script><script src="impact-core.js"></script><script src="app.js"></script><script src="atlas-core.js"></script><script src="workbench-v39.js"></script><script src="atlas.js"></script><script src="lab-v311.js"></script><script src="v312-lab-motion.js"></script><script src="lab-play.js"></script>
 </body>
 </html>

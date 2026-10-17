@@ -80,21 +80,20 @@ function paint(t){
    view.setGraph(snap.agents,base.edges,{tick:t});
  }else view.setFrame(snap.agents,{tick:t});
  updateStats(snap,reference);
- // Counts are factual comparisons of consecutive *model* snapshots; no attribution asserted.
+ // Banner, role cards, and highlights all compare the SAME A[t] / B[t].
  const banner=$("world-variation");
  if(banner){
-   if(frames&&t>0){
-     const earlier=new Map(frames.B[t-1].agents.map(n=>[n.name,n]));
+   if(frames&&reference){
+     const earlier=new Map(reference.agents.map(n=>[n.name,n]));
      const exits=snap.agents.filter(n=>earlier.get(n.name)?.alive&&!n.alive).length;
      const declined=snap.agents.filter(n=>earlier.get(n.name)?.alive&&n.alive&&
        Number.isFinite(n.energy)&&Number.isFinite(earlier.get(n.name).energy)&&
-       n.energy<earlier.get(n.name).energy-.045).length;
-     const riskDelta=snap.state.disaster-frames.B[t-1].state.disaster;
-     banner.textContent="T"+String(t).padStart(2,"0")+" 模型观察 · "+
-       declined+" 个角色状态变弱 · "+exits+" 个角色退出";
+       n.energy<earlier.get(n.name).energy-.005).length;
+     banner.textContent="T"+String(t).padStart(2,"0")+" 模型观察 · 对照未发生变化的路径 · "+
+       declined+" 个角色状态更弱 · "+exits+" 个角色退出";
      banner.dataset.changed=exits||declined?"true":"false";
    }else{
-     banner.textContent=frames?"假设变化已开始 · 看看网络会怎样发展":"模型里的产业关系 · 点击播放开始";
+     banner.textContent="模型里的产业关系 · 点击播放开始";
      banner.dataset.changed="false";
    }
  }
@@ -102,6 +101,7 @@ function paint(t){
  // snapshots at the selected tick, not from real company data or causal inference.
  const roleStory=window.ZKRoleStory,roleBox=$("role-story-focus");
  const changed=frames&&reference&&roleStory?roleStory.compare(reference,snap,3):[];
+ view.setStoryFocus(changed);
  if(roleBox){
    roleBox.replaceChildren();
    if(changed.length){
@@ -110,9 +110,14 @@ function paint(t){
      changed.forEach((c,i)=>{
        const li=document.createElement("li"),button=document.createElement("button");
        button.type="button";button.className="role-story-person";
+       button.setAttribute("aria-pressed",String(selected===c.name));
        button.textContent=(i+1)+". "+c.name+" · "+c.direction;
        button.setAttribute("aria-label","在网络中查看"+c.name+"："+c.direction);
-       button.addEventListener("click",()=>focusNode(c.name));
+       button.addEventListener("click",()=>{
+         focusNode(c.name);
+         roleBox.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b===button)));
+         $("world-stage")?.scrollIntoView({behavior:reduced?"auto":"smooth",block:"center"});
+       });
        const detail=document.createElement("span");detail.textContent=c.explanation+"（仅模型对照）";
        li.append(button,detail);list.append(li);
      });
@@ -167,7 +172,7 @@ function reset({preserveSeed=true}={}){
 }
 function run(shock,atTick=0){
  if(!SHOCKS.includes(shock)){msg("未登记在原模型的冲击类型，无法执行。");return;}
- stop();$("portal-shock").value=shock;chosen=shock;
+ stop();view.finishEntrance();$("portal-shock").value=shock;chosen=shock;
  const size=selectedSize();
  base=new S(seed,{n_agents:size,ticks:MAX_TICKS});
  const b=new S(seed,{n_agents:size,ticks:MAX_TICKS});
@@ -242,7 +247,19 @@ function manualCopy(link){
 }
 try{
  view=H.mount({canvas:$("holo-canvas"),labels:$("holo-labels"),tooltip:$("holo-hover"),
-  status:$("render-mode"),onSelect:selectNode});
+  status:$("render-mode"),onSelect:selectNode,entrance:true,onEntrance:info=>{
+    const status=$("world-build-status"),list=$("build-batches");
+    if(status)status.textContent=info.done?
+      "组网完成 · "+info.total+" 个模型主体 / "+info.edges+" 条模型连线":
+      "正在接入 · "+(info.batches[info.batch]?.label||"产业主体")+" · "+info.arrived+" / "+info.total+" 个主体已到位";
+    if(list){
+      if(list.children.length!==info.batches.length){
+        list.replaceChildren(...info.batches.map(g=>{const li=document.createElement("li");li.textContent=g.label+" "+g.count;return li;}));
+      }
+      [...list.children].forEach((li,i)=>{li.dataset.state=info.done?"done":info.stages[i];});
+    }
+  }});
+ $("world-build-replay")?.addEventListener("click",()=>{reset();$("world-stage")?.scrollIntoView({behavior:reduced?"auto":"smooth",block:"center"});});
  view.setLabelMode($("portal-labels").value);
  $("portal-run").addEventListener("click",()=>run($("portal-shock").value));
  $("preset-risk").addEventListener("click",()=>run("链主外迁"));

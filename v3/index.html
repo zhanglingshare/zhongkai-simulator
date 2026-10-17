@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#020c17">
 <meta name="description" content="仲恺产业风洞：基于公开证据的可交互三维产业网络，探索风险传播和潜在增长条件。独立研究、非官方决策建议。">
-<title>仲恺产业风洞 · 产业关系全息门户 · 沉浸体验优化</title>
-<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css">
+<title>仲恺产业风洞 · 看见产业如何连起来</title>
+<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css"><link rel="stylesheet" href="visual-interaction.css">
 <script defer src="portal-kernel.js"></script>
 <script defer src="holo-core.js"></script>
+<script defer src="visual-entry-core.js"></script>
 <script defer src="portal-render.js"></script>
 <script defer src="role-story-core.js"></script>
 <script defer src="portal.js"></script>
@@ -58,6 +59,9 @@
         <div class="world-footer"><span><b id="world-node-count">—</b> 个产业角色</span>
           <span><b id="world-edge-count">—</b> 条模型连线</span><span class="world-pointer">拖动旋转 · 点击主体</span></div>
       </div>
+
+      <div class="world-build"><p id="world-build-status" role="status" aria-live="off">链主、配套、服务与人才，正在组成一张网。</p><button id="world-build-replay" type="button">↻ 重新看组网</button></div>
+      <ol class="build-batches" id="build-batches" aria-label="产业主体入场顺序"></ol>
 
       <section class="story-result" aria-label="这次模拟里发生了什么">
         <div class="story-result-head"><span>看到了什么？</span><strong id="story-phase">还没开始</strong></div>

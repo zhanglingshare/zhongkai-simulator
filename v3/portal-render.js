@@ -84,6 +84,8 @@ void main(){
   let cam={yaw:-.36,pitch:.18,distance:5.1},raf=0,lastFrame=0,visible=true,disposed=false;
   let start={x:0,y:0},dragged=false;
   let changeGlow=null; // Visual-only observed state transitions, never causal transmission.
+  const entryCore=root.ZKVisualEntry;
+  let entrance=null,storyFocus=new Map(),drawTime=0;
   const pointers=new Map();
   let oldPinch=0;
   const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -96,15 +98,24 @@ void main(){
    if(canvas.width!==Math.round(w*ratio)||canvas.height!==Math.round(h*ratio)){canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);}
    return [w,h,ratio];
   }
+  function presented(n){
+   if(!entrance||!entryCore)return n;
+   const p=entryCore.node(entrance.plan,n.name,drawTime-entrance.started);
+   const ease=1-Math.pow(1-p,3),side=(Core.hash(n.name)%2?1:-1);
+   return {...n,x:n.x+side*3.3*(1-ease),y:n.y+2.1*(1-ease),z:n.z-1.8*(1-ease)};
+  }
+  function nodeProgress(n){return entrance?entryCore.node(entrance.plan,n.name,drawTime-entrance.started):1;}
+  function edgeProgress(e){return entrance?entryCore.edge(entrance.plan,e.a,e.b,drawTime-entrance.started):1;}
   function screen(n){
    const [width,height]=[Math.max(1,canvas.clientWidth),Math.max(1,canvas.clientHeight)];
-   const p=Core.project(n,cam,width/height);
+   const p=Core.project(presented(n),cam,width/height);
    return {x:(p.x+1)*width/2,y:(1-p.y)*height/2,depth:p.depth};
   }
   function nearest(x,y){
    if(!graph)return null;
    let best=null,d=Infinity;
    graph.nodes.forEach(n=>{
+     if(nodeProgress(n)<1)return;
      const p=screen(n),distance=Math.hypot(p.x-x,p.y-y);
      if(distance<Math.max(17,24*(5.1/p.depth))&&distance<d){best=n;d=distance;}
    });
@@ -136,7 +147,8 @@ void main(){
     const nodeMap=new Map(graph.nodes.map(n=>[n.name,n]));
     for(const edge of graph.edges){
       const a=nodeMap.get(edge.a),b=nodeMap.get(edge.b);if(!a||!b)continue;
-      const pa=screen(a),pb=screen(b);
+      const progress=edgeProgress(edge);if(progress<=0)continue;
+      const pa=screen(a),end=screen(b),pb={x:pa.x+(end.x-pa.x)*progress,y:pa.y+(end.y-pa.y)*progress};
       ctx.strokeStyle=!a.alive||!b.alive?"rgba(87,107,128,.19)":edge.layer==="hist"?"rgba(77,207,231,.48)":"rgba(75,151,171,.22)";
       const one=glowAt(a.name,now),two=glowAt(b.name,now);
       const glow=Math.abs(one)>=Math.abs(two)?one:two,level=Math.abs(glow);
@@ -147,24 +159,29 @@ void main(){
       }
       ctx.lineWidth=(edge.layer==="hist"?1.25:.8)+level*1.8;
       ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
-      if(edge.layer==="hist"&&a.alive&&b.alive&&!reduced){
+      if(edge.layer==="hist"&&a.alive&&b.alive&&!reduced&&progress>=1){
         const phase=((now/2700)+(Core.hash(edge.a+edge.b)%97)/97)%1;
         const x=pa.x+(pb.x-pa.x)*phase,y=pa.y+(pb.y-pa.y)*phase;
         ctx.fillStyle="rgba(152,241,252,.8)";ctx.beginPath();ctx.arc(x,y,1.75,0,Math.PI*2);ctx.fill();
       }
     }
     [...graph.nodes].sort((a,b)=>screen(b).depth-screen(a).depth).forEach(n=>{
+     const arrival=nodeProgress(n);if(arrival<=0)return;
      const p=screen(n),scale=clamp(5.1/p.depth,.55,1.7);
      const rad=(n.w>=3?11:n.w===2?7:4.6)*scale;
      const color=Core.palette(n),rgb=color.slice(0,3).map(x=>Math.round(x*255)).join(",");
      const glow=glowAt(n.name,now),level=Math.abs(glow);
+     if(storyFocus.has(n.name)){
+       ctx.strokeStyle=storyFocus.get(n.name)>0?"#96f3d1":"#ffd1a0";ctx.lineWidth=2.5;
+       ctx.beginPath();ctx.arc(p.x,p.y,rad+10,0,Math.PI*2);ctx.stroke();
+     }
      if(level>0){
        ctx.strokeStyle=(glow<0?"rgba(255,190,128,":"rgba(123,243,213,")+(level*.88)+")";
        ctx.lineWidth=1.4+level*2.7;
        ctx.beginPath();ctx.arc(p.x,p.y,rad+7+level*11,0,Math.PI*2);ctx.stroke();
      }
      ctx.shadowBlur=n.alive?rad*(2.6+level*4):0;ctx.shadowColor="rgba("+rgb+",.7)";
-     ctx.fillStyle="rgba("+rgb+","+color[3]+")";
+     ctx.fillStyle="rgba("+rgb+","+(color[3]*arrival)+")";
      ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
      ctx.strokeStyle=n.name===selected?"#fff":"rgba("+rgb+",.72)";
      ctx.lineWidth=n.name===selected?2:1;ctx.beginPath();ctx.arc(p.x,p.y,rad+4,0,Math.PI*2);ctx.stroke();
@@ -178,6 +195,8 @@ void main(){
     const lines=[],particles=[],points=[];
     for(const e of graph.edges){
       const a=map.get(e.a),b=map.get(e.b);if(!a||!b)continue;
+      const progress=edgeProgress(e);if(progress<=0)continue;
+      const pa=presented(a),pb=presented(b);
       const isActive=a.alive&&b.alive,c=edgeColors[e.layer]||edgeColors.unknown;
       const first=glowAt(a.name,now),second=glowAt(b.name,now);
       const edgeGlow=Math.abs(first)>=Math.abs(second)?first:second;
@@ -186,23 +205,26 @@ void main(){
         edgeGlow<0?[.99,.65,.41,Math.min(.85,c[3]+level*.5)]:
           [.39,.96,.78,Math.min(.85,c[3]+level*.5)]:
         isActive?c:[.34,.43,.54,.09];
-      push(lines,[a.x,a.y,a.z],color,1);push(lines,[b.x,b.y,b.z],color,1);
-      if(isActive&&e.layer==="hist"&&!reduced){
+      push(lines,[pa.x,pa.y,pa.z],color,1);push(lines,[pa.x+(pb.x-pa.x)*progress,pa.y+(pb.y-pa.y)*progress,pa.z+(pb.z-pa.z)*progress],color,1);
+      if(isActive&&e.layer==="hist"&&!reduced&&progress>=1){
        const k=((now/3100)+(Core.hash(e.a+e.b)%131)/131)%1;
        push(particles,[a.x+(b.x-a.x)*k,a.y+(b.y-a.y)*k,a.z+(b.z-a.z)*k],[.72,.96,1,.79],9);
       }
     }
     graph.nodes.forEach(n=>{
+     const arrival=nodeProgress(n);if(arrival<=0)return;
+     const pos=presented(n),xyz=[pos.x,pos.y,pos.z];
      const col=Core.palette(n);
      const glow=glowAt(n.name,now),level=Math.abs(glow);
      if(level>0){
        const tint=glow<0?[1,.69,.40]:[.49,1,.81];
-       push(points,[n.x,n.y,n.z],[...tint,level*.54],(n.w>=3?43:27)+level*65);
+       push(points,xyz,[...tint,level*.54],(n.w>=3?43:27)+level*65);
      }
      const size=(n.w>=3?43:n.w===2?28:19);
-     if(n.name===selected)push(points,[n.x,n.y,n.z],[1,.98,.84,.27],size+30);
-     push(points,[n.x,n.y,n.z],[col[0],col[1],col[2],col[3]*.24],size*2.4);
-     push(points,[n.x,n.y,n.z],col,size);
+     if(storyFocus.has(n.name))push(points,xyz,storyFocus.get(n.name)>0?[.5,1,.78,.35]:[1,.72,.43,.4],size+45);
+     if(n.name===selected)push(points,xyz,[1,.98,.84,.27],size+30);
+     push(points,xyz,[col[0],col[1],col[2],col[3]*.24*arrival],size*2.4);
+     push(points,xyz,[col[0],col[1],col[2],col[3]*arrival],size);
     });
     renderer.draw(lines,"lines",cam,w,h,ratio);
     renderer.draw(particles,"points",cam,w,h,ratio);
@@ -211,9 +233,10 @@ void main(){
   function syncLabels(){
     if(!labels||!graph)return;
     const width=canvas.clientWidth,height=canvas.clientHeight;
-    const nodes=graph.nodes.filter(n=>labelMode==="all"||n.w>=3&&n.alive)
+    const nodes=graph.nodes.filter(n=>nodeProgress(n)>=1&&(labelMode==="all"||storyFocus.has(n.name)||n.name===selected||n.w>=3&&n.alive))
       .sort((a,b)=>
         Number(b.name===selected)-Number(a.name===selected)||
+        Number(storyFocus.has(b.name))-Number(storyFocus.has(a.name))||
         b.w-a.w||Number(b.alive)-Number(a.alive)||
         Core.hash(a.name)-Core.hash(b.name));
     const accepted=[],retained=new Set();
@@ -234,6 +257,7 @@ void main(){
       element.style.left=p.x+"px";element.style.top=top+"px";
       element.hidden=false;
       element.classList.toggle("inactive",!n.alive);
+      element.classList.toggle("story-focus",storyFocus.has(n.name));
     }
     for(const [name,element] of labelMap){
       if(!retained.has(name)){element.remove();labelMap.delete(name);}
@@ -242,7 +266,12 @@ void main(){
   function draw(now){
    raf=0;if(disposed||!visible)return;
    if(now-lastFrame<30){raf=requestAnimationFrame(draw);return;}
-   lastFrame=now;
+   lastFrame=now;drawTime=now;
+   if(entrance){
+    const info=entryCore.status(entrance.plan,now-entrance.started,graph.edges);
+    if(opts.onEntrance)opts.onEntrance({...info,total:graph.nodes.length,edges:graph.edges.length,batches:entrance.plan.batches});
+    if(info.done)entrance=null;
+   }
    const [w,h,r]=resize();
    if(renderer)render3d(now,w,h,r);else render2d(now,w,h,r);
    syncLabels();
@@ -296,6 +325,16 @@ void main(){
   function orbit(dx,dy){cam.yaw+=dx;cam.pitch=clamp(cam.pitch+dy,-1.15,1.15);cameraChange();}
   function zoom(mult){cam.distance=clamp(cam.distance*mult,3.4,11);cameraChange();}
   function resetCamera(){cam={yaw:-.36,pitch:.18,distance:5.1};cameraChange();}
+  function finishEntrance(){
+   entrance=null;
+   if(graph&&opts.onEntrance)opts.onEntrance({done:true,arrived:graph.nodes.length,linked:graph.edges.length,total:graph.nodes.length,edges:graph.edges.length,batches:entryCore?entryCore.plan(graph.nodes).batches:[]});
+   schedule();
+  }
+  function replayEntrance(){
+   if(!graph||!opts.entrance||!entryCore)return;
+   if(reduced){finishEntrance();return;}
+   entrance={plan:entryCore.plan(graph.nodes),started:performance.now()};schedule();
+  }
   const ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(schedule):null;if(ro)ro.observe(canvas);
   if(typeof IntersectionObserver!=="undefined"){
     const io=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)schedule();else if(raf){cancelAnimationFrame(raf);raf=0;}},{threshold:0});
@@ -305,7 +344,8 @@ void main(){
   return {
    get mode(){return mode;},get camera(){return {...cam};},get graph(){return graph;},
    setGraph(agents,edges,metaNext){
-    graph=Core.build(agents,edges);changeGlow=null;meta=metaNext||{};schedule();return graph;
+    graph=Core.build(agents,edges);changeGlow=null;storyFocus.clear();meta=metaNext||{};
+    if(opts.entrance)replayEntrance();schedule();return graph;
    },
    setFrame(agents,metaNext){
     if(!graph)return;
@@ -322,6 +362,8 @@ void main(){
     selected=node?name:null;schedule();return node||null;
    },
    setLabelMode(value){if(value!=="core"&&value!=="all")return false;labelMode=value;schedule();return true;},
+   setStoryFocus(changes){storyFocus=new Map((changes||[]).filter(c=>graph?.nodes.some(n=>n.name===c.name)).map(c=>[c.name,c.exit?-1:c.returning?1:Math.sign(c.change)||0]));schedule();},
+   replayEntrance,finishEntrance,
    orbit,zoom,resetCamera,
    dispose(){disposed=true;if(raf)cancelAnimationFrame(raf);if(ro)ro.disconnect();}
   };
