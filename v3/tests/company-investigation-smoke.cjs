@@ -50,7 +50,7 @@ async function check(browser,port,width,licensed=false){
  await page.locator("#investigation-edit-business").fill("人工核实后的车载物联网智能终端");
  assert.equal(await page.locator("#investigation-edit-business").inputValue(),"人工核实后的车载物联网智能终端");
  await page.locator("#investigation-apply").click();
- const audit=await page.evaluate(()=>({business:document.querySelector("#company-business").value,review:window.ZKCompanyResearchUI.snapshot().investigation?.approved?.business,edits:window.ZKCompanyResearchUI.snapshot().investigation?.userChanges}));
+ const audit=await page.evaluate(()=>{const v=window.ZKCompanyResearchUI.snapshot();return {keys:Object.keys(v),investigation:v.investigation,company:document.querySelector("#company-name").value,business:document.querySelector("#company-business").value,source:Function.prototype.toString.call(window.ZKCompanyResearchUI.snapshot).slice(0,500)};});
  console.log("V3.17 DEBUG REVIEW",JSON.stringify(audit));
  assert.ok((await page.locator("#investigation-status").innerText()).includes("调查结论已填入"));
  assert.ok(await page.locator(".investigation-field").count()===7,"Adoption must preserve editable report");
