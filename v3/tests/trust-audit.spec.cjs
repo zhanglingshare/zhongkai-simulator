@@ -55,7 +55,7 @@ assert.equal(T.auditResearch({observations:badObs,companies:firms,observationCor
  "Observations without source must block audit as valid");
 assert.equal(T.safeHttps("http://invalid.example"),false);
 const draft=T.preregistration({metric:"gdp_real_yoy",targetPeriod:"2027",releaseDate:"2028-03-31",
- forecastValue:"3.5",modelCommit:"a".repeat(40),protocolVersion:"zk-measurement-protocol-v2",
+ forecastValue:"3.5",unit:"%",modelCommit:"a".repeat(40),protocolVersion:"zk-measurement-protocol-v2",
  measurementRule:"Bind annual GDP comparable-price growth 2027 to model tick 20 only under frozen rules.",
  sources:"https://www.hzzk.gov.cn/"});
 assert.equal(draft.ok,true,draft.errors.join(" "));
