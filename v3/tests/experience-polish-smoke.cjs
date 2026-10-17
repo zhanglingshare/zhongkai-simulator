@@ -44,6 +44,7 @@ async function check(browser,port,width){
  assert.match(narrative,/不是现实企业/);
  const total=await page.locator("#world-node-count").innerText();
  assert.equal(total,"41");
+ await page.locator("#story-settings summary").click();
  await page.locator("#portal-population").selectOption("24");
  assert.equal(await page.locator("#world-node-count").innerText(),"24");
  assert.match(await page.locator("#portal-story-result").innerText(),/不等于现实企业/);
