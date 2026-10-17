@@ -1,0 +1,140 @@
+/* Experience polish for the existing V3.21 pages. Presentation only:
+   no Sim equations, enterprise economics, evidence grades, or data changes. */
+:where(.portal-shell,.lab-v311,.shell,.trust-shell) :focus-visible{
+ outline:3px solid #84edf0;outline-offset:3px;
+}
+:where(.portal-shell,.lab-v311,.shell,.trust-shell) :is(a,button,select,input,textarea){
+ -webkit-tap-highlight-color:rgba(115,224,227,.24);
+}
+:where(.portal-shell,.lab-v311,.shell,.trust-shell) :is(section,article,[id]){
+ scroll-margin-top:18px;
+}
+/* The first interaction uses an existing and registered Sim shock. */
+.portal-shell .hero-quick-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:12px 0 17px}
+.portal-shell .hero-quick-actions button{
+ color:#04293d;background:linear-gradient(100deg,#a6f2ee,#72d6dc);
+ border:1px solid #c5faf5;border-radius:12px;padding:13px 18px;
+ min-height:46px;font-weight:800;font-size:14px;
+ box-shadow:0 9px 26px #1a8c9c38;
+}
+.portal-shell .hero-quick-actions button:hover{filter:brightness(1.08)}
+.portal-shell .hero-quick-actions span{font-size:12px;line-height:1.55;color:#a4c7d0}
+.portal-shell .scene-plain-result{font-size:12px;line-height:1.65;color:#b6e6e7;margin:7px 0 0;max-width:860px}
+.portal-shell .hero-deck{font-size:14px;line-height:1.75;max-width:640px}
+.portal-shell .portal-field select{min-height:43px}
+.portal-shell .site-nav a{min-height:39px;display:inline-flex;align-items:center}
+.portal-shell .portal-actions button,.portal-shell .preset-row button{min-height:43px}
+.portal-shell .telemetry-item>span{line-height:1.5}
+.portal-shell .telemetry-item small{line-height:1.55}
+/* Existing A/B results: translate computed metric differences before full charts. */
+.lab-v311 .lab-preview-plain{
+ padding:15px 17px;margin:14px 0 10px;border-radius:12px;
+ border:1px solid #4b8e97;background:linear-gradient(140deg,#19485a,#0b3043);
+ color:#eaf9f6;
+}
+.lab-v311 .lab-preview-plain strong{font-size:16px;line-height:1.55}
+.lab-v311 .lab-preview-plain p{font-size:13px;line-height:1.7;color:#bfdfdf;margin:7px 0 0}
+.lab-v311 .lab-intro p,.lab-v311 .wind-heading p{font-size:14px;line-height:1.8}
+.lab-v311 .lab-nav a{min-height:42px;display:inline-flex;align-items:center}
+.lab-v311 .lab-stage>.wind-deck .wind-preset strong{font-size:14px}
+.lab-v311 .lab-stage>.wind-deck .wind-preset small{font-size:12px;line-height:1.5}
+.lab-v311 .lab-stage>.wind-deck .wind-share-note{font-size:12px;line-height:1.7}
+.lab-v311 .lab-preview-deck{font-size:13px}
+.lab-v311 .lab-stage>.wind-deck .wind-share-actions button{min-height:45px;font-size:13px}
+.lab-v311 .lab-parameters select,.lab-v311 .lab-parameters input{min-height:43px;font-size:13px}
+.lab-v311 .lab-preview-boundary{font-size:12px}
+.lab-v311 .lab-preview-status{letter-spacing:.4px}
+/* Fast path points only at existing example and research areas. */
+.shell .inflow-first-steps{display:flex;gap:8px;flex-wrap:wrap;margin-top:19px}
+.shell .inflow-first-steps a{font-size:12px;line-height:1.5;min-height:42px;display:inline-flex;align-items:center;padding:9px 12px;
+ border-radius:10px;border:1px solid #4d9a9d;background:#143a4c;color:#d9f7f4;text-decoration:none}
+.shell .inflow-first-steps a:first-child{background:#176178;border-color:#8cdbd6;font-weight:780}
+.shell .intro .lede,.shell .intro-note p,.shell .section-help{font-size:14px;line-height:1.8}
+.shell .local-case button{min-height:47px;font-size:14px}
+.shell .topbar nav a{min-height:42px;display:inline-flex;align-items:center}
+/* For ordinary visitors, let existing audited examples lead the trust page. */
+.trust-shell .hero-links .trust-first-action{background:#1a657a;border-color:#8be2dd;color:#e9fffe;font-weight:760}
+.trust-shell .trust-hero p,.trust-shell .section-description{font-size:14px;line-height:1.8}
+.trust-shell .pilot-source-card p,.trust-shell .pilot-source-card small,
+.trust-shell .pilot-alert,.trust-shell .pilot-issues p{font-size:12px;line-height:1.75}
+.trust-shell .pilot-question-list,.trust-shell .pilot-field small{font-size:12px;line-height:1.65}
+.trust-shell .pilot-source-card a{font-size:13px}
+.trust-shell .trust-stat small,.trust-shell .enterprise-check p{font-size:12px;line-height:1.6}
+.trust-shell .pilot-form label,.trust-shell .pilot-toprow label{font-size:12px}
+.trust-shell .pilot-control{font-size:14px;min-height:43px}
+.trust-shell .pilot-form button,.trust-shell .pilot-actions button{min-height:46px;font-size:13px}
+/* Mobile: story -> immersive model -> settings -> metrics. The model is the hero,
+   controls remain rendered and usable for repeat experiments and automated QA. */
+@media(max-width:960px){
+ .portal-shell .portal-main{display:flex;flex-direction:column;align-items:stretch;gap:12px}
+ .portal-shell .portal-main>.hero-story{display:contents}
+ .portal-shell .portal-main .hero-kicker,
+ .portal-shell .portal-main .hero-story h1,
+ .portal-shell .portal-main .hero-deck,
+ .portal-shell .portal-main .hero-quick-actions{order:0}
+ .portal-shell .portal-main .story-emphasis{display:none}
+ .portal-shell .portal-main .world-stage{order:1}
+ .portal-shell .portal-main .control-panel{order:2;max-width:none}
+ .portal-shell .portal-main .telemetry{order:3}
+ .portal-shell .portal-main .hero-deck{max-width:780px}
+}
+@media(max-width:760px){
+ .portal-shell .hero-story h1{font-size:clamp(28px,8.6vw,42px);white-space:normal;letter-spacing:-.9px}
+ .portal-shell .hero-kicker{font-size:12px}
+ .portal-shell .hero-deck{font-size:14px;line-height:1.7}
+ .portal-shell .site-nav{justify-content:space-between;gap:8px}
+ .portal-shell .site-nav a{font-size:12px;line-height:1.4;min-height:43px;white-space:normal}
+ .portal-shell .site-nav a:nth-child(4),.portal-shell .site-nav a:nth-child(5){display:none}
+ .portal-shell .portal-main .world-stage{height:52svh;min-height:350px}
+ .portal-shell .world-footer{font-size:10px}.portal-shell .world-heading{font-size:10px}
+ .portal-shell .holo-node-label{font-size:11px}
+ .portal-shell .world-variation{font-size:11px;max-width:calc(100% - 20px)}
+ .portal-shell .telemetry{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .portal-shell .telemetry-item{padding:12px 8px}
+ .portal-shell .telemetry-item>span{font-size:12px}
+ .portal-shell .telemetry-item strong{font-size:21px}
+ .portal-shell .telemetry-item small{font-size:11px}
+ .portal-shell .telemetry-head,.portal-shell .selected-subject{grid-column:1/-1}
+ .portal-shell .hero-quick-actions button{width:100%;font-size:15px}
+ .portal-shell .hero-quick-actions span{font-size:12px}
+ .portal-shell .portal-field span{font-size:12px}
+ .portal-shell .portal-field select{font-size:13px}
+ .portal-shell .portal-exits .exit-card p{font-size:13px;line-height:1.7}
+ .portal-shell .scene-plain-result{font-size:13px}
+ .lab-v311 .lab-nav{gap:5px;font-size:12px}
+ .lab-v311 .lab-nav a{min-height:43px;line-height:1.3;white-space:normal;text-align:center}
+ .lab-v311 .lab-nav a:nth-child(4),.lab-v311 .lab-nav a:nth-child(5){display:none}
+ .lab-v311 .lab-intro p,.lab-v311 .wind-heading p{font-size:14px}
+ .lab-v311 .lab-flow{font-size:12px;line-height:1.3}
+ .lab-v311 .lab-stage>.wind-deck .wind-preset small{font-size:12px}
+ .lab-v311 .lab-stage>.wind-deck .wind-preset strong{font-size:14px}
+ .lab-v311 .lab-preview-plain strong{font-size:16px}
+ .lab-v311 .lab-preview-plain p{font-size:14px}
+ .shell .topbar nav a{font-size:12px;min-height:44px}
+ .shell .topbar nav a:nth-child(4){display:none}
+ .shell .intro .lede,.shell .section-help{font-size:14px}
+ .shell .intro{padding:20px 0}
+ .shell .inflow-first-steps{display:grid;grid-template-columns:1fr;gap:7px}
+ .shell .inflow-first-steps a{font-size:14px;min-height:45px}
+ .trust-shell .trust-hero{padding:23px 0}
+ .trust-shell .trust-hero h1{font-size:30px}
+ .trust-shell .trust-hero p,.trust-shell .section-description{font-size:14px}
+ .trust-shell .trust-nav nav a{font-size:12px;min-height:44px;display:inline-flex;align-items:center}
+ .trust-shell .trust-stat span{font-size:12px}
+ .trust-shell .trust-stat small{font-size:12px}
+ .trust-shell .pilot-steps span{font-size:12px;padding:9px}
+ .trust-shell .pilot-source h3{font-size:18px}
+ .trust-shell .pilot-field strong{font-size:13px}
+ .trust-shell .pilot-field span,.trust-shell .pilot-added p{font-size:12px}
+ .trust-shell .pilot-measure strong{font-size:16px}
+ .trust-shell .pilot-issues small{font-size:12px}
+}
+@media(max-width:390px){
+ .portal-shell .site-nav a{font-size:11px}
+ .lab-v311 .lab-nav{font-size:11px}
+ .trust-shell .trust-nav nav a{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ .portal-shell .hero-quick-actions button{transition:none}
+ :where(.portal-shell,.lab-v311,.shell,.trust-shell) *{scroll-behavior:auto!important}
+}
