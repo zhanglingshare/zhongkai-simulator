@@ -93,6 +93,8 @@ jobs:
         run: node v3/scripts/check-snapshot-history.cjs
       - name: V3.21 independently verify previous V3.20 live GitHub Pages
         run: node v3/tests/v320-public-pages-check.mjs
+      - name: V3.21 presentation-only immersion, onboarding, narrative and mobile readability
+        run: node v3/tests/experience-polish-smoke.cjs
       - name: Upload screenshots for visual review
         if: always()
         uses: actions/upload-artifact@v4
