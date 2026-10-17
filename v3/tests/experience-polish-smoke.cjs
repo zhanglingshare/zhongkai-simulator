@@ -23,7 +23,9 @@ async function check(browser,port,width){
  let {page,errors}=await open(browser,port,"index.html",width);
  assert.equal(await page.locator("#portal-labels").inputValue(),"core","Default labels should not clutter network");
  assert.ok(await page.locator("#hero-quickstart").isVisible());
- assert.match(await page.locator(".hero-deck").innerText(),/模型推演/);
+ assert.match(await page.locator(".hero-deck").innerText(),/假设/);
+ assert.equal(await page.locator("#story-settings").evaluate(x=>x.open),false);
+ assert.equal(await page.locator("#story-research").evaluate(x=>x.open),false);
  assert.equal(await page.locator("#timeline-slider").isDisabled(),true);
  if(width<=960){
   const p=await page.evaluate(()=>{
