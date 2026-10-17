@@ -5,15 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#06121e">
-<title>V3.15 · 中国企业检索与仲恺案例 | 仲恺产业风洞</title>
+<title>V3.16 · 企业预判断与真实情景识别 | 仲恺产业风洞</title>
 <meta name="description" content="用公开研究模型比较一个假设新企业接入前后的产业网络、模型内指数与不确定性。独立探索，不作现实预测。">
 <link rel="stylesheet" href="inflow.css"><link rel="stylesheet" href="company-assist.css">
 <script defer src="portal-kernel.js"></script>
 <script defer src="inflow-core.js"></script>
 <script defer src="company-assist-core.js"></script>
 <script defer src="company-china-core.js"></script>
+<script defer src="company-dossier-core.js"></script>
 <script defer src="inflow.js"></script>
 <script defer src="company-china.js"></script>
+<script defer src="company-dossier-ui.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -25,7 +27,7 @@
     <a class="active" href="inflow.html" aria-current="page">新企业接入</a>
     <a href="measurement.html">科学验证</a>
   </nav>
-  <span class="version">V3.15 / CHINA SEARCH + LOCAL CASE</span>
+  <span class="version">V3.16 / SOURCED DOSSIER</span>
 </header>
 <main>
   <section class="intro">
@@ -41,14 +43,15 @@
     <section class="pane inputs" aria-labelledby="input-title">
       <div class="section-number">01 / FIND · REVIEW · CONFIRM</div>
       <h2 id="input-title">这家企业叫什么？</h2>
-      <p class="section-help">先体验一个仲恺真实企业的演示案例，或输入企业名称，用百度、360、企查查等中国平台查资料。公开资料由你确认，系统再根据介绍做初步行业判断。</p>
+      <p class="section-help">系统先查已有中国公开资料、预判企业是否已经在仲恺，再由你核对和修改；资料索引之外的企业仍可跳转国内平台核实。</p>
         <div class="local-case" id="zhongkai-demo"><div><span class="case-tag">仲恺高新区 · 真实企业参考</span><strong>惠州市博实结科技有限公司</strong><p>车载智能终端 / 物联网硬件。该企业已在仲恺经营，示范的是把现有企业补入模型，并非“新签约落地”。</p></div><button type="button" id="load-zhongkai-case">用这个案例演示 →</button><a href="https://gxj.huizhou.gov.cn/zwgk/ssjygk/content/post_3920441.html" target="_blank" rel="noopener noreferrer">惠州市工信局依据 ↗</a></div>
       <form id="inflow-form" novalidate>
         <label>企业名称（必填）
           <input id="company-name" name="company" maxlength="60" autocomplete="off" placeholder="输入企业名，例如：某某科技有限公司" required>
         </label>
+        <div class="dossier-search"><button type="button" id="company-auto-dossier">✦ 自动查找并预判断</button><span>现阶段自动填充仅覆盖已审核的公开样本（2 家）；并非任意企业的实时全网搜索。</span><div id="company-dossier-status" class="lookup-status" role="status" aria-live="polite">可以先试试博实结，或搜索“利元亨”。查不到时不会编造企业档案。</div><div id="company-dossier-hits" class="lookup-results"></div></div>
         <div class="lookup-actions">
-          <button type="button" id="company-search">⌕ 用中国平台查这家企业</button>
+          <button type="button" id="company-search">⌕ 到中国平台进一步核实</button>
           <span>百度 / 360 / 惠州政府 / 企查查 / 天眼查 / 国家公示系统</span>
         </div>
         <div id="company-search-status" class="lookup-status" role="status" aria-live="polite">可打开国内搜索结果核对。全面自动填单需要授权企业数据接口，目前不会冒充已经抓到搜索结果。</div>
@@ -66,6 +69,16 @@
           <input id="company-website" type="url" maxlength="500" placeholder="https://…">
         </label>
         <div id="company-assessment" class="assistant-assessment" aria-live="polite">系统会根据业务文字给出可修改的行业初判；不会仅凭名字判定规模。</div>
+        <div class="scenario-panel"><div class="section-number">02 / REALITY CHECK</div><h3>系统认为这家企业属于哪种情况？</h3><div id="company-reality" aria-live="polite">尚无足够资料判断。请选择研究情景；系统会检查明显的事实冲突。</div><label>你要研究什么？（请确认）
+          <select id="company-scenario">
+            <option value="unknown">还不确定，先看资料</option>
+            <option value="backfill">它早就在仲恺：补入模型</option>
+            <option value="proposed_new">假设是拟引进新企业（未必真实签约）</option>
+            <option value="expansion">已有企业扩产：暂不支持本页模拟</option>
+          </select>
+        </label><label>新增项目的公开依据链接（可选）
+          <input type="url" id="project-proof" maxlength="500" placeholder="https://…（没有就保持空白，不得伪造）">
+        </label><div id="company-source-evidence" class="source-evidence">系统查到公开资料后，这里会列出具体来源和对应事实。</div><p id="company-scenario-gate" class="scenario-gate" role="status" aria-live="polite">请核实企业身份和本次情景。</p></div>
         <div class="two">
           <label>它在产业链里更像哪种企业？
             <select id="company-type">
@@ -112,10 +125,10 @@
         </label>
         <label class="confirmation">
           <input type="checkbox" id="company-confirm">
-          <span>我核对过企业资料，明白搜索结果与模型推荐的业务联系都需要核实；案例中的已落地企业只代表模型新增节点。</span>
+          <span>我已核对公开来源和研究情景，明白已有企业补录不等于现实新增招商，假设联系不代表真实合同。</span>
         </label>
         <div class="controls">
-          <button type="submit" id="inflow-run" class="primary">▶ 看看它进来后会怎样</button>
+          <button type="submit" id="inflow-run" class="primary">▶ 运行本次研究情景</button>
           <button type="button" id="inflow-reset" class="secondary">清空结果</button>
         </div>
         <p id="form-message" class="form-message" role="alert" aria-live="polite">先填写企业名称，查找或补充资料，确认后再开始。</p>
@@ -124,7 +137,7 @@
 
     <section class="pane visualization" aria-labelledby="visual-title">
       <div class="section-heading"><div><div class="section-number">02 / WHAT COULD CHANGE</div><h2 id="visual-title">进来之后，网络会怎样？</h2></div><span class="model-pill">模型情景 · 非现实预测</span></div>
-      <div class="scene-status"><span id="scene-badge">等待运行</span><span id="scene-count">模型主体以本次种子为准</span></div>
+      <div class="scene-status"><span id="scene-badge">等待运行</span><span id="scene-count">模型主体以本次种子为准</span></div><p class="scientific-note" id="scenario-result-note">运行前先确认：是补入现有企业，还是研究未经核实的拟引进假设。</p>
       <div class="network-wrap">
         <svg id="inflow-network" viewBox="0 0 640 340" role="img" aria-label="基于现有 Sim 主体与边绘制的条件性网络图"></svg>
       </div>
