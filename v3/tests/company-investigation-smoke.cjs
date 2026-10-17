@@ -83,6 +83,7 @@ async function check(browser,port,width,licensed=false){
     "Registered address must not override actual operation address");
  }
  await page.locator("#company-name").fill("没有收录的示例企业");
+ assert.equal(await page.locator("#investigation-online-consent").isChecked(),false,"Each different company requires fresh consent");
  await page.locator("#investigate-company").click();
  await page.waitForFunction(()=>document.querySelector("#investigation-status").textContent.includes("未获得"),null,{timeout:9000});
  assert.equal(await page.locator("#investigation-apply").isDisabled(),true);
