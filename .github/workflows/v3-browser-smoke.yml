@@ -34,6 +34,10 @@ jobs:
         run: node v3/tests/story-scope.spec.cjs
       - name: V3.23 named exit and same-time original-model snapshot truth
         run: node v3/tests/home-story.spec.cjs
+      - name: V3.24 same experiment handoff and original-model repeat truth
+        run: node v3/tests/story-journey.spec.cjs
+      - name: V3.24 story prediction, same-time comparison, repetition and evidence reading
+        run: node v3/tests/story-journey-smoke.cjs
       - name: V3.22 direct manipulation and same-snapshot Chrome acceptance
         run: node v3/tests/visual-interaction-smoke.cjs
       - name: Evidence validation unit tests
