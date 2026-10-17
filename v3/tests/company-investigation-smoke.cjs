@@ -73,6 +73,7 @@ async function check(browser,port,width,licensed=false){
   await page.locator("#investigate-company").click();
   await page.waitForFunction(()=>document.querySelectorAll(".investigation-field").length===7 &&
    document.querySelector("#investigation-status").textContent.includes("授权企业数据接口"),null,{timeout:10000});
+  console.log("V3.17 POST CALLS",JSON.stringify(external));
   assert.equal(external.length,1,"Exactly one explicit vendor request");
   assert.equal(await page.locator("#investigation-edit-business").inputValue(),"");
   assert.ok((await page.locator("#investigation-report").innerText()).includes("来源冲突"));
