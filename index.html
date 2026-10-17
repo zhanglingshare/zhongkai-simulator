@@ -38,6 +38,26 @@
   .cta-btn{flex:1;min-width:140px;text-align:center;padding:14px;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none}
   .cta-primary{background:#22d3ee;color:#0a0f1e}
   .cta-secondary{background:#0f172a;color:#e2e8f0;border:1px solid #1e293b}
+
+  /* Project introduction / stable multi-version launch navigation */
+  .experience-entrances{margin:18px 0 25px;border:1px solid #275269;background:linear-gradient(125deg,#112c3f,#0d1d35 72%);padding:22px;border-radius:16px}
+  .experience-entrances .entry-eyebrow{font-size:12px;font-weight:750;letter-spacing:.8px;color:#8bdae0;margin:0 0 8px}
+  .experience-entrances h2{font-size:23px;line-height:1.35;color:#f0fafc;margin:0 0 10px}
+  .experience-entrances .entry-intro{font-size:14px;color:#c3d7e5;line-height:1.75;margin:0 0 15px}
+  .experience-entries{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  .experience-entry{min-width:0;text-decoration:none;display:flex;flex-direction:column;gap:9px;padding:20px;border-radius:12px;border:1px solid #395b78;background:#0f2035;color:#e9f8f9;min-height:176px;transition:transform .15s,border-color .15s}
+  .experience-entry:hover,.experience-entry:focus-visible{transform:translateY(-2px);border-color:#82e5e9;outline-offset:3px}
+  .experience-entry--featured{background:linear-gradient(145deg,#145e71,#163a56);border-color:#6de0e5}
+  .experience-entry .entry-tag{font-size:12px;color:#90d0dc}
+  .experience-entry .entry-title{font-size:20px;line-height:1.35;font-weight:800;color:#f1ffff}
+  .experience-entry .entry-description{font-size:13px;line-height:1.65;color:#ccdde5}
+  .experience-entrances .entry-note{font-size:12px;line-height:1.7;margin:15px 0 0;color:#98b4c5}
+  .entry-minor{margin-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+  .entry-minor a{font-size:13px;color:#9de3e5;text-decoration:underline;text-underline-offset:3px}
+  .sidebar-nav .entry-sidebar{color:#84e1e3;font-weight:760}
+  @media(max-width:850px){.experience-entries{grid-template-columns:1fr}.experience-entry{min-height:0;padding:16px}}
+  @media(max-width:680px){body{display:block}.sidebar{width:100%;border-right:0;border-bottom:1px solid #1e293b;padding:10px 0}.sidebar-logo{padding:7px 16px 10px;margin-bottom:4px}.sidebar-nav{display:flex;gap:5px;padding:6px 9px;overflow-x:auto}.sidebar-nav .nav-section{display:none}.sidebar-nav .nav-item{white-space:nowrap;margin:0;font-size:12px;flex-shrink:0;padding:10px}.main{padding:22px 14px}.main h1{font-size:24px}.experience-entrances{padding:17px}.experience-entrances h2{font-size:21px}}
+  @media(prefers-reduced-motion:reduce){.experience-entry{transition:none}.experience-entry:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -50,6 +70,8 @@
   </div>
   <div class="sidebar-nav">
     <div class="nav-section">概览</div>
+    <a href="v3/index.html" class="nav-item entry-sidebar">▶ 大众故事版 · 新入口</a>
+    <a href="v3/portal-classic.html" class="nav-item">◇ 经典全息版 · 旧入口</a>
     <a href="index.html" class="nav-item on">📊 现在正在发生什么</a>
     <a href="today.html" class="nav-item">📍 今日仲恺</a>
     <div class="nav-section">推演</div>
@@ -68,6 +90,30 @@
 
   <h1>仲恺现在，正在发生什么？</h1>
   <div class="sub">最近3天动态 · 机遇与风险 · 信源分级</div>
+
+  <section class="experience-entrances" id="experience-entrances" aria-label="两个独立版本的体验入口">
+    <p class="entry-eyebrow">仲恺产业风洞 / 选择体验方式</p>
+    <h2>第一次来，先看一个产业故事。</h2>
+    <p class="entry-intro">如果一家大厂突然搬走，产业网络会怎样变化？不用懂经济学、不用填写参数。已有旧版保留，随时可以返回熟悉的操作方式。</p>
+    <div class="experience-entries">
+      <a class="experience-entry experience-entry--featured" href="v3/index.html" id="entry-story">
+        <span class="entry-tag">新版 · 推荐第一次体验</span>
+        <strong class="entry-title">▶ 大众故事版 ↗</strong>
+        <span class="entry-description">点一下播放，看全息产业网络变化，再读一句普通话的模型解释。</span>
+      </a>
+      <a class="experience-entry" href="v3/portal-classic.html" id="entry-classic">
+        <span class="entry-tag">旧版 · 保留原来操作</span>
+        <strong class="entry-title">◇ 经典全息版 ↗</strong>
+        <span class="entry-description">原来的全息门户布局、情景选项、主体和模型指标仍可操作，不会被新版覆盖。</span>
+      </a>
+    </div>
+    <div class="entry-minor">
+      <a href="v3/lab.html">深入：专业模拟实验室 ↗</a>
+      <a href="zhongkai_simulator.html">历史：早期单文件版 ↗</a>
+    </div>
+    <p class="entry-note">两个全息入口都属于同一研究系统，只是体验方式不同。网页所演示的是模型假设，不能当作现实企业迁出、实际裁员或经济预测。</p>
+  </section>
+
 
   <!-- 今日动态 -->
   <div style="background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:16px;margin:20px 0">
