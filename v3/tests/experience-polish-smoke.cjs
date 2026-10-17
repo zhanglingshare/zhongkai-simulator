@@ -51,6 +51,7 @@ async function check(browser,port,width){
  await page.close();
  // 2 — Only computed deltas can produce narrative.
  ({page,errors}=await open(browser,port,"lab.html",width));
+ if(width<=760)assert.equal(await page.locator(".rail").isVisible(),false,"Mobile must not duplicate expert icon rail");
  assert.match(await page.locator("#lab-plain-result").innerText(),/还没有进行实验/);
  assert.equal(await page.locator("#lab-preview .lab-quick-row").count(),0);
  await page.locator("#lab-all-shocks").selectOption("技术突破");
@@ -87,6 +88,9 @@ async function check(browser,port,width){
  assert.ok(positions.pilots<positions.baseline,"Pilot source review should lead statistical baseline");
  assert.match(await page.locator(".trust-first-action").innerText(),/先查一家企业的证据/);
  assert.equal(await page.locator("#pilot-case option").count(),5);
+ assert.match(await page.locator("#pilot-case option").first().innerText(),/产能扩建/);
+ assert.doesNotMatch(await page.locator("#pilot-case").innerText(),/expansion-project-application|government-award-allocation/,
+  "Raw engineering source type must be explained in Chinese");
  assert.match(await page.locator("#pilot-source").innerText(),/不证明/);
  assert.ok(await page.locator("#pilot-export").isDisabled());
  await checkGeometry(page,width);
