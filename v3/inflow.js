@@ -235,11 +235,13 @@ function render(data){
 }
 $form.addEventListener("submit",e=>{
  e.preventDefault();stop();
+ if(!$("company-confirm").checked){message("请先核对企业资料，并勾选确认信息与联系仍是待核实假设。","error");return;}
  if(!Core||!Sim){message("原始 Sim 模型无法加载，不能运行实验。","error");return;}
  const check=Core.validate(Sim,input());
  if(!check.ok){stale();message(check.errors.join("；"),"error");return;}
  try{
   const data=Core.run(Sim,check.input,24);
+  if(data.ok&&window.ZKCompanyResearchUI){data.companyResearch=window.ZKCompanyResearchUI.snapshot();}
   if(!data.ok){stale();message(data.errors.join("；"),"error");return;}
   render(data);
  }catch(err){stale();message("实验计算失败："+err.message,"error");}
