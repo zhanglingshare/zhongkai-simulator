@@ -27,6 +27,7 @@ async function test(browser,port,width,reduce=false){
  await page.locator("#company-name").fill("独立研究测试新节点");
  await page.locator("#link-one").selectOption({index:1});
  await page.locator("#link-two").selectOption({index:2});
+ await page.locator("#company-confirm").check();
  await page.locator("#inflow-run").click();
  await page.waitForFunction(()=>document.querySelectorAll("#inflow-metrics .metric").length===4,null,{timeout:6000}).catch(async err=>{
   const formMessage=await page.locator("#form-message").innerText();
