@@ -113,13 +113,16 @@ start.addEventListener("click",()=>{investigate().catch(err=>{
  statusText("调查未完成："+err.message+"。可改用下方国内搜索入口手工核查。","warning");start.disabled=false;});});
 apply.addEventListener("click",()=>{
  if(!result?.ok||!window.ZKCompanyDossierUI)return;
- const approved=E.accepted(result,edited);
+ // Take values from the live editable controls at approval time. Other legacy
+ // form listeners may have invalidated the cached edits while focus changed.
+ const submitted=Object.fromEntries(E.KEYS.map(k=>[k,$("investigation-edit-"+k)?.value??""]));
+ const approved=E.accepted(result,submitted);
  if(!approved){statusText("尚无可采纳的调查结果","warning");return;}
  // Evidence-rich result is reviewed by the user, never marked as government-certified.
  if(!approved.record.sources.length){
   statusText("没有可核对的业务或实际经营地点来源，无法当作已审核的企业档案；可使用下方手工表单。","warning");return;
  }
- const reviewedReport=result,reviewedEdits={...edited};
+ const reviewedReport=result,reviewedEdits={...submitted};
  applying=true;
  let done=false;try{done=window.ZKCompanyDossierUI.applyReviewed(approved.record);}finally{applying=false;}
  // Older form handlers may invalidate UI after field dispatch. Preserve the
