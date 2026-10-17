@@ -125,6 +125,12 @@ apply.addEventListener("click",()=>{
  // Older form handlers may invalidate UI after field dispatch. Preserve the
  // review document independently of the form state so provenance stays visible.
  result=reviewedReport;edited=reviewedEdits;render();
+ // Guard against an older autofill handler restoring an original business
+ // description after the reviewer explicitly corrected the investigation.
+ if(done&&approved.values.business&&$("company-business").value!==approved.values.business){
+  $("company-business").value=approved.values.business;
+  $("company-business").dispatchEvent(new Event("input",{bubbles:true}));
+ }
  if(!done){statusText("未能应用调查结果；请检查来源链接","warning");return;}
  acceptedSnapshot={name:result.query,fieldStatus:Object.fromEntries(E.KEYS.map(k=>[k,result.fields[k].status])),
   originalSources:result.fields,approved:approved.values,userChanges:approved.userChanges,
