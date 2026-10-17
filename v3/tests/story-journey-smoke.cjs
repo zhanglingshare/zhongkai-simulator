@@ -15,6 +15,7 @@ async function lab(browser,port,width,fallback=false){const {page:p,errors}=awai
  const link=p.locator('.site-nav a[href^="story-lab.html"]');assert.equal(await link.count(),1);await link.click();await p.waitForURL('**/v3/story-lab.html?**');
  assert.match(await p.locator('#story-continuity').innerText(),/41 个角色/);assert.match(await p.locator('#story-continuity').innerText(),/第 6 步/);
  assert.equal(await p.locator('#story-reveal').isDisabled(),true);assert.equal(await p.locator('#story-time').isDisabled(),true);assert.equal(await p.locator('#story-alive').innerText(),'—');
+ await shot(p,`v324-entry-${width}.png`);if(width<700){const last=await p.locator('[data-guess="more"]').boundingBox();assert.ok(last.y+last.height<844,'The three prediction choices fit on the first mobile screen');}
  await p.locator('[data-guess="less"]').click();await p.locator('#story-reveal').click();await p.waitForFunction(()=>window.__frame?.tick===6);
  const f=await p.evaluate(()=>window.__frame);assert.deepEqual(f.a,original.baseline);assert.deepEqual(f.b,original.scenario);assert.deepEqual(f.edges,original.edges);assert.equal(f.settings.pop,41);
  const out=await p.evaluate(()=>window.ZKStoryLab.outcome(window.ZKStoryLab.run(window.ZKSim,{...window.__frame.settings,tick:20})));

@@ -107,5 +107,5 @@ const raw=new URLSearchParams(location.search).get('scenario'),received=raw?C.de
 if(received){input=received;$('story-size').value=input.pop;$('story-seed').value=input.seed;$('story-shock').value=input.kind==='exit'?'exit':input.shock;}
 else if(raw)$('story-notice').textContent='链接条件无效，已恢复 41 个角色、起点 7 的默认实验。';
 targets();if(input.kind==='exit')$('story-target').value=input.target;invalidate();
-if(received)$('story-continuity').textContent='接着刚才的实验：'+(input.kind==='exit'?input.target+'退出':input.shock)+' · '+input.pop+' 个角色 · 起点 '+input.seed+' · 揭晓后停在第 '+input.tick+' 步。';
+if(received)$('story-continuity').textContent='接续实验：'+(input.kind==='exit'?input.target+'退出':input.shock)+' · '+input.pop+' 个角色 · 起点 '+input.seed+' · 第 '+input.tick+' 步。';
 })();
