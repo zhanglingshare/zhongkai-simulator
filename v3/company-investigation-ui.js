@@ -70,7 +70,7 @@ function render(){
  questions.append(ul);reportHost.append(questions);
 }
 async function investigate(){
- const q=company.value.trim();const marker=++run;apply.disabled=true;edited={};acceptedSnapshot=null;
+ const q=company.value.trim();const marker=++run;apply.disabled=true;edited={};acceptedSnapshot=null;lastAccepted=null;
  if(q.length<2){result={ok:false,reason:"请至少输入两个字的企业名称"};render();statusText(result.reason,"warning");return;}
  start.disabled=true;statusText("正在检查国内公开证据及授权接口状态……","pending");
  let docs=[],providerState="";
@@ -144,9 +144,12 @@ apply.addEventListener("click",()=>{
  statusText("调查结论已填入可编辑表单；修改身份资料会使之前的在地判断失效。仍需确认研究情景与业务联系。","success");
  $("company-confirm").checked=false;
 });
-company.addEventListener("input",()=>{if(applying)return;
+company.addEventListener("input",event=>{if(applying)return;
  if(lastAccepted&&E.normal(company.value)===E.normal(lastAccepted.name))return;
- run++;result=null;edited={};acceptedSnapshot=null;lastAccepted=null;
+ run++;result=null;edited={};acceptedSnapshot=null;
+ // Legacy auto-fill events are synthetic. Only a genuine human identity edit
+ // may revoke an approved dossier; snapshot still checks the current name.
+ if(event.isTrusted)lastAccepted=null;
  apply.disabled=true;reportHost.replaceChildren();
  statusText("名称已修改，之前调查结果不适用。","warning");start.disabled=false;});
 const previous=window.ZKCompanyResearchUI?.snapshot;
