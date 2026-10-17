@@ -132,3 +132,13 @@
 @media(prefers-reduced-motion:reduce){
  .portal-shell :is(.story-settings,.story-research) summary{scroll-behavior:auto}
 }
+/* Narrative stays attached to actual named simulated agents, not just aggregate indices. */
+.portal-shell .role-story-focus{padding:12px 0 2px}
+.portal-shell .role-story-focus>strong{font-size:14px;color:#91e2df;display:block;margin-bottom:11px}
+.portal-shell .role-story-focus>p{font-size:13px;color:#b8d5dd;line-height:1.65}
+.portal-shell .role-story-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.portal-shell .role-story-list li{min-width:0;background:#09283a;border:1px solid #326479;border-radius:11px;padding:11px;display:grid;gap:7px}
+.portal-shell .role-story-person{display:block;min-height:44px;border:1px solid #6ac6c8;border-radius:8px;background:#14536a;color:#e9fffa;
+ cursor:pointer;text-align:left;font-size:13px;font-weight:750;padding:10px;overflow-wrap:anywhere}
+.portal-shell .role-story-list li span{font-size:12px;line-height:1.6;color:#b5d0d9}
+@media(max-width:700px){.portal-shell .role-story-list{grid-template-columns:1fr}.portal-shell .role-story-person{font-size:14px}.portal-shell .role-story-list li{padding:9px}}
