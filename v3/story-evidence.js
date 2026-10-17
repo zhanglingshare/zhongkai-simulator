@@ -8,12 +8,12 @@ if(tabs.some(t=>t.dataset.panel===location.hash.slice(1)))switchPanel(location.h
 const safeLink=(url,title)=>{try{const u=new URL(url);if(u.protocol!=='https:'||u.username||u.password)throw Error();const a=node('a','',title+' ↗');a.href=u.toString();a.target='_blank';a.rel='noopener noreferrer';return a;}catch{return node('span','','来源链接格式有待复核');}};
 const format=n=>Number(n).toLocaleString('zh-CN',{maximumFractionDigits:3});
 function source(){const metric=$('evidence-metric').value,year=Number($('evidence-year').value),def=dataset.metric_definitions[metric],r=(audit.byMetric[metric]||[]).find(x=>x.year===year),host=$('evidence-source');host.replaceChildren();
+ document.querySelectorAll('#evidence-chart [data-year]').forEach(p=>{const selected=Number(p.dataset.year)===year,c=p.querySelector('circle');c.setAttribute('stroke-width',selected?'4':'2');c.setAttribute('stroke',selected?'#ffe4a9':'#8fbdbb');});
  if(!r){host.append(node('p','notice',year+' 年没有这项原始观测；这里留空，不补值。'));return;}
  const box=node('article','source-card');box.append(node('strong','',year+' 年 · '+format(r.value)+' '+r.unit));
  box.append(node('span','evidence-status',r.review_status==='official_page_checked'?'台账标记：政府原文已查看':r.review_status==='mirrored_plus_official_corroboration'?'台账标记：转载及政府佐证':'台账标记：转载待复核'));
  for(const id of r.source_ids){const s=dataset.sources[id];box.append(safeLink(s.url,s.title),node('p','',s.publisher+' · '+(s.release_date||'台账未记录发布日期')+' · '+(s.host_type==='government_portal'?'政府门户原文':'第三方转载')));}
- box.append(node('p','','记录版本：'+r.vintage+'。'+(r.note||'')),node('p','',def.description));host.append(box);
- document.querySelectorAll('#evidence-chart [data-year]').forEach(p=>p.setAttribute('stroke-width',Number(p.dataset.year)===year?'4':'2'));
+ box.append(node('p','','记录版本：'+(r.vintage==='published_preliminary'?'发布时的初步统计数':'台账记录版本待复核')+'。'+(r.note||'')),node('p','',def.description));host.append(box);
  window.dispatchEvent(new CustomEvent('zk:story-evidence',{detail:{metric,year,row:r,sources:r.source_ids.map(id=>dataset.sources[id])}}));
 }
 function chart(){const key=$('evidence-metric').value,def=dataset.metric_definitions[key],series=audit.byMetric[key]||[],years=audit.years;

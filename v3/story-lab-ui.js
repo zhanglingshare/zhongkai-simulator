@@ -52,8 +52,8 @@ function paint(t){if(!experiment)return;tick=Math.max(0,Math.min(20,Math.trunc(t
  const last=C.outcome(experiment);$('stage-prediction').textContent='你猜'+words[guess]+' · 最后一步'+words[last.choice]+'（未改变 '+last.a+' / 改变后 '+last.b+'）';
  $('story-stage').dataset.peek=String(peek);$('story-stage').dataset.state='ready';$('story-hold').setAttribute('aria-pressed',String(peek));
  $('story-alive').textContent=counts.alive;$('story-links').textContent=counts.links;
- $('story-alive-ref').textContent='同一步：未改变 '+info.a.alive+' 个 / 改变后 '+info.b.alive+' 个';
- $('story-links-ref').textContent='同一步：未改变 '+info.a.links+' 条 / 改变后 '+info.b.links+' 条';
+ $('story-alive-ref').textContent='未改变 '+info.a.alive+' / 改变后 '+info.b.alive;
+ $('story-links-ref').textContent='未改变 '+info.a.links+' / 改变后 '+info.b.links;
  $('story-view').textContent=(peek?'未改变':'改变后')+' · 第 '+tick+' 步';$('story-time').value=tick;$('story-time-out').textContent='第 '+tick+' / 20 步';
  $('stage-phase').textContent=peek?'正在长按对照':tick===experiment.keyTick&&!running?'关键变化 · 已暂停':running?'正在回放变化':'同一步对照';
  $('stage-title').textContent=peek?'如果没有这次改变':tick===0&&experiment.kind==='exit'?experiment.target+'退出了模型':'同一步，'+info.changes.length+' 个角色不同';
@@ -100,7 +100,7 @@ for(const id of ['story-target','story-shock','story-size'])$(id).addEventListen
 $('story-seed').addEventListener('input',()=>{input.tick=20;targets();invalidate();});
 $('story-reveal').addEventListener('click',reveal);$('story-time').addEventListener('input',()=>{stop();peek=false;paint(Number($('story-time').value));});$('story-play').addEventListener('click',play);$('story-key').addEventListener('click',()=>{stop();peek=false;paint(experiment.keyTick);});$('story-repeat').addEventListener('click',repeat);
 const hold=$('story-hold');hold.addEventListener('pointerdown',e=>{if(hold.disabled)return;e.preventDefault();hold.setPointerCapture(e.pointerId);beginPeek();});for(const type of ['pointerup','pointercancel','lostpointercapture'])hold.addEventListener(type,endPeek);
-hold.addEventListener('keydown',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();if(!e.repeat)beginPeek();}});hold.addEventListener('keyup',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();endPeek();}});hold.addEventListener('blur',endPeek);window.addEventListener('blur',()=>{stop();endPeek();});document.addEventListener('visibilitychange',()=>{if(document.hidden){stop();endPeek();}});
+hold.addEventListener('keydown',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();if(!e.repeat)beginPeek();}});hold.addEventListener('keyup',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();endPeek();}});hold.addEventListener('blur',endPeek);const pause=()=>{stop();if(peek)endPeek();else if(experiment)paint(tick);};window.addEventListener('blur',pause);document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
 for(const b of document.querySelectorAll('[data-metric]'))b.addEventListener('click',()=>{metric=b.dataset.metric;document.querySelectorAll('[data-metric]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));paint(tick);});
 $('story-share').addEventListener('click',async()=>{if(!experiment)return;const url=new URL(location.href);url.searchParams.set('scenario',encodeURIComponent(JSON.stringify(C.payload({...input,tick}))));url.hash='';try{await navigator.clipboard.writeText(url.toString());message('已复制同一场实验的条件与时间步；对方可先判断再揭晓。');}catch{const f=node('textarea');f.value=url.toString();f.readOnly=true;f.setAttribute('aria-label','手动复制实验链接');$('story-message').replaceChildren(f);f.select();}});
 const raw=new URLSearchParams(location.search).get('scenario'),received=raw?C.decode(Sim,raw):null;

@@ -73,6 +73,7 @@ const h=fs.readFileSync(path.join(root,"trust.html"),"utf8");
 for(const file of ["trust-core.js","trust-ui.js","benchmark-core.js","measurement-core.js","observations-core.js"]){
  assert.match(h,new RegExp(file.replaceAll(".","\\.")));
 }
-assert.match(fs.readFileSync(path.join(root,"index.html"),"utf8"),/href="trust.html"/);
+assert.match(fs.readFileSync(path.join(root,"index.html"),"utf8"),/href="story-evidence.html#claims"/);
+assert.match(fs.readFileSync(path.join(root,"story-evidence.html"),"utf8"),/href="trust.html"/);
 assert.match(fs.readFileSync(path.join(root,"inflow.html"),"utf8"),/href="trust.html"/);
 console.log("PASS V3.20 58 real observation records, 20 source-indexed company names, 0 fabricated verification, 3 honest retrospective baselines, no leakage or fake Sim accuracy");
