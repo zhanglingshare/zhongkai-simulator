@@ -52,6 +52,7 @@ async function check(browser,port,width,licensed=false){
  await page.locator("#investigation-apply").click();
  const audit=await page.evaluate(()=>{const v=window.ZKCompanyResearchUI.snapshot();return {keys:Object.keys(v),investigation:v.investigation,company:document.querySelector("#company-name").value,business:document.querySelector("#company-business").value,source:Function.prototype.toString.call(window.ZKCompanyResearchUI.snapshot).slice(0,500)};});
  console.log("V3.17 DEBUG REVIEW",JSON.stringify(audit));
+ console.log("V3.17 DEBUG LEX",JSON.stringify(await page.evaluate(()=>window.__V317Diagnostics?.())));
  assert.ok((await page.locator("#investigation-status").innerText()).includes("调查结论已填入"));
  assert.ok(await page.locator(".investigation-field").count()===7,"Adoption must preserve editable report");
  assert.equal(await page.locator("#company-scenario").inputValue(),"backfill");
