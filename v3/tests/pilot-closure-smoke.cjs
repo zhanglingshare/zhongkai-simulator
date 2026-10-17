@@ -81,6 +81,7 @@ async function verify(browser,port,width){
  updated.cases[0].source[0].support="有新增证据线索，仍未核实实情";
  await page.locator("#pilot-compare-file").setInputFiles({
   name:"new-source-snapshot.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(updated))});
+ await page.waitForFunction(()=>document.querySelector("#pilot-changes")?.textContent?.includes("原来源发生变化"),null,{timeout:5000});
  assert.match(await page.locator("#pilot-changes").innerText(),/原来源发生变化/);
  const [saved]=await Promise.all([page.waitForEvent("download"),page.locator("#pilot-export-review").click()]);
  const session=JSON.parse(fs.readFileSync(await saved.path(),"utf8"));
