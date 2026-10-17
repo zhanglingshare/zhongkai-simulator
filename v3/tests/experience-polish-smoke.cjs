@@ -47,7 +47,7 @@ async function check(browser,port,width){
  await page.locator("#story-settings summary").click();
  await page.locator("#portal-population").selectOption("24");
  assert.equal(await page.locator("#world-node-count").innerText(),"24");
- assert.match(await page.locator("#portal-story-result").innerText(),/不等于现实企业/);
+ assert.match(await page.locator("#portal-story-result").innerText(),/点上面的播放按钮/);
  await checkGeometry(page,width);
  if(width===390)await shot(page,"v321-ux-portal-mobile.png");
  assert.deepEqual(errors,[],"Portal runtime: "+errors.join(" | "));
