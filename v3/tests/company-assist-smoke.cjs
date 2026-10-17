@@ -17,6 +17,7 @@ async function test(browser,port,width){
  await page.waitForFunction(()=>document.querySelectorAll("#company-links .suggestion").length>0,null,{timeout:12000});
  assert.equal(await page.locator("#load-zhongkai-case").count(),1);
  await page.locator("#load-zhongkai-case").click();
+ await page.waitForFunction(()=>document.querySelector("#company-scenario").value==="backfill",null,{timeout:7000});
  assert.equal(await page.locator("#company-name").inputValue(),"惠州市博实结科技有限公司");
  assert.match(await page.locator("#company-business").inputValue(),/物联网/);
  assert.match(await page.locator("#company-location").inputValue(),/仲恺高新区/);
