@@ -37,6 +37,7 @@ async function home(browser,port,width,reduced=true,fallback=false){
   });
   assert.equal(await page.locator("#world-node-count").innerText(),"40");
   assert.equal(await page.locator("#world-edge-count").innerText(),String(actual.edges-actual.incident));
+  await page.locator(".story-absence").waitFor({state:"visible"});
   assert.ok(await page.locator(".story-absence").isVisible());
   await page.locator("#world-stage").screenshot({path:path.join(shots,`v323-exit-${width}.png`)});
   await page.waitForFunction(()=>window.__home.phase==="key",null,{timeout:12000});
@@ -62,6 +63,7 @@ async function home(browser,port,width,reduced=true,fallback=false){
  assert.match(await page.locator("#home-story-title").innerText(),/退出/);
  const cards=await page.locator(".role-story-person").allTextContents();
  assert.ok(cards.some(t=>t.includes("TCL华星")&&t.includes("退出")));
+ await page.locator(".story-absence").waitFor({state:"visible"});
  assert.ok(await page.locator(".story-absence").isVisible());
  const marker=await page.locator(".story-absence").boundingBox();
  const area=await page.locator(".story-network-area").boundingBox();
