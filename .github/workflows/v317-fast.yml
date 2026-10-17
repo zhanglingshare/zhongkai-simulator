@@ -1,0 +1,30 @@
+name: V3.17 Fast Investigation Checks
+on:
+  push:
+    branches:
+      - "chatgpt/v3.17-*"
+    paths:
+      - "v3/**"
+      - "services/company-investigation/**"
+      - ".github/workflows/v317-fast.yml"
+  pull_request:
+    paths:
+      - "v3/company-investigation*"
+      - "v3/tests/company-investigation*"
+      - "services/company-investigation/**"
+      - ".github/workflows/v317-fast.yml"
+permissions:
+  contents: read
+jobs:
+  investigate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install --no-save --no-audit --no-fund playwright
+      - run: node v3/tests/company-investigation.spec.cjs
+      - run: node v3/tests/company-investigation-server.spec.mjs
+      - run: node v3/tests/company-investigation-smoke.cjs
