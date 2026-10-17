@@ -16,7 +16,7 @@ assert.ok(lines>=1&&lines<=3,"Must show real top model role differences, not emp
 const name=await page.locator(".story-affected-role b").first().innerText();
 assert.ok(name.trim().length>0);
 await page.locator(".story-affected-role").first().click();
-assert.equal(await page.locator("#subject-name").innerText(),name);
+assert.equal(await page.locator("#subject-name").textContent(),name);
 assert.equal(await page.locator(".story-affected-role").first().getAttribute("aria-pressed"),"true");
 assert.match(await page.locator(".story-affected-disclaimer").innerText(),/不证明企业之间真实的影响关系/);
 const geometry=await page.evaluate(()=>({screen:innerWidth,overflow:document.documentElement.scrollWidth}));
