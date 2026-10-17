@@ -1,0 +1,15 @@
+const assert=require("node:assert/strict");
+const {changes}=require("../story-affected-core.js");
+const A={agents:[{name:"工厂甲",alive:true,energy:.8},{name:"供应商乙",alive:true,energy:.7},{name:"园区丙",alive:true,energy:.45}]};
+const B={agents:[{name:"工厂甲",alive:false,energy:0},{name:"供应商乙",alive:true,energy:.38},{name:"园区丙",alive:true,energy:.45}]};
+const out=changes(A,B,3);
+assert.equal(out.length,2);
+assert.equal(out[0].name,"工厂甲");
+assert.equal(out[0].type,"exit");
+assert.equal(out[1].name,"供应商乙");
+assert.equal(out[1].type,"lower");
+assert.deepEqual(changes(A,A),[]);
+assert.deepEqual(changes(null,B),[]);
+assert.deepEqual(changes(A,B,0),[]);
+assert.ok(out.every(x=>!x.description.includes("真实")&&!x.description.includes("裁员")));
+console.log("PASS named roles arise only from A/B model snapshot differences");

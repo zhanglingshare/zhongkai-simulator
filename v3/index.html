@@ -6,10 +6,11 @@
 <meta name="theme-color" content="#020c17">
 <meta name="description" content="仲恺产业风洞：基于公开证据的可交互三维产业网络，探索风险传播和潜在增长条件。独立研究、非官方决策建议。">
 <title>仲恺产业风洞 · 产业关系全息门户 · 沉浸体验优化</title>
-<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css">
+<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css"><link rel="stylesheet" href="story-affected.css">
 <script defer src="portal-kernel.js"></script>
 <script defer src="holo-core.js"></script>
 <script defer src="portal-render.js"></script>
+<script defer src="story-affected-core.js"></script>
 <script defer src="portal.js"></script>
 </head>
 <body>
@@ -61,6 +62,7 @@
       <section class="story-result" aria-label="这次模拟里发生了什么">
         <div class="story-result-head"><span>看到了什么？</span><strong id="story-phase">还没开始</strong></div>
         <p class="scene-plain-result" id="portal-story-result" aria-live="polite">点上面的播放按钮，看看模型里的产业角色会怎样变化。</p>
+        <div class="story-affected" id="story-affected" aria-label="模型中变化最大的产业角色" aria-live="off"><p class="story-affected-empty">开始播放后，这里会直接告诉你哪些角色与无冲击情景相比发生了变化。</p></div>
         <small>这里都是假设模型的内部结果，不是某家真实企业已经搬迁，也不是裁员或 GDP 预测。</small>
       </section>
       <details class="story-settings" id="story-settings">

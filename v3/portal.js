@@ -118,6 +118,43 @@ function paint(t){
      story.textContent="点上面的播放按钮，看看模型里的产业角色会怎样变化。";
    }
  }
+  // Pair each ordinary-language result with named, actual model snapshot differences.
+  const who=$("story-affected");
+  if(who){
+    who.replaceChildren();
+    const rows=frames&&reference&&t>0?window.ZKStoryAffected.changes(reference,snap,3):[];
+    if(rows.length){
+      const heading=document.createElement("strong");heading.className="story-affected-title";
+      heading.textContent="哪些角色发生了不同的变化？点名字，网络会帮你找到它。";
+      const list=document.createElement("div");list.className="story-affected-list";
+      for(const entry of rows){
+        const btn=document.createElement("button");
+        btn.type="button";btn.className="story-affected-role";
+        btn.setAttribute("aria-pressed",selected===entry.name?"true":"false");
+        const name=document.createElement("b");name.textContent=entry.name;
+        const desc=document.createElement("span");desc.textContent=entry.description;
+        btn.append(name,desc);
+        btn.addEventListener("click",()=>{
+          focusNode(entry.name);
+          who.querySelectorAll(".story-affected-role").forEach(x=>x.setAttribute("aria-pressed",String(x===btn)));
+        });
+        list.append(btn);
+      }
+      who.append(heading,list);
+      // Persistent highlighting, not a fabricated causal chain or real-world claim.
+      if(!selected||!rows.some(x=>x.name===selected)){selected=rows[0].name;view.select(selected);}
+    }else{
+      const note=document.createElement("p");note.className="story-affected-empty";
+      note.textContent=frames&&t>0?"这一步还没有足够明显的单个角色差异；不能硬编一个受影响名单。":
+        "开始播放后，这里会直接指出模型里变化明显的角色。";
+      who.append(note);
+    }
+    if(frames&&t>0){
+      const caution=document.createElement("p");caution.className="story-affected-disclaimer";
+      caution.textContent="名单只按两条模型路径的状态差异排列，不证明企业之间真实的影响关系。";
+      who.append(caution);
+    }
+  }
   $("timeline-slider").value=String(t);
  $("timeline-output").textContent="T "+String(t).padStart(2,"0")+" / "+MAX_TICKS;
  $("world-node-count").textContent=snap.agents.length;
