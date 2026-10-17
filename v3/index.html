@@ -10,6 +10,7 @@
 <script defer src="portal-kernel.js"></script>
 <script defer src="holo-core.js"></script>
 <script defer src="portal-render.js"></script>
+<script defer src="story-insight.js"></script>
 <script defer src="portal.js"></script>
 </head>
 <body>
@@ -59,9 +60,11 @@
       </div>
 
       <section class="story-result" aria-label="这次模拟里发生了什么">
-        <div class="story-result-head"><span>看到了什么？</span><strong id="story-phase">还没开始</strong></div>
-        <p class="scene-plain-result" id="portal-story-result" aria-live="polite">点上面的播放按钮，看看模型里的产业角色会怎样变化。</p>
-        <small>这里都是假设模型的内部结果，不是某家真实企业已经搬迁，也不是裁员或 GDP 预测。</small>
+        <div class="story-result-head"><span>刚才，谁发生了变化？</span><strong id="story-phase">还没开始</strong></div>
+        <p class="scene-plain-result" id="portal-story-result" aria-live="polite">点上面的播放按钮，看看模型里的哪些角色出现变化。</p>
+        <p id="story-explanation" class="story-explanation">我们会直接标出模型里发生变化的名字，不必先读懂那些专业指标。</p>
+        <div class="story-people" id="story-people" aria-label="当前模型中最显著的主体差异"></div>
+        <small>只比较同一步的两条模拟路线。画面中的变化不能证明真实的企业搬迁、采购损失、裁员，也不能证明因果关系。</small>
       </section>
       <details class="story-settings" id="story-settings">
         <summary>我想换个情景，自己试试看 <span>可选 · 高级玩法</span></summary>
