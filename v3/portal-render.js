@@ -84,6 +84,7 @@ void main(){
   let cam={yaw:-.36,pitch:.18,distance:5.1},raf=0,lastFrame=0,visible=true,disposed=false;
   let start={x:0,y:0},dragged=false;
   let changeGlow=null; // Visual-only observed state transitions, never causal transmission.
+  let spotlight=new Map(); // Named differences against A[t], independent of transient B[t-1] glow.
   const pointers=new Map();
   let oldPinch=0;
   const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -158,6 +159,11 @@ void main(){
      const rad=(n.w>=3?11:n.w===2?7:4.6)*scale;
      const color=Core.palette(n),rgb=color.slice(0,3).map(x=>Math.round(x*255)).join(",");
      const glow=glowAt(n.name,now),level=Math.abs(glow);
+     const emphasized=spotlight.get(n.name);
+     if(emphasized){
+       ctx.strokeStyle=emphasized.tone==="down"?"#f7b483":"#a0f5db";
+       ctx.lineWidth=3.5;ctx.beginPath();ctx.arc(p.x,p.y,rad+15,0,Math.PI*2);ctx.stroke();
+     }
      if(level>0){
        ctx.strokeStyle=(glow<0?"rgba(255,190,128,":"rgba(123,243,213,")+(level*.88)+")";
        ctx.lineWidth=1.4+level*2.7;
@@ -195,6 +201,12 @@ void main(){
     graph.nodes.forEach(n=>{
      const col=Core.palette(n);
      const glow=glowAt(n.name,now),level=Math.abs(glow);
+     const emphasis=spotlight.get(n.name);
+     if(emphasis){
+       const color=emphasis.tone==="down"?[1,.69,.40]:[.48,1,.82];
+       push(points,[n.x,n.y,n.z],[...color,.8],(n.w>=3?66:52));
+       push(points,[n.x,n.y,n.z],[...color,.25],(n.w>=3?98:80));
+     }
      if(level>0){
        const tint=glow<0?[1,.69,.40]:[.49,1,.81];
        push(points,[n.x,n.y,n.z],[...tint,level*.54],(n.w>=3?43:27)+level*65);
@@ -211,8 +223,9 @@ void main(){
   function syncLabels(){
     if(!labels||!graph)return;
     const width=canvas.clientWidth,height=canvas.clientHeight;
-    const nodes=graph.nodes.filter(n=>labelMode==="all"||n.w>=3&&n.alive)
+    const nodes=graph.nodes.filter(n=>spotlight.has(n.name)||labelMode==="all"||n.w>=3&&n.alive)
       .sort((a,b)=>
+        Number(spotlight.has(b.name))-Number(spotlight.has(a.name))||
         Number(b.name===selected)-Number(a.name===selected)||
         b.w-a.w||Number(b.alive)-Number(a.alive)||
         Core.hash(a.name)-Core.hash(b.name));
@@ -230,7 +243,11 @@ void main(){
       accepted.push(box);retained.add(n.name);
       let element=labelMap.get(n.name);
       if(!element){element=document.createElement("span");element.className="holo-node-label";labels.append(element);labelMap.set(n.name,element);}
-      element.textContent=n.name;
+      const emphasis=spotlight.get(n.name);
+      element.textContent=n.name+(emphasis?" · "+emphasis.label:"");
+      element.classList.toggle("story-spotlight",!!emphasis);
+      element.classList.toggle("story-spotlight-down",!!emphasis&&emphasis.tone==="down");
+      element.classList.toggle("story-spotlight-up",!!emphasis&&emphasis.tone==="up");
       element.style.left=p.x+"px";element.style.top=top+"px";
       element.hidden=false;
       element.classList.toggle("inactive",!n.alive);
@@ -304,8 +321,15 @@ void main(){
   canvas.addEventListener("webglcontextlost",e=>{e.preventDefault();renderer=null;context2d=canvas.getContext("2d");if(status)status.textContent="图形上下文中断 · 请刷新或使用兼容浏览器";schedule();});
   return {
    get mode(){return mode;},get camera(){return {...cam};},get graph(){return graph;},
+   get spotlightNames(){return [...spotlight.keys()];},
    setGraph(agents,edges,metaNext){
     graph=Core.build(agents,edges);changeGlow=null;meta=metaNext||{};schedule();return graph;
+   },
+   setSpotlight(entries){
+    spotlight=new Map((Array.isArray(entries)?entries:[]).slice(0,3)
+      .filter(x=>x&&typeof x.name==="string"&&["down","up"].includes(x.tone))
+      .map(x=>[x.name,{tone:x.tone,label:String(x.label||"有变化").slice(0,12)}]));
+    schedule();return [...spotlight.keys()];
    },
    setFrame(agents,metaNext){
     if(!graph)return;

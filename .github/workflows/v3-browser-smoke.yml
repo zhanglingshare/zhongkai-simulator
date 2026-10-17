@@ -95,6 +95,8 @@ jobs:
         run: node v3/tests/v320-public-pages-check.mjs
       - name: V3.21 presentation-only immersion, onboarding, narrative and mobile readability
         run: node v3/tests/experience-polish-smoke.cjs
+      - name: V3.21 real-name source-of-truth model story narration tests
+        run: node v3/tests/story-insight.spec.cjs
       - name: Story-first one-click actual Sim and accessible research desktop/mobile browser acceptance
         run: node v3/tests/story-first-smoke.cjs
       - name: Public project introduction launch links and distinct legacy classic V3 Chrome acceptance

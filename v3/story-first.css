@@ -110,7 +110,7 @@
  .portal-shell .hero-quick-actions button{min-height:50px;font-size:16px;width:100%}
  .portal-shell .hero-quick-actions span{font-size:12px}
  .portal-shell .portal-main .world-stage{height:51svh;min-height:330px;border-radius:15px;margin-top:7px}
- .portal-shell .world-heading{font-size:10px;top:10px;left:9px}
+ .portal-shell .world-heading{font-size:10px;top:10px;left:9px;right:10px;transform:none;white-space:normal;display:flex;flex-wrap:wrap;line-height:1.45}
  .portal-shell .world-footer{font-size:10px;gap:7px;left:10px;right:10px}
  .portal-shell .world-footer b{font-size:14px}
  .portal-shell .world-variation{font-size:11px;line-height:1.45;bottom:46px;max-width:calc(100% - 20px)}
@@ -131,4 +131,50 @@
 }
 @media(prefers-reduced-motion:reduce){
  .portal-shell :is(.story-settings,.story-research) summary{scroll-behavior:auto}
+}
+/* V3.21 citizen-readable model story and aligned visual attention. */
+.portal-shell .story-result .scene-plain-result{
+ font-size:clamp(19px,2.35vw,27px);line-height:1.52;margin:13px 0 5px;
+ color:#f5ffff;font-weight:790
+}
+.portal-shell .story-explanation{
+ font-size:14px;line-height:1.75;color:#c6e2e8;margin:7px 0 13px;
+ max-width:1000px
+}
+.portal-shell .story-people{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0}
+.portal-shell .story-person{min-width:0;border-radius:12px;
+ display:flex;flex-direction:column;align-items:flex-start;gap:7px;text-align:left;
+ padding:13px 14px;min-height:83px;cursor:pointer;
+ background:rgba(12,41,53,.85);border:1px solid rgba(150,236,229,.53);
+ color:#f5ffff;transition:border-color .15s,transform .15s
+}
+.portal-shell .story-person:hover{border-color:#fff;transform:translateY(-2px)}
+.portal-shell .story-person:focus-visible{outline:3px solid #b7ffff;outline-offset:3px}
+.portal-shell .story-person--down{border-left:4px solid #ffc096}
+.portal-shell .story-person--up{border-left:4px solid #7ce2c2}
+.portal-shell .story-person strong{font-size:14px;line-height:1.45;overflow-wrap:anywhere}
+.portal-shell .story-person span{font-size:12px;line-height:1.5;color:#bcd9dc}
+.portal-shell .holo-node-label.story-spotlight{z-index:3;font-size:12px;
+ background:#102d3b;border:2px solid #83dedd;font-weight:800;
+ box-shadow:0 3px 20px #0008,0 0 20px #4facb544
+}
+.portal-shell .holo-node-label.story-spotlight-down{
+ background:#442c27;color:#ffe8c8;border-color:#ffc096;
+ box-shadow:0 0 15px #e7a16e88
+}
+.portal-shell .holo-node-label.story-spotlight-up{
+ background:#133b37;color:#ddfff0;border-color:#72eac6;
+ box-shadow:0 0 15px #62d4af77
+}
+@media(max-width:700px){
+ .portal-shell .story-result .scene-plain-result{font-size:19px;line-height:1.55}
+ .portal-shell .story-explanation{font-size:13px;line-height:1.7}
+ .portal-shell .story-people{grid-template-columns:1fr;gap:7px}
+ .portal-shell .story-person{min-height:63px;padding:10px 12px;gap:3px}
+ .portal-shell .story-person strong{font-size:15px}
+ .portal-shell .holo-node-label.story-spotlight{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ .portal-shell .story-person{transition:none}
+ .portal-shell .story-person:hover{transform:none}
 }
