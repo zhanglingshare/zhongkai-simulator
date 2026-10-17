@@ -48,7 +48,10 @@ async function check(browser,port,width,licensed=false){
  assert.ok(grouped.some(s=>s.includes("仅一独立来源")));
  assert.ok(grouped.some(s=>s.includes("缺少证据")));
  await page.locator("#investigation-edit-business").fill("人工核实后的车载物联网智能终端");
+ assert.equal(await page.locator("#investigation-edit-business").inputValue(),"人工核实后的车载物联网智能终端");
  await page.locator("#investigation-apply").click();
+ const audit=await page.evaluate(()=>({business:document.querySelector("#company-business").value,review:window.ZKCompanyResearchUI.snapshot().investigation?.approved?.business,edits:window.ZKCompanyResearchUI.snapshot().investigation?.userChanges}));
+ console.log("V3.17 DEBUG REVIEW",JSON.stringify(audit));
  assert.ok((await page.locator("#investigation-status").innerText()).includes("调查结论已填入"));
  assert.ok(await page.locator(".investigation-field").count()===7,"Adoption must preserve editable report");
  assert.equal(await page.locator("#company-scenario").inputValue(),"backfill");
