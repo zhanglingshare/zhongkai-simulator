@@ -49,3 +49,31 @@
 .paste-helper small{color:#8daebf;font-size:10px;line-height:1.65}
 .case-confirmation{background:#123c45;border-left:3px solid #7ed6bf;color:#b8dcd9;padding:10px 11px;line-height:1.7;font-size:11px;margin:0}
 @media(max-width:480px){.china-search-link{flex-direction:column;align-items:stretch}.local-case{padding:14px}.local-case button{width:100%}}
+
+
+/* V3.16 source provenance and reality-research gate */
+.dossier-search{display:grid;gap:10px;border:1px solid #2b8694;background:linear-gradient(115deg,#0a2a41,#11364b);border-radius:11px;padding:14px}
+#company-auto-dossier{width:100%;border:1px solid #76dfdf;background:linear-gradient(110deg,#177d94,#206574);color:#f2ffff;padding:13px 15px;border-radius:9px;font-size:13px;font-weight:750;cursor:pointer;min-height:44px}
+.dossier-search>span{font-size:10px;color:#a8ccd3;line-height:1.65}
+.dossier-search .candidate-card button{width:100%}
+.source-success{color:#a6ecda;font-size:11px;line-height:1.6;margin:0}
+.scenario-panel{display:grid;gap:12px;border:1px solid #2f7081;border-radius:11px;padding:17px;background:#0d2d41}
+.scenario-panel h3{color:#e5f7f9;font-size:15px;margin:0}
+#company-reality{background:#123b4c;border-left:3px solid #70cbd2;padding:12px 14px;border-radius:5px;font-size:12px;line-height:1.7}
+#company-reality strong{display:block;margin-bottom:5px;color:#cceff0}
+#company-reality p{margin:2px 0;color:#a5c9d6;font-size:11px;overflow-wrap:anywhere}
+#company-reality .reality-flags{color:#e3bd90}
+.source-evidence{border-top:1px solid #376276;padding-top:11px;color:#a4c6d1;font-size:11px;line-height:1.7;display:grid;gap:9px}
+.source-evidence>p{margin:0;font-size:10px;color:#83b6c1}
+.source-item{padding:10px 12px;border-radius:7px;background:#143b4d;border:1px solid #376275;min-width:0}
+.source-item strong{display:block;color:#d4f3f5;font-size:11px}
+.source-item p{font-size:11px;color:#a9c6ce;margin:6px 0;overflow-wrap:anywhere}
+.source-item a{font-size:11px;color:#88d5e2;text-decoration:underline}
+.scenario-gate{border:1px solid #497987;background:#0d3748;padding:12px;border-radius:8px;line-height:1.65;overflow-wrap:anywhere}
+.scenario-gate[data-allowed="no"]{background:#483526;border-color:#9e7250}
+.scenario-gate strong{display:block;color:#d5f2f5;font-size:12px;margin-bottom:5px}
+.scenario-gate[data-allowed="no"] strong{color:#ffd6ac}
+.scenario-gate p{color:#b0cbd4;font-size:11px;margin:3px 0}
+.scenario-gate[data-allowed="no"] p{color:#eed4bb}
+.scenario-gate .gate-warnings{color:#e0bb91}
+@media(max-width:480px){.dossier-search,.scenario-panel{padding:12px}#company-auto-dossier{font-size:12px}.source-item{padding:10px}}
