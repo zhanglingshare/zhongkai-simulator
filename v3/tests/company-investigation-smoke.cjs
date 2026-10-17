@@ -13,7 +13,7 @@ async function check(browser,port,width,licensed=false){
  const page=await browser.newPage({viewport:{width,height:860},reducedMotion:"reduce"});
  const errors=[],external=[];
  page.on("pageerror",e=>errors.push(e.message));
- page.on("request",r=>{if(r.url().startsWith("https://licensed.example.test"))external.push(r.url());});
+ page.on("request",r=>{if(r.url().startsWith("https://licensed.example.test")&&r.method()==="POST")external.push(r.url());});
  if(licensed){
   await page.route("**/company-investigation-config.js",r=>r.fulfill({status:200,contentType:"application/javascript",
    body:'window.ZKInvestigationConfig={apiUrl:"https://licensed.example.test/api/company-investigate",providerLabel:"测试授权数据"};'}));
@@ -50,9 +50,6 @@ async function check(browser,port,width,licensed=false){
  await page.locator("#investigation-edit-business").fill("人工核实后的车载物联网智能终端");
  assert.equal(await page.locator("#investigation-edit-business").inputValue(),"人工核实后的车载物联网智能终端");
  await page.locator("#investigation-apply").click();
- const audit=await page.evaluate(()=>{const v=window.ZKCompanyResearchUI.snapshot();return {keys:Object.keys(v),investigation:v.investigation,company:document.querySelector("#company-name").value,business:document.querySelector("#company-business").value,source:Function.prototype.toString.call(window.ZKCompanyResearchUI.snapshot).slice(0,500)};});
- console.log("V3.17 DEBUG REVIEW",JSON.stringify(audit));
- console.log("V3.17 DEBUG LEX",JSON.stringify(await page.evaluate(()=>window.__V317Diagnostics?.())));
  assert.ok((await page.locator("#investigation-status").innerText()).includes("调查结论已填入"));
  assert.ok(await page.locator(".investigation-field").count()===7,"Adoption must preserve editable report");
  assert.equal(await page.locator("#company-scenario").inputValue(),"backfill");
