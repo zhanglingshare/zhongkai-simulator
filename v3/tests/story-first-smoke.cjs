@@ -51,8 +51,22 @@ async function visit(browser,port,width,reduced){
  }
  let t=Number(await page.locator("#timeline-slider").inputValue());
  assert.ok(t>=1&&t<=20);
- assert.match(await page.locator("#portal-story-result").innerText(),new RegExp("模拟第 "+t+" 步"));
- assert.match(await page.locator("#portal-story-result").innerText(),/不是现实企业受损名单/);
+ const expected=await page.evaluate((tick)=>{
+  const a=new window.ZKSim(7,{n_agents:41,ticks:20}),b=new window.ZKSim(7,{n_agents:41,ticks:20});
+  b.shock("链主外迁");
+  for(let j=0;j<tick;j++){a.step();b.step();}
+  return window.ZKStoryInsight.narrate(a._snap(),b._snap(),tick,"链主外迁");
+ },t);
+ assert.equal(await page.locator("#portal-story-result").innerText(),expected.title);
+ assert.equal(await page.locator("#story-explanation").innerText(),expected.description);
+ assert.deepEqual(await page.locator("#story-people .story-person").evaluateAll(xs=>xs.map(x=>x.dataset.name)),
+  expected.items.map(x=>x.name),"Story cards must match the actual model snapshots");
+ assert.ok((await page.locator("#story-people .story-person").count())<=3);
+ assert.match(await page.locator(".story-result").innerText(),/不能证明因果关系/);
+ if(expected.items.length){
+   await page.locator("#story-people .story-person").first().click();
+   assert.equal(await page.locator("#subject-name").textContent(),expected.items[0].name);
+ }
  assert.equal(await page.locator("#world-node-count").innerText(),"41");
  await page.locator("#story-settings summary").click();
  assert.equal(await page.locator("#portal-population").isVisible(),true);
