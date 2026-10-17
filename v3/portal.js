@@ -100,18 +100,41 @@ function paint(t){
  }
  // Story captions are derived only from the original model's completed A/B
  // snapshots at the selected tick, not from real company data or causal inference.
+ const roleStory=window.ZKRoleStory,roleBox=$("role-story-focus");
+ const changed=frames&&reference&&roleStory?roleStory.compare(reference,snap,3):[];
+ if(roleBox){
+   roleBox.replaceChildren();
+   if(changed.length){
+     const heading=document.createElement("strong");heading.textContent="看看这些模型角色";roleBox.append(heading);
+     const list=document.createElement("ol");list.className="role-story-list";
+     changed.forEach((c,i)=>{
+       const li=document.createElement("li"),button=document.createElement("button");
+       button.type="button";button.className="role-story-person";
+       button.textContent=(i+1)+". "+c.name+" · "+c.direction;
+       button.setAttribute("aria-label","在网络中查看"+c.name+"："+c.direction);
+       button.addEventListener("click",()=>focusNode(c.name));
+       const detail=document.createElement("span");detail.textContent=c.explanation+"（仅模型对照）";
+       li.append(button,detail);list.append(li);
+     });
+     roleBox.append(list);
+     // Synchronize visual focus with one actual changed agent. Don't rotate the
+     // camera every tick; user can manually click any of the listed roles.
+     if(!selected||!changed.some(c=>c.name===selected)){
+       const node=view.graph.nodes.find(n=>n.name===changed[0].name);
+       if(node){view.select(node.name);selected=node.name;}
+     }
+   }else{
+     const line=document.createElement("p");
+     line.textContent=frames?"目前没有明显不同的模型角色，后续可能会有变化。":"播放开始后，这里会指出模型里哪些角色发生变化。";
+     roleBox.append(line);
+   }
+ }
  const story=$("portal-story-result"),phase=$("story-phase");
  if(phase)phase.textContent=!frames?"等你按播放":t===0?"故事开始了":t===MAX_TICKS?"已经播完 · 可以再试":"正在播放 · "+t+"/"+MAX_TICKS;
  if(story){
    if(frames&&reference&&t>0){
-     const activeB=snap.agents.filter(a=>a.alive).length,activeA=reference.agents.filter(a=>a.alive).length;
-     const risk=snap.state.disaster-reference.state.disaster;
-     const count=activeB===activeA?"数量和不发生变化时一样":
-       "比不发生变化时"+(activeB<activeA?"少了 ":"多了 ")+Math.abs(activeA-activeB)+" 个";
-     const direction=Math.abs(risk)<.0005?"变化很小":risk>0?"更高":"更低";
-     story.textContent="模拟第 "+t+" 步：模型里还有 "+activeB+" 个产业角色在运转，"+
-       count+"（基准情景 "+activeA+" 个）。模型中的压力提示"+direction+"。"+
-       "这不是现实企业受损名单，也不是现实会发生的预测。";
+     story.textContent=roleStory?roleStory.summary(changed,frames.shock,t):
+       "第"+t+"步的模型演示正在进行，下面是当前发生变化的角色。";
    }else if(frames){
      story.textContent="「"+frames.shock+"」只是一个假设。看着这些点和线，观察接下来哪些模型角色会变化。";
    }else{
