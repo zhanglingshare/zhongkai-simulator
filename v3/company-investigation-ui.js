@@ -145,6 +145,8 @@ apply.addEventListener("click",()=>{
  $("company-confirm").checked=false;
 });
 company.addEventListener("input",event=>{if(applying)return;
+ // Consent applies to one named company, not subsequent queries.
+ if(event.isTrusted)consent.checked=false;
  // Old lookup components sometimes dispatch a synthetic input event that
  // repeats the identical company value. That must not cancel an in-flight
  // lookup or silently discard the human-reviewed dossier.
