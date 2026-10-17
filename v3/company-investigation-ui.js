@@ -87,7 +87,7 @@ async function investigate(){
  if(consent.checked&&endpoint&&marker===run){
   const abort=new AbortController(),timer=setTimeout(()=>abort.abort(),11000);
   try{
-   const response=await fetch(endpoint,{method:"POST",mode:"cors",credentials:"omit",
+   const response=await fetch(endpoint,{method:"POST",mode:"cors",credentials:"include",
     headers:{"content-type":"application/json"},body:JSON.stringify({name:q,consent:true}),
     signal:abort.signal,cache:"no-store"});
    if(!response.ok)throw new Error("授权接口暂不可用（HTTP "+response.status+"）");
