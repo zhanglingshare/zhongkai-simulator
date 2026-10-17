@@ -41,7 +41,7 @@ async function check(browser,port,width){
  await page.locator("#timeline-slider").fill("6");
  const narrative=await page.locator("#portal-story-result").innerText();
  assert.match(narrative,/模拟第 6 步/);
- assert.match(narrative,/基准情景/);
+ assert.match(narrative,/与没有这件事的模型相比|没有发现明显不同/);
  assert.match(narrative,/不是现实企业/);
  const total=await page.locator("#world-node-count").innerText();
  assert.equal(total,"41");
