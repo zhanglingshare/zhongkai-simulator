@@ -51,7 +51,7 @@ async function check(browser,port,width){
    const tags=await page.locator("#holo-labels .story-highlight").count();
    assert.ok(tags<=3,"Never clutter hologram with >3 highlighted names");
    await page.locator("#story-people .story-person").first().click();
-   assert.equal(await page.locator("#subject-name").innerText(),expected[0].name,
+   assert.equal(await page.locator("#subject-name").textContent(),expected[0].name,
     "Click model actor in story must move original hologram focus");
   }else{
    assert.equal(await page.locator("#story-spotlight").isVisible(),false);
