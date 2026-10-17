@@ -143,7 +143,7 @@ function paint(t){
   chapter=(phase==="key"?"03 · 停在这里，对照一下":t===MAX_TICKS?"04 · 看完后续结果":"03 · 观察后续变化")+" · 第 "+t+" 步";
   title=t===MAX_TICKS?"这条路径里，仍有 "+info.b.alive+" 个角色运转":phase==="key"?"第 "+t+" 步，两条路径有 "+changes.length+" 个角色不同":"退出之后，其他角色怎样了？";
   caption=phase==="key"?"演示已暂停。按住下方按钮，看同一步的未退出路径。":t===MAX_TICKS?"未退出路径为 "+info.a.alive+" 个；这里呈现的是本次模型结果。":"有变化的角色持续标色，退出的角色保留位置和名字。";
-  explanation=info.exits.length+" 个角色在退出路径中不再运转；"+info.returns.length+" 个在退出路径中仍运转（均与另一条路径对照）。";
+  explanation="与未退出时相比："+info.exits.length+" 个角色只在这里退出；"+info.returns.length+" 个角色只在这里保持运转。";
   plain="模拟第 "+t+" 步：「"+target+"」保持退出。当前有 "+info.b.alive+" 个模型角色运转，未退出路径为 "+info.a.alive+" 个。角色差异见下方名单。";
  }else{
   chapter="另一种模型情景 · 第 "+t+" 步";title="「"+frames.shock+"」之后";
@@ -152,7 +152,7 @@ function paint(t){
   plain="模拟第 "+t+" 步：当前 "+info.b.alive+" 个角色运转，对照路径 "+info.a.alive+" 个。";
  }
  setText("home-story-chapter",chapter);setText("home-story-title",title);setText("home-story-caption",caption);
- setText("home-view-label",!frames?"初始模型世界":before?"未改变路径 · 第 "+t+" 步":"改变后路径 · 第 "+t+" 步");
+ setText("home-view-label",!frames?"初始模型世界":frames.kind==="exit"?(before?"未退出":"已退出")+" · 第 "+t+" 步":(before?"未改变路径":"改变后路径")+" · 第 "+t+" 步");
  setText("world-variation",explanation);$("world-variation").dataset.changed=String(!!changes.length);
  setText("portal-story-result",plain);
  setText("story-phase",!frames?"等你按播放":peek?"正在查看对照":phase==="intro"?"先认出主角":phase==="key"?"关键变化 · 已暂停":t===MAX_TICKS?"已经播完 · 可以再试":"模拟第 "+t+" 步");

@@ -70,6 +70,8 @@ async function home(browser,port,width,reduced=true,fallback=false){
  assert.ok(marker.x>=area.x&&marker.x+marker.width<=area.x+area.width,"Exit marker fits in view");
  const control=await page.locator("#home-peek").boundingBox(),stage=await page.locator("#world-stage").boundingBox();
  assert.ok(control.y+control.height<=stage.y+stage.height,"Comparison is inside the stage");
+ const slider=await page.locator("#timeline-slider").boundingBox();
+ assert.ok(slider.width>stage.width*.7,"Timeline keeps most of the stage width on mobile too");
  await geometry(page);
  await page.locator("#world-stage").screenshot({path:path.join(shots,`v323-network-${width}${fallback?"-2d":""}.png`)});
  await page.locator("#home-peek").focus();await page.keyboard.down("Space");
