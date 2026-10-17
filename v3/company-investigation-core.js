@@ -81,7 +81,7 @@ function analyze(query,rawDocs=[],opts={}){
  if(fields.business.status==="missing")questions.push("该企业具体生产什么产品、拥有何种产能？");
  questions.push("是否有明确的仲恺新落地或扩产项目？合同、时间、投资规模有何公开依据？");
  questions.push("有哪些证据证明拟建立的供货与采购关系，还是仅属于模型假设？");
- const linked=docs.some(d=>d.source.type==="licensed_registry");
+ const linked=docs.some(d=>d.source.type==="licensed_registry"&&d.source.licensed===true);
  const domicile=fields.operationAddress;
  const existingLocal=domicile.status!=="missing"&&domicile.status!=="conflict"&&/仲恺/.test(domicile.recommended)
   &&docs.some(d=>d.fields.operationAddress&&/仲恺/.test(d.fields.operationAddress)
