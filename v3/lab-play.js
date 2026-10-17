@@ -4,6 +4,9 @@
 const $=id=>document.getElementById(id),K=window.ZKImpact;
 const host=$("lab-play-stage"),slider=$("lab-play-time");
 if(!host||!K)return;
+// This interaction card belongs to the story edition's own second page.
+const activeLink=document.querySelector(".lab-v311 .rail-link.active");
+if(activeLink)activeLink.href="story-lab.html";
 let current=null;
 const active=s=>s.agents.filter(n=>n.alive).length;
 const formatted=(key,s,value)=>key==="survivors"?active(s)+"个":value.toFixed(3);

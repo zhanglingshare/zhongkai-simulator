@@ -30,6 +30,8 @@ jobs:
         run: npm install --no-save --no-audit --no-fund playwright
       - name: V3.22 real graph entrance timing and no-mutation tests
         run: node v3/tests/visual-entry.spec.cjs
+      - name: Story-only release scope and unchanged other versions
+        run: node v3/tests/story-scope.spec.cjs
       - name: V3.22 direct manipulation and same-snapshot Chrome acceptance
         run: node v3/tests/visual-interaction-smoke.cjs
       - name: Evidence validation unit tests
