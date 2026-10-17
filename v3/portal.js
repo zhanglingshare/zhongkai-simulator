@@ -3,8 +3,8 @@
 (function(){
 "use strict";
 const $=id=>document.getElementById(id),S=window.ZKSim,H=window.ZKHolo;
-const Core=window.ZKHoloCore;
-if(!S||!H||!Core){$("scene-message").textContent="模型或三维渲染模块未载入，请刷新页面或进入模拟实验室。";return;}
+const Core=window.ZKHoloCore,Story=window.ZKStoryInsight;
+if(!S||!H||!Core||!Story){$("scene-message").textContent="模型或三维渲染模块未载入，请刷新页面或进入模拟实验室。";return;}
 const SHOCKS=window.ZKRegisteredShocks||[];
 const SIZES=[24,32,41],MAX_TICKS=20;
 let seed=7,base=null,view=null,frames=null,cursor=0,timer=null,chosen=null,selected=null;
@@ -98,24 +98,29 @@ function paint(t){
      banner.dataset.changed="false";
    }
  }
- // Story captions are derived only from the original model's completed A/B
- // snapshots at the selected tick, not from real company data or causal inference.
+ // These names and visible rings are computed from exactly A[t] and B[t].
+ // Do not claim the difference is a verified causal chain in the real economy.
  const story=$("portal-story-result"),phase=$("story-phase");
- if(phase)phase.textContent=!frames?"等你按播放":t===0?"故事开始了":t===MAX_TICKS?"已经播完 · 可以再试":"正在播放 · "+t+"/"+MAX_TICKS;
- if(story){
-   if(frames&&reference&&t>0){
-     const activeB=snap.agents.filter(a=>a.alive).length,activeA=reference.agents.filter(a=>a.alive).length;
-     const risk=snap.state.disaster-reference.state.disaster;
-     const count=activeB===activeA?"数量和不发生变化时一样":
-       "比不发生变化时"+(activeB<activeA?"少了 ":"多了 ")+Math.abs(activeA-activeB)+" 个";
-     const direction=Math.abs(risk)<.0005?"变化很小":risk>0?"更高":"更低";
-     story.textContent="模拟第 "+t+" 步：模型里还有 "+activeB+" 个产业角色在运转，"+
-       count+"（基准情景 "+activeA+" 个）。模型中的压力提示"+direction+"。"+
-       "这不是现实企业受损名单，也不是现实会发生的预测。";
-   }else if(frames){
-     story.textContent="「"+frames.shock+"」只是一个假设。看着这些点和线，观察接下来哪些模型角色会变化。";
-   }else{
-     story.textContent="点上面的播放按钮，看看模型里的产业角色会怎样变化。";
+ const explain=$("story-explanation"),list=$("story-people");
+ const insight=frames&&reference?Story.narrate(reference,snap,t,frames.shock):null;
+ if(phase)phase.textContent=!frames?"等你按播放":t===0?"刚开始":t===MAX_TICKS?"故事播完":"故事进行中 · "+t+"/"+MAX_TICKS;
+ if(story)story.textContent=insight?insight.title:"点上面的播放按钮，看看模型里的哪些角色出现变化。";
+ if(explain)explain.textContent=insight?insight.description:"我们会直接标出模型里发生变化的名字，不必先读懂那些专业指标。";
+ if(view.setSpotlight)view.setSpotlight(insight?insight.items.map(item=>({
+   name:item.name,tone:item.tone,label:item.kind==="exit"?"退出":item.kind==="enter"?"仍在运转":item.kind==="down"?"变弱":"变强"
+ })):[]);
+ if(list){
+   list.replaceChildren();
+   for(const item of insight?insight.items:[]){
+     const button=document.createElement("button");
+     button.type="button";button.className="story-person story-person--"+item.tone;
+     button.dataset.name=item.name;
+     button.setAttribute("aria-label","把镜头转向模型角色 "+item.name+"，"+item.text);
+     const name=document.createElement("strong"),desc=document.createElement("span");
+     name.textContent=item.name;desc.textContent=item.text+" · 点我在网络里找到它";
+     button.append(name,desc);
+     button.addEventListener("click",()=>focusNode(item.name));
+     list.append(button);
    }
  }
   $("timeline-slider").value=String(t);
