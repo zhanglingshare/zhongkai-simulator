@@ -195,6 +195,7 @@ $("pilot-simulation").addEventListener("input",e=>{if(e.target.matches("input,te
 $("pilot-simulation").addEventListener("change",()=>invalidate());
 $("pilot-compare-file").addEventListener("change",async e=>{
  const file=e.target.files?.[0];if(!file)return;
+ $("pilot-changes").replaceChildren(el("p","","正在读取并对照新来源快照…"));
  try{if(file.size>300000)throw Error("超过安全的版本资料大小限制");
   const next=JSON.parse(await file.text());
   diff=P.compareDocuments(registry,next);
