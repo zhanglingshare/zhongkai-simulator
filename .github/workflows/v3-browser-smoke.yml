@@ -78,6 +78,8 @@ jobs:
         run: node v3/tests/trust-audit.spec.cjs
       - name: V3.20 20-entity evidence trust dashboard Chrome desktop and mobile
         run: node v3/tests/trust-audit-smoke.cjs
+      - name: V3.20 independent public V3.19 Pages access check
+        run: node v3/tests/v319-public-pages-check.mjs
       - name: Upload screenshots for visual review
         if: always()
         uses: actions/upload-artifact@v4
