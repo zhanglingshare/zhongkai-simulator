@@ -21,7 +21,7 @@ async function check(browser,port,width,licensed=false){
    const sent=route.request().postDataJSON();
    assert.equal(sent.consent,true);
    assert.equal(sent.name,"惠州市博实结科技有限公司");
-   route.fulfill({status:200,contentType:"application/json",headers:{"access-control-allow-origin":"*"},
+   route.fulfill({status:200,contentType:"application/json",headers:{"access-control-allow-origin":"http://127.0.0.1:"+port,"access-control-allow-credentials":"true"},
     body:JSON.stringify({ok:true,name:sent.name,documents:[{
      companyName:sent.name,fields:{business:"工业机器人零部件供应",registrationStatus:"存续",
       registeredAddress:"惠州市仲恺高新区某地（测试数据）"},
