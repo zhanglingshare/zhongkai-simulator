@@ -98,7 +98,26 @@ function paint(t){
      banner.dataset.changed="false";
    }
  }
- $("timeline-slider").value=String(t);
+ // Plain-language narration derives only from computed Sim snapshots.
+  // Never turns model movements into real employment, GDP or causality claims.
+  const story=$("portal-story-result");
+  if(story){
+    if(frames&&reference&&t>0){
+      const risk=snap.state.disaster-reference.state.disaster;
+      const activeB=snap.agents.filter(a=>a.alive).length;
+      const activeA=reference.agents.filter(a=>a.alive).length;
+      const riskText=Math.abs(risk)<.0005?"与基准基本相同":
+        risk>0?"比未发生这次变化时更高":"比未发生这次变化时更低";
+      story.textContent="模拟第 "+t+" 步：当前 "+activeB+" 个主体仍在模型中运转"+
+        "（基准情景 "+activeA+" 个），风险指数"+riskText+"。"+
+        "这只解释模型内结果，不是现实企业的受损名单。";
+    }else if(frames){
+      story.textContent="已经选择「"+frames.shock+"」。拖动时间轴或播放，看看模型中的不同路径。";
+    }else{
+      story.textContent="选一种变化，再看模型里哪些主体的状态发生改变。结果不等于现实企业的实际损失。";
+    }
+  }
+  $("timeline-slider").value=String(t);
  $("timeline-output").textContent="T "+String(t).padStart(2,"0")+" / "+MAX_TICKS;
  $("world-node-count").textContent=snap.agents.length;
  $("world-edge-count").textContent=base.edges.length;
@@ -203,6 +222,10 @@ try{
  view.setLabelMode($("portal-labels").value);
  $("portal-run").addEventListener("click",()=>run($("portal-shock").value));
  $("preset-risk").addEventListener("click",()=>run("链主外迁"));
+ $("hero-quickstart")?.addEventListener("click",()=>{
+   run("链主外迁");
+   $("world-stage")?.scrollIntoView({behavior:reduced?"auto":"smooth",block:"center"});
+ });
  $("preset-growth").addEventListener("click",()=>run("技术突破"));
  $("portal-population").addEventListener("change",()=>{reset();$("portal-run").textContent="▶ 开始情景推演";});
  $("portal-shock").addEventListener("change",()=>{if(frames){reset();$("portal-run").textContent="▶ 开始情景推演";}});
