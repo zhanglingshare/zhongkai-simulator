@@ -1,80 +1,68 @@
-/* V3.14 Chrome acceptance: one explicit public lookup with a MOCK of Wikidata.
-   The test does not claim to audit live Wikidata network connectivity. */
-const assert=require("node:assert/strict"),http=require("node:http"),fs=require("node:fs"),path=require("node:path");
+/* V3.15 Chrome: Chinese-first search handoff, real sourced Zhongkai case, no hidden network scraping. */
+const assert=require("node:assert/strict"),fs=require("node:fs"),http=require("node:http"),path=require("node:path");
 const {chromium}=require("playwright");
 const root=path.resolve(__dirname,"../..");
-const mime={".html":"text/html; charset=utf-8",".css":"text/css; charset=utf-8",".js":"text/javascript; charset=utf-8"};
+const types={".html":"text/html;charset=utf-8",".js":"application/javascript;charset=utf-8",".css":"text/css;charset=utf-8"};
 const server=http.createServer((req,res)=>{
- let target;try{const u=new URL(req.url,"http://127.0.0.1"),decoded=decodeURI(u.pathname);
-  target=path.resolve(root,"."+decoded);}catch{res.writeHead(400);res.end();return;}
- if(!target.startsWith(root+path.sep)){res.writeHead(403);res.end();return;}
- fs.readFile(target,(e,b)=>{if(e){res.writeHead(404);res.end();return;}
-  res.writeHead(200,{"content-type":mime[path.extname(target)]||"text/plain"});res.end(b);
- });
+ let file;try{file=path.resolve(root,"."+decodeURI(new URL(req.url,"http://localhost").pathname));}catch{res.writeHead(400).end();return;}
+ if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}
+ fs.readFile(file,(e,b)=>{if(e){res.writeHead(404).end();return;}res.writeHead(200,{"Content-Type":types[path.extname(file)]||"text/plain"});res.end(b);});
 });
-async function scenario(browser,port,width,offline=false){
- const page=await browser.newPage({viewport:{width,height:850}});
- const errors=[],requests=[];page.on("pageerror",e=>errors.push(e.message));
- await page.route("https://www.wikidata.org/w/api.php**",route=>{
-  const u=new URL(route.request().url()),act=u.searchParams.get("action");
-  requests.push(act);
-  if(offline)return route.abort();
-  const info=act==="wbsearchentities"?{search:[{id:"Q42",label:"测试机器人企业",description:"机器人整机制造"}]}:
-   u.searchParams.get("props")==="labels"?{entities:{}}:
-    {entities:{Q42:{id:"Q42",labels:{zh:{value:"测试机器人企业"}},
-      descriptions:{zh:{value:"机器人整机制造商"}},claims:{
-      P856:[{rank:"normal",mainsnak:{snaktype:"value",datavalue:{value:"https://example.com"}}}]}}}};
-  route.fulfill({status:200,contentType:"application/json",body:JSON.stringify(info)});
- });
+async function test(browser,port,width){
+ const page=await browser.newPage({viewport:{width,height:890},reducedMotion:"reduce"});
+ const errors=[],foreign=[];
+ page.on("pageerror",e=>errors.push(e.message));
+ page.on("request",r=>{if(!r.url().startsWith("http://127.0.0.1:"))foreign.push(r.url());});
  await page.goto("http://127.0.0.1:"+port+"/v3/inflow.html");
- await page.locator("#company-name").fill("测试机器人企业");
+ await page.waitForFunction(()=>document.querySelectorAll("#company-links .suggestion").length>0,null,{timeout:12000});
+ assert.equal(await page.locator("#load-zhongkai-case").count(),1);
+ await page.locator("#load-zhongkai-case").click();
+ assert.equal(await page.locator("#company-name").inputValue(),"惠州市博实结科技有限公司");
+ assert.match(await page.locator("#company-business").inputValue(),/物联网/);
+ assert.match(await page.locator("#company-location").inputValue(),/仲恺高新区/);
+ assert.match(await page.locator("#source").inputValue(),/gxj\.huizhou\.gov\.cn/);
+ assert.equal(await page.locator("#company-type").inputValue(),"oem");
+ assert.equal(await page.locator("#evidence").inputValue(),"unverified");
+ assert.ok((await page.locator("#company-search-status").innerText()).includes("已载入"));
+ assert.equal(await page.locator("#link-one").inputValue(),"","Cannot invent a real contract by default");
  assert.equal(await page.locator("#company-confirm").isChecked(),false);
- await page.locator("#company-search").click();
- if(!offline){
-  await page.locator(".select-candidate").click();
-  await page.waitForFunction(()=>document.querySelector("#company-search-status").textContent.includes("已填入公开知识库"));
-  assert.equal(await page.locator("#company-business").inputValue(),"机器人整机制造商");
-  assert.equal(await page.locator("#company-website").inputValue(),"https://example.com");
-  assert.equal(await page.locator("#company-type").inputValue(),"oem","Conservative role hint from supplied description");
-  assert.ok((await page.locator("#source").inputValue()).includes("/wiki/Q42"));
-  assert.equal(await page.locator("#evidence").inputValue(),"unverified","Cannot promote third-party source into verified supply relationship");
-  assert.equal(await page.locator(".candidate-card").count(),0);
- }else{
-  await page.waitForFunction(()=>document.querySelector("#company-search-status").textContent.includes("在线查找暂不可用"));
-  await page.locator("#company-business").fill("机器人整机制造商");
- }
- // User must explicitly choose a relationship; a suggested partner is never asserted as a fact.
- assert.equal(await page.locator("#link-one").inputValue(),"");
- await page.locator("#company-links .suggestion").first().click();
- assert.notEqual(await page.locator("#link-one").inputValue(),"");
  await page.locator("#inflow-run").click();
  assert.ok((await page.locator("#form-message").innerText()).includes("勾选确认"));
+ await page.locator("#company-links .suggestion").first().click();
+ assert.notEqual(await page.locator("#link-one").inputValue(),"");
  await page.locator("#company-confirm").check();
  await page.locator("#inflow-run").click();
- await page.waitForFunction(()=>document.querySelectorAll("#inflow-metrics .metric").length===4,null,{timeout:15000});
+ await page.waitForFunction(()=>document.querySelectorAll("#inflow-metrics .metric").length===4,null,{timeout:16000});
+ assert.equal(await page.locator("#count-a").innerText(),"24");
  assert.equal(await page.locator("#count-b").innerText(),"25");
- assert.equal(await page.locator("#company-confirm").isChecked(),true);
+ const snap=await page.evaluate(()=>window.ZKCompanyResearchUI.snapshot());
+ assert.equal(snap.publicCandidate.kind,"existing-enterprise-as-model-inflow");
+ assert.equal(snap.confirmedByUser,true);
  assert.ok(await page.locator("#inflow-export").isEnabled());
- const widthCheck=await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+4);
- assert.equal(widthCheck,true,"Mobile layout must not overflow");
- if(width===390&&!offline){
-  const shot=path.join(root,"v3/screenshots/v314-company-research-mobile.png");
-  fs.mkdirSync(path.dirname(shot),{recursive:true});await page.screenshot({path:shot,fullPage:true});
- }
- await page.locator("#company-business").fill("半导体芯片");
+ if(width===390){const file=path.join(root,"v3/screenshots/v315-domestic-case-390.png");fs.mkdirSync(path.dirname(file),{recursive:true});await page.screenshot({path:file,fullPage:true});}
+ await page.locator("#company-search").click();
+ assert.equal(await page.locator(".china-search-link").count(),6);
+ const href=await page.locator(".china-search-link a").first().getAttribute("href");
+ assert.ok(href.startsWith("https://www.baidu.com/s?wd="));
  assert.equal(await page.locator("#company-confirm").isChecked(),false);
+ await page.locator("#company-name").fill("自定义公开企业");
+ await page.locator("#company-excerpt").fill("企业经营车载智能终端设备制造，位于惠州市仲恺高新区惠风西三路。");
+ await page.locator("#extract-company-excerpt").click();
+ assert.match(await page.locator("#company-business").inputValue(),/车载智能终端/);
+ assert.equal(await page.locator("#company-type").inputValue(),"oem");
+ await page.locator("#source").fill("https://example.org/article");
  assert.equal(await page.locator("#inflow-export").isDisabled(),true);
- assert.deepEqual(errors,[],errors.join("; "));
- assert.ok(requests.length>=1);
+ assert.equal(await page.locator("#company-confirm").isChecked(),false);
+ const geometry=await page.evaluate(()=>({w:innerWidth,doc:document.documentElement.scrollWidth}));
+ assert.ok(geometry.doc<=geometry.w+4,"horizontal overflow "+JSON.stringify(geometry));
+ assert.deepEqual(errors,[]);
+ assert.deepEqual(foreign,[],"No auto-query to foreign or paid providers; navigation only after deliberate link click");
  await page.close();
 }
 (async()=>{
- await new Promise(ok=>server.listen(0,"127.0.0.1",ok));
- let browser;try{
-  browser=await chromium.launch({channel:"chrome",headless:true,args:["--no-sandbox"]});
-  await scenario(browser,server.address().port,1440,false);
-  await scenario(browser,server.address().port,390,false);
-  await scenario(browser,server.address().port,360,true);
-  console.log("PASS V3.14 browser sourced search, user-selected autofill, editable role, explicit link/confirmation, offline manual fallback, mobile");
+ await new Promise(ok=>server.listen(0,"127.0.0.1",ok));let browser;
+ try{browser=await chromium.launch({channel:"chrome",headless:true,args:["--no-sandbox"]});
+  for(const width of [1440,390,360])await test(browser,server.address().port,width);
+  console.log("PASS V3.15 Chinese search handoff, Zhongkai local example, approved actual Sim, mobile, no hidden lookups");
  }finally{if(browser)await browser.close();server.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
