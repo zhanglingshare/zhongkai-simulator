@@ -148,6 +148,7 @@
       // Only explicit, hypothesized, model-side adjacency links. No verified trading claims.
       edges:main.b.edges.map(e=>({...e})),
       agents0:main.b.snapshots[0].agents.map(a=>({name:a.name,type:a.type,w:a.w,energy:a.energy,alive:a.alive})),
+      actorsByTick:main.b.snapshots.map(s=>s.agents.map(a=>({name:a.name,type:a.type,w:a.w,energy:round(a.energy),alive:a.alive}))),
       series,
       newAgentAtT20:{name:v.name,alive:!!newAgent.alive,energy:round(newAgent.energy)},
       existingChanges:oldDifferences,
