@@ -1,6 +1,9 @@
 /* V3.13: deterministic hypothetical inflow runs *existing* Sim and preserves truth boundaries. */
 const assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path"),vm=require("node:vm");
 const root=path.resolve(__dirname,"../.."),context=vm.createContext({window:{}});
+for(const script of ["inflow-core.js","inflow.js"]){
+ new vm.Script(fs.readFileSync(path.join(root,"v3",script),"utf8"),{filename:script});
+}
 vm.runInContext(fs.readFileSync(path.join(root,"v3/portal-kernel.js"),"utf8"),context,{filename:"portal-kernel.js"});
 const Sim=context.window.ZKSim,Core=require("../inflow-core.js");
 assert.equal(typeof Sim,"function");
