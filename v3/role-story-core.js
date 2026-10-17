@@ -23,7 +23,7 @@ function summary(changes,shock,t){
  if(!t)return "这是一个「"+shock+"」的假设情景。看网络里哪些点改变颜色，下面会显示它们是谁。";
  if(!changes.length)return "模拟进行到第"+t+"步：与没有这次假设的模型路径相比，还没有发现明显的个体状态差异。";
  const first=changes[0];
- return "模拟第"+t+"步：变化最明显的模型角色之一是「"+first.name+"」，它"+first.explanation+"。下面还能看到其他发生变化的角色。";
+ return "模拟第 "+t+" 步：变化最明显的模型角色之一是「"+first.name+"」，它"+first.explanation+"。下面还能看到其他发生变化的角色。";
 }
 return {compare,summary};
 });
