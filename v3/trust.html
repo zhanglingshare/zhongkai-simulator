@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark"><meta name="theme-color" content="#081322">
+<title>V3.20 · 现实证据与模型可信度工作台 | 仲恺产业风洞</title>
+<meta name="description" content="分开审计20家企业公开证据、2019-2025年度观测、回溯朴素基线和Sim独立验证门槛。没有预测存档不声称真实预测准确率。">
+<link rel="stylesheet" href="trust.css">
+<script defer src="observations-core.js"></script><script defer src="benchmark-core.js"></script>
+<script defer src="measurement-core.js"></script><script defer src="trust-core.js"></script>
+<script defer src="trust-ui.js"></script>
+</head><body>
+<div class="trust-shell">
+<header class="trust-nav">
+  <a class="trust-brand" href="index.html" aria-label="返回仲恺全息产业世界"><b>Z<span>.</span></b><span>ZHONGKAI<small>INDUSTRIAL RESEARCH</small></span></a>
+  <nav aria-label="工作台导航"><a href="index.html">全息世界</a><a href="lab.html">风洞实验</a><a href="inflow.html">企业接入</a><a class="active" href="trust.html" aria-current="page">可信度核验</a></nav>
+  <span class="trust-edition">V3.20 / EVIDENCE FIRST</span>
+</header>
+<main>
+<section class="trust-hero">
+ <div><div class="eyebrow">ZHONGKAI / TRUST &amp; FALSIFICATION LAB</div>
+  <h1>这个模拟结果，<br><em>我们究竟能信多少？</em></h1>
+  <p>把真实公开资料、事后基线回放、模型映射和独立预测检验分开呈现。数据有出处，不等于模型已验证；不能证明的部分，清楚展示为什么还不能。</p>
+  <div class="hero-links"><a href="observations.html">逐项查看历史统计 ↗</a><a href="measurement.html">查看测量假设 ↗</a><a href="verification.html">既有科学验证台 ↗</a></div>
+ </div>
+ <aside class="trust-gate">
+  <span class="gate-kicker">核心科研门槛</span><strong id="model-status">正在核对…</strong>
+  <p id="model-status-note">系统只在具备事前冻结的模型预测及后续独立观测时，才可能评价真实预测误差。</p>
+  <div class="gate-bar"><span></span></div>
+  <small>不把回溯拟合、相关性或用户主观门槛当作现实预测能力。</small>
+ </aside>
+</section>
+<section class="trust-kpis" id="trust-kpis" aria-label="证据审计总览"><p class="trust-empty">正在读取已有研究记录…</p></section>
+<section class="trust-section" aria-labelledby="backtest-title">
+ <div class="section-heading"><div><div class="eyebrow">01 / HISTORICAL BASELINES</div><h2 id="backtest-title">历史基线有多大误差？</h2></div>
+ <div class="heading-meta">仅为朴素基线事后回放 · 不代表 Sim 准确率</div></div>
+ <p class="section-description">重用 V3.5 逐年“只用此前观测”的朴素预测。数据版本是事后重建，未恢复每一年的原始发布版本，因此这不是获得独立存证的模型回测。</p>
+ <div class="trust-metric-select"><label for="trust-metric">选择真实统计指标</label><select id="trust-metric">
+   <option value="gdp_real_yoy">GDP 可比价增速</option><option value="industry_growth">规上工业增加值增速</option>
+   <option value="industry_invest_growth">工业投资增速</option></select></div>
+ <div class="backtest-layout">
+  <div><div id="trust-backtest-score" class="trust-score"><p>等待统计数据…</p></div>
+   <div id="trust-folds" class="trust-folds" role="group" aria-label="逐年回溯预测和误差对照"></div></div>
+  <div class="trust-table-wrap"><table class="trust-table"><thead><tr><th>年度</th><th>真实观测</th><th>上年值基线</th><th>历年均值基线</th><th>依据</th></tr></thead><tbody id="trust-fold-table"><tr><td colspan="5">等待数据…</td></tr></tbody></table>
+   <p class="trust-footnote">误差单位为同比百分点；仅反映两种朴素统计基线，不涉及多智能体 Sim 的输出。</p>
+  </div></div>
+</section>
+<section class="trust-section" aria-labelledby="bridge-title">
+ <div class="section-heading"><div><div class="eyebrow">02 / MODEL TO REALITY</div><h2 id="bridge-title">模型指标，现实中真的量得到吗？</h2></div><div class="heading-meta">5 个模型指标 · 逐项说明</div></div>
+ <p class="section-description">直接复用 V3.6 已登记的候选测量关系；弱代理只代表探索性假设，不是已校准映射。</p>
+ <div id="trust-bridge" class="bridge-grid"><p>读取测量假设…</p></div>
+ <div class="trust-blocks"><h3>为何还不能给出 Sim 预测准确率？</h3><ol id="trust-block-reasons"><li>正在检测事前协议、模型时间步及独立留出。</li></ol></div>
+</section>
+<section class="trust-section" aria-labelledby="enterprise-title">
+ <div class="section-heading"><div><div class="eyebrow">03 / ENTERPRISE EVIDENCE</div><h2 id="enterprise-title">20 家真实企业，哪些事实已经有证据？</h2></div><div class="heading-meta">逐项来源标引 ≠ 完成工商尽调</div></div>
+ <p class="section-description">企业名、区县或项目位置来自已整理的公开记录。实际经营、投资兑现、岗位采购和是否首次引入仲恺，尚无全量独立验证；没有数据不会凭企业名自动填充。</p>
+ <div id="trust-enterprise-kpis" class="enterprise-kpis"></div>
+ <div class="enterprise-layout">
+   <div class="enterprise-list">
+    <label for="enterprise-filter">按来源台账查看企业</label>
+    <select id="enterprise-filter"><option value="all">全部20家</option><option value="仲恺高新区">仲恺高新区（名单归属/位置线索）</option><option value="other">其他惠州区县</option></select>
+    <div id="enterprise-items" class="enterprise-items" role="group" aria-label="可查看证据的企业"></div>
+   </div>
+   <div id="enterprise-detail" class="enterprise-detail"><p>选择企业后显示逐字段证据与缺口。</p></div>
+ </div>
+</section>
+<section class="trust-section" aria-labelledby="future-title">
+ <div class="section-heading"><div><div class="eyebrow">04 / FROZEN BEFORE THE OUTCOME</div><h2 id="future-title">为真正的独立预测预注册</h2></div><div class="heading-meta">导出未封存草稿 · 不是已认证预测</div></div>
+ <p class="section-description">在目标年度结果公布前冻结测量映射、模型版本、数据版本、预测数值和时间戳，后续才能独立验模。这里仅生成可检查的草稿；无法在浏览器本地凭一份文件自行证明“早于结果公布”。</p>
+ <form id="prereg-form" class="prereg-form" novalidate>
+   <label>现实指标<select id="prereg-metric"><option value="gdp_real_yoy">GDP 可比价同比</option><option value="industry_growth">规上工业增加值同比</option><option value="industry_invest_growth">工业投资同比</option></select></label>
+   <label>目标统计年<input id="prereg-target" type="text" placeholder="例如 2027" maxlength="4" inputmode="numeric"></label>
+   <label>预计公布日期<input id="prereg-release" type="date"></label>
+   <label>事前预测的数值（%）<input id="prereg-value" type="number" step="any" placeholder="没有就保持空白"></label>
+   <label>模型 Git 40位提交 SHA<input id="prereg-commit" type="text" maxlength="40" placeholder="Git commit SHA"></label>
+   <label>冻结测量协议版本<input id="prereg-version" type="text" maxlength="120" placeholder="例如协议版本号及文档存证引用"></label>
+   <label>预定观测原文 HTTPS 来源<input id="prereg-source" type="url" maxlength="160" placeholder="https://…"></label>
+   <label class="wide">模型时间步与现实指标映射规则<textarea id="prereg-rule" rows="3" maxlength="160" placeholder="写清模型时间步、现实指标口径、参数和转换公式，不得事后更改"></textarea></label>
+   <div class="prereg-actions"><button type="submit">检查并生成预注册草稿</button><button id="prereg-export" type="button" disabled>↓ 下载未封存草稿</button></div>
+   <p id="prereg-status" role="status" aria-live="polite">请先填写资料，系统不会默认生成预测数字。</p>
+ </form>
+</section>
+</main>
+<footer class="trust-footer">V3.20 · 公开科研工具 · 数据覆盖不等于预测能力 · 原 Sim 内核与每日数据更新保持不变</footer>
+</div>
+</body></html>
