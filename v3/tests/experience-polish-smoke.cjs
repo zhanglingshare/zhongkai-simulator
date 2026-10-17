@@ -23,15 +23,18 @@ async function check(browser,port,width){
  let {page,errors}=await open(browser,port,"index.html",width);
  assert.equal(await page.locator("#portal-labels").inputValue(),"core","Default labels should not clutter network");
  assert.ok(await page.locator("#hero-quickstart").isVisible());
- assert.match(await page.locator(".hero-deck").innerText(),/模型推演/);
+ assert.match(await page.locator(".hero-deck").innerText(),/假设/);
+ assert.equal(await page.locator("#story-settings").evaluate(x=>x.open),false);
+ assert.equal(await page.locator("#story-research").evaluate(x=>x.open),false);
  assert.equal(await page.locator("#timeline-slider").isDisabled(),true);
  if(width<=960){
   const p=await page.evaluate(()=>{
    const a=document.querySelector("#world-stage").getBoundingClientRect(),
-    b=document.querySelector(".control-panel").getBoundingClientRect();
+    b=document.querySelector("#story-settings").getBoundingClientRect();
    return {stage:a.top,controls:b.top};
   });
-  assert.ok(p.stage<p.controls,"Mobile users should see visual world before expert form: "+JSON.stringify(p));
+  assert.ok(p.stage<p.controls,"Immersive model must appear before optional settings: "+JSON.stringify(p));
+  assert.equal(await page.locator("#portal-population").isVisible(),false);
  }
  await page.locator("#hero-quickstart").click();
  assert.equal(await page.locator("#timeline-slider").isEnabled(),true);
@@ -42,9 +45,10 @@ async function check(browser,port,width){
  assert.match(narrative,/不是现实企业/);
  const total=await page.locator("#world-node-count").innerText();
  assert.equal(total,"41");
+ await page.locator("#story-settings summary").click();
  await page.locator("#portal-population").selectOption("24");
  assert.equal(await page.locator("#world-node-count").innerText(),"24");
- assert.match(await page.locator("#portal-story-result").innerText(),/不等于现实企业/);
+ assert.match(await page.locator("#portal-story-result").innerText(),/点上面的播放按钮/);
  await checkGeometry(page,width);
  if(width===390)await shot(page,"v321-ux-portal-mobile.png");
  assert.deepEqual(errors,[],"Portal runtime: "+errors.join(" | "));

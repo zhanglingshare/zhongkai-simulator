@@ -42,12 +42,15 @@ function explain(metrics){
   .sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta))[0];
  if(!important)return;
  const nearZero=Math.abs(important.delta)<.0005;
+ const names={abundance:"产业活力",order:"产业角色的协同程度",disaster:"模型里的风险压力",
+  mood:"产业角色的信心",survivors:"仍在运转的角色比例"};
+ const name=names[important.key]||important.name;
  const sentence=nearZero?
   "这次实验的五项模型指数几乎没有变化。":
-  "这次模型对照中，「"+important.name+"」变化最明显："+
-   (important.delta>0?"升高":"降低")+" "+Math.abs(important.delta).toFixed(3)+"。";
- box.append(make("strong","",sentence),
-   make("p","","你看到的是当前模型中“改变前 / 改变后”的差异，而不是现实的经济损失、岗位变化或政策预测。下方保留所有指标供你核查。"));
+  "这次模型对照里，变化最明显的是「"+name+"」："+
+   "与没有发生这件事的情景相比，它"+(important.delta>0?"增加了":"减少了")+"。";
+  box.append(make("strong","",sentence),
+   make("p","","你看到的只是模拟世界中的两条可能路径，不是现实的经济损失、岗位变化或政策预测。想查数字？下面保留原来的全部研究指标。"));
 }
 function empty(stale=false){
  validResult=false;
@@ -96,6 +99,16 @@ function render(event){
 window.addEventListener("zk:comparison",e=>render(e.detail));
 window.addEventListener("zk:compare-stale",()=>{empty(true);document.body.classList.remove("lab-has-results");});
 window.addEventListener("zk:compare-clear",()=>{empty(false);document.body.classList.remove("lab-has-results");});
+el("lab-story-start")?.addEventListener("click",()=>{
+ const shock="链主外迁";
+ if(![...all.options].some(option=>option.value===shock)){
+  el("lab-input-warning").textContent="当前模型没有这个演示情景，请从下方选择另一种变化。";
+  return;
+ }
+ all.value=shock;all.dispatchEvent(new Event("change",{bubbles:true}));
+ el("wind-run").click();
+ window.requestAnimationFrame(()=>el("lab-preview")?.scrollIntoView({block:"start",behavior:"auto"}));
+});
 el("wind-run").addEventListener("click",()=>{
  const n=Number(seed.value);
  if(!Number.isSafeInteger(n)||n<1||n>2147483647){

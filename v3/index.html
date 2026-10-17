@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#020c17">
 <meta name="description" content="仲恺产业风洞：基于公开证据的可交互三维产业网络，探索风险传播和潜在增长条件。独立研究、非官方决策建议。">
 <title>仲恺产业风洞 · 产业关系全息门户 · 沉浸体验优化</title>
-<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css">
+<link rel="stylesheet" href="portal.css"><link rel="stylesheet" href="v312-motion.css"><link rel="stylesheet" href="experience-polish.css"><link rel="stylesheet" href="story-first.css">
 <script defer src="portal-kernel.js"></script>
 <script defer src="holo-core.js"></script>
 <script defer src="portal-render.js"></script>
@@ -19,13 +19,12 @@
       <span class="brand-mark">Z<span>·</span></span>
       <span class="brand-name">ZHONGKAI <small>INDUSTRIAL WIND TUNNEL</small></span>
     </a>
-    <span class="edition"><span class="online-pulse"></span> 产业世界 / LIVE MODEL</span>
+    <span class="edition"><span class="online-pulse"></span> 产业故事 · 真实模型</span>
     <nav class="site-nav" aria-label="门户导航">
-      <a class="nav-active" href="#world">全息网络</a>
-      <a href="lab.html">模拟实验 <span>↗</span></a>
-      <a href="inflow.html">新企业接入 <span>↗</span></a>
-      <a href="observations.html">公开证据</a>
-      <a href="verification.html">科学验证</a><a href="trust.html">可信度工作台 <span>↗</span></a>
+      <a class="nav-active" href="#world">看产业故事</a>
+      <a href="lab.html">自己试变化 ↗</a>
+      <a href="trust.html">资料靠谱吗？ ↗</a>
+
     </nav>
   </header>
 
@@ -33,12 +32,39 @@
     <section class="portal-main" id="world" aria-labelledby="portal-title">
       <div class="portal-atmosphere" aria-hidden="true"></div>
       <div class="hero-story">
-        <p class="hero-kicker"><span class="hero-diamond">◈</span> 产业关系全息入口 / OPEN RESEARCH</p>
-        <h1 id="portal-title">一家关键工厂变动，<br><span>谁会受到影响？</span></h1>
-        <p class="hero-deck">点一下，亲眼看这个产业网络里的企业与角色如何变化。你看到的是模型推演，不是现实发生过的事件。</p>
-        <div class="hero-quick-actions"><button id="hero-quickstart" type="button">▶ 看一次「链主外迁」</button><span>无需填写参数 · 使用现有模型情景</span></div>
-        <div class="story-emphasis"><span class="emphasis-rule"></span><p>不替任何人作决定。<br>只把值得注意的可能性照亮。</p></div>
+        <p class="hero-kicker"><span class="hero-diamond">◈</span> 一个关于产业的假设故事</p>
+        <h1 id="portal-title">假如一家大厂突然搬走，<br><span>谁会受到影响？</span></h1>
+        <p class="hero-deck">不用学经济学，也不用填表。按一下播放，看一场假设中的产业变化。</p>
+        <div class="hero-quick-actions"><button id="hero-quickstart" type="button">▶ 看看会发生什么</button><span>一键播放 · 看完再决定要不要深入</span></div>
+        <div class="story-emphasis"><span class="emphasis-rule"></span><p>这不是现实新闻，而是一次可重复的模型演示。</p></div>
 
+
+      </div>
+
+      <div class="world-stage" id="world-stage">
+        <div class="world-orbit world-orbit-one" aria-hidden="true"></div>
+        <div class="world-orbit world-orbit-two" aria-hidden="true"></div>
+        <div class="world-grid" aria-hidden="true"></div>
+        <canvas id="holo-canvas" class="world-canvas" role="img" aria-label="可交互三维产业关系网络。拖动旋转，滚轮或双指缩放，点击模型主体查看更多信息。"></canvas>
+        <div id="holo-labels" class="holo-labels" aria-hidden="true"></div>
+        <div id="holo-hover" class="holo-hover" hidden></div>
+        <div class="world-heading"><span class="crosshair">⌖</span> <span>这是一张模型里的产业关系网</span><small id="render-mode">载入真实模型关系…</small></div>
+        <div class="world-corner world-corner-tl" aria-hidden="true"></div>
+        <div class="world-corner world-corner-tr" aria-hidden="true"></div>
+        <div class="world-corner world-corner-bl" aria-hidden="true"></div>
+        <div class="world-corner world-corner-br" aria-hidden="true"></div>
+        <div class="world-variation" id="world-variation" data-changed="false" role="status" aria-live="off" title="青绿光效：模型能量上升；橙色光效：模型能量下降或退场。强调相邻关系不等于现实因果传播。">模型里的产业关系 · 点上方按钮开始</div>
+        <div class="world-footer"><span><b id="world-node-count">—</b> 个产业角色</span>
+          <span><b id="world-edge-count">—</b> 条模型连线</span><span class="world-pointer">拖动旋转 · 点击主体</span></div>
+      </div>
+
+      <section class="story-result" aria-label="这次模拟里发生了什么">
+        <div class="story-result-head"><span>看到了什么？</span><strong id="story-phase">还没开始</strong></div>
+        <p class="scene-plain-result" id="portal-story-result" aria-live="polite">点上面的播放按钮，看看模型里的产业角色会怎样变化。</p>
+        <small>这里都是假设模型的内部结果，不是某家真实企业已经搬迁，也不是裁员或 GDP 预测。</small>
+      </section>
+      <details class="story-settings" id="story-settings">
+        <summary>我想换个情景，自己试试看 <span>可选 · 高级玩法</span></summary>
         <div class="control-panel" aria-label="全息网络情景控制">
           <div class="panel-eyebrow"><span>01</span> 想试另一个变化？ <span class="panel-meta">SCENARIO</span></div>
           <label class="portal-field" for="portal-shock"><span>风险 / 增长情景</span>
@@ -78,25 +104,9 @@
             <button type="button" id="preset-growth">↗ 技术突破</button>
           </div>
         </div>
-      </div>
-
-      <div class="world-stage" id="world-stage">
-        <div class="world-orbit world-orbit-one" aria-hidden="true"></div>
-        <div class="world-orbit world-orbit-two" aria-hidden="true"></div>
-        <div class="world-grid" aria-hidden="true"></div>
-        <canvas id="holo-canvas" class="world-canvas" role="img" aria-label="可交互三维产业关系网络。拖动旋转，滚轮或双指缩放，点击模型主体查看更多信息。"></canvas>
-        <div id="holo-labels" class="holo-labels" aria-hidden="true"></div>
-        <div id="holo-hover" class="holo-hover" hidden></div>
-        <div class="world-heading"><span class="crosshair">⌖</span> <span>SIMULATED INDUSTRIAL NETWORK</span><small id="render-mode">载入真实模型关系…</small></div>
-        <div class="world-corner world-corner-tl" aria-hidden="true"></div>
-        <div class="world-corner world-corner-tr" aria-hidden="true"></div>
-        <div class="world-corner world-corner-bl" aria-hidden="true"></div>
-        <div class="world-corner world-corner-br" aria-hidden="true"></div>
-        <div class="world-variation" id="world-variation" data-changed="false" role="status" aria-live="off" title="青绿光效：模型能量上升；橙色光效：模型能量下降或退场。强调相邻关系不等于现实因果传播。">模型基线 · 选择情景开始观察</div>
-        <div class="world-footer"><span><b id="world-node-count">—</b> MODEL NODES</span>
-          <span><b id="world-edge-count">—</b> MODEL EDGES</span><span class="world-pointer">拖动旋转 · 点击主体</span></div>
-      </div>
-
+      </details>
+      <details class="story-research" id="story-research">
+        <summary>我想看看模型具体怎么算 <span>可选 · 专业指标</span></summary>
       <aside class="telemetry" aria-label="当前场景模型数据及选中主体">
         <div class="telemetry-head"><span class="radio-light"></span> 模型在这一刻发生了什么</div>
         <div class="telemetry-item"><span>经营景气（模型内）</span><strong id="metric-abundance">—</strong><small id="delta-abundance">模型内部指标</small></div>
@@ -109,10 +119,11 @@
           <button type="button" id="subject-clear">清除聚焦 ⟲</button>
         </div>
       </aside>
+      </details>
     </section>
 
     <section class="playback-dock" aria-label="模型时间演化控制">
-      <div class="dock-context"><span class="dock-emblem">⟡</span><div><strong id="scene-title">基线 · 产业网络</strong><small id="scene-message" role="status" aria-live="polite">41 个已登记的模型候选主体就绪，选择情景可观察变化。</small><p class="scene-plain-result" id="portal-story-result" aria-live="off">选一种变化，再看模型里哪些主体的状态发生改变。结果不等于现实企业的实际损失。</p></div></div>
+      <div class="dock-context"><span class="dock-emblem">⟡</span><div><strong id="scene-title">基线 · 产业网络</strong><small id="scene-message" role="status" aria-live="polite">41 个已登记的模型候选主体就绪，选择情景可观察变化。</small></div></div>
       <button type="button" id="timeline-play" class="timeline-play" disabled aria-label="播放模型演化">▶</button>
       <div class="timeline-control"><div class="timeline-heading"><span>模拟过程（不是现实年份）</span><output id="timeline-output" for="timeline-slider">T 00 / 20</output></div>
         <input id="timeline-slider" type="range" min="0" max="20" value="0" step="1" disabled aria-label="模型时间步回放">
@@ -127,15 +138,16 @@
     </section>
 
     <section class="portal-exits" aria-labelledby="portal-exits-title">
-      <div class="exits-heading"><span>GO DEEPER / RESEARCH PORTALS</span><h2 id="portal-exits-title">从全息世界，进入更深的研究。</h2></div>
+      <div class="exits-heading"><span>继续探索 · 按兴趣选择</span><h2 id="portal-exits-title">想自己试，还是看看证据？</h2></div>
       <div class="exit-grid">
-        <a class="exit-card" href="lab.html"><span class="exit-id">01 / SIMULATION LAB</span><strong>模拟实验室 <span>↗</span></strong><p>完整 A/B 推演、影响透视、主体全景索引和专业模型工具。</p></a>
-        <a class="exit-card" href="observations.html"><span class="exit-id">02 / PUBLIC OBSERVATIONS</span><strong>公开数据与证据 <span>↗</span></strong><p>分级证据、历史经济观测和来源追溯。</p></a>
-        <a class="exit-card" href="verification.html"><span class="exit-id">03 / SCIENTIFIC REVIEW</span><strong>方法、局限与质疑 <span>↗</span></strong><p>理解模型假设、验证边界及可复算方法。</p></a>
+        <a class="exit-card" href="lab.html"><span class="exit-id">01 / SIMULATION LAB</span><strong>模拟实验室 <span>↗</span></strong><p>自己换一个条件，看看模拟前后有哪些变化。</p></a>
+        <a class="exit-card" href="observations.html"><span class="exit-id">02 / PUBLIC OBSERVATIONS</span><strong>公开数据与证据 <span>↗</span></strong><p>看看这些数据来自哪里，有哪些地方还不确定。</p></a>
+        <a class="exit-card" href="verification.html"><span class="exit-id">03 / SCIENTIFIC REVIEW</span><strong>方法、局限与质疑 <span>↗</span></strong><p>想认真研究？这里保留完整的方法和限制。</p></a>
       </div>
+      <p class="portal-more-paths">更多研究入口：<a href="inflow.html">企业进入产业网络</a> · <a href="trust.html">企业资料是否可信</a></p>
     </section>
   </main>
-  <footer class="portal-footer"><span>ZHONGKAI WIND TUNNEL · PUBLIC RESEARCH / V3.10</span>
+  <footer class="portal-footer"><span>ZHONGKAI · PUBLIC RESEARCH / V3.21</span>
     <span>公开信息下的条件性模拟 · 非官方平台、非现实发生概率、非政策决策建议</span></footer>
 </div>
 </body></html>

@@ -34,6 +34,7 @@ async function portal(browser,port,width,reduce=false){
  assert.equal(await page.locator("#holo-canvas").count(),1);
  assert.equal(await page.locator("#world-variation").count(),1);
  assert.match(await page.locator("#render-mode").innerText(),/WEBGL|2.5D/);
+ await page.locator("#story-settings summary").click();
  await page.locator("#portal-population").selectOption("24");
  assert.equal(await page.locator("#world-node-count").innerText(),"24");
  await page.locator("#portal-population").selectOption("41");
@@ -53,6 +54,7 @@ async function portal(browser,port,width,reduce=false){
  await page.locator("#timeline-slider").fill("9");
  assert.equal(await page.locator("#timeline-output").innerText(),"T 09 / 20");
  assert.match(await page.locator("#world-variation").innerText(),/T09/);
+ await page.locator("#story-research summary").click();
  const metric=Number(await page.locator("#metric-disaster").innerText());
  assert.ok(Number.isFinite(metric)&&metric>=0&&metric<=1);
  assert.match(await page.locator("#delta-disaster").innerText(),/B−A/);

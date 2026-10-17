@@ -91,32 +91,33 @@ function paint(t){
        n.energy<earlier.get(n.name).energy-.045).length;
      const riskDelta=snap.state.disaster-frames.B[t-1].state.disaster;
      banner.textContent="T"+String(t).padStart(2,"0")+" 模型观察 · "+
-       declined+" 主体能量下降 · "+exits+" 退场 · 风险 Δ "+(riskDelta>0?"+":"")+riskDelta.toFixed(3);
+       declined+" 个角色状态变弱 · "+exits+" 个角色退出";
      banner.dataset.changed=exits||declined?"true":"false";
    }else{
-     banner.textContent=frames?"冲击已注入 · 拖动时间轴观察模型状态":"模型基线 · 选择情景开始观察";
+     banner.textContent=frames?"假设变化已开始 · 看看网络会怎样发展":"模型里的产业关系 · 点击播放开始";
      banner.dataset.changed="false";
    }
  }
- // Plain-language narration derives only from computed Sim snapshots.
-  // Never turns model movements into real employment, GDP or causality claims.
-  const story=$("portal-story-result");
-  if(story){
-    if(frames&&reference&&t>0){
-      const risk=snap.state.disaster-reference.state.disaster;
-      const activeB=snap.agents.filter(a=>a.alive).length;
-      const activeA=reference.agents.filter(a=>a.alive).length;
-      const riskText=Math.abs(risk)<.0005?"与基准基本相同":
-        risk>0?"比未发生这次变化时更高":"比未发生这次变化时更低";
-      story.textContent="模拟第 "+t+" 步：当前 "+activeB+" 个主体仍在模型中运转"+
-        "（基准情景 "+activeA+" 个），风险指数"+riskText+"。"+
-        "这只解释模型内结果，不是现实企业的受损名单。";
-    }else if(frames){
-      story.textContent="已经选择「"+frames.shock+"」。拖动时间轴或播放，看看模型中的不同路径。";
-    }else{
-      story.textContent="选一种变化，再看模型里哪些主体的状态发生改变。结果不等于现实企业的实际损失。";
-    }
-  }
+ // Story captions are derived only from the original model's completed A/B
+ // snapshots at the selected tick, not from real company data or causal inference.
+ const story=$("portal-story-result"),phase=$("story-phase");
+ if(phase)phase.textContent=!frames?"等你按播放":t===0?"故事开始了":t===MAX_TICKS?"已经播完 · 可以再试":"正在播放 · "+t+"/"+MAX_TICKS;
+ if(story){
+   if(frames&&reference&&t>0){
+     const activeB=snap.agents.filter(a=>a.alive).length,activeA=reference.agents.filter(a=>a.alive).length;
+     const risk=snap.state.disaster-reference.state.disaster;
+     const count=activeB===activeA?"数量和不发生变化时一样":
+       "比不发生变化时"+(activeB<activeA?"少了 ":"多了 ")+Math.abs(activeA-activeB)+" 个";
+     const direction=Math.abs(risk)<.0005?"变化很小":risk>0?"更高":"更低";
+     story.textContent="模拟第 "+t+" 步：模型里还有 "+activeB+" 个产业角色在运转，"+
+       count+"（基准情景 "+activeA+" 个）。模型中的压力提示"+direction+"。"+
+       "这不是现实企业受损名单，也不是现实会发生的预测。";
+   }else if(frames){
+     story.textContent="「"+frames.shock+"」只是一个假设。看着这些点和线，观察接下来哪些模型角色会变化。";
+   }else{
+     story.textContent="点上面的播放按钮，看看模型里的产业角色会怎样变化。";
+   }
+ }
   $("timeline-slider").value=String(t);
  $("timeline-output").textContent="T "+String(t).padStart(2,"0")+" / "+MAX_TICKS;
  $("world-node-count").textContent=snap.agents.length;
@@ -224,6 +225,8 @@ try{
  $("preset-risk").addEventListener("click",()=>run("链主外迁"));
  $("hero-quickstart")?.addEventListener("click",()=>{
    run("链主外迁");
+   // Reduced-motion visitors should still get a complete, computed result.
+   if(reduced&&frames)paint(MAX_TICKS);
    $("world-stage")?.scrollIntoView({behavior:reduced?"auto":"smooth",block:"center"});
  });
  $("preset-growth").addEventListener("click",()=>run("技术突破"));
