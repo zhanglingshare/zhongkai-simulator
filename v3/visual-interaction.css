@@ -10,8 +10,8 @@
 .portal-shell .portal-main>.build-batches{order:1;margin:0 0 4px}
 .portal-shell .world-stage .holo-node-label.story-focus{color:#fff1de;background:#543927;border-color:#f5b682;font-weight:800;box-shadow:0 0 15px #f4b87844}
 .portal-shell .role-story-person[aria-pressed=true]{border-color:#ffd29e;background:#574331}
-.portal-shell .world-stage .world-heading{pointer-events:none}
-.portal-shell .world-stage .world-heading small{display:block}
+.portal-shell .world-stage .world-heading{pointer-events:none;left:20px;right:20px;transform:none;white-space:normal;flex-wrap:wrap;gap:6px;line-height:1.5}
+.portal-shell .world-stage .world-heading small{display:block;flex-basis:100%;margin-left:0}
 .portal-shell .world-stage .world-footer{pointer-events:none}
 /* Operate and compare inside the SAME card, with an honest common 0–1 scale. */
 .lab-v311 .lab-play-stage{margin:17px 0 8px;padding:17px 14px 14px;border:1px solid #4d8b9c;border-radius:14px;background:linear-gradient(160deg,#123c4d,#092536);min-width:0}
@@ -71,6 +71,7 @@
 @media(max-width:700px){
  .portal-shell .world-build{font-size:12px;gap:8px}.portal-shell .world-build p{min-width:155px}.portal-shell .world-build button{font-size:12px;padding:7px 10px}
  .portal-shell .build-batches{gap:5px}.portal-shell .build-batches li{font-size:10px;padding:4px 8px}
+ .portal-shell .world-stage .world-heading{left:10px;right:10px}
  .lab-v311 .lab-play-stage{padding:14px 10px 12px}.lab-play-head h3{font-size:17px}.lab-play-head>span{font-size:10px}
  .lab-play-bars{gap:9px}.lab-play-chart{height:133px;gap:7px}.lab-play-column{width:27px}.lab-play-number{font-size:10px}
  .lab-play-group h4{font-size:12px}.lab-play-gap{font-size:11px}.lab-play-group>small{font-size:9px}

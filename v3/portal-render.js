@@ -344,7 +344,7 @@ void main(){
   return {
    get mode(){return mode;},get camera(){return {...cam};},get graph(){return graph;},
    setGraph(agents,edges,metaNext){
-    graph=Core.build(agents,edges);changeGlow=null;storyFocus.clear();meta=metaNext||{};
+    graph=Core.build(agents,edges);changeGlow=null;storyFocus.clear();selected=null;meta=metaNext||{};
     if(opts.entrance)replayEntrance();schedule();return graph;
    },
    setFrame(agents,metaNext){
