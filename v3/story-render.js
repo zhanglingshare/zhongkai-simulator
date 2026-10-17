@@ -86,6 +86,9 @@ void main(){
   let changeGlow=null; // Visual-only observed state transitions, never causal transmission.
   const entryCore=root.ZKVisualEntry;
   let entrance=null,storyFocus=new Map(),drawTime=0;
+  let storyScene=null,sceneChanges=new Map(),neighbors=new Set();
+  const absence=labels?document.createElement("div"):null;
+  if(absence){absence.className="story-absence";absence.hidden=true;absence.append(document.createElement("b"));labels.append(absence);}
   const pointers=new Map();
   let oldPinch=0;
   const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -93,6 +96,36 @@ void main(){
   if(!renderer){context2d=canvas.getContext("2d");mode="canvas2d";}
   if(status)status.textContent=renderer?"WEBGL · 真实模型网络":"2.5D 降级 · 真实模型网络";
   const edgeColors={hist:[.38,.84,.95,.38],affinity:[.19,.53,.66,.22],contact:[.29,.64,.67,.17],unknown:[.29,.55,.65,.22]};
+  function storyActive(){return storyScene&&storyScene.phase!=="idle";}
+  function roleState(n){
+   if(!storyActive())return "normal";
+   if(storyScene.phase==="intro")return "intro";
+   if(storyScene.peek)return n.alive?"before":"absent";
+   const d=sceneChanges.get(n.name);
+   return d?d.exit?"exited":d.returning?"stronger":d.change<0?"weaker":"stronger":n.alive?"unchanged":"absent";
+  }
+  function nodeColor(n){
+   if(!storyActive())return Core.palette(n);
+   const state=roleState(n),hero=n.name===storyScene.hero;
+   if(state==="intro")return hero?[.64,.95,1,1]:neighbors.has(n.name)?[.35,.75,.86,.75]:[.28,.48,.56,.11];
+   if(state==="exited")return [1,.55,.45,.78];
+   if(state==="weaker")return [1,.74,.46,.97];
+   if(state==="stronger")return [.53,.94,.73,.98];
+   if(state==="absent")return [.4,.48,.52,.12];
+   const emphasis=hero||sceneChanges.has(n.name);
+   return [.36,.78,.88,emphasis?.98:neighbors.has(n.name)?.38:.19];
+  }
+  function relationColor(edge,a,b){
+   if(!storyActive())return a.alive&&b.alive?(edgeColors[edge.layer]||edgeColors.unknown):[.34,.43,.54,.09];
+   if(!a.alive||!b.alive)return [.73,.5,.41,.16];
+   if(storyScene.phase==="intro")return edge.a===storyScene.hero||edge.b===storyScene.hero?[.4,.86,.95,.7]:[.25,.5,.58,.055];
+   const changes=[sceneChanges.get(a.name),sceneChanges.get(b.name)].filter(Boolean);
+   if(changes.length&&!storyScene.peek){
+    const negative=changes.some(n=>n.exit||n.change<0&&!n.returning);
+    return negative?[.98,.71,.44,.5]:[.45,.83,.66,.5];
+   }
+   return [.31,.66,.76,changes.length?.5:.1];
+  }
   function resize(){
    const box=canvas.getBoundingClientRect(),w=Math.max(1,box.width),h=Math.max(1,box.height),ratio=Math.min(devicePixelRatio||1,2);
    if(canvas.width!==Math.round(w*ratio)||canvas.height!==Math.round(h*ratio)){canvas.width=Math.round(w*ratio);canvas.height=Math.round(h*ratio);}
@@ -149,8 +182,8 @@ void main(){
       const a=nodeMap.get(edge.a),b=nodeMap.get(edge.b);if(!a||!b)continue;
       const progress=edgeProgress(edge);if(progress<=0)continue;
       const pa=screen(a),end=screen(b),pb={x:pa.x+(end.x-pa.x)*progress,y:pa.y+(end.y-pa.y)*progress};
-      ctx.strokeStyle=!a.alive||!b.alive?"rgba(87,107,128,.19)":edge.layer==="hist"?"rgba(77,207,231,.48)":"rgba(75,151,171,.22)";
-      const one=glowAt(a.name,now),two=glowAt(b.name,now);
+      const rc=relationColor(edge,a,b);ctx.strokeStyle="rgba("+rc.slice(0,3).map(v=>Math.round(v*255)).join(",")+","+rc[3]+")";
+      const one=storyActive()?0:glowAt(a.name,now),two=storyActive()?0:glowAt(b.name,now);
       const glow=Math.abs(one)>=Math.abs(two)?one:two,level=Math.abs(glow);
       if(level>0){
         // Warm means observed energy decline/exit; teal means improvement/recovery.
@@ -158,8 +191,9 @@ void main(){
         ctx.strokeStyle=(glow<0?"rgba(242,170,117,":"rgba(114,226,192,")+(level*.63)+")";
       }
       ctx.lineWidth=(edge.layer==="hist"?1.25:.8)+level*1.8;
-      ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
-      if(edge.layer==="hist"&&a.alive&&b.alive&&!reduced&&progress>=1){
+      ctx.setLineDash(storyActive()&&(!a.alive||!b.alive)?[3,6]:[]);
+      ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();ctx.setLineDash([]);
+      if(edge.layer==="hist"&&a.alive&&b.alive&&!reduced&&progress>=1&&!storyActive()){
         const phase=((now/2700)+(Core.hash(edge.a+edge.b)%97)/97)%1;
         const x=pa.x+(pb.x-pa.x)*phase,y=pa.y+(pb.y-pa.y)*phase;
         ctx.fillStyle="rgba(152,241,252,.8)";ctx.beginPath();ctx.arc(x,y,1.75,0,Math.PI*2);ctx.fill();
@@ -167,10 +201,11 @@ void main(){
     }
     [...graph.nodes].sort((a,b)=>screen(b).depth-screen(a).depth).forEach(n=>{
      const arrival=nodeProgress(n);if(arrival<=0)return;
+     if(storyActive()&&n.name===storyScene.hero&&!n.alive)return;
      const p=screen(n),scale=clamp(5.1/p.depth,.55,1.7);
      const rad=(n.w>=3?11:n.w===2?7:4.6)*scale;
-     const color=Core.palette(n),rgb=color.slice(0,3).map(x=>Math.round(x*255)).join(",");
-     const glow=glowAt(n.name,now),level=Math.abs(glow);
+     const color=nodeColor(n),rgb=color.slice(0,3).map(x=>Math.round(x*255)).join(",");
+     const glow=storyActive()?0:glowAt(n.name,now),level=Math.abs(glow);
      if(storyFocus.has(n.name)){
        ctx.strokeStyle=storyFocus.get(n.name)>0?"#96f3d1":"#ffd1a0";ctx.lineWidth=2.5;
        ctx.beginPath();ctx.arc(p.x,p.y,rad+10,0,Math.PI*2);ctx.stroke();
@@ -185,7 +220,7 @@ void main(){
      ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
      ctx.strokeStyle=n.name===selected?"#fff":"rgba("+rgb+",.72)";
      ctx.lineWidth=n.name===selected?2:1;ctx.beginPath();ctx.arc(p.x,p.y,rad+4,0,Math.PI*2);ctx.stroke();
-     if(n.w>=3){ctx.textAlign="center";ctx.font="600 11px system-ui";ctx.fillStyle="#c9f8ff";ctx.fillText(n.name,p.x,p.y-rad-13);}
+     if(n.w>=3&&!storyActive()){ctx.textAlign="center";ctx.font="600 11px system-ui";ctx.fillStyle="#c9f8ff";ctx.fillText(n.name,p.x,p.y-rad-13);}
     });
   }
   function render3d(now,w,h,ratio){
@@ -198,24 +233,30 @@ void main(){
       const progress=edgeProgress(e);if(progress<=0)continue;
       const pa=presented(a),pb=presented(b);
       const isActive=a.alive&&b.alive,c=edgeColors[e.layer]||edgeColors.unknown;
-      const first=glowAt(a.name,now),second=glowAt(b.name,now);
+      const first=storyActive()?0:glowAt(a.name,now),second=storyActive()?0:glowAt(b.name,now);
       const edgeGlow=Math.abs(first)>=Math.abs(second)?first:second;
       const level=Math.abs(edgeGlow);
       const color=level>0?
         edgeGlow<0?[.99,.65,.41,Math.min(.85,c[3]+level*.5)]:
           [.39,.96,.78,Math.min(.85,c[3]+level*.5)]:
-        isActive?c:[.34,.43,.54,.09];
-      push(lines,[pa.x,pa.y,pa.z],color,1);push(lines,[pa.x+(pb.x-pa.x)*progress,pa.y+(pb.y-pa.y)*progress,pa.z+(pb.z-pa.z)*progress],color,1);
-      if(isActive&&e.layer==="hist"&&!reduced&&progress>=1){
+        relationColor(e,a,b);
+      const segments=storyActive()&&!isActive?7:1;
+      for(let j=0;j<segments;j++){
+       const start=j/segments*progress,end=(j+(segments===1?1:.38))/segments*progress;
+       push(lines,[pa.x+(pb.x-pa.x)*start,pa.y+(pb.y-pa.y)*start,pa.z+(pb.z-pa.z)*start],color,1);
+       push(lines,[pa.x+(pb.x-pa.x)*end,pa.y+(pb.y-pa.y)*end,pa.z+(pb.z-pa.z)*end],color,1);
+      }
+      if(isActive&&e.layer==="hist"&&!reduced&&progress>=1&&!storyActive()){
        const k=((now/3100)+(Core.hash(e.a+e.b)%131)/131)%1;
        push(particles,[a.x+(b.x-a.x)*k,a.y+(b.y-a.y)*k,a.z+(b.z-a.z)*k],[.72,.96,1,.79],9);
       }
     }
     graph.nodes.forEach(n=>{
      const arrival=nodeProgress(n);if(arrival<=0)return;
+     if(storyActive()&&n.name===storyScene.hero&&!n.alive)return;
      const pos=presented(n),xyz=[pos.x,pos.y,pos.z];
-     const col=Core.palette(n);
-     const glow=glowAt(n.name,now),level=Math.abs(glow);
+     const col=nodeColor(n);
+     const glow=storyActive()?0:glowAt(n.name,now),level=Math.abs(glow);
      if(level>0){
        const tint=glow<0?[1,.69,.40]:[.49,1,.81];
        push(points,xyz,[...tint,level*.54],(n.w>=3?43:27)+level*65);
@@ -233,16 +274,26 @@ void main(){
   function syncLabels(){
     if(!labels||!graph)return;
     const width=canvas.clientWidth,height=canvas.clientHeight;
-    const nodes=graph.nodes.filter(n=>nodeProgress(n)>=1&&(labelMode==="all"||storyFocus.has(n.name)||n.name===selected||n.w>=3&&n.alive))
+    const hero=storyScene&&graph.nodes.find(n=>n.name===storyScene.hero);
+    if(absence){
+     absence.hidden=!storyActive()||!hero||hero.alive;
+     if(!absence.hidden){const p=screen(hero);absence.style.left=p.x+"px";absence.style.top=p.y+"px";absence.firstChild.textContent=hero.name+" · 已退出";}
+    }
+    const introLabels=new Set(storyScene?.phase==="intro"?graph.nodes.filter(n=>neighbors.has(n.name)).sort((a,b)=>b.w-a.w||a.name.localeCompare(b.name,"zh-CN")).slice(0,3).map(n=>n.name):[]);
+    const nodes=graph.nodes.filter(n=>nodeProgress(n)>=1&&!(storyActive()&&n.name===storyScene.hero&&!n.alive)&&
+      (storyActive()?(n.name===storyScene.hero||sceneChanges.has(n.name)||n.name===selected||introLabels.has(n.name)):labelMode==="all"||storyFocus.has(n.name)||n.name===selected||n.w>=3&&n.alive))
       .sort((a,b)=>
+        Number(b.name===storyScene?.hero)-Number(a.name===storyScene?.hero)||
         Number(b.name===selected)-Number(a.name===selected)||
         Number(storyFocus.has(b.name))-Number(storyFocus.has(a.name))||
         b.w-a.w||Number(b.alive)-Number(a.alive)||
         Core.hash(a.name)-Core.hash(b.name));
     const accepted=[],retained=new Set();
+    if(absence&&!absence.hidden&&hero){const p=screen(hero);accepted.push({l:p.x-91,r:p.x+91,t:p.y-75,b:p.y+35});}
     for(const n of nodes){
       const p=screen(n);
-      const chars=[...n.name].length;
+      const state=roleState(n),suffix=!storyActive()?"":state==="exited"?" · 已退出":state==="weaker"?" · 较弱":state==="stronger"?" · 较强":n.name===storyScene.hero?storyScene.peek?" · 未退出":" · 主角":"";
+      const text=n.name+suffix,chars=[...text].length;
       const w=Math.min(Math.max(57,chars*12+18),180),h=23;
       const offset=Math.max(13,40/p.depth);
       const left=p.x-w/2,top=p.y+offset;
@@ -253,11 +304,12 @@ void main(){
       accepted.push(box);retained.add(n.name);
       let element=labelMap.get(n.name);
       if(!element){element=document.createElement("span");element.className="holo-node-label";labels.append(element);labelMap.set(n.name,element);}
-      element.textContent=n.name;
+      element.textContent=text;
       element.style.left=p.x+"px";element.style.top=top+"px";
       element.hidden=false;
       element.classList.toggle("inactive",!n.alive);
       element.classList.toggle("story-focus",storyFocus.has(n.name));
+      for(const cls of ["exited","weaker","stronger","unchanged"])element.classList.toggle("story-"+cls,state===cls);
     }
     for(const [name,element] of labelMap){
       if(!retained.has(name)){element.remove();labelMap.delete(name);}
@@ -363,6 +415,11 @@ void main(){
    },
    setLabelMode(value){if(value!=="core"&&value!=="all")return false;labelMode=value;schedule();return true;},
    setStoryFocus(changes){storyFocus=new Map((changes||[]).filter(c=>graph?.nodes.some(n=>n.name===c.name)).map(c=>[c.name,c.exit?-1:c.returning?1:Math.sign(c.change)||0]));schedule();},
+   setStoryScene(scene){
+    storyScene=scene||null;sceneChanges=new Map((scene?.changes||[]).map(c=>[c.name,c]));neighbors=new Set();
+    if(graph&&scene?.hero)for(const e of graph.edges){if(e.a===scene.hero)neighbors.add(e.b);if(e.b===scene.hero)neighbors.add(e.a);}
+    schedule();
+   },
    replayEntrance,finishEntrance,
    orbit,zoom,resetCamera,
    dispose(){disposed=true;if(raf)cancelAnimationFrame(raf);if(ro)ro.disconnect();}
