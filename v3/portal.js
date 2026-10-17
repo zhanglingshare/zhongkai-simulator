@@ -80,21 +80,17 @@ function paint(t){
    view.setGraph(snap.agents,base.edges,{tick:t});
  }else view.setFrame(snap.agents,{tick:t});
  updateStats(snap,reference);
- // Counts are factual comparisons of consecutive *model* snapshots; no attribution asserted.
+ // Exactly the same A[t]/B[t] comparison drives the map, banner and named cards.
+ const insight=frames&&reference?Story.narrate(reference,snap,t,frames.shock):null;
  const banner=$("world-variation");
  if(banner){
-   if(frames&&t>0){
-     const earlier=new Map(frames.B[t-1].agents.map(n=>[n.name,n]));
-     const exits=snap.agents.filter(n=>earlier.get(n.name)?.alive&&!n.alive).length;
-     const declined=snap.agents.filter(n=>earlier.get(n.name)?.alive&&n.alive&&
-       Number.isFinite(n.energy)&&Number.isFinite(earlier.get(n.name).energy)&&
-       n.energy<earlier.get(n.name).energy-.045).length;
-     const riskDelta=snap.state.disaster-frames.B[t-1].state.disaster;
-     banner.textContent="T"+String(t).padStart(2,"0")+" 模型观察 · "+
-       declined+" 个角色状态变弱 · "+exits+" 个角色退出";
-     banner.dataset.changed=exits||declined?"true":"false";
+   if(insight){
+     banner.textContent="T"+String(t).padStart(2,"0")+" 模型观察 · 比另一条模拟路线："+ 
+       insight.counts.exit+" 个角色退出、"+insight.counts.down+" 个角色较弱"+
+       (insight.counts.enter+insight.counts.up?"、"+(insight.counts.enter+insight.counts.up)+" 个角色较强或仍在运转":"");
+     banner.dataset.changed=insight.total?"true":"false";
    }else{
-     banner.textContent=frames?"假设变化已开始 · 看看网络会怎样发展":"模型里的产业关系 · 点击播放开始";
+     banner.textContent="模型里的产业关系 · 点击播放开始";
      banner.dataset.changed="false";
    }
  }
@@ -102,7 +98,7 @@ function paint(t){
  // Do not claim the difference is a verified causal chain in the real economy.
  const story=$("portal-story-result"),phase=$("story-phase");
  const explain=$("story-explanation"),list=$("story-people");
- const insight=frames&&reference?Story.narrate(reference,snap,t,frames.shock):null;
+
  if(phase)phase.textContent=!frames?"等你按播放":t===0?"刚开始":t===MAX_TICKS?"故事播完":"故事进行中 · "+t+"/"+MAX_TICKS;
  if(story)story.textContent=insight?insight.title:"点上面的播放按钮，看看模型里的哪些角色出现变化。";
  if(explain)explain.textContent=insight?insight.description:"我们会直接标出模型里发生变化的名字，不必先读懂那些专业指标。";
