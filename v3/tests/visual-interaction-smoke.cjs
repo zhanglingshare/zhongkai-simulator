@@ -17,6 +17,7 @@ async function open(browser,port,file,width,reduced=true,fallback=false){
 async function home(browser,port,width,reduced=true,fallback=false){
  const {page,errors}=await open(browser,port,"index.html",width,reduced,fallback);
  await page.waitForFunction(()=>document.getElementById("world-node-count").textContent==="41");
+ assert.equal(await page.locator(".company-phrase").evaluate(n=>n.getClientRects().length),1,"Keep the Chinese company phrase together across responsive headlines");
  await page.waitForFunction(()=>document.getElementById("world-build-status").textContent.includes("组网完成"),null,{timeout:9000});
  const count=await page.evaluate(()=>{const s=new window.ZKSim(7,{n_agents:41,ticks:20});return {nodes:s.agents.length,edges:s.edges.length};});
  assert.match(await page.locator("#world-build-status").innerText(),new RegExp(count.nodes+" 个模型主体 / "+count.edges+" 条模型连线"));
