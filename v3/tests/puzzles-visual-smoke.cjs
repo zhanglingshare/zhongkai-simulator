@@ -39,6 +39,9 @@ const server=http.createServer((req,res)=>{
    });
    assert.equal(Number(await page.locator('#count-after').innerText()),numbers.alive,'B count from real model');
    assert.equal(Number(await page.locator('#count-changed').innerText()),numbers.changed,'changed roles from same-tick A/B');
+   // Element screenshots are taller than the viewport; hide fixed global chrome only for artifact capture.
+   // Otherwise Chrome draws the fixed navbar and offscreen skip-link halfway through the stitched image.
+   await page.evaluate(()=>{document.querySelector('.topbar').style.visibility='hidden';document.querySelector('.skip').style.visibility='hidden';});
    await page.locator('#scene-network').screenshot({path:path.join(shots,'puzzles-v2-hologram-'+width+'.png')});
    await page.locator('#compare-hold').focus();
    await page.keyboard.down('Space');
