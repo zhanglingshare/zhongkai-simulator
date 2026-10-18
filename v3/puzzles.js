@@ -124,8 +124,9 @@ $('run-exit').addEventListener('click',()=>{
   caption.textContent='无法运行模型实验：'+error.message;
  }
 });
-targetSelect.addEventListener('change',()=>{stop();experiment=null;slider.disabled=true;hold.disabled=true;play.disabled=true;
- $('network-phase').textContent='等待新实验';notice.textContent='选择了'+targetSelect.value+'；点击「触发退出」以开始新的模型实验。';});
+targetSelect.addEventListener('change',()=>{stop();experiment=null;peek=false;slider.disabled=true;hold.disabled=true;play.disabled=true;
+ try{const pristine=new Sim(7,{n_agents:41,ticks:20});view.setGraph(pristine.agents,pristine.edges,{tick:0});view.setStoryScene({phase:'idle'});view.setStoryFocus([]);$('count-after').textContent=pristine.agents.filter(x=>x.alive).length;$('count-changed').textContent='0';$('count-diff').textContent='初始模型网络';}catch(e){caption.textContent='重置模型时出错：'+e.message;}
+ $('network-tick').textContent='T 00 / 20';$('time-readout').textContent='T 00';slider.value='0';$('network-phase').textContent='等待新实验';notice.textContent='选择了'+targetSelect.value+'；点击「触发退出」以开始新的模型实验。';});
 slider.addEventListener('input',()=>{if(!experiment)return;stop();peek=false;paint(Number(slider.value));});
 play.addEventListener('click',()=>{
  if(!experiment)return;
