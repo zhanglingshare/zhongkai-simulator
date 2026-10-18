@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="仲恺产业风洞的三个产业谜题：从工业与投资背离，到链主退出，再到企业进入网络。先选择，再核对，随后运行真实模型。">
+<title>三个产业谜题 · 仲恺产业风洞</title>
+<link rel="stylesheet" href="puzzles.css">
+<script defer src="puzzles.js"></script>
+</head>
+<body>
+<a class="skip" href="#puzzle-1">跳到第一个谜题</a>
+<header class="topbar">
+  <a class="brand" href="index.html" aria-label="返回仲恺全息产业世界"><span class="brand-icon">Z<span>·</span></span><span>ZHONGKAI<small>INDUSTRIAL WIND TUNNEL</small></span></a>
+  <nav aria-label="体验导航">
+    <a href="index.html">全息世界</a>
+    <a aria-current="page" href="puzzles.html">三个谜题</a>
+    <a href="story-lab.html">亲手实验</a>
+    <a href="story-evidence.html">核对证据</a>
+  </nav>
+</header>
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-inner">
+      <div class="eyebrow"><span class="pulse" aria-hidden="true"></span> THREE MYSTERIES / 公开数据与条件实验</div>
+      <p class="intro-overline">仲恺的下一步，不该只有一种答案。</p>
+      <h1 id="hero-title">工厂还在增长。<br><em>下一棒，谁来接？</em></h1>
+      <p class="hero-desc">一座工业重镇、一张相互连接的产业网络、一次可能改变判断的企业选择。你只需要先选答案，再去看真正的证据和模型变化。</p>
+      <div class="hero-actions">
+        <a class="primary-link" href="#puzzle-1">开始第一题 <span aria-hidden="true">↓</span></a>
+        <a class="quiet-link" href="index.html">先看全息产业世界 ↗</a>
+      </div>
+      <p class="hero-note">本页是互动叙事入口，不会偷偷运行模拟或预填结果。涉及模型时，跳转到现有实验室实际计算。</p>
+    </div>
+    <div class="signal-card" aria-label="2025年公开指标所呈现的背离">
+      <div class="signal-top"><span>一个值得追问的矛盾</span><span>2025 / 仓库公开资料口径</span></div>
+      <div class="signal-item up"><div class="signal-number">+12.2<small>%</small></div><div><strong>规上工业总产值增速</strong><span>现有产能仍在贡献</span></div></div>
+      <div class="signal-divider">但是</div>
+      <div class="signal-item down"><div class="signal-number">−23.6<small>%</small></div><div><strong>工业投资增速</strong><span>未来项目接续值得核查</span></div></div>
+      <p>数据与解释不能画等号。同比背离是观察，原因还需要证据。</p>
+      <a href="observations.html">查看历史观测与数据口径 ↗</a>
+    </div>
+  </section>
+
+  <div class="journey-strip" aria-label="谜题章节">
+    <span class="journey-title">沿着三个问题往下走</span>
+    <a href="#puzzle-1"><span>01</span> 下一棒</a>
+    <a href="#puzzle-2"><span>02</span> 谁受影响</a>
+    <a href="#puzzle-3"><span>03</span> 企业值不值</a>
+    <span class="journey-status" id="journey-progress" role="status" aria-live="polite">已完成 0 / 3 次判断</span>
+  </div>
+
+  <section id="puzzle-1" class="chapter" data-puzzle="1" aria-labelledby="q1-title">
+    <div class="chapter-mark"><span>01</span><span>THE NEXT BATON</span></div>
+    <div class="chapter-grid">
+      <div class="chapter-copy">
+        <p class="section-kicker">第一个矛盾 · 已观察到的经济数字</p>
+        <h2 id="q1-title">工业在涨，投资却在跌。<br><em>到底算好，还是不好？</em></h2>
+        <p>如果今天的工厂仍然忙碌，而新一轮工业投资正在承压，你会如何判断几年之后的增长接续？</p>
+        <p class="muted">先做一次直觉判断。这里没有自动生成的“未来GDP”。</p>
+        <div class="visual-chain" aria-label="项目到产能的概念性时序">
+          <div><span>项目建设</span><small>时间与资金</small></div><b aria-hidden="true">→</b><div><span>设备投产</span><small>条件与进度</small></div><b aria-hidden="true">→</b><div><span>产能释放</span><small>订单与人员</small></div>
+        </div>
+      </div>
+      <div class="decision-box">
+        <fieldset>
+          <legend>你的第一反应？</legend>
+          <div class="answer-options">
+            <button type="button" data-choice="0" aria-pressed="false">工业还在增长，未来自然没有问题。</button>
+            <button type="button" data-choice="1" aria-pressed="false">投资下降，未来一定会下降。</button>
+            <button type="button" data-choice="2" aria-pressed="false">先区分当前产能与后续投资，再核对项目接续。</button>
+          </div>
+        </fieldset>
+        <button type="button" class="reveal-btn" disabled>选一个判断，再看提示 →</button>
+        <div class="answer-panel" hidden aria-live="polite">
+          <p class="answer-tag">揭晓 · 如何追问</p><strong class="answer-response"></strong>
+          <p>增长和投资不在同一个时间环节。指标背离本身不能证明一定是“换挡”，也不能断言未来必然下滑。真正需要继续核实的是项目落地、投产周期、订单和产能利用。</p>
+          <p class="answer-boundary">这一题是公开数据的解释练习，不是模型已经做出经济预测。</p>
+        </div>
+        <div class="action-links"><a class="action-main" href="observations.html">核对历年观测 ↗</a><a href="#puzzle-2">进入第二题 ↓</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="puzzle-2" class="chapter accent-blue" data-puzzle="2" aria-labelledby="q2-title">
+    <div class="chapter-mark"><span>02</span><span>THE NETWORK EFFECT</span></div>
+    <div class="chapter-grid">
+      <div class="chapter-copy">
+        <p class="section-kicker">第二个谜题 · 现有模型能实际运行</p>
+        <h2 id="q2-title">假如一家链主退出模型，<br><em>会只有它自己受影响吗？</em></h2>
+        <p>一座园区里，不只有大厂，还有供应商、服务、人才、载体和设施。你看见一家公司，模型看见的是一张可能改变的关系网。</p>
+        <div class="network-mini" aria-label="示意网络：一个核心角色与几种产业角色之间的连接，不代表真实交易">
+          <span class="mini-node anchor">链主</span>
+          <span class="mini-node n-one">配套</span><span class="mini-node n-two">人才</span><span class="mini-node n-three">服务</span><span class="mini-node n-four">设施</span>
+          <svg viewBox="0 0 320 186" preserveAspectRatio="none" aria-hidden="true"><path d="M160 93 L58 40 M160 93 L262 40 M160 93 L58 146 M160 93 L262 146" /></svg>
+        </div>
+        <p class="muted">上图只是一幅角色关系示意。实际参与实验的主体、连线和状态由原模型运行产生。</p>
+      </div>
+      <div class="decision-box">
+        <fieldset>
+          <legend>你猜模型里会怎样？</legend>
+          <div class="answer-options">
+            <button type="button" data-choice="0" aria-pressed="false">只会影响退出的那一个角色。</button>
+            <button type="button" data-choice="1" aria-pressed="false">所有角色一定同时变差。</button>
+            <button type="button" data-choice="2" aria-pressed="false">要看模型关系和逐步演化，不能凭直觉确定。</button>
+          </div>
+        </fieldset>
+        <button type="button" class="reveal-btn" disabled>先猜，再看怎样验证 →</button>
+        <div class="answer-panel" hidden aria-live="polite">
+          <p class="answer-tag">揭晓 · 把问题交给模型</p><strong class="answer-response"></strong>
+          <p>这道题不能靠一句话揭晓结果。现有故事实验室会用同一组条件计算“未退出”和“退出后”的两条模型路径，并显示真正出现变化的角色。你还可以换24个随机起点重复观察。</p>
+          <p class="answer-boundary">模型网络不是现实采购合同；运转角色变化不能换算成真实裁员人数。</p>
+        </div>
+        <div class="action-links"><a class="action-main" href="story-lab.html">亲手运行链主退出实验 ↗</a><a href="#puzzle-3">进入第三题 ↓</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="puzzle-3" class="chapter accent-amber" data-puzzle="3" aria-labelledby="q3-title">
+    <div class="chapter-mark"><span>03</span><span>THE NEW ARRIVAL</span></div>
+    <div class="chapter-grid">
+      <div class="chapter-copy">
+        <p class="section-kicker">第三个谜题 · 用证据决定要问什么</p>
+        <h2 id="q3-title">一家企业愿意来。<br><em>就一定值得优先引进吗？</em></h2>
+        <p>企业承诺了投资、产能、岗位。可“投资计划”不是“资金兑现”，“新增岗位”也未必等于“净新增就业”。原有企业补入模型，更不能直接算成新招商。</p>
+        <div class="due-diligence">
+          <span>项目身份</span><span>新增投资</span><span>本地净采购</span><span>净新增岗位</span><span>土地 / 用电 / 用水</span><span>待核实的证据</span>
+        </div>
+        <p class="muted">在仲恺现有企业接入页面，这些问题会转化为可编辑的假设、区间和人工核查。</p>
+      </div>
+      <div class="decision-box">
+        <fieldset>
+          <legend>只够问一个问题，你会先问？</legend>
+          <div class="answer-options">
+            <button type="button" data-choice="0" aria-pressed="false">投资额越大，贡献就一定越高吗？</button>
+            <button type="button" data-choice="1" aria-pressed="false">它在公开资料中出现过，就算新增招商吗？</button>
+            <button type="button" data-choice="2" aria-pressed="false">这到底是不是净增量？证据和资源约束够不够？</button>
+          </div>
+        </fieldset>
+        <button type="button" class="reveal-btn" disabled>选一个追问，再看研究路径 →</button>
+        <div class="answer-panel" hidden aria-live="polite">
+          <p class="answer-tag">揭晓 · 先核实再推演</p><strong class="answer-response"></strong>
+          <p>现有企业接入模块可以区分存量补录、拟引进和扩产假设，对投资、采购、岗位和资源约束作条件性研究。资料不够时，应该提出下一条需要核实的问题，而不是编造确定收益。</p>
+          <p class="answer-boundary">这不代表模型已经验证了现实企业的真实经济贡献，也不代替正式招商评审。</p>
+        </div>
+        <div class="action-links"><a class="action-main" href="inflow.html#zhongkai-demo">进入企业接入与尽调 ↗</a><a href="trust.html">看看证据是否可信 ↗</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="outro" id="next" aria-labelledby="outro-title">
+    <span class="section-kicker">THE CHOICE IS YOURS</span>
+    <h2 id="outro-title">三道题，不是一份标准答案。<br><em>而是三次重新判断的机会。</em></h2>
+    <p>你可以不相信一句漂亮的结论。查看公开数据、亲手重跑模型、核查企业资料，然后决定还应该追问什么。</p>
+    <div class="outro-actions"><a class="primary-link" href="story-lab.html">继续动手实验 ↗</a><a class="quiet-link" href="index.html">返回全息产业世界 ↗</a></div>
+    <p class="fine">本项目为独立开源研究演示。公开统计、模型推演和现实因果证据是不同层级；不构成官方预测、项目审批或投资建议。</p>
+  </section>
+</main>
+<footer class="footer"><span>ZHONGKAI · 产业命运的三个谜题</span><span>从直觉出发，回到证据。</span></footer>
+</body>
+</html>
