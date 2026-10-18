@@ -1,10 +1,10 @@
 {
   "schema_version": 2,
   "region": "zhongkai",
-  "updated": "2026-10-18 07:28",
-  "fetched_at": "2026-10-18 07:28",
+  "updated": "2026-10-19 07:31",
+  "fetched_at": "2026-10-19 07:31",
   "frequency": "每日更新一次",
-  "count": 8,
+  "count": 9,
   "stats": [
     {
       "n": "5.8%",
@@ -16,38 +16,18 @@
   "note": "话题按编辑关注程度排序，标注关注档（高/较高/中）与来源级别；每条显示原报道时间、最近抓取与核验状态（官方原文或≥2独立来源=已核验，单源媒体/本地=待核实），缺失标「待核实」。本页不展示平台后台真实阅读、转发、点赞数据。话题均来自公开渠道，每日更新。",
   "items": [
     {
-      "title": "市长陈宇航到仲恺高新区调研先进制造业，问需解难优化营商环境",
-      "cat": "industry",
-      "emoji": "🏭",
-      "tier": "较高",
-      "srcLevel": "官方发布",
-      "live": false,
-      "source": "仲恺高新区官网",
-      "url": "https://www.hzzk.gov.cn/bmpd/hngxkjy/ztzl/zsyz/zsdt/content/post_5871857.html",
-      "summary": "10月14日上午，市委副书记、市长陈宇航前往仲恺高新区调研先进制造业，实地了解企业经营情况、为企业发展问需解难，强调坚持实体经济为本、制造业当家，持续优化营商环境，以高水平服务推动先进制造业高质量发展。",
-      "published_at": "2026-10-15",
-      "event_date": "2026-10-14",
-      "fetched_at": "2026-10-18 07:28",
-      "verified_status": "已核验",
-      "fate": {
-        "kind": "info",
-        "direction": "利好",
-        "note": "市主要领导调研先进制造业、聚焦营商环境与企业服务信号"
-      }
-    },
-    {
-      "title": "惠州四环路实现全线闭环，R线（仲恺往惠阳）计划10月30日通车",
+      "title": "惠州四环路实现全线闭环，R线（仲恺往惠阳方向）计划10月30日通车",
       "cat": "city",
       "emoji": "🛣️",
       "tier": "较高",
       "srcLevel": "官方发布",
       "live": false,
-      "source": "仲恺高新区官网",
+      "source": "仲恺高新区管委会",
       "url": "https://www.hzzk.gov.cn/gkmlpt/content/5/5868/mpost_5868135.html",
-      "summary": "10月7日下午，四环南路（平南互通段）主线L线（惠阳往仲恺方向）开放交通，惠州四环路实现全线闭环；R线（仲恺往惠阳方向）桥梁工程已完成约80%，计划10月30日完工通车，进一步打通市区与仲恺产业片区联动通道。",
+      "summary": "10月7日下午四环南路平南互通段主线L线（惠阳往仲恺方向）开放交通，困扰市区与仲恺十年的交通堵点打通、四环路实现全线闭环；R线（仲恺往惠阳方向）桥梁工程已完成约80%，计划10月30日完工通车，进一步便利产业片区通勤与货运。",
       "published_at": "2026-10-09",
       "event_date": "2026-10-07",
-      "fetched_at": "2026-10-18 07:28",
+      "fetched_at": "2026-10-19 07:31",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
@@ -56,67 +36,107 @@
       }
     },
     {
-      "title": "恺合新型显示智能制造项目（陈江）42.49公顷，城镇开发边界局部优化方案公示",
+      "title": "亿纬动力电池潼湖生态智慧区红岗片区22.47万㎡地块建设用地规划许可批前公示",
       "cat": "industry",
-      "emoji": "🖥️",
+      "emoji": "🔋",
       "tier": "较高",
       "srcLevel": "官方发布",
       "live": false,
-      "source": "仲恺高新区官网",
-      "url": "https://www.hzzk.gov.cn/bmpd/zrzyfj/tzgg/content/post_5869853.html",
-      "summary": "惠州仲恺恺合新型显示智能制造项目位于陈江街道，总用地规模约42.49公顷，为解决项目范围内城镇建设用地规模缺口、满足重大项目建设需求，拟在陈江街道石圳片区调入一类工业用地约6.99公顷，现进行城镇开发边界局部优化方案公示。",
-      "published_at": "2026-10-12",
-      "event_date": "2026-10-12",
-      "fetched_at": "2026-10-18 07:28",
+      "source": "仲恺高新区管委会",
+      "url": "https://www.hzzk.gov.cn/bmpd/zrzyfj/tzgg/content/post_5864535.html",
+      "summary": "惠州亿纬动力电池有限公司位于潼湖生态智慧区红岗片区ZKD-011-19地块的《建设用地规划许可证》批前公示，用地面积约22.47万平方米、用地性质为一类工业用地，新能源电池产业在潼湖生态智慧区继续布局。",
+      "published_at": "2026-10-08",
+      "event_date": "2026-10-08",
+      "fetched_at": "2026-10-19 07:31",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
         "direction": "利好",
-        "note": "新型显示重大产业项目落地陈江信号；开发边界/规划公示≠投产，不把公示直接当作产值参数"
+        "note": "新能源电池产业用地规划公示；规划许可≠开工投产，不直接当作产值参数"
       }
     },
     {
-      "title": "胜诺达通讯扩建项目（东江科技园）工程设计方案及规划许可批前公示",
+      "title": "德赛电池物联网电源高端智造项目（惠南科技园）总平面规划调整批后公告",
       "cat": "industry",
-      "emoji": "📡",
+      "emoji": "🔌",
       "tier": "较高",
       "srcLevel": "官方发布",
       "live": false,
-      "source": "仲恺高新区官网（东江科技园）",
-      "url": "https://www.hzzk.gov.cn/hzzkdjkjy/gkmlpt/content/5/5870/post_5870583.html",
-      "summary": "惠州胜诺达通讯有限公司扩建项目位于东江高新科技产业园东兴区DX-10-02-01地块，现进行建设工程设计方案及规划许可证批前公示（公示期10月13日至10月23日），园区通讯制造产能继续扩容。",
-      "published_at": "2026-10-13",
-      "event_date": "2026-10-13 至 2026-10-23",
-      "fetched_at": "2026-10-18 07:28",
+      "source": "仲恺高新区管委会（惠南科技园）",
+      "url": "https://www.hzzk.gov.cn/hzzkhnkjy/gkmlpt/content/5/5862/post_5862522.html?jump=true",
+      "summary": "惠州市德赛电池有限公司德赛电池物联网电源高端智造项目位于惠南高新科技产业园SM-12-3地块，其建设工程设计调整方案与建设工程规划许可证批后公告发布，园区物联网电源高端制造产能布局进一步明确。",
+      "published_at": "2026-09-30",
+      "event_date": "2026-09-30",
+      "fetched_at": "2026-10-19 07:31",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
         "direction": "利好",
-        "note": "园区现有通讯制造企业扩产信号；规划许可批前公示≠投产，不把公示当作产值参数"
+        "note": "电池高端智造项目规划调整落地；批后公告≠投产，产能以实际建设为准"
       }
     },
     {
-      "title": "潼湖生态智慧区编印产业供需信息手册，近200家企业供需“速配”",
+      "title": "沥林碌鹅即食食品建设项目建设用地周转规模使用方案公示",
       "cat": "industry",
-      "emoji": "📒",
+      "emoji": "🦢",
       "tier": "较高",
       "srcLevel": "官方发布",
       "live": false,
-      "source": "仲恺高新区官网（潼湖生态智慧区）",
-      "url": "https://www.hzzk.gov.cn/bmpd/thstzhq/dtzx/content/post_5869734.html",
-      "summary": "潼湖生态智慧区深入走访园区投产企业，将近200家企业的主营业务、核心产品、采购需求分类汇编，印制《潼湖生态智慧区产业供需信息手册》并同步上线电子版，让园区企业“一册在手、供需速配”，推动产业链“隔墙供应”。",
-      "published_at": "2026-10-12",
-      "event_date": "2026-10-12",
-      "fetched_at": "2026-10-18 07:28",
+      "source": "仲恺高新区管委会",
+      "url": "http://www.hzzk.gov.cn/bmpd/zrzyfj/tzgg/index.html",
+      "summary": "《惠州市惠城区建设用地周转规模使用方案（沥林碌鹅即食食品建设项目）》公示，沥林碌鹅这一本地特色美食正向即食化、标准化加工延链，预制食品项目有望带动本地碌鹅产业链与农户增收。",
+      "published_at": "2026-10-15",
+      "event_date": "2026-10-15",
+      "fetched_at": "2026-10-19 07:31",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
         "direction": "利好",
-        "note": "园区产业链供需对接与企业服务提质，本地化协作配套升温"
+        "note": "本地特色美食食品化加工延链；用地方案公示阶段，不直接当作产值"
       }
     },
     {
-      "title": "357创新产业带澄海片区一宗工业用地挂牌出让，10月19日起网上竞买",
+      "title": "亿纬锂能新能源产业园二期3#AI中心厂房基础工程夜间连续施工获批",
+      "cat": "industry",
+      "emoji": "🏗️",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区生态环境部门",
+      "url": "https://www.hzzk.gov.cn/hzzksthjj/gkmlpt/content/5/5861/post_5861484.html?jump=true",
+      "summary": "生态环境部门批复同意惠州亿纬锂能新能源产业园二期项目2#综合楼、3#AI中心（厂房）、10#门房部分基础工程开展夜间连续施工作业，保障大体积混凝土基础连续浇筑，项目建设按节点加快推进。",
+      "published_at": "2026-09-29",
+      "event_date": "2026-09-29",
+      "fetched_at": "2026-10-19 07:31",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "direction": "利好",
+        "note": "重大项目基础施工按工艺需要连续推进，夜间施工按批复落实降噪"
+      }
+    },
+    {
+      "title": "企岭荔枝风味饮品项目施工第二次招标，本地果品深加工再延链",
+      "cat": "industry",
+      "emoji": "🥤",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "广东省公共资源交易平台",
+      "url": "http://search.gd.gov.cn/search/mall/752038?page=9&recommand=0&timeRange=month&areaid=&jump=false&sort=time",
+      "summary": "企岭荔枝风味饮品项目施工（第二次招标）发布工程建设项目招标公告，项目落地仲恺，依托本地荔枝资源发展风味饮品深加工，推动农产品加工与食品饮料产业链延伸。",
+      "published_at": "2026-09-24",
+      "event_date": "2026-09-24",
+      "fetched_at": "2026-10-19 07:31",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "direction": "利好",
+        "note": "果品深加工项目推进施工招标；招标阶段，投产时间以建设为准"
+      }
+    },
+    {
+      "title": "357创新产业带澄海片区一宗工业用地今日（10月19日）起网上竞买",
       "cat": "city",
       "emoji": "🏗️",
       "tier": "较高",
@@ -124,10 +144,10 @@
       "live": false,
       "source": "仲恺高新区公共资源交易中心",
       "url": "https://www.hzzk.gov.cn/hzzkggzyzx/gkmlpt/content/5/5861/post_5861037.html",
-      "summary": "仲恺高新区357创新产业带澄海片区ZKCH-02-45-01号工业用地发布国有建设用地使用权网上挂牌出让公告（公告期9月29日至10月18日），网上挂牌竞买自10月19日9时起至11月2日，357创新产业带持续补充产业用地。",
+      "summary": "仲恺高新区357创新产业带澄海片区ZKCH-02-45-01号工业用地国有建设用地使用权网上挂牌竞买自10月19日9时起至11月2日，357创新产业带持续补充优质产业用地，为先进制造业项目落地储备空间。",
       "published_at": "2026-09-29",
-      "event_date": "2026-10-19 至 2026-11-02",
-      "fetched_at": "2026-10-18 07:28",
+      "event_date": "2026-10-19至2026-11-02",
+      "fetched_at": "2026-10-19 07:31",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
@@ -136,43 +156,43 @@
       }
     },
     {
-      "title": "省道S120改建（原江南大道二期）一标段发布征收补偿安置方案公示",
-      "cat": "city",
-      "emoji": "🚧",
-      "tier": "较高",
-      "srcLevel": "官方发布",
-      "live": false,
-      "source": "仲恺高新区官网",
-      "url": "https://www.hzzk.gov.cn/zzgxqzdlyxxgk/zdxxgk/pchddxzxmydmc/zdbcazfaggxx/content/post_5873151.html",
-      "summary": "仲恺高新区就省道S120线改建项目（原江南大道二期工程）一标段项目用地发布集体土地征收补偿安置方案公示，涉及潼湖镇永平村等集体经济组织，明确土地补偿、留用地折算货币补偿等标准，区域骨干路网建设持续推进。",
-      "published_at": "2026-10-16",
-      "event_date": "2026-10-16",
-      "fetched_at": "2026-10-18 07:28",
-      "verified_status": "已核验",
-      "fate": {
-        "kind": "info",
-        "direction": "中性",
-        "note": "骨干路网建设征地补偿按法定标准公示推进；公示阶段，不直接折算为工程进度或产值"
-      }
-    },
-    {
-      "title": "重阳前夕，沥林镇启动“敬老月”系列活动把关爱送到长者身边",
+      "title": "重阳敬老月，沥林镇埔仔村开展“金秋送暖·敬老传情”长者关爱活动",
       "cat": "livelihood",
       "emoji": "🧓",
       "tier": "较高",
       "srcLevel": "官方发布",
       "live": false,
-      "source": "仲恺高新区官网（沥林镇）",
+      "source": "仲恺高新区管委会（沥林镇）",
       "url": "http://www.hzzk.gov.cn/bmpd/llzrmzf/gzdt/index.html",
       "summary": "重阳节来临之际，沥林镇以“敬老月”为契机，10月16日上午在埔仔村开展“金秋送暖，敬老传情”长者关爱活动，并通过敬老主题活动、入户走访慰问等形式，把暖心服务和关怀送到老年群众身边。",
       "published_at": "2026-10-16",
       "event_date": "2026-10-16",
-      "fetched_at": "2026-10-18 07:28",
+      "fetched_at": "2026-10-19 07:31",
       "verified_status": "已核验",
       "fate": {
         "kind": "life",
         "direction": "利好",
         "note": "重阳敬老社区暖闻"
+      }
+    },
+    {
+      "title": "潼湖碌鹅季人气旺：广和老街百年圩市里，高峰三天卖出约1000只",
+      "cat": "fun",
+      "emoji": "🍽️",
+      "tier": "中",
+      "srcLevel": "媒体报道",
+      "live": false,
+      "source": "惠州发布",
+      "url": "http://m.toutiao.com/group/7692251024086483491/",
+      "summary": "国庆假期潼湖碌鹅人气高涨，广和老街藏在百年圩市里的添美食餐厅已开了二十余年，店主黄想明是潼湖碌鹅知名制作人，高峰期碌鹅三天可卖出约1000只；吃完碌鹅顺道逛广和老街，成为“吃非遗碌鹅、游山水田园”的热门路线。",
+      "published_at": "2026-10-03",
+      "event_date": "2026-10-03",
+      "fetched_at": "2026-10-19 07:31",
+      "verified_status": "待核实",
+      "fate": {
+        "kind": "life",
+        "direction": "利好",
+        "note": "非遗美食与百年圩市带动本地文旅消费；销量为高峰期公开报道口径"
       }
     }
   ]
