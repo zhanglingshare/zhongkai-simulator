@@ -1,6 +1,6 @@
 (function(){'use strict';
 const $=id=>document.getElementById(id),node=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=String(text);return n;};
-let dataset,audit,pilots;
+let dataset,audit,pilots,incoming=null;
 const tabs=[...document.querySelectorAll('[data-panel]')];
 function switchPanel(name){for(const tab of tabs){const yes=tab.dataset.panel===name;tab.setAttribute('aria-selected',String(yes));tab.setAttribute('aria-pressed',String(yes));tab.tabIndex=yes?0:-1;$('panel-'+tab.dataset.panel).hidden=!yes;}history.replaceState(null,'','#'+name);if(name==='facts'&&audit?.ok)chart();}
 for(const [i,tab]of tabs.entries()){tab.addEventListener('click',()=>switchPanel(tab.dataset.panel));tab.addEventListener('keydown',e=>{let next;if(e.key==='ArrowRight')next=(i+1)%tabs.length;else if(e.key==='ArrowLeft')next=(i+tabs.length-1)%tabs.length;else if(e.key==='Home')next=0;else if(e.key==='End')next=tabs.length-1;else return;e.preventDefault();switchPanel(tabs[next].dataset.panel);tabs[next].focus();});}
@@ -28,6 +28,9 @@ function chart(){const key=$('evidence-metric').value,def=dataset.metric_definit
  const choose=()=>{$('evidence-year').value=year;source();};g.addEventListener('click',choose);g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}});chart.append(g);}
  source();
 }
+function receiveQuestion(){const params=new URLSearchParams(location.search),raw=params.get('scenario');if(!raw)return;const Sim=window.ZKSim,C=window.ZKStoryLab;Sim.storyShocks=window.ZKRegisteredShocks;const settings=C.decode(Sim,raw);if(!settings){$('field-notice').hidden=false;$('field-notice').textContent='实验链接条件无效，未采用链接中的主体或问题。仍可独立查看已有资料。';return;}
+ const sim=new Sim(settings.seed,{n_agents:settings.pop,ticks:20}),q=window.ZKStoryReading.question(settings,sim.edges,params.get('role'));incoming={settings,question:q};document.body.classList.add('has-field-question');$('field-arrival').hidden=false;$('arrival-experiment').textContent=(settings.kind==='exit'?settings.target+'退出':settings.shock)+' · '+settings.pop+' 个角色 · 起点 '+settings.seed+' · 第 '+settings.tick+' 步';$('arrival-question').textContent=q.title;$('arrival-check').textContent=q.check;$('arrival-scope').textContent=q.scope;const url=new URL('story-lab.html',location.href);url.searchParams.set('scenario',encodeURIComponent(JSON.stringify(C.payload(settings))));for(const a of document.querySelectorAll('a[href="story-lab.html"]'))a.href=url.toString();$('field-return').href=url.toString();$('field-return').textContent='回到第 '+settings.tick+' 步实验 →';
+}
 function company(){const c=pilots.cases.find(c=>c.id===$('evidence-company').value);if(!c)return;
  for(const [id,key]of [['claim-support','support'],['claim-excludes','excludes']]){const host=$(id);host.replaceChildren();for(const s of c.source)host.append(node('p','',s[key]||'台账未明确记录，仍需核实。'));}
  const host=$('claim-sources');host.replaceChildren();for(const s of c.source){const box=node('div','source-card');box.append(safeLink(s.url,s.publisher+' · '+s.publishedAt),node('p','',s.evidenceText),node('p','','台账查看日期：'+s.retrievedAt));host.append(box);}
@@ -35,6 +38,7 @@ function company(){const c=pilots.cases.find(c=>c.id===$('evidence-company').val
 }
 async function load(){try{const paths=['observations/annual-2019-2025.json','data/pilot-cases-v321.json'],data=await Promise.all(paths.map(p=>fetch(p,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('资料读取失败：'+p);return r.json();})));
  [dataset,pilots]=data;audit=window.ZKObservations.validate(dataset);if(!audit.ok)throw Error('年度台账结构未通过检查；请到完整台账核对。');if(pilots.schema!=='zk-enterprise-pilot-v321'||!Array.isArray(pilots.cases)||!pilots.cases.every(c=>Array.isArray(c.source)))throw Error('企业台账结构不受支持。');
+ if(incoming)$('field-coverage').textContent='已有 '+audit.rows.length+' 条年度统计、'+pilots.cases.length+' 家企业材料。它们的证明范围在下方列明；带来的问题仍需逐项核实。';
  $('evidence-date').textContent='年度台账建立：'+dataset.created_on+'；企业资料快照：'+pilots.capturedAt+'。展示归档材料，不代表今天重新核实。';
  $('evidence-metric').replaceChildren(...Object.entries(dataset.metric_definitions).map(([key,d])=>new Option(d.label+'（'+d.unit+'）',key)));$('evidence-metric').value='gdp_current';
  $('evidence-year').replaceChildren(...audit.years.map(y=>new Option(y+' 年',y)));$('evidence-year').value=audit.years.at(-1);
@@ -43,7 +47,7 @@ async function load(){try{const paths=['observations/annual-2019-2025.json','dat
  $('evidence-caveats').replaceChildren(...[...new Set([...dataset.known_caveats,...audit.warnings])].map(s=>node('li','',s)));
  const statuses=[['年度统计材料',audit.rows.length+' 条记录可追来源'],['固定现实映射',dataset.model_mapping?'台账有映射记录，需专业复核':'台账未提供固定映射'],['独立留出检验',dataset.independent_holdout===true?'台账声明有独立留出，需核对档案':'本台账不是独立留出集']];
  $('evidence-method-status').replaceChildren(...statuses.map(([label,text])=>{const d=node('div');d.append(node('strong','',label),node('span','',text));return d;}));chart();company();
- }catch(e){$('evidence-error').hidden=false;$('evidence-error').textContent=e.message+' 已停止展示数据摘要；可打开原始专业台账继续核对。';$('evidence-date').textContent='本次资料未能完整载入。';}}
+ }catch(e){if(incoming)$('field-coverage').textContent='资料未能完整载入，这个问题仍待核实。';$('evidence-error').hidden=false;$('evidence-error').textContent=e.message+' 已停止展示数据摘要；可打开原始专业台账继续核对。';$('evidence-date').textContent='本次资料未能完整载入。';}}
 let resizeFrame;window.addEventListener('resize',()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{if(audit?.ok&&!$('panel-facts').hidden)chart();});});
-$('evidence-metric').addEventListener('change',chart);$('evidence-year').addEventListener('change',source);$('evidence-company').addEventListener('change',company);load();
+$('evidence-metric').addEventListener('change',chart);$('evidence-year').addEventListener('change',source);$('evidence-company').addEventListener('change',company);receiveQuestion();load();
 })();

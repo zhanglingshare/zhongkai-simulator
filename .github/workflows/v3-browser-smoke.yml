@@ -36,6 +36,10 @@ jobs:
         run: node v3/tests/home-story.spec.cjs
       - name: V3.24 same experiment handoff and original-model repeat truth
         run: node v3/tests/story-journey.spec.cjs
+      - name: V3.26 result reading and no-mutation question tests
+        run: node v3/tests/story-reading.spec.cjs
+      - name: V3.26 first action to field question and evidence return
+        run: node v3/tests/story-reading-smoke.cjs
       - name: V3.25 tactile stage exact counts and native touch drag
         run: node v3/tests/story-stage-smoke.cjs
       - name: V3.24 story prediction, same-time comparison, repetition and evidence reading

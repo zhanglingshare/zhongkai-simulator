@@ -1,5 +1,5 @@
 (function(){'use strict';
-const $=id=>document.getElementById(id),Sim=window.ZKSim,H=window.ZKHomeStory,C=window.ZKStoryLab,Stage=window.ZKStoryStage;
+const $=id=>document.getElementById(id),Sim=window.ZKSim,H=window.ZKHomeStory,C=window.ZKStoryLab,Stage=window.ZKStoryStage,R=window.ZKStoryReading;
 Sim.storyShocks=window.ZKRegisteredShocks;
 const words={less:'更少',same:'一样多',more:'更多'},reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let input={kind:'exit',target:'TCL华星',seed:7,pop:41,tick:20},experiment=null,guess=null,tick=20,peek=false,timer=null,running=false,repeatToken=0,selected=null,metric='disaster',showAllRoles=false,roleSignature='';
@@ -29,7 +29,7 @@ function invalidate(){stop();document.body.classList.remove('focus-mode');contra
  for(const id of ['metric-a-fill','metric-b-fill'])$(id).style.width='0%';
  $('story-alive-ref').textContent='等待模型结果';$('story-links-ref').textContent='包含预设与推断关系';$('story-time-out').textContent='尚未揭晓';$('story-view').textContent='等待揭晓';
  $('stage-phase').textContent='先判断，再揭晓';$('stage-title').textContent='同一步，看看哪里不同';$('stage-caption').textContent='条件已准备好。揭晓后可拖动、长按对照。';
- $('roles-summary').textContent='揭晓后，列出同一步中有差异的真实模型角色。';$('story-role-list').replaceChildren();
+ $('roles-summary').textContent='揭晓后，把未改变与改变后的角色状态并排看。';$('field-question').textContent='先揭晓，再带着具体问题去查';$('field-context').textContent='问题会接续你选择的实验和当前时间步。';$('field-check').hidden=true;$('field-scope').hidden=true;$('story-evidence-link').href='story-evidence.html';$('story-evidence-link').textContent='先看看已有证据 →';$('story-role-list').replaceChildren();
  $('repeat-status').textContent='比较 24 个起点中，各组最后一步的运转角色数量。';$('story-repeat').textContent='检查 24 个起点';
  document.querySelectorAll('[data-guess]').forEach(b=>b.setAttribute('aria-pressed','false'));context();
  window.dispatchEvent(new CustomEvent('zk:story-clear'));
@@ -41,17 +41,17 @@ function select(name){if(!experiment)return;selected=name;const n=view.select(na
 }
 function roles(info){const signature=JSON.stringify([tick,showAllRoles,info.changes]);if(signature===roleSignature)return;roleSignature=signature;const list=$('story-role-list');list.replaceChildren();
  const changes=info.changes.slice().sort((a,b)=>Number(b.name===experiment.target)-Number(a.name===experiment.target)||Number(b.exit)-Number(a.exit)||Math.abs(b.change)-Math.abs(a.change));
- $('roles-summary').textContent='第 '+tick+' 步：'+info.exits.length+' 个角色只在改变后退出，'+info.returns.length+' 个只在改变后仍运转；'+(info.weaker.length+info.stronger.length)+' 个存续角色经营状态有差异。';
+ $('roles-summary').textContent=R.explain(info,tick);
  if(!changes.length){list.append(node('li','','这一步未发现明显角色差异。'));return;}
  for(const c of (showAllRoles?changes:changes.slice(0,6))){const li=node('li'),button=node('button','',c.name+' · '+c.direction);button.type='button';li.dataset.name=c.name;li.dataset.selected=String(selected===c.name);li.dataset.direction=c.exit?'exit':c.returning||c.change>0?'stronger':'weaker';
  button.addEventListener('click',()=>{select(c.name);$('story-stage').scrollIntoView({block:'start',behavior:'auto'});});
- li.append(button,node('p','',c.exit?'未改变时仍运转，改变后退出。':c.returning?'未改变时已退出，改变后仍运转。':'同一步中，改变后的模型经营状态'+(c.change<0?'较弱。':'较强。')));list.append(li);}
+ const pair=node('div','role-paths');for(const [key,label] of [['A','未改变'],['B','改变后']]){const agent=experiment[key][tick].agents.find(n=>n.name===c.name),cell=node('span');cell.dataset.path=key;cell.dataset.alive=String(agent.alive);cell.append(node('small','',label),node('b','',agent.alive?'仍运转':'已退出'));pair.append(cell);}li.append(button,pair);if(!c.exit&&!c.returning)li.append(node('p','','两边都仍运转，改变后的模型经营状态'+(c.change<0?'较弱。':'较强。')));list.append(li);}
  if(changes.length>6){const li=node('li'),b=node('button','',showAllRoles?'收起更多角色':'展开其余 '+(changes.length-6)+' 个角色');b.type='button';b.addEventListener('click',()=>{showAllRoles=!showAllRoles;roles(info);});li.append(b);list.append(li);}
 }
 function paint(t){if(!experiment)return;tick=Math.max(0,Math.min(20,Math.trunc(t)));input.tick=tick;
  const info=H.frameInfo(experiment,tick),snapshot=peek?experiment.A[tick]:experiment.B[tick],counts=peek?info.a:info.b;
  view.setFrame(snapshot.agents,{tick});view.setStoryFocus(peek?[]:info.changes);view.setStoryScene({hero:experiment.target,phase:tick===20?'final':'scrub',peek,changes:info.changes});
- const last=C.outcome(experiment);$('stage-prediction').textContent='你猜'+words[guess]+' · 最后一步'+words[last.choice]+'（未改变 '+last.a+' / 改变后 '+last.b+'）';
+ const last=C.outcome(experiment);$('stage-prediction').textContent='你猜最后一步'+words[guess]+' · 最后一步实际'+words[last.choice]+'（'+last.a+' → '+last.b+'）';
  contrast.update(info,{tick,peek});scrubber.update(tick,experiment.keyTick,true);
  $('stage-balance').textContent='只在改变后退出 '+info.exits.length+' 个 · 只在改变后仍运转 '+info.returns.length+' 个';
  $('path-composition').textContent='第 '+tick+' 步，两条路径中：'+info.exits.map(c=>c.name).join('、')+(info.exits.length?'只在改变后退出。':'没有角色只在改变后退出。')+(info.returns.length?info.returns.map(c=>c.name).join('、')+'只在改变后仍运转。':'没有角色只在改变后仍运转。')+'数量净差为 '+(info.b.alive-info.a.alive)+' 个。';
@@ -67,6 +67,7 @@ function paint(t){if(!experiment)return;tick=Math.max(0,Math.min(20,Math.trunc(t
  for(const path of ['a','b']){const n=(path==='a'?experiment.A:experiment.B)[tick].state[metric];$('metric-'+path).textContent=n.toFixed(3);$('metric-'+path+'-fill').style.width=(n*100)+'%';}
  const d=experiment.B[tick].state[metric]-experiment.A[tick].state[metric];
  $('metric-note').textContent=(metric==='disaster'?'压力风险，低一些较好':'产业活力，高一些较好')+'；改变后减未改变：'+(d>=0?'+':'')+d.toFixed(3)+'。均为 0—1 模型指数。';roles(info);
+ const adjacent=new Set(experiment.edges.flatMap(e=>e.a===input.target?[e.b]:e.b===input.target?[e.a]:[])),preferred=info.changes.find(c=>c.name!==input.target&&adjacent.has(c.name))?.name,q=R.question(input,experiment.edges,preferred),url=new URL('story-evidence.html',location.href);url.searchParams.set('scenario',encodeURIComponent(JSON.stringify(C.payload({...input,tick}))));if(q.role)url.searchParams.set('role',q.role);url.hash='method';$('story-evidence-link').href=url.toString();$('story-evidence-link').textContent='带着这个问题查证据 →';$('field-question').textContent=q.title;$('field-context').textContent=(input.kind==='exit'?input.target+'退出':input.shock)+' · 第 '+tick+' 步 · 模型结果不等于现实事实';$('field-check').textContent=q.check;$('field-scope').textContent=q.scope;$('field-check').hidden=false;$('field-scope').hidden=false;
  window.dispatchEvent(new CustomEvent('zk:story-frame',{detail:{settings:{...input},tick,peek,a:experiment.A[tick],b:experiment.B[tick],displayed:snapshot,edges:experiment.edges,keyTick:experiment.keyTick,camera:view.camera}}));
 }
 function reveal(){const s=read();if(!guess)return;try{stop();experiment=C.run(Sim,s);input=s;repeatToken++;$('repeat-results').hidden=true;
