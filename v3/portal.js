@@ -182,7 +182,7 @@ function reset({preserveSeed=true}={}){
  $("timeline-play").disabled=true;$("timeline-slider").disabled=true;
  setText("subject-name","点击网络节点");setText("subject-detail","查看主体类别、模型状态与关系来源。");
  setText("scene-title","基线 · 产业关系网络");
- if(protagonist){setText("hero-deck","这次只让「"+protagonist.name+"」退出模型。先看哪些连线熄灭，再拖动看后续。");setText("hero-quickstart","▶ 让 "+protagonist.name+" 退出模型");}
+ if(protagonist){setText("hero-deck","这次假设「"+protagonist.name+"」退出模型。先看哪些连线熄灭，再拖动看后续。");setText("hero-quickstart","▶ 让 "+protagonist.name+" 退出模型");}
  if(view)view.setGraph(base.snapshots[0].agents,base.edges,{tick:0});
  paint(0);msg("初始模型世界已就绪，可播放指定链主退出的假设演示。");
 }
