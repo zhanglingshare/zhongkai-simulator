@@ -14,7 +14,7 @@ const server=http.createServer((req,res)=>{
 });
 (async()=>{
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
- const port=server.address().port,browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+ const port=server.address().port,browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});
  try{
   for(const width of [1440,390]){
    const page=await browser.newPage({viewport:{width,height:width===390?844:960},reducedMotion:'reduce'});
