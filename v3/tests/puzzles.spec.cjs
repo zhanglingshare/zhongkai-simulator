@@ -1,69 +1,46 @@
 'use strict';
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const vm = require('node:vm');
-const path = require('node:path');
-const here = path.resolve(__dirname,'..');
-const read = name => fs.readFileSync(path.join(here,name),'utf8');
-const html = read('puzzles.html');
-const js = read('puzzles.js');
-const css = read('puzzles.css');
-const home = read('index.html');
-const story = read('story-lab.html');
-
+/* New visual-first P0 contract: no hardcoded scenario results, original Sim A/B only. */
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+const root=path.resolve(__dirname,'..');
+const read=name=>fs.readFileSync(path.join(root,name),'utf8');
+const html=read('puzzles.html'),css=read('puzzles.css'),js=read('puzzles.js');
 new vm.Script(js,{filename:'puzzles.js'});
-for(const id of ['puzzle-1','puzzle-2','puzzle-3']){
-  assert.match(html,new RegExp('id="'+id+'"'));
-}
-assert.equal((html.match(/data-puzzle="/g)||[]).length,3,'three real chapters');
-assert.equal((html.match(/data-choice="/g)||[]).length,9,'three choices per chapter');
-assert.equal((html.match(/class="answer-panel" hidden/g)||[]).length,3,'no prefabricated revealed result');
-for(const target of ['observations.html','story-lab.html','inflow.html#zhongkai-demo','trust.html']){
-  assert.ok(html.includes('href="'+target+'"'),'missing real destination '+target);
-}
-assert.ok(home.includes('href="puzzles.html"'),'holographic homepage must offer a story route');
-assert.ok(story.includes('puzzles.html#puzzle-3'),'network story must continue into next puzzle');
-assert.match(html,/规上工业总产值增速/);
-assert.match(html,/工业投资增速/);
-assert.ok(css.includes('@media(max-width:540px)'),'mobile style required');
-assert.ok(css.includes('prefers-reduced-motion'),'respect reduced motion');
-assert.ok(!html.includes('model.js')&&!html.includes('portal-kernel.js'),'landing must not masquerade as model runner');
-assert.ok(!js.includes('fetch(')&&!js.includes('localStorage'),'landing makes no hidden data calls or persistent tracking');
+function has(id){assert.ok(html.includes('id="'+id+'"'),'missing visual control: '+id);}
+for(const id of ['scene-data','scene-network','scene-inflow','data-interpret','impact-canvas','impact-labels','impact-tip','run-exit','target','compare-hold','toggle-play','sim-time','gate-number','gate-state','gate-progress-bar','evidence-cards','lab-next'])has(id);
+assert.equal((html.match(/class="scene /g)||[]).length,3,'three cinematic acts');
+assert.equal((html.match(/data-evidence="/g)||[]).length,5,'five explorable evidence dimensions');
+assert.ok(html.includes('portal-kernel.js')&&html.includes('story-render.js')&&html.includes('home-story-core.js'),'original model and existing renderer must be loaded');
+assert.ok(js.includes('H.exitRun(Sim,7,41,target,20)'),'network animation must use actual A/B model run');
+assert.ok(js.includes('H.frameInfo(experiment,tick)'),'network readout must use real same-tick snapshots');
+assert.ok(js.includes('view.setFrame(snapshot.agents'),'network visuals must change with model');
+assert.ok(js.includes('view.setStoryFocus(peek?[]:info.changes)'),'network must animate role-level differences');
+assert.ok(js.includes('experiment.A[tick]')&&js.includes('experiment.B[tick]'),'hold compare needs both paths at same timestep');
+assert.ok(js.includes("new URL('story-lab.html'"),'professional lab should inherit exact scenario');
+assert.ok(js.includes('不代表现实资料已经审核通过'),'evidence gate must not imply verified information');
+assert.ok(html.includes('observations.html')&&html.includes('inflow.html#zhongkai-demo'));
+assert.ok(css.includes('max-width:700px')&&css.includes('max-width:390px'),'responsive mobile design required');
+assert.ok(css.includes('prefers-reduced-motion:reduce'),'reduced motion required');
+assert.equal((html.match(/<section(?:\s|>)/g)||[]).length,(html.match(/<\/section>/g)||[]).length,'section tags balanced');
 
-// DOM-free behavior contract: choice -> reveal -> progress -> changing choice clears stale reveal.
-function mockButton(choice){
-  const listeners={};
-  return {dataset:{choice:String(choice)},attrs:{},disabled:false,textContent:'',
-    addEventListener(type,fn){listeners[type]=fn;},
-    setAttribute(key,value){this.attrs[key]=value;},
-    click(){assert.ok(listeners.click,'handler missing');listeners.click();}};
-}
-function mockChapter(index){
-  const options=[0,1,2].map(mockButton),reveal=mockButton(0),panel={hidden:true},
-  response={textContent:''};
-  return {dataset:{puzzle:String(index)},options,reveal,panel,response,
-    querySelectorAll(selector){assert.equal(selector,'[data-choice]');return options;},
-    querySelector(selector){return selector==='.reveal-btn'?reveal:selector==='.answer-panel'?panel:selector==='.answer-response'?response:null;}};
-}
-const chapters=[1,2,3].map(mockChapter);
-const progress={textContent:''};
-const document={querySelectorAll(selector){assert.equal(selector,'[data-puzzle]');return chapters;},
-getElementById(id){assert.equal(id,'journey-progress');return progress;}};
-vm.runInNewContext(js,{document},{filename:'puzzles.js'});
-assert.match(progress.textContent,/0 \/ 3/);
-for(let i=0;i<3;i++){
-  const q=chapters[i];
-  q.options[2].click();
-  assert.equal(q.reveal.disabled,false);
-  assert.equal(q.options[2].attrs['aria-pressed'],'true');
-  q.reveal.click();
-  assert.equal(q.panel.hidden,false);
-  assert.ok(q.response.textContent.length>10,'feedback must not be empty');
-  assert.match(progress.textContent,new RegExp((i+1)+' \\/ 3'));
-}
-chapters[0].options[0].click();
-assert.equal(chapters[0].panel.hidden,true,'changing selection hides old reveal');
-assert.match(progress.textContent,/2 \/ 3/);
-chapters[0].reveal.click();
-assert.match(progress.textContent,/3 \/ 3/);
-console.log('three-mystery narrative and interactions: PASS');
+// Real model invariants: no constants inserted as fictional scenario outcomes.
+const context=vm.createContext({window:{}});
+vm.runInContext(read('portal-kernel.js'),context,{filename:'portal-kernel.js'});
+vm.runInContext(read('home-story-core.js'),context,{filename:'home-story-core.js'});
+const Sim=context.window.ZKSim,H=context.window.ZKHomeStory;
+assert.ok(typeof Sim==='function'&&typeof H.exitRun==='function');
+const initial=new Sim(7,{n_agents:41,ticks:20});
+const target=H.hero(initial.agents);
+assert.ok(target&&target.type==='anchor');
+const run=H.exitRun(Sim,7,41,target.name,20);
+assert.equal(run.A.length,21);
+assert.equal(run.B.length,21);
+assert.ok(run.edges.length>0);
+const a=H.frameInfo(run,0),b=H.frameInfo(run,20);
+assert.equal(a.a.total,41);assert.equal(b.b.total,41);
+assert.ok(Number.isFinite(b.b.alive-b.a.alive));
+assert.ok(run.keyTick>=0&&run.keyTick<=20);
+assert.deepEqual(Object.keys(a).sort(),Object.keys(b).sort());
+console.log('puzzles visual-first structural + original-model checks: PASS');
