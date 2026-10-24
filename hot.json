@@ -1,8 +1,8 @@
 {
   "schema_version": 2,
   "region": "zhongkai",
-  "updated": "2026-10-24 07:31",
-  "fetched_at": "2026-10-24 07:31",
+  "updated": "2026-10-25 07:29",
+  "fetched_at": "2026-10-25 07:29",
   "frequency": "每日更新一次",
   "count": 9,
   "stats": [
@@ -27,7 +27,7 @@
       "summary": "10月20日，“汇聚金融 赋能实体”2026年惠州市仲恺金融支持人工智能专场对接活动举行，工商银行、农业银行等9家银行与科力尔电机（惠州）、惠州中京电子科技等9家人工智能与智能装备企业完成集中授信签约，现场授信近20亿元，为新兴产业发展注入金融活水。",
       "published_at": "2026-10-22",
       "event_date": "2026-10-20",
-      "fetched_at": "2026-10-24 07:31",
+      "fetched_at": "2026-10-25 07:29",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
@@ -35,6 +35,50 @@
         "objects": "人工智能与智能装备企业",
         "direction": "利好",
         "assumption": "授信总额为官方公开口径"
+      }
+    },
+    {
+      "title": "仲恺新增公办学位2400个，多所公立院区改造投用",
+      "cat": "livelihood",
+      "emoji": "🏫",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区管委会",
+      "url": "https://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/qt/zzgxqxxgzjb/content/post_5874969.html",
+      "summary": "今年仲恺多个重点学校项目落地见效，包括仲恺中学改扩建、廖承志红军学校幸福校区及第一幼儿园分园等项目，新增公办高中、初中、小学及幼儿学位累计2400个，多所公立院区完成改造投用，缓解区域学位紧张问题。",
+      "published_at": "2026-10-19",
+      "event_date": "2026",
+      "fetched_at": "2026-10-25 07:29",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "ident": "livelihood",
+        "objects": "学生家庭",
+        "direction": "利好",
+        "assumption": "学位数为官方公开口径"
+      }
+    },
+    {
+      "title": "沥林镇开展“敬老月”系列活动：敬老宴、入户慰问暖桑榆",
+      "cat": "gossip",
+      "emoji": "🌼",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区管委会·沥林镇",
+      "url": "https://www.hzzk.gov.cn/bmpd/llzrmzf/gzdt/content/post_5873543.html",
+      "summary": "重阳节来临之际，沥林镇以“敬老月”为契机开展敬老主题活动、入户走访慰问；10月17日下午沥林村举办敬老宴，约500名长者、老干部和返乡知青欢聚一堂，文化惠民演出同步上演，把暖心服务送到老年群众身边。",
+      "published_at": "2026-10-16",
+      "event_date": "2026-10",
+      "fetched_at": "2026-10-25 07:29",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "life",
+        "ident": "gossip",
+        "objects": "老年居民",
+        "direction": "中性",
+        "assumption": "活动信息以官方发布为准"
       }
     },
     {
@@ -46,10 +90,10 @@
       "live": false,
       "source": "仲恺高新区管委会",
       "url": "https://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/zwdt/yqzj/content/post_5876600.html",
-      "summary": "讯强电子1999年落户惠环，从台式电脑散热器起家，率先切入AI散热领域，2025年营收首次突破百亿元、产值实现两年倍增；海亮集团旗下佳晔金属投资建设高性能铜冷板生产线，规划年产能40万套，惠环新兴产业多点开花。",
+      "summary": "讯强电子1999年落户惠环，从台式电脑散热器起家，率先切入AI散热领域，2025年营收首次突破百亿元、产值实现两年倍增；海亮集团旗下佳晔金属投资建设高性能铜冷板生产线，规划年产能40万套，截至今年9月惠环共落地项目40个，招商落地投资额同比增长56%。",
       "published_at": "2026-10-22",
       "event_date": "2026",
-      "fetched_at": "2026-10-24 07:31",
+      "fetched_at": "2026-10-25 07:29",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
@@ -60,47 +104,25 @@
       }
     },
     {
-      "title": "仲恺高新区举办人工智能赋能制造业发展交流会",
+      "title": "市长陈宇航到仲恺高新区调研先进制造业：制造业当家，问需解难",
       "cat": "industry",
-      "emoji": "🤖",
+      "emoji": "🏭",
       "tier": "较高",
       "srcLevel": "官方发布",
       "live": false,
-      "source": "仲恺高新区管委会·政务动态",
-      "url": "http://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/zwdt/index.html",
-      "summary": "仲恺高新区举办人工智能赋能制造业发展交流会，聚焦AI与制造深度融合，推动区内制造业企业智能化升级。",
-      "published_at": "2026-10-22",
-      "event_date": "2026-10",
-      "fetched_at": "2026-10-24 07:31",
+      "source": "仲恺高新区管委会",
+      "url": "https://www.hzzk.gov.cn/gkmlpt/content/5/5871/mpost_5871934.html",
+      "summary": "10月14日上午，市委副书记、市长陈宇航前往仲恺高新区调研先进制造业，实地了解企业经营情况、为企业发展问需解难，强调坚持实体经济为本、制造业当家，持续优化营商环境，以高水平服务推动先进制造业高质量发展。",
+      "published_at": "2026-10-15",
+      "event_date": "2026-10-14",
+      "fetched_at": "2026-10-25 07:29",
       "verified_status": "已核验",
       "fate": {
         "kind": "info",
         "ident": "industry",
-        "objects": "制造业企业",
+        "objects": "区内制造业企业",
         "direction": "利好",
-        "assumption": "交流信息以官方发布为准"
-      }
-    },
-    {
-      "title": "仲恺新增公办学位2400个，多所公立院区改造投用",
-      "cat": "livelihood",
-      "emoji": "🏫",
-      "tier": "较高",
-      "srcLevel": "官方发布",
-      "live": false,
-      "source": "仲恺高新区管委会·政务动态",
-      "url": "http://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/zwdt/index.html",
-      "summary": "仲恺高新区持续扩容教育与医疗资源：新增公办学位2400个，多所公立院区完成改造投用，让随迁子女和产业人才子女“有学上、上好学”，家门口就医更便利。",
-      "published_at": "2026-10-19",
-      "event_date": "2026",
-      "fetched_at": "2026-10-24 07:31",
-      "verified_status": "已核验",
-      "fate": {
-        "kind": "info",
-        "ident": "livelihood",
-        "objects": "学生家庭、居民",
-        "direction": "利好",
-        "assumption": "学位数为官方公开口径"
+        "assumption": "调研信息以官方发布为准"
       }
     },
     {
@@ -112,10 +134,10 @@
       "live": false,
       "source": "仲恺高新区管委会·潼湖生态智慧区",
       "url": "https://www.hzzk.gov.cn/bmpd/thstzhq/dtzx/content/post_5853372.html",
-      "summary": "潼湖生态智慧区依托原卓研工业区厂房盘活存量载体，打造“运动+美食”双核心定位的智谷彩街特色商业街：规划引入羽毛球馆、中式餐饮、休闲轻食、特色小吃、美食广场、便民零售等多元业态，招商约80%、力争12月开业。",
+      "summary": "潼湖生态智慧区依托原卓研工业区厂房盘活存量载体，打造“运动+美食”双核心定位的智谷彩街特色商业街：规划引入羽毛球馆、中式餐饮、休闲轻食、特色小吃、美食广场、便民零售等多元业态，招商约80%、力争12月开业，为园区职工与居民提供休闲消费新去处。",
       "published_at": "2026-09-16",
       "event_date": "2026",
-      "fetched_at": "2026-10-24 07:31",
+      "fetched_at": "2026-10-25 07:29",
       "verified_status": "已核验",
       "fate": {
         "kind": "life",
@@ -126,47 +148,47 @@
       }
     },
     {
-      "title": "西坑片区24228平方米工业用地挂牌成交，产业用地持续落子",
-      "cat": "city",
-      "emoji": "📌",
-      "tier": "较高",
-      "srcLevel": "官方发布",
-      "live": false,
-      "source": "仲恺高新区管委会·公共资源交易",
-      "url": "https://www.hzzk.gov.cn/hzzkggzyzx/gkmlpt/content/5/5875/mpost_5875592.html",
-      "summary": "位于仲恺高新区西坑片区的24228平方米工业用地挂牌成交（10月15日成交），为产业项目落地腾出新空间，仲恺工业用地供给持续加码。",
-      "published_at": "2026-10-20",
-      "event_date": "2026-10-15",
-      "fetched_at": "2026-10-24 07:31",
-      "verified_status": "已核验",
-      "fate": {
-        "kind": "info",
-        "ident": "city",
-        "objects": "产业载体",
-        "direction": "利好",
-        "assumption": "成交信息以公告为准"
-      }
-    },
-    {
-      "title": "王者荣耀全国大赛仲恺站暨智谷杯电竞嘉年华带热园区夜经济",
-      "cat": "fun",
-      "emoji": "🎮",
+      "title": "一册在手、供需“速配”：潼湖生态智慧区上线产业供需信息手册",
+      "cat": "industry",
+      "emoji": "📘",
       "tier": "较高",
       "srcLevel": "官方发布",
       "live": false,
       "source": "仲恺高新区管委会·潼湖生态智慧区",
-      "url": "https://www.hzzk.gov.cn/bmpd/thstzhq/dtzx/content/post_5860560.html",
-      "summary": "第十四届王者荣耀全国大赛海选赛惠州仲恺站暨智谷杯电竞嘉年华在智谷悦享汇举行，活动现场设置猜灯谜、国风冰箱贴DIY、商户双节福利等互动项目，22支战队、近200人参与，电竞与夜经济带热园区。",
-      "published_at": "2026-09-28",
-      "event_date": "2026-09-25",
-      "fetched_at": "2026-10-24 07:31",
+      "url": "https://www.hzzk.gov.cn/bmpd/thstzhq/dtzx/content/post_5869734.html",
+      "summary": "为打通园区产业链供需信息不对称的堵点，潼湖生态智慧区深入走访园区投产企业，将近200家企业的主营业务、核心产品、采购需求分类汇编，印制《潼湖生态智慧区产业供需信息手册》并同步上线电子版，让园区企业“一册在手、供需速配”。",
+      "published_at": "2026-10-12",
+      "event_date": "2026-10",
+      "fetched_at": "2026-10-25 07:29",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "ident": "industry",
+        "objects": "园区企业",
+        "direction": "利好",
+        "assumption": "手册信息以官方发布为准"
+      }
+    },
+    {
+      "title": "陈江街道“先锋领航，为爱挽袖”：无偿献血传递社会正能量",
+      "cat": "gossip",
+      "emoji": "🩸",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区管委会·陈江街道",
+      "url": "https://www.hzzk.gov.cn/hzzkcjjdb/gkmlpt/content/5/5873/post_5873803.html?jump=true",
+      "summary": "10月16日上午，陈江街道办事处组织开展“先锋领航，为爱挽袖”无偿献血活动，街道干部职工、企业爱心人士踊跃参与，本次活动共成功献血34人，以实际行动奉献爱心、传递社会正能量。",
+      "published_at": "2026-10-19",
+      "event_date": "2026-10-16",
+      "fetched_at": "2026-10-25 07:29",
       "verified_status": "已核验",
       "fate": {
         "kind": "life",
-        "ident": "fun",
-        "objects": "园区青年",
+        "ident": "gossip",
+        "objects": "献血者",
         "direction": "中性",
-        "assumption": "参与人数为公开口径"
+        "assumption": "献血人数为官方公开口径"
       }
     },
     {
@@ -181,7 +203,7 @@
       "summary": "碌鹅是仲恺的饮食符号：沥林碌鹅是市级非遗，一年一度的鹅文化节传承烹鹅技艺；往潼湖镇方向，广和老街添美食餐厅藏着百年圩市里的潼湖碌鹅，烟火气十足，循着鹅香出发、看戏摘果正当时。",
       "published_at": "2026-10-03",
       "event_date": "2026-10",
-      "fetched_at": "2026-10-24 07:31",
+      "fetched_at": "2026-10-25 07:29",
       "verified_status": "已核验",
       "fate": {
         "kind": "life",
@@ -189,28 +211,6 @@
         "objects": "食客",
         "direction": "中性",
         "assumption": "人气为公开打卡热度合理估算"
-      }
-    },
-    {
-      "title": "仲恺高新区召开2026年秋冬季大气污染防治攻坚工作部署会议",
-      "cat": "city",
-      "emoji": "🌤️",
-      "tier": "较高",
-      "srcLevel": "官方发布",
-      "live": false,
-      "source": "仲恺高新区管委会·政务动态",
-      "url": "http://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/zwdt/index.html",
-      "summary": "仲恺高新区召开2026年秋冬季大气污染防治攻坚工作部署会议，聚焦秋冬季污染特征精准管控，守护园区蓝天。",
-      "published_at": "2026-10-22",
-      "event_date": "2026-10",
-      "fetched_at": "2026-10-24 07:31",
-      "verified_status": "已核验",
-      "fate": {
-        "kind": "info",
-        "ident": "city",
-        "objects": "园区企业、居民",
-        "direction": "中性",
-        "assumption": "部署信息以官方发布为准"
       }
     }
   ]
