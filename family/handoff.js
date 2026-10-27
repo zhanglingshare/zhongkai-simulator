@@ -1,7 +1,7 @@
 /* Cross-page input protocol only. NO model/results/secrets are transported. */
 (function(root,factory){const x=factory();if(typeof module==='object'&&module.exports)module.exports=x;if(root)root.ZKFamily=x;})(typeof window!=='undefined'?window:null,function(){
 'use strict';
-const VERSION=1,SAFE_TARGETS=['TCL华星','TCL王牌','亿纬锂能','德赛西威'];
+const VERSION=1,SAFE_TARGETS=['TCL华星','TCL王牌','亿纬锂能','德赛西威','龙旗电子'];
 const KINDS=['exit','shock','explore','research','town'],SIZES=[24,32,41];
 const SCENE_SHOCKS=['技术突破','供应链中断','链主外迁','芯片断供','限电'];
 function boundedStr(s,n=100){return typeof s==='string'&&s.length<=n&&s.trim()!==''?s.trim():null;}
