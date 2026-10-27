@@ -76,6 +76,7 @@ if(context){
   context.entity?'已携带主体名称：'+context.entity:'已带入探索背景；不同模型不自动换算结果';
  const p=make('span','zkf-note',label);p.title=label;p.setAttribute('role','status');nav.append(p);
 }
+document.body.classList.add('zkf-has-family-bar');
 document.body.prepend(nav);
 // State is a proposed input only. Research and town engines are not mathematically interchangeable.
 if(context && here==='research'){
