@@ -32,7 +32,10 @@ function homepageCtx(){
    {v:1,kind:'exit',seed:d.seed,pop:d.pop,tick:d.tick,target:d.target,entity:d.target,source:'see'}:
    {v:1,kind:'shock',seed:d.seed,pop:d.pop,tick:d.tick,shock:d.shock,source:'see'};}catch{}
  }
- return {v:1,kind:'explore',seed:7,pop:41,tick:0,source:'see'};
+ const chosen=document.getElementById('subject-name')?.textContent?.trim()||'';
+ if(family?.SAFE_TARGETS?.includes(chosen))
+  return {v:1,kind:'exit',target:chosen,entity:chosen,seed:7,pop:41,tick:0,source:'see'};
+ return {v:1,kind:'explore',entity:chosen&&chosen!=='点击网络节点'?chosen:undefined,seed:7,pop:41,tick:0,source:'see'};
 }
 function labCtx(){
  const seed=Number(document.getElementById('seed-input')?.value||7);
