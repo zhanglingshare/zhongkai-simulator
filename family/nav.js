@@ -74,4 +74,23 @@ if(context){
  const p=make('span','zkf-note',label);p.title=label;p.setAttribute('role','status');nav.append(p);
 }
 document.body.prepend(nav);
+// State is a proposed input only. Research and town engines are not mathematically interchangeable.
+if(context && here==='research'){
+ const seedField=document.getElementById('seed-input');
+ const shockField=document.getElementById('shock-sel');
+ if(seedField&&context.seed)seedField.value=String(context.seed);
+ if(context.kind==='shock'&&shockField&&[...shockField.options].some(o=>o.value===context.shock)){
+  shockField.value=context.shock;shockField.dispatchEvent(new Event('change',{bubbles:true}));
+ }
+ const hint=make('p','zkf-note',
+  context.kind==='exit'?'你带来的是指定主体退出实验；专业台的预设冲击可能不同，不能自动换算。请重新核对后运行。':
+  '已接收情景输入，请核对专业模型参数后手动运行；旧结果不会自动沿用。');
+ hint.style.maxWidth='350px';hint.style.margin='0 4px';hint.style.whiteSpace='normal';nav.append(hint);
+}
+if(context && here==='inflow' && context.entity){
+ // Never auto-request network investigation; the user must review and choose to submit.
+ const input=document.getElementById('company-name');
+ if(input && !input.value)input.value=context.entity;
+}
+
 })();
