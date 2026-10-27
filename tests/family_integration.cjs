@@ -15,7 +15,7 @@ test('All-zone seed is the original 41 subjects / 71 relationships',()=>{
  assert.equal(whole.candidates.length,41);assert.equal(whole.relations.length,71);
 });
 test('Lilin remains a distinct town model with independent 20 nodes / 21 edges',()=>{
- const m=lilin.match(/NO:\[([\s\S]*?)\],LK:\[([\s\S]*?)\],/);
+ const m=lilin.match(/NO:\[(.*?)\],LK:\[(.*?)\],BRI:/s);
  assert.ok(m);
  assert.equal([...m[1].matchAll(/\["n\d+","[^"]+"/g)].length,20);
  assert.equal([...m[2].matchAll(/\["n\d+","n\d+",\d/g)].length,21);
