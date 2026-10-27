@@ -1,0 +1,18 @@
+/* Zhongkai unified family navigation: isolated names, never changes simulation CSS or engines. */
+#zk-family-nav{position:relative;z-index:9995;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;box-sizing:border-box;padding:7px clamp(11px,2.5vw,30px);border-bottom:1px solid rgba(91,154,177,.31);background:#071625;color:#dcecf9;font:12px/1.45 -apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif}
+#zk-family-nav *{box-sizing:border-box}
+#zk-family-nav a{color:#c5dcf0;text-decoration:none;font:inherit;white-space:nowrap;border-radius:7px;padding:7px 9px;display:inline-block}
+#zk-family-nav a:hover,#zk-family-nav a:focus-visible{color:#9ff6eb;background:#143447;outline:none}
+#zk-family-nav .zkf-brand{color:#97e4e1;font-weight:800;letter-spacing:.6px}
+#zk-family-nav .zkf-links{display:flex;align-items:center;gap:4px;overflow-x:auto;scrollbar-width:thin}
+#zk-family-nav .zkf-links a[data-active=true]{background:#1b4454;color:#b3fff3;border:1px solid #42778b}
+#zk-family-nav .zkf-links a[data-active=false]{border:1px solid transparent}
+#zk-family-nav .zkf-town{color:#ffdab1}
+#zk-family-nav details{position:relative;flex:none}
+#zk-family-nav details summary{cursor:pointer;list-style:none;padding:8px 9px;border-radius:7px;color:#b6cadd;white-space:nowrap}
+#zk-family-nav details summary:hover{background:#153348}
+#zk-family-nav details summary::-webkit-details-marker{display:none}
+#zk-family-nav details[open] .zkf-menu{position:absolute;right:0;top:calc(100% + 7px);min-width:190px;padding:6px;border:1px solid #3a5e75;border-radius:11px;background:#0b2335;box-shadow:0 18px 40px #000a;display:flex;flex-direction:column;z-index:9999}
+#zk-family-nav .zkf-note{font-size:10px;color:#93b7c3;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#zk-family-nav .zkf-home{font-weight:700;color:#a9f2e8}
+@media(max-width:900px){#zk-family-nav{display:flex;flex-wrap:wrap;justify-content:center;padding:7px 8px;gap:3px}#zk-family-nav .zkf-note{display:none}#zk-family-nav .zkf-links{width:100%;justify-content:flex-start}#zk-family-nav a{padding:6px 8px}#zk-family-nav details[open] .zkf-menu{right:0}}
