@@ -14,6 +14,17 @@ async function run(viewport,tag){
   const page=await browser.newPage({viewport,deviceScaleFactor:viewport.width<=500?2:1,storageState:{cookies:[],origins:[]}});
   page.on('pageerror',e=>issue.push(tag+' JS: '+e.message));
   page.on('console',m=>{if(m.type()==='error')console.log(tag+' console warning: '+m.text())});
+  for(const legacy of ['index.html','v2/index.html']){
+    await page.goto(base+legacy,{waitUntil:'networkidle'});
+    await page.locator('#zk-family-nav').waitFor({state:'visible'});
+    const geom=await page.evaluate(()=>{
+      const nav=document.getElementById('zk-family-nav').getBoundingClientRect();
+      const aside=document.querySelector('.sidebar')?.getBoundingClientRect();
+      return {width:nav.width,right:nav.right,navBottom:nav.bottom,sidebarTop:aside?.top??0};
+    });
+    assert.ok(geom.width>=viewport.width*.92,legacy+' nav must remain full width');
+    assert.ok(geom.sidebarTop>=geom.navBottom-3,legacy+' legacy sidebar must remain below nav');
+  }
   await page.goto(base+'family/index.html',{waitUntil:'networkidle'});
   await page.waitForFunction(()=>document.getElementById('world-data-status').textContent.includes('41个模型主体'),{timeout:12000});
   assert.equal(await page.locator('#orbits .orbnode').count(),41);
