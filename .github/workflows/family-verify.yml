@@ -1,0 +1,41 @@
+name: zhongkai-family-verify
+on:
+  push:
+    branches:
+      - integration/zhongkai-family-lilin-20261028
+  workflow_dispatch:
+jobs:
+  verify:
+    name: Zhongkai + Lilin integration and mobile browser
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Original model regression
+        run: |
+          node tests/verify.js
+      - name: Family and Lilin independent test suite
+        run: |
+          node --test tests/family_integration.cjs
+      - name: Install browser test tools
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Start site
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/zhongkai-family-http.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:8765/family/index.html >/dev/null
+          curl --fail http://127.0.0.1:8765/lilin/index.html >/dev/null
+      - name: Full family browser acceptance
+        run: node tests/family_browser.cjs
+      - name: Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zhongkai-family-desktop-mobile
+          path: tests/shots/*.png
+          if-no-files-found: warn
