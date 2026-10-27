@@ -62,7 +62,7 @@ async function run(viewport,tag){
   await page.waitForURL(/v3\/index\.html/);
   const inbound=await page.evaluate(()=>window.ZKFamily?.parseSearch(location.search));
   assert.equal(inbound.kind,'town');assert.equal(inbound.town,'沥林');
-  assert.ok(!location.pathname.includes('lilin'),'should return to regional view');
+  assert.ok(!new URL(page.url()).pathname.includes('lilin'),'should return to regional view');
   await page.screenshot({path:path.join(OUT,tag+'-return-region.png'),fullPage:false});
   console.log(tag+' ALL routes verified');
  }finally{await browser.close();}
