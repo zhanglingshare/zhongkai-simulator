@@ -59,7 +59,7 @@
   @media(max-width:680px){body{display:block}.sidebar{width:100%;border-right:0;border-bottom:1px solid #1e293b;padding:10px 0}.sidebar-logo{padding:7px 16px 10px;margin-bottom:4px}.sidebar-nav{display:flex;gap:5px;padding:6px 9px;overflow-x:auto}.sidebar-nav .nav-section{display:none}.sidebar-nav .nav-item{white-space:nowrap;margin:0;font-size:12px;flex-shrink:0;padding:10px}.main{padding:22px 14px}.main h1{font-size:24px}.experience-entrances{padding:17px}.experience-entrances h2{font-size:21px}}
   @media(prefers-reduced-motion:reduce){.experience-entry{transition:none}.experience-entry:hover{transform:none}}
 </style>
-</head>
+<script defer src="family/handoff.js"></script><script defer src="family/nav.js"></script></head>
 <body>
 
 <!-- 左侧边栏 -->
@@ -91,11 +91,16 @@
   <h1>仲恺现在，正在发生什么？</h1>
   <div class="sub">最近3天动态 · 机遇与风险 · 信源分级</div>
 
-  <section class="experience-entrances" id="experience-entrances" aria-label="两个独立版本的体验入口">
+  <section class="experience-entrances" id="experience-entrances" aria-label="仲恺全区和沥林一体化入口">
     <p class="entry-eyebrow">仲恺产业风洞 / 选择体验方式</p>
     <h2>第一次来，先看一个产业故事。</h2>
     <p class="entry-intro">如果一家大厂突然搬走，产业网络会怎样变化？不用懂经济学、不用填写参数。已有旧版保留，随时可以返回熟悉的操作方式。</p>
     <div class="experience-entries">
+      <a class="experience-entry experience-entry--featured" href="family/index.html" id="entry-family" style="grid-column:1/-1;background:linear-gradient(120deg,#123c45,#102b4c);border-color:#33a7a7">
+        <span class="entry-tag">统一入口 · 仲恺全区 + 沥林镇域</span>
+        <strong class="entry-title">◈ 进入仲恺产业世界 · 看见 / 对撞 / 研究 / 沥林 ↗</strong>
+        <span class="entry-description">围绕同一个问题进入不同体验；历史版本和专业工具保持完整，沥林六种情景直接可用。</span>
+      </a>
       <a class="experience-entry experience-entry--featured" href="v3/index.html" id="entry-story">
         <span class="entry-tag">新版 · 推荐第一次体验</span>
         <strong class="entry-title">▶ 大众故事版 ↗</strong>

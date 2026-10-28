@@ -336,6 +336,19 @@ try{
  $("share-scene").addEventListener("click",share);
  reset();
  handleScenarioLink();
+ // Family integration: inspect a public subject from the gateway without changing Sim.
+ // This runs after all deferred head scripts have installed the validated handoff helper.
+ window.addEventListener("DOMContentLoaded",()=>{
+  const ctx=window.ZKFamily?.parseSearch(window.location.search);
+  if(!ctx||!ctx.entity||ctx.kind!=="explore")return;
+  try{
+   const node=view?.graph?.nodes?.find(n=>n.name===ctx.entity);
+   if(!node){msg("已带来主体名称："+ctx.entity+"。此主体尚未在本次模型角色中核对，不自动生成新节点。");return;}
+   view.finishEntrance();
+   focusNode(node.name);
+   msg("已定位来自统一门户的主体："+node.name+"。点击相关联系继续探索，模型关系不等于真实商业合同。");
+  }catch(error){msg("主体定位暂不可用，可手动在全息网络中寻找："+ctx.entity);}
+ });
 }catch(error){
  $("render-mode").textContent="图形显示暂不可用";
  msg("全息渲染遇到问题："+error.message+"。仍可从顶部进入完整模拟实验室。");

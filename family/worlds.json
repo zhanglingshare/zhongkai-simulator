@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "family": "zhongkai-regional-simulation",
+  "updated_by": "manual-integration",
+  "shared_contract": [
+    "entity identity",
+    "source provenance",
+    "observation date",
+    "evidence status",
+    "model version",
+    "scope"
+  ],
+  "worlds": [
+    {
+      "id": "zhongkai-region",
+      "label": "仲恺高新区全区产业模型",
+      "scope_type": "regional_simulation",
+      "subject_count": 41,
+      "relation_count": 71,
+      "simulation_engine": "root/model.js and V3 portal-kernel.js maintained as existing separate runtimes",
+      "source": "examples/world_seed_zhongkai.json",
+      "public_entry": "v3/index.html",
+      "test_entry": "v3/story-lab.html",
+      "research_entry": "v3/lab.html",
+      "data_inputs": [
+        "hot.json",
+        "life.json"
+      ],
+      "data_updater": "Doubao Skills (unchanged)"
+    },
+    {
+      "id": "lilin-town",
+      "label": "沥林镇域决策模拟器",
+      "scope_type": "town_simulation",
+      "parent_region": "zhongkai-region",
+      "subject_count": 20,
+      "relation_count": 21,
+      "scenario_ids": [
+        "S1",
+        "S2",
+        "S3",
+        "S4",
+        "S5",
+        "S6"
+      ],
+      "simulation_engine": "standalone Lilin HTML inline model",
+      "source": "lilin/index.html",
+      "public_entry": "lilin/index.html",
+      "data_updater": "not auto-synced; original local tool has static snapshot"
+    }
+  ],
+  "cross_scale": {
+    "relationship": "沥林镇属仲恺高新区的地理/行政隶属（由项目业主提供）",
+    "confirmed_entity_matches": [],
+    "mapping_policy": "No identical entity names between 41 all-zone and 20 town snapshot; do not infer equivalence by sector/location. No automatic graph edge or parameter transfer.",
+    "allowed_transfer": [
+      "navigation",
+      "research question text",
+      "public entity name from explicitly verified same entity",
+      "source links"
+    ],
+    "forbidden_transfer": [
+      "raw graph edges",
+      "GDP impacts",
+      "role probabilities",
+      "scenario scores",
+      "town parameters",
+      "economic causal effects"
+    ]
+  },
+  "evidence_protocol": {
+    "labels": "A/B/C/D status meanings must be interpreted per dataset; no cross-version blind coercion",
+    "update_policy": "A news update never automatically changes model coefficients",
+    "published_meta_note": "This registry is integration metadata; it does not validate model predictive accuracy"
+  }
+}
