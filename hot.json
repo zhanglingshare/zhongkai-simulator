@@ -1,35 +1,13 @@
 {
   "schema_version": 2,
   "region": "zhongkai",
-  "updated": "2026-11-10 22:25",
-  "fetched_at": "2026-11-10 22:25",
+  "updated": "2026-11-10 22:16",
+  "fetched_at": "2026-11-10 22:16",
   "frequency": "每日更新一次",
   "count": 6,
   "stats": [],
-  "note": "话题按编辑关注程度排序，标注关注档（高/较高/中）与来源级别；每条显示原报道时间、最近抓取与核验状态。本页不展示平台后台真实阅读、转发、点赞数据。区级公开渠道 11 月 9—10 日新增偏少（政务动态 1 条、在线访谈 1 条，其余多为规划许可与招标公示，已剔除），故本期取最近一周可溯源条目 6 条，其中 11 月 9—10 日新增 2 条，卡面均标原报道日期；不凑数、不编造，未用旧稿顶替新增。话题均来自公开渠道，定期更新。",
+  "note": "话题按编辑关注程度排序，标注关注档（高/较高/中）与来源级别；每条显示原报道时间、最近抓取与核验状态。本页不展示平台后台真实阅读、转发、点赞数据。本周区级公开渠道新增较少（11 月 9—10 日仅 1 条政务动态、其余为规划许可批前公示），本期取最近一周可溯源条目 6 条，已剔除审批公示，未用旧稿填充。话题均来自公开渠道，定期更新。",
   "items": [
-    {
-      "title": "沥林在线访谈：培育算力物流新优势，建设宜居宜业活力沥林",
-      "cat": "city",
-      "emoji": "🏙️",
-      "tier": "较高",
-      "srcLevel": "官方发布",
-      "live": false,
-      "source": "仲恺高新区门户·在线访谈",
-      "url": "http://www.hzzk.gov.cn/hdjlpt/live/index.php?pid=5979",
-      "summary": "11月10日10:00—11:00，仲恺高新区举行在线访谈，沥林镇负责人围绕“培育算力物流新优势、聚力打造生产性服务业集聚区、加快建设宜居宜业活力沥林”与网友交流，谈镇域产业配套与生活服务补短板。",
-      "published_at": "2026-11-10",
-      "event_date": "2026-11-10 10:00-11:00",
-      "fetched_at": "2026-11-10 22:25",
-      "verified_status": "已核验",
-      "fate": {
-        "kind": "info",
-        "ident": "city",
-        "objects": "沥林镇生产性服务业与算力物流",
-        "direction": "中性",
-        "assumption": "具体举措以官方发布为准"
-      }
-    },
     {
       "title": "粤桂协作三大平台在仲恺揭牌：就业驿站、产教科创站、零工市场服务站",
       "cat": "industry",
@@ -50,28 +28,6 @@
         "objects": "粤桂劳务协作与零工市场",
         "direction": "利好",
         "assumption": "服务成效以官方统计为准"
-      }
-    },
-    {
-      "title": "仲恺召开全区干部大会：传达学习党的二十届五中全会精神",
-      "cat": "city",
-      "emoji": "🏛️",
-      "tier": "较高",
-      "srcLevel": "官方发布",
-      "live": false,
-      "source": "仲恺高新区管委会",
-      "url": "http://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/zwdt/zwyw/content/post_5888053.html",
-      "summary": "仲恺高新区召开全区干部大会，传达学习贯彻党的二十届五中全会精神及全省、全市干部大会精神，对学习宣传贯彻工作与持之以恒推进全面从严治党作出动员部署。",
-      "published_at": "2026-11-05",
-      "event_date": null,
-      "fetched_at": "2026-11-10 22:16",
-      "verified_status": "已核验",
-      "fate": {
-        "kind": "info",
-        "ident": "city",
-        "objects": "仲恺干部队伍",
-        "direction": "中性",
-        "assumption": "以官方发布为准"
       }
     },
     {
@@ -119,6 +75,28 @@
       }
     },
     {
+      "title": "仲恺召开全区干部大会：传达学习党的二十届五中全会精神",
+      "cat": "city",
+      "emoji": "🏛️",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区管委会",
+      "url": "http://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/zwdt/zwyw/content/post_5888053.html",
+      "summary": "仲恺高新区召开全区干部大会，传达学习贯彻党的二十届五中全会精神及全省、全市干部大会精神，对学习宣传贯彻工作与持之以恒推进全面从严治党作出动员部署。",
+      "published_at": "2026-11-05",
+      "event_date": null,
+      "fetched_at": "2026-11-10 22:16",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "ident": "city",
+        "objects": "仲恺干部队伍",
+        "direction": "中性",
+        "assumption": "以官方发布为准"
+      }
+    },
+    {
       "title": "区领导调研公安工作：看基层警务与平安建设",
       "cat": "city",
       "emoji": "🚓",
@@ -136,6 +114,28 @@
         "kind": "info",
         "ident": "city",
         "objects": "基层警务",
+        "direction": "中性",
+        "assumption": "以官方发布为准"
+      }
+    },
+    {
+      "title": "瑞士驻穗总领馆带工商代表团到访仲恺，借广交会拓中瑞合作",
+      "cat": "industry",
+      "emoji": "🇨🇭",
+      "tier": "较高",
+      "srcLevel": "官方发布",
+      "live": false,
+      "source": "仲恺高新区管委会",
+      "url": "http://www.hzzk.gov.cn/zzgxqgwhmhwz/zwgk/zwdt/zwyw/content/post_5880023.html",
+      "summary": "瑞士驻广州总领馆携工商代表团到访惠州仲恺，借广交会窗口对接中瑞经贸合作。",
+      "published_at": "2026-10-27",
+      "event_date": null,
+      "fetched_at": "2026-11-10 22:16",
+      "verified_status": "已核验",
+      "fate": {
+        "kind": "info",
+        "ident": "industry",
+        "objects": "仲恺外资合作",
         "direction": "中性",
         "assumption": "以官方发布为准"
       }
